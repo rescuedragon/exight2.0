@@ -213,32 +213,32 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
         
         <div className="flex flex-col h-full px-3 pb-3 pt-0">
           {/* Stats Grid - Ultra Compact */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2">
-            <div className="flex items-center gap-1.5">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2 justify-items-center">
+            <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="p-1 bg-blue-accent/10 rounded-md">
                 <IndianRupee className="h-2.5 w-2.5 text-blue-accent" />
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Amount</p>
                 <p className="text-xs font-bold text-foreground">{formatCurrency(expense.amount, expense.currency)}</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="p-1 bg-emerald-accent/10 rounded-md">
                 <Calendar className="h-2.5 w-2.5 text-emerald-accent" />
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Due Day</p>
                 <p className="text-xs font-bold text-foreground">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
               </div>
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="p-1 bg-purple-accent/10 rounded-md">
                 <Clock className="h-2.5 w-2.5 text-purple-accent" />
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Remaining</p>
                 <p className="text-xs font-bold text-foreground">
                   {expense.isRecurring ? 'Recurring' : `${expense.remainingMonths} months`}
@@ -246,11 +246,11 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
               </div>
             </div>
             
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="p-1 bg-orange-accent/10 rounded-md">
                 <TrendingDown className="h-2.5 w-2.5 text-orange-accent" />
               </div>
-              <div>
+              <div className="text-center">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Balance</p>
                 <p className="text-xs font-bold text-foreground">
                   {expense.isRecurring ? 'N/A' : formatCurrency(expense.remainingAmount || 0, expense.currency)}
@@ -261,7 +261,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
           
           {/* Progress Section - Only for fixed-time expenses */}
           {!expense.isRecurring && (
-            <div>
+            <div className="text-center">
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs font-medium text-muted-foreground">Progress</span>
                 <span className="text-xs font-bold text-foreground">{progressPercentage}%</span>
