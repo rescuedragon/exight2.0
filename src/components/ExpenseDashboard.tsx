@@ -215,9 +215,6 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
           {/* Stats Grid - Ultra Compact */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2 justify-items-center">
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="p-1 bg-blue-accent/10 rounded-md">
-                <IndianRupee className="h-2.5 w-2.5 text-blue-accent" />
-              </div>
               <div className="text-center">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Amount</p>
                 <p className="text-xs font-bold text-foreground">{formatCurrency(expense.amount, expense.currency)}</p>
@@ -225,9 +222,6 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="p-1 bg-emerald-accent/10 rounded-md">
-                <Calendar className="h-2.5 w-2.5 text-emerald-accent" />
-              </div>
               <div className="text-center">
                 <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Due Day</p>
                 <p className="text-xs font-bold text-foreground">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
@@ -235,25 +229,29 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="p-1 bg-purple-accent/10 rounded-md">
-                <Clock className="h-2.5 w-2.5 text-purple-accent" />
-              </div>
               <div className="text-center">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Remaining</p>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  {expense.isRecurring ? 'Paid YTD' : 'Remaining'}
+                </p>
                 <p className="text-xs font-bold text-foreground">
-                  {expense.isRecurring ? 'Recurring' : `${expense.remainingMonths} months`}
+                  {expense.isRecurring 
+                    ? formatCurrency(expense.amount * Math.min(new Date().getMonth() + 1, 12), expense.currency)
+                    : `${expense.remainingMonths} months`
+                  }
                 </p>
               </div>
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="p-1 bg-orange-accent/10 rounded-md">
-                <TrendingDown className="h-2.5 w-2.5 text-orange-accent" />
-              </div>
               <div className="text-center">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Balance</p>
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                  {expense.isRecurring ? 'Avg/Month' : 'Balance'}
+                </p>
                 <p className="text-xs font-bold text-foreground">
-                  {expense.isRecurring ? 'N/A' : formatCurrency(expense.remainingAmount || 0, expense.currency)}
+                  {expense.isRecurring 
+                    ? formatCurrency(expense.amount, expense.currency)
+                    : formatCurrency(expense.remainingAmount || 0, expense.currency)
+                  }
                 </p>
               </div>
             </div>
@@ -313,8 +311,9 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                   strokeLinejoin="round"
                   className="h-5 w-5 text-white"
                 >
-                  <path d="M3 3V21H21" />
-                  <path d="M9 9L12 6L16 10L21 5" />
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" />
+                  <path d="M2 17L12 22L22 17" />
+                  <path d="M2 12L12 17L22 12" />
                 </svg>
               </div>
               <div>
@@ -364,7 +363,8 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                   strokeLinejoin="round"
                   className="h-5 w-5 text-white"
                 >
-                  <path d="M22 12H18L15 21L9 3L6 12H2" />
+                  <circle cx="12" cy="12" r="10" />
+                  <polyline points="12,6 12,12 16,14" />
                 </svg>
               </div>
               <div>
