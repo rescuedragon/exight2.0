@@ -57,13 +57,13 @@ export const SimpleChart = ({ data, maxAmount, formatCurrency, selectedYear }: S
               return `${index === 0 ? 'M' : 'L'} ${x}% ${y}%`;
             }).join(' ')}
             stroke="url(#lineGradient)"
-            strokeWidth="2"
+            strokeWidth="3"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
-            opacity="0.8"
+            opacity="0.9"
             style={{
-              filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
+              filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))'
             }}
           />
         </svg>

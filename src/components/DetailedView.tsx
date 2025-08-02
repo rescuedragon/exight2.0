@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { X, IndianRupee } from "lucide-react";
+import { X, IndianRupee, Calendar } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { ExpenseChart } from "@/components/ExpenseChart";
 
@@ -60,57 +60,65 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-background/90 backdrop-blur-xl z-50 flex items-center justify-center p-4 animate-fade-in-up">
-      <Card className="w-full max-w-7xl max-h-[90vh] overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in">
-        <CardHeader className="flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-accent/5 to-purple-accent/5 border-b border-border/20">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-2xl">
-              <IndianRupee className="h-6 w-6 text-blue-accent" />
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-md z-50 flex items-center justify-center p-4 animate-fade-in-up">
+      <Card className="w-full max-w-6xl max-h-[85vh] overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-0 shadow-2xl rounded-2xl animate-scale-in">
+        <CardHeader className="flex flex-row items-center justify-between py-4 px-6 bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 border-b border-gray-200/50 dark:border-gray-700/50 rounded-t-2xl">
+          <div className="flex items-center gap-3">
+            <div className="p-2 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-xl backdrop-blur-sm">
+              <IndianRupee className="h-5 w-5 text-blue-600 dark:text-blue-400" />
             </div>
             <div>
-              <CardTitle className="text-3xl font-bold text-foreground">Detailed Monthly View</CardTitle>
-              <p className="text-muted-foreground font-medium">{selectedYear}</p>
+              <CardTitle className="text-2xl font-semibold text-gray-900 dark:text-white tracking-tight">
+                Detailed Monthly View
+              </CardTitle>
+              <div className="flex items-center gap-1 mt-1">
+                <Calendar className="h-3 w-3 text-gray-500 dark:text-gray-400" />
+                <p className="text-sm text-gray-600 dark:text-gray-300 font-medium">{selectedYear}</p>
+              </div>
             </div>
           </div>
           <Button
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="h-12 w-12 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors"
+            className="h-10 w-10 rounded-full hover:bg-gray-100/80 dark:hover:bg-gray-800/80 transition-all duration-200 group"
           >
-            <X className="h-5 w-5" />
+            <X className="h-4 w-4 text-gray-600 dark:text-gray-300 group-hover:text-gray-900 dark:group-hover:text-white transition-colors" />
           </Button>
         </CardHeader>
-        <CardContent className="overflow-auto p-0">
-          <div className="space-y-8">
-            <div className="overflow-x-auto">
+        <CardContent className="overflow-auto p-0 bg-gradient-to-br from-gray-50/30 to-white/30 dark:from-gray-900/30 dark:to-gray-800/30">
+          <div className="space-y-6 p-6">
+            <div className="overflow-x-auto bg-white/60 dark:bg-gray-900/60 backdrop-blur-sm rounded-xl border border-gray-200/50 dark:border-gray-700/50 shadow-lg">
               <Table className="min-w-full">
                 <TableHeader>
-                  <TableRow className="bg-gradient-to-r from-muted/20 to-muted/10 border-b border-border/20">
-                    <TableHead className="sticky left-0 bg-muted/20 font-bold text-foreground py-3 px-4 min-w-[160px] max-w-[160px]">
-                      <div className="text-xs">Expense</div>
+                  <TableRow className="bg-gradient-to-r from-gray-50/80 to-gray-100/60 dark:from-gray-800/80 dark:to-gray-700/60 border-b border-gray-200/50 dark:border-gray-600/50">
+                    <TableHead className="sticky left-0 bg-gradient-to-r from-gray-50/90 to-gray-100/70 dark:from-gray-800/90 dark:to-gray-700/70 font-semibold text-gray-900 dark:text-white py-3 px-4 min-w-[140px] max-w-[140px] rounded-l-xl">
+                      <div className="text-xs font-semibold tracking-wide">Expense</div>
                     </TableHead>
                     {months.map((month) => (
-                      <TableHead key={month} className="text-center font-bold py-3 px-1 min-w-[60px] max-w-[60px]">
-                        <div className="text-foreground text-xs">
+                      <TableHead key={month} className="text-center font-semibold py-3 px-1 min-w-[50px] max-w-[50px]">
+                        <div className="text-gray-700 dark:text-gray-200 text-xs font-medium tracking-wide">
                           {month.substring(0, 3)}
                         </div>
                       </TableHead>
                     ))}
-                    <TableHead className="text-center font-bold bg-gradient-to-r from-blue-accent/10 to-emerald-accent/10 py-3 px-2 min-w-[80px] max-w-[80px]">
-                      <div className="text-foreground text-xs">Total</div>
+                    <TableHead className="text-center font-semibold bg-gradient-to-r from-blue-500/10 to-blue-600/10 dark:from-blue-500/20 dark:to-blue-600/20 py-3 px-2 min-w-[70px] max-w-[70px]">
+                      <div className="text-gray-900 dark:text-white text-xs font-semibold tracking-wide">Total</div>
                     </TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {activeExpenses.map((expense) => (
-                    <TableRow key={expense.id} className="hover:bg-gradient-to-r hover:from-blue-accent/5 hover:to-transparent transition-all duration-200 border-b border-border/10">
-                      <TableCell className="sticky left-0 bg-background font-bold text-foreground py-3 px-4 min-w-[160px] max-w-[160px]">
+                  {activeExpenses.map((expense, index) => (
+                    <TableRow 
+                      key={expense.id} 
+                      className="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-transparent dark:hover:from-blue-900/20 dark:hover:to-transparent transition-all duration-300 border-b border-gray-100/50 dark:border-gray-700/30 group"
+                    >
+                      <TableCell className="sticky left-0 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm font-medium text-gray-900 dark:text-white py-3 px-4 min-w-[140px] max-w-[140px] rounded-l-xl group-hover:bg-white/90 dark:group-hover:bg-gray-900/90 transition-colors">
                         <div className="space-y-1">
-                          <div className="font-bold text-foreground text-sm truncate" title={expense.name}>
+                          <div className="font-semibold text-gray-900 dark:text-white text-sm tracking-wide" title={expense.name}>
                             {expense.name}
                           </div>
-                          <div className="text-xs text-muted-foreground font-medium px-2 py-0.5 bg-muted/20 rounded-full inline-block">
+                          <div className="text-xs text-gray-500 dark:text-gray-400 font-medium px-2 py-0.5 bg-gray-100/60 dark:bg-gray-700/60 rounded-full inline-block tracking-wide">
                             {expense.type}
                           </div>
                         </div>
@@ -118,19 +126,19 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
                       {months.map((month, monthIndex) => {
                         const amount = getMonthlyExpenseForItem(expense, monthIndex);
                         return (
-                          <TableCell key={month} className="text-center py-3 px-1 min-w-[60px] max-w-[60px]">
+                          <TableCell key={month} className={`text-center py-3 px-1 min-w-[50px] max-w-[50px] ${amount > 0 ? 'bg-gradient-to-r from-blue-500/10 to-blue-600/10 dark:from-blue-500/20 dark:to-blue-600/20 hover:from-blue-500/15 hover:to-blue-600/15 dark:hover:from-blue-500/25 dark:hover:to-blue-600/25 transition-all duration-200' : ''}`}>
                             {amount > 0 ? (
-                              <div className="font-bold text-foreground bg-gradient-to-r from-blue-accent/10 to-emerald-accent/10 px-1 py-1 rounded text-xs">
+                              <div className="font-semibold text-gray-900 dark:text-white text-xs tracking-wide">
                                 ₹{(amount / 1000).toFixed(0)}k
                               </div>
                             ) : (
-                              <span className="text-muted-foreground font-medium text-xs">-</span>
+                              <span className="text-gray-400 dark:text-gray-500 font-medium text-xs">—</span>
                             )}
                           </TableCell>
                         );
                       })}
-                      <TableCell className="text-center font-bold bg-gradient-to-r from-blue-accent/10 to-emerald-accent/10 py-3 px-2 min-w-[80px] max-w-[80px]">
-                        <div className="text-foreground bg-gradient-to-r from-blue-accent/20 to-emerald-accent/20 px-2 py-1 rounded text-xs">
+                      <TableCell className="text-center font-semibold bg-gradient-to-r from-blue-500/15 to-blue-600/15 dark:from-blue-500/25 dark:to-blue-600/25 py-3 px-2 min-w-[70px] max-w-[70px]">
+                        <div className="text-gray-900 dark:text-white text-xs font-semibold tracking-wide">
                           {formatCurrency(
                             months.reduce((total, _, monthIndex) => {
                               return total + getMonthlyExpenseForItem(expense, monthIndex);
@@ -141,19 +149,19 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
                       </TableCell>
                     </TableRow>
                   ))}
-                  <TableRow className="border-t-2 border-blue-accent/20 bg-gradient-to-r from-blue-accent/10 to-emerald-accent/10">
-                    <TableCell className="sticky left-0 bg-blue-accent/10 font-bold text-foreground py-4 px-4 min-w-[160px] max-w-[160px]">
-                      <div className="text-sm">Monthly Total</div>
+                  <TableRow className="border-t-2 border-blue-500/20 bg-gradient-to-r from-blue-500/10 to-blue-600/10 dark:from-blue-500/20 dark:to-blue-600/20">
+                    <TableCell className="sticky left-0 bg-gradient-to-r from-blue-500/15 to-blue-600/15 dark:from-blue-500/25 dark:to-blue-600/25 font-semibold text-gray-900 dark:text-white py-3 px-4 min-w-[140px] max-w-[140px] rounded-l-xl">
+                      <div className="text-sm font-semibold tracking-wide">Monthly Total</div>
                     </TableCell>
                     {months.map((month, monthIndex) => (
-                      <TableCell key={month} className="text-center font-bold py-4 px-1 min-w-[60px] max-w-[60px]">
-                        <div className="text-foreground bg-gradient-to-r from-blue-accent/20 to-emerald-accent/20 px-1 py-1 rounded text-xs">
+                      <TableCell key={month} className="text-center font-semibold bg-gradient-to-r from-blue-500/20 to-blue-600/20 dark:from-blue-500/30 dark:to-blue-600/30 py-3 px-1 min-w-[50px] max-w-[50px]">
+                        <div className="text-gray-900 dark:text-white text-xs font-semibold tracking-wide">
                           ₹{(getMonthlyTotal(monthIndex) / 1000).toFixed(0)}k
                         </div>
                       </TableCell>
                     ))}
-                    <TableCell className="text-center font-bold py-4 px-2 min-w-[80px] max-w-[80px]">
-                      <div className="text-sm font-bold text-foreground bg-gradient-primary text-white px-2 py-1 rounded shadow-premium">
+                    <TableCell className="text-center font-semibold bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-400 dark:to-blue-500 py-3 px-2 min-w-[70px] max-w-[70px]">
+                      <div className="text-white text-xs font-bold tracking-wide">
                         {formatCurrency(
                           months.reduce((total, _, monthIndex) => total + getMonthlyTotal(monthIndex), 0)
                         )}
@@ -165,7 +173,7 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
             </div>
 
             {/* Expense Chart below the table */}
-            <div className="p-8 pt-0">
+            <div className="pt-0">
               <ExpenseChart expenses={expenses} />
             </div>
           </div>
