@@ -47,13 +47,13 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
 
   return (
     <>
-      <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl p-8 mb-8 animate-fade-in-up stagger-1 shadow-2xl">
+      <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-8 mb-8 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
         <div className="grid grid-cols-3 gap-6 justify-items-center">
           <div
-            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:from-white/30 hover:via-white/20 hover:to-white/30 dark:hover:from-gray-800/40 dark:hover:via-gray-700/30 dark:hover:to-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-500 hover:scale-105 hover:shadow-2xl border border-white/30 dark:border-gray-600/30 w-full max-w-xs group"
+            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:bg-white/30 dark:hover:bg-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md border border-white/30 dark:border-transparent w-full max-w-xs group"
             onClick={() => setShowMonthlyModal(true)}
           >
-            <div className="p-4 rounded-2xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-purple-500/90 to-purple-600/90 group-hover:from-purple-500 to-purple-600 transition-all duration-300" style={{ backgroundColor: '#5c5aeb' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#5c5aeb' }}>
               <svg
                 width="24"
                 height="24"
@@ -79,10 +79,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
           </div>
 
           <div
-            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:from-white/30 hover:via-white/20 hover:to-white/30 dark:hover:from-gray-800/40 dark:hover:via-gray-700/30 dark:hover:to-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-500 hover:scale-105 hover:shadow-2xl border border-white/30 dark:border-gray-600/30 w-full max-w-xs group"
+            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:bg-white/30 dark:hover:bg-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md border border-white/30 dark:border-transparent w-full max-w-xs group"
             onClick={() => setShowYearlyModal(true)}
           >
-            <div className="p-4 bg-gradient-to-br from-green-500/90 to-green-600/90 group-hover:from-green-500 to-green-600 rounded-2xl shadow-xl backdrop-blur-sm transition-all duration-300">
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#10b981' }}>
               <svg
                 width="24"
                 height="24"
@@ -107,10 +107,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
           </div>
 
           <div
-            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:from-white/30 hover:via-white/20 hover:to-white/30 dark:hover:from-gray-800/40 dark:hover:via-gray-700/30 dark:hover:to-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-500 hover:scale-105 hover:shadow-2xl border border-white/30 dark:border-gray-600/30 w-full max-w-xs group"
+            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:bg-white/30 dark:hover:bg-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md border border-white/30 dark:border-transparent w-full max-w-xs group"
             onClick={() => setShowActiveModal(true)}
           >
-            <div className="p-4 bg-gradient-to-br from-purple-500/90 to-purple-600/90 group-hover:from-purple-500 to-purple-600 rounded-2xl shadow-xl backdrop-blur-sm transition-all duration-300">
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#8b5cf6' }}>
               <svg
                 width="24"
                 height="24"

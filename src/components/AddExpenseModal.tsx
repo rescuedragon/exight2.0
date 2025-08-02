@@ -32,7 +32,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.amount || !formData.deductionDay) {
+    if (!formData.name || !formData.amount) {
       toast({
         title: "Error",
         description: "Please fill in all required fields",
@@ -51,12 +51,14 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     }
 
     const amount = parseFloat(formData.amount);
+    const deductionDay = formData.deductionDay ? parseInt(formData.deductionDay) : 1; // Default to 1st if not specified
+    
     const expenseData: any = {
       name: formData.name,
       amount,
       currency: formData.currency,
       type: formData.type,
-      deductionDay: parseInt(formData.deductionDay),
+      deductionDay,
       isRecurring: formData.isRecurring
     };
 
@@ -95,9 +97,8 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button 
-          variant="gradient" 
           size="lg" 
-          className="gap-3 rounded-full px-8 hover:shadow-premium transition-all duration-300 hover:scale-105"
+          className="gap-3 rounded-full px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"
           onClick={() => setOpen(true)}
         >
           <Plus className="h-5 w-5" />
@@ -171,7 +172,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
             {/* Right Column */}
             <div className="space-y-6">
               <div className="space-y-3">
-                <Label htmlFor="deductionDay" className="text-sm font-semibold text-foreground">Deduction Day *</Label>
+                <Label htmlFor="deductionDay" className="text-sm font-semibold text-foreground">Deduction Day (defaults to 1st)</Label>
                 <Input
                   id="deductionDay"
                   type="number"
@@ -179,7 +180,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                   max="31"
                   value={formData.deductionDay}
                   onChange={(e) => setFormData(prev => ({ ...prev, deductionDay: e.target.value }))}
-                  placeholder="5"
+                  placeholder="1 (default)"
                   className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
                 />
               </div>
@@ -244,7 +245,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-full px-8 h-12">
               Cancel
             </Button>
-            <Button type="submit" variant="gradient" className="rounded-full px-8 h-12 hover:shadow-premium transition-all duration-300">
+            <Button type="submit" className="rounded-full px-8 h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
               Save Expense
             </Button>
           </div>

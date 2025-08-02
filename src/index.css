@@ -204,3 +204,10 @@ body {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Dark mode border removal for InfoBar */
+.dark .infobar-container {
+  border: none !important;
+  border-width: 0 !important;
+  border-style: none !important;
+}
