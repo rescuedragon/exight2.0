@@ -80,11 +80,11 @@ const Login = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative">
       {/* Enhanced Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-accent/5 via-purple-accent/3 to-emerald-accent/2"></div>
-        <div className="absolute inset-0 opacity-30 bg-gradient-to-r from-blue-accent/10 via-transparent to-purple-accent/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-accent/5 via-purple-accent/3 to-emerald-accent/2 dark:from-blue-accent/10 dark:via-purple-accent/5 dark:to-emerald-accent/10"></div>
+        <div className="hidden lg:flex flex-col justify-center p-12 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900/80 dark:to-gray-800/80 rounded-3xl ml-12 backdrop-blur-xl border border-border/20 dark:border-border/40 shadow-xl dark:shadow-elevated"></div>
       </div>
 
       {/* Theme Toggle */}
@@ -109,11 +109,11 @@ const Login = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-8 text-center"
             >
-                          <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
-              <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
-                Exight
-              </span>
-            </h1>
+              <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
+                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+                  Exight
+                </span>
+              </h1>
               <p className="text-lg text-muted-foreground">
                 Insights for your expenses
               </p>
@@ -125,16 +125,16 @@ const Login = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
             >
-              <Card className="backdrop-blur-xl bg-white/80 border-white/30 shadow-xl rounded-2xl">
+              <div className="flex items-start space-x-4 p-4 rounded-xl bg-white/50 dark:bg-background/40 backdrop-blur-sm border border-border/20 dark:border-border/30 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group-hover:opacity-100 hover:!opacity-100 group-hover:scale-100 hover:!scale-100">
                 <CardContent className="p-8">
                   {/* Tab Navigation */}
-                  <div className="flex mb-6 bg-muted/30 rounded-xl p-1.5">
+                  <div className="flex mb-6 bg-muted/30 dark:bg-muted/10 rounded-xl p-1.5">
                     <button
                       onClick={() => setIsLogin(true)}
                       className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-300 ${
                         isLogin 
-                          ? "bg-white text-foreground shadow-lg backdrop-blur-sm" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-white/20"
+                          ? "bg-white dark:bg-accent text-foreground shadow-lg backdrop-blur-sm dark:bg-accent/90 dark:text-accent-foreground" 
+                          : "text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-accent/30 dark:text-muted-foreground dark:hover:text-foreground"
                       }`}
                     >
                       Sign In
@@ -143,8 +143,8 @@ const Login = () => {
                       onClick={() => setIsLogin(false)}
                       className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-300 ${
                         !isLogin 
-                          ? "bg-white text-foreground shadow-lg backdrop-blur-sm" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-white/20"
+                          ? "bg-white dark:bg-accent text-foreground shadow-lg backdrop-blur-sm dark:bg-accent/90 dark:text-accent-foreground" 
+                          : "text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-accent/30 dark:text-muted-foreground dark:hover:text-foreground"
                       }`}
                     >
                       Register
@@ -152,14 +152,14 @@ const Login = () => {
                   </div>
 
                   {error && (
-                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800/50 backdrop-blur-sm">
                       <p className="text-sm text-red-600">{error}</p>
                     </div>
                   )}
 
                   <form onSubmit={handleSubmit} className="space-y-5">
                     {!isLogin && (
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
                         <div className="space-y-2">
                           <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">First Name</Label>
                           <Input
@@ -168,7 +168,7 @@ const Login = () => {
                             placeholder="First name"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            className="py-3 bg-white/70 border-white/30 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium"
+                            className="py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                             required={!isLogin}
                           />
                         </div>
@@ -180,7 +180,7 @@ const Login = () => {
                             placeholder="Last name"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            className="py-3 bg-white/70 border-white/30 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium"
+                            className="py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                             required={!isLogin}
                           />
                         </div>
@@ -197,7 +197,7 @@ const Login = () => {
                           placeholder="Enter your email address"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="pl-12 pr-4 py-3 bg-white/70 border-white/30 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium"
+                          className="pl-12 pr-4 py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                           required
                         />
                       </div>
@@ -213,7 +213,7 @@ const Login = () => {
                           placeholder="Enter your password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="pl-12 pr-12 py-3 bg-white/70 border-white/30 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium"
+                          className="pl-12 pr-12 py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                           required
                         />
                         <button
@@ -230,13 +230,13 @@ const Login = () => {
                     <Button 
                       type="submit" 
                       disabled={isLoading}
-                      className="w-full py-3 bg-gradient-to-r from-blue-accent to-purple-accent hover:from-blue-accent/90 hover:to-purple-accent/90 text-white shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed rounded-xl font-semibold text-base"
+                      className="w-full group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-600/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-blue-500/20 dark:shadow-blue-900/50 hover:shadow-blue-500/30 dark:hover:shadow-blue-900/60 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
                     >
                       {isLoading ? (
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"
                         />
                       ) : (
                         <>
@@ -247,7 +247,7 @@ const Login = () => {
                     </Button>
                   </form>
                 </CardContent>
-              </Card>
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -269,12 +269,12 @@ const Login = () => {
             >
               <h2 className="text-5xl font-bold text-foreground leading-tight">
                 Finally, know where your{" "}
-                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%] font-extrabold">
                   money goes
                 </span>
               </h2>
               
-              <p className="text-xl text-muted-foreground max-w-lg mx-auto leading-relaxed">
+              <p className="text-xl text-muted-foreground/90 dark:text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
                 Track EMIs, visualize expenses, and get smart insights to take control of your finances.
               </p>
             </motion.div>
@@ -358,9 +358,9 @@ const Login = () => {
                       >
                         {feature.icon}
                       </motion.div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-foreground text-sm mb-1">{feature.title}</h3>
-                        <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-foreground dark:text-foreground/90">{feature.title}</h3>
+                        <p className="text-xs text-muted-foreground/90 dark:text-muted-foreground/80 mt-1">{feature.description}</p>
                       </div>
                     </div>
                   </CardContent>
