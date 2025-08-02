@@ -81,12 +81,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative">
-      {/* Enhanced Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-accent/5 via-purple-accent/3 to-emerald-accent/2 dark:from-blue-accent/10 dark:via-purple-accent/5 dark:to-emerald-accent/10"></div>
-        <div className="hidden lg:flex flex-col justify-center p-12 bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-900/80 dark:to-gray-800/80 rounded-3xl ml-12 backdrop-blur-xl border border-border/20 dark:border-border/40 shadow-xl dark:shadow-elevated"></div>
-      </div>
-
       {/* Theme Toggle */}
       <div className="fixed top-6 right-6 z-50">
         <ThemeToggle />
@@ -100,7 +94,7 @@ const Login = () => {
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
-            className="w-full max-w-md"
+            className="w-full max-w-md mx-auto"
           >
             {/* Brand */}
             <motion.div
@@ -124,14 +118,15 @@ const Login = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
+              className="flex justify-center"
             >
-              <div className="flex items-start space-x-4 p-4 rounded-xl bg-white/50 dark:bg-background/40 backdrop-blur-sm border border-border/20 dark:border-border/30 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group-hover:opacity-100 hover:!opacity-100 group-hover:scale-100 hover:!scale-100">
+              <div className="w-full max-w-sm rounded-xl bg-white/50 dark:bg-background/40 backdrop-blur-sm border border-border/20 dark:border-border/30 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group-hover:opacity-100 hover:!opacity-100 group-hover:scale-100 hover:!scale-100">
                 <CardContent className="p-8">
                   {/* Tab Navigation */}
-                  <div className="flex mb-6 bg-muted/30 dark:bg-muted/10 rounded-xl p-1.5">
+                  <div className="flex mb-4 bg-muted/30 dark:bg-muted/10 rounded-xl p-1.5">
                     <button
                       onClick={() => setIsLogin(true)}
-                      className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      className={`flex-1 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all duration-300 ${
                         isLogin 
                           ? "bg-white dark:bg-accent text-foreground shadow-lg backdrop-blur-sm dark:bg-accent/90 dark:text-accent-foreground" 
                           : "text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-accent/30 dark:text-muted-foreground dark:hover:text-foreground"
@@ -141,7 +136,7 @@ const Login = () => {
                     </button>
                     <button
                       onClick={() => setIsLogin(false)}
-                      className={`flex-1 py-3 px-6 rounded-lg text-sm font-semibold transition-all duration-300 ${
+                      className={`flex-1 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all duration-300 ${
                         !isLogin 
                           ? "bg-white dark:bg-accent text-foreground shadow-lg backdrop-blur-sm dark:bg-accent/90 dark:text-accent-foreground" 
                           : "text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-accent/30 dark:text-muted-foreground dark:hover:text-foreground"
@@ -152,15 +147,15 @@ const Login = () => {
                   </div>
 
                   {error && (
-                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800/50 backdrop-blur-sm">
+                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800/50 backdrop-blur-sm mb-4">
                       <p className="text-sm text-red-600">{error}</p>
                     </div>
                   )}
 
-                  <form onSubmit={handleSubmit} className="space-y-5">
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     {!isLogin && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10">
-                        <div className="space-y-2">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="space-y-1.5">
                           <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">First Name</Label>
                           <Input
                             id="firstName"
@@ -168,11 +163,11 @@ const Login = () => {
                             placeholder="First name"
                             value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
-                            className="py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
+                            className="py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                             required={!isLogin}
                           />
                         </div>
-                        <div className="space-y-2">
+                        <div className="space-y-1.5">
                           <Label htmlFor="lastName" className="text-sm font-semibold text-foreground">Last Name</Label>
                           <Input
                             id="lastName"
@@ -180,14 +175,14 @@ const Login = () => {
                             placeholder="Last name"
                             value={lastName}
                             onChange={(e) => setLastName(e.target.value)}
-                            className="py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
+                            className="py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                             required={!isLogin}
                           />
                         </div>
                       </div>
                     )}
                     
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="email" className="text-sm font-semibold text-foreground">Email</Label>
                       <div className="relative group">
                         <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-blue-accent transition-colors duration-200" />
@@ -197,13 +192,13 @@ const Login = () => {
                           placeholder="Enter your email address"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="pl-12 pr-4 py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
+                          className="pl-12 pr-4 py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                           required
                         />
                       </div>
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-1.5">
                       <Label htmlFor="password" className="text-sm font-semibold text-foreground">Password</Label>
                       <div className="relative group">
                         <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-blue-accent transition-colors duration-200" />
@@ -213,7 +208,7 @@ const Login = () => {
                           placeholder="Enter your password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="pl-12 pr-12 py-3 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
+                          className="pl-12 pr-12 py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
                           required
                         />
                         <button
@@ -224,13 +219,12 @@ const Login = () => {
                           {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                         </button>
                       </div>
-                      <p className="text-xs text-muted-foreground">Must be at least 8 characters.</p>
                     </div>
 
                     <Button 
                       type="submit" 
                       disabled={isLoading}
-                      className="w-full group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-600/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-blue-500/20 dark:shadow-blue-900/50 hover:shadow-blue-500/30 dark:hover:shadow-blue-900/60 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0"
+                      className="w-full group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-600/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-blue-500/20 dark:shadow-blue-900/50 hover:shadow-blue-500/30 dark:hover:shadow-blue-900/60 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 mt-4"
                     >
                       {isLoading ? (
                         <motion.div
