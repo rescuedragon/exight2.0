@@ -25,6 +25,31 @@ const Index = () => {
   const [showHistory, setShowHistory] = useState(false);
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
   const [userProfile, setUserProfile] = useState<{ firstName?: string; lastName?: string } | null>(null);
+  const [scrollOpacity, setScrollOpacity] = useState(1);
+
+  // Handle scroll-based fade effect - faster fade to prevent overlap
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      const fadeStart = 5; // Start fading after just 5px scroll
+      const fadeEnd = 40; // Completely fade by 40px scroll (much faster fade)
+      
+      if (scrollY <= fadeStart) {
+        setScrollOpacity(1);
+      } else if (scrollY >= fadeEnd) {
+        setScrollOpacity(0);
+      } else {
+        // Calculate opacity between fadeStart and fadeEnd
+        // Using an ease-out curve for a more natural feel
+        const progress = (scrollY - fadeStart) / (fadeEnd - fadeStart);
+        const opacity = 1 - Math.pow(progress, 0.5); // Square root for ease-out
+        setScrollOpacity(Math.max(0, Math.min(1, opacity)));
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Load user profile and expenses from API on component mount
   useEffect(() => {
@@ -193,8 +218,11 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-gradient-background">
-      {/* Title - Top Left with Padding */}
-      <div className="fixed top-6 left-6 z-30 space-y-2">
+      {/* Title - Top Left */}
+      <div 
+        className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
+        style={{ opacity: scrollOpacity }}
+      >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
@@ -204,24 +232,21 @@ const Index = () => {
         <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
           Insights for your expenses.
         </p>
-        
-        {/* Greeting */}
-        {userProfile?.firstName && (
-          <div className="animate-fade-in-up stagger-4">
-            <p className="text-lg font-semibold text-foreground">
-              Hi, {userProfile.firstName}!
-            </p>
-          </div>
-        )}
       </div>
 
       {/* Theme Toggle - Top Right */}
-      <div className="fixed top-6 right-6 z-40">
+      <div 
+        className="fixed top-6 right-6 z-40 transition-opacity duration-300 ease-out"
+        style={{ opacity: scrollOpacity }}
+      >
         <ThemeToggle />
       </div>
 
       {/* History Button - Below Theme Toggle */}
-      <div className="fixed top-20 right-6 z-40">
+      <div 
+        className="fixed top-20 right-6 z-40 transition-opacity duration-300 ease-out"
+        style={{ opacity: scrollOpacity }}
+      >
         <Button
           variant="outline"
           size="icon"
@@ -234,7 +259,10 @@ const Index = () => {
       </div>
 
       {/* Login Button - Below History Button */}
-      <div className="fixed top-32 right-6 z-40">
+      <div 
+        className="fixed top-32 right-6 z-40 transition-opacity duration-300 ease-out"
+        style={{ opacity: scrollOpacity }}
+      >
         <Link to="/login">
           <Button
             variant="outline"
@@ -250,6 +278,15 @@ const Index = () => {
       <div className="container mx-auto px-6 py-12 max-w-7xl">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-center md:justify-end items-center mb-6 gap-8 animate-fade-in-up pt-16">
+          
+          {/* Greeting - Above buttons */}
+          {userProfile?.firstName && (
+            <div className="animate-fade-in-up stagger-3 mb-4 md:mb-0">
+              <p className="text-lg font-semibold text-foreground text-center md:text-right">
+                Hi, {userProfile.firstName}!
+              </p>
+            </div>
+          )}
           
           <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
             <Button 
