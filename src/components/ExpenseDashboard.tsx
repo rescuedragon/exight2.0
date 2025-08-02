@@ -144,18 +144,18 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
     return (
       <div 
         key={expense.id} 
-        className={`bg-background border border-border/30 rounded-xl hover:shadow-md group transition-all duration-300 compact-expense-card animate-fade-in-up ${staggerClass}`}
+        className={`backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 border border-white/30 dark:border-gray-600/30 rounded-2xl hover:shadow-xl group transition-all duration-500 compact-expense-card animate-fade-in-up ${staggerClass} hover:scale-[1.02] hover:backdrop-blur-lg`}
       >
-        <div className="p-3 pb-2 flex-shrink-0">
+        <div className="p-4 pb-3 flex-shrink-0">
           <div className="flex items-center justify-between min-h-[1.5rem]">
-            <div className="flex items-center gap-1.5 text-base font-bold">
-              <div className="p-1 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-md">
+            <div className="flex items-center gap-2 text-base font-bold">
+              <div className="p-1 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-md backdrop-blur-sm">
                 {getExpenseIcon(expense.type)}
               </div>
-              {expense.name}
+              <span className="bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{expense.name}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`${getExpenseColor(expense.type)} px-1.5 py-0.5 rounded-full font-medium text-xs`}>
+              <Badge variant="outline" className={`${getExpenseColor(expense.type)} px-2 py-1 rounded-full font-semibold text-xs backdrop-blur-sm border-white/30 dark:border-gray-600/30`}>
                 {expense.type}
               </Badge>
               {!expense.isRecurring && (
@@ -164,26 +164,26 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                     <Button 
                       variant="premium" 
                       size="sm"
-                      className="rounded-full px-3 py-0.5 text-xs hover:scale-105 transition-transform duration-200 h-5"
+                      className="rounded-full px-3 py-1 text-xs hover:scale-105 transition-transform duration-200 h-6 backdrop-blur-sm bg-gradient-to-r from-blue-500/90 to-purple-500/90 hover:from-blue-500 to-purple-500"
                       onClick={() => setSelectedExpense(expense)}
                     >
                       Partial Payment
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px] premium-card border-border/40">
+                  <DialogContent className="sm:max-w-[425px] backdrop-blur-xl bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-900/30 dark:via-gray-800/20 dark:to-gray-900/30 border border-white/30 dark:border-gray-600/30">
                     <DialogHeader>
-                      <DialogTitle className="text-xl font-bold">Make Partial Payment</DialogTitle>
+                      <DialogTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">Make Partial Payment</DialogTitle>
                     </DialogHeader>
                     <div className="space-y-6 mt-6">
-                      <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-2xl border border-blue-accent/20">
-                        <h3 className="font-bold text-lg">{selectedExpense?.name}</h3>
-                        <p className="text-sm text-muted-foreground mt-1">
+                      <div className="p-6 backdrop-blur-md bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-2xl border border-blue-accent/20 dark:border-blue-accent/30">
+                        <h3 className="font-bold text-lg bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{selectedExpense?.name}</h3>
+                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
                           Remaining: {formatCurrency(selectedExpense?.remainingAmount || 0, selectedExpense?.currency)}
                         </p>
                       </div>
                       
                       <div className="space-y-3">
-                        <Label htmlFor="payment" className="text-sm font-medium">Payment Amount</Label>
+                        <Label htmlFor="payment" className="text-sm font-semibold text-gray-700 dark:text-gray-300">Payment Amount</Label>
                         <Input
                           id="payment"
                           type="number"
@@ -191,15 +191,15 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                           onChange={(e) => setPartialPayment(e.target.value)}
                           placeholder="Enter amount"
                           max={selectedExpense?.remainingAmount}
-                          className="bg-background border-border/40 rounded-xl h-12 text-lg"
+                          className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50 border-white/30 dark:border-gray-600/30 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
                         />
                       </div>
                       
                       <div className="flex justify-end space-x-3 pt-4">
-                        <Button variant="outline" onClick={() => setSelectedExpense(null)} className="rounded-full px-6">
+                        <Button variant="outline" onClick={() => setSelectedExpense(null)} className="rounded-full px-6 backdrop-blur-sm border-white/30 dark:border-gray-600/30">
                           Cancel
                         </Button>
-                        <Button variant="gradient" onClick={handlePartialPayment} className="rounded-full px-6">
+                        <Button variant="gradient" onClick={handlePartialPayment} className="rounded-full px-6 backdrop-blur-sm bg-gradient-to-r from-blue-500/90 to-purple-500/90 hover:from-blue-500 to-purple-500">
                           Record Payment
                         </Button>
                       </div>
@@ -211,29 +211,29 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
           </div>
         </div>
         
-        <div className="flex flex-col h-full px-3 pb-3 pt-0">
+        <div className="flex flex-col h-full px-4 pb-4 pt-0">
           {/* Stats Grid - Ultra Compact */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2 justify-items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3 justify-items-center">
             <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="text-center">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Amount</p>
-                <p className="text-xs font-bold text-foreground">{formatCurrency(expense.amount, expense.currency)}</p>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Amount</p>
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{formatCurrency(expense.amount, expense.currency)}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="text-center">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Due Day</p>
-                <p className="text-xs font-bold text-foreground">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Due Day</p>
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="text-center">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                   {expense.isRecurring ? 'Paid YTD' : 'Remaining'}
                 </p>
-                <p className="text-xs font-bold text-foreground">
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
                   {expense.isRecurring 
                     ? formatCurrency(expense.amount * Math.min(new Date().getMonth() + 1, 12), expense.currency)
                     : `${expense.remainingMonths} months`
@@ -244,10 +244,10 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
             
             <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="text-center">
-                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
                   {expense.isRecurring ? 'Avg/Month' : 'Balance'}
                 </p>
-                <p className="text-xs font-bold text-foreground">
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
                   {expense.isRecurring 
                     ? formatCurrency(expense.amount, expense.currency)
                     : formatCurrency(expense.remainingAmount || 0, expense.currency)
@@ -260,13 +260,13 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
           {/* Progress Section - Only for fixed-time expenses */}
           {!expense.isRecurring && (
             <div className="text-center">
-              <div className="flex justify-between items-center mb-1">
-                <span className="text-xs font-medium text-muted-foreground">Progress</span>
-                <span className="text-xs font-bold text-foreground">{progressPercentage}%</span>
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Progress</span>
+                <span className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{progressPercentage}%</span>
               </div>
-              <div className="w-full bg-muted/20 rounded-full h-1 overflow-hidden">
+              <div className="w-full backdrop-blur-sm bg-white/20 dark:bg-gray-800/20 rounded-full h-2 overflow-hidden border border-white/30 dark:border-gray-600/30">
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-accent to-emerald-accent rounded-full transition-all duration-700 ease-out"
+                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-lg"
                   style={{ 
                     width: `${progressPercentage}%`,
                     transitionDelay: `${index * 100 + 200}ms`
@@ -293,13 +293,13 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
       
       {/* Recurring Expenses Section */}
       {recurringExpenses.length > 0 && (
-        <div className="premium-card overflow-hidden">
+        <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
           <div 
-            className="flex items-center justify-between cursor-pointer p-4 hover:bg-muted/5 transition-all duration-300"
+            className="flex items-center justify-between cursor-pointer p-6 hover:backdrop-blur-md hover:bg-gradient-to-r hover:from-white/20 hover:via-white/10 hover:to-white/20 dark:hover:from-gray-800/30 dark:hover:via-gray-700/20 dark:hover:to-gray-800/30 transition-all duration-500"
             onClick={() => setIsRecurringExpanded(!isRecurringExpanded)}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl" style={{ backgroundColor: '#f59e0b' }}>
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-amber-500/90 to-amber-600/90 hover:from-amber-500 to-amber-600 transition-all duration-300" style={{ backgroundColor: '#f59e0b' }}>
                 <svg
                   width="20"
                   height="20"
@@ -309,7 +309,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-5 w-5 text-white"
+                  className="h-5 w-5 text-white drop-shadow-lg"
                 >
                   <path d="M12 2L2 7L12 12L22 7L12 2Z" />
                   <path d="M2 17L12 22L22 17" />
@@ -317,25 +317,25 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-foreground">Recurring Expenses</h3>
-                <p className="text-sm text-muted-foreground">{recurringExpenses.length} active recurring payment{recurringExpenses.length !== 1 ? 's' : ''}</p>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">Recurring Expenses</h3>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 tracking-wide">{recurringExpenses.length} active recurring payment{recurringExpenses.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">
                 {formatCurrency(recurringExpenses.reduce((sum, exp) => sum + exp.amount, 0))} / month
               </span>
               {isRecurringExpanded ? (
-                <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform duration-300" />
               ) : (
-                <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                <ChevronDown className="h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform duration-300" />
               )}
             </div>
           </div>
           
           {isRecurringExpanded && (
-            <div className="border-t border-border/20 bg-muted/5">
-              <div className="p-4 space-y-3 animate-fade-in-up">
+            <div className="border-t border-white/20 dark:border-gray-700/30 backdrop-blur-md bg-gradient-to-b from-white/5 to-transparent dark:from-gray-800/10 dark:to-transparent">
+              <div className="p-6 space-y-4 animate-fade-in-up">
                 {recurringExpenses.map((expense, index) => renderExpenseCard(expense, index))}
               </div>
             </div>
@@ -345,13 +345,13 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
       
       {/* Fixed-Time Expenses Section */}
       {fixedTimeExpenses.length > 0 && (
-        <div className="premium-card overflow-hidden">
+        <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
           <div 
-            className="flex items-center justify-between cursor-pointer p-4 hover:bg-muted/5 transition-all duration-300"
+            className="flex items-center justify-between cursor-pointer p-6 hover:backdrop-blur-md hover:bg-gradient-to-r hover:from-white/20 hover:via-white/10 hover:to-white/20 dark:hover:from-gray-800/30 dark:hover:via-gray-700/20 dark:hover:to-gray-800/30 transition-all duration-500"
             onClick={() => setIsFixedTimeExpanded(!isFixedTimeExpanded)}
           >
-            <div className="flex items-center gap-3">
-              <div className="p-2 rounded-xl" style={{ backgroundColor: '#ec4899' }}>
+            <div className="flex items-center gap-4">
+              <div className="p-3 rounded-2xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-pink-500/90 to-pink-600/90 hover:from-pink-500 to-pink-600 transition-all duration-300" style={{ backgroundColor: '#ec4899' }}>
                 <svg
                   width="20"
                   height="20"
@@ -361,32 +361,32 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                   strokeWidth="2"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="h-5 w-5 text-white"
+                  className="h-5 w-5 text-white drop-shadow-lg"
                 >
                   <circle cx="12" cy="12" r="10" />
                   <polyline points="12,6 12,12 16,14" />
                 </svg>
               </div>
               <div>
-                <h3 className="text-lg font-bold text-foreground">Fixed-Term Expenses</h3>
-                <p className="text-sm text-muted-foreground">{fixedTimeExpenses.length} active EMI{fixedTimeExpenses.length !== 1 ? 's' : ''} & loan{fixedTimeExpenses.length !== 1 ? 's' : ''}</p>
+                <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">Fixed-Term Expenses</h3>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 tracking-wide">{fixedTimeExpenses.length} active EMI{fixedTimeExpenses.length !== 1 ? 's' : ''} & loan{fixedTimeExpenses.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-muted-foreground">
+            <div className="flex items-center gap-3">
+              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">
                 {formatCurrency(fixedTimeExpenses.reduce((sum, exp) => sum + exp.amount, 0))} / month
               </span>
               {isFixedTimeExpanded ? (
-                <ChevronUp className="h-5 w-5 text-muted-foreground" />
+                <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform duration-300" />
               ) : (
-                <ChevronDown className="h-5 w-5 text-muted-foreground" />
+                <ChevronDown className="h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform duration-300" />
               )}
             </div>
           </div>
           
           {isFixedTimeExpanded && (
-            <div className="border-t border-border/20 bg-muted/5">
-              <div className="p-4 space-y-3 animate-fade-in-up">
+            <div className="border-t border-white/20 dark:border-gray-700/30 backdrop-blur-md bg-gradient-to-b from-white/5 to-transparent dark:from-gray-800/10 dark:to-transparent">
+              <div className="p-6 space-y-4 animate-fade-in-up">
                 {fixedTimeExpenses.map((expense, index) => renderExpenseCard(expense, index))}
               </div>
             </div>
