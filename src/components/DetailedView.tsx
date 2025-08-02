@@ -42,10 +42,36 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
       return expense.amount;
     }
 
-    // For non-recurring (EMI/Loan), check if still paying
-    if (expense.remainingMonths && expense.remainingMonths > 0) {
-      const monthsFromCreation = Math.floor((targetDate.getTime() - expense.createdAt.getTime()) / (1000 * 60 * 60 * 24 * 30));
-      if (monthsFromCreation >= 0 && monthsFromCreation < (expense.totalMonths || 0) - (expense.remainingMonths || 0) + (expense.remainingMonths || 0)) {
+    // For non-recurring (EMI/Loan), calculate the timeline properly
+    if (expense.remainingMonths && expense.remainingMonths > 0 && expense.totalMonths) {
+      const currentDate = new Date();
+      const currentMonthIndex = currentDate.getMonth();
+      const currentYear = currentDate.getFullYear();
+      
+      // Calculate completed months
+      const completedMonths = expense.totalMonths - expense.remainingMonths;
+      
+      // EMI started 'completedMonths' months ago from current month
+      const startMonthIndex = currentMonthIndex - completedMonths;
+      const startYear = currentYear + Math.floor(startMonthIndex / 12);
+      const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
+      
+      // EMI will end 'remainingMonths' months from current month
+      const endMonthIndex = currentMonthIndex + expense.remainingMonths;
+      const endYear = currentYear + Math.floor(endMonthIndex / 12);
+      const normalizedEndMonth = endMonthIndex % 12;
+      
+      // Check if the target month falls within the EMI period
+      const targetYear = selectedYear;
+      const targetMonth = monthIndex;
+      
+      // Convert dates to comparable format (year * 12 + month)
+      const startPeriod = startYear * 12 + normalizedStartMonth;
+      const endPeriod = endYear * 12 + normalizedEndMonth;
+      const targetPeriod = targetYear * 12 + targetMonth;
+      
+      // Include the expense if target month is within the EMI period
+      if (targetPeriod >= startPeriod && targetPeriod < endPeriod) {
         return expense.amount;
       }
     }
@@ -129,7 +155,7 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
                           <TableCell key={month} className={`text-center py-3 px-1 min-w-[50px] max-w-[50px] ${amount > 0 ? 'bg-gradient-to-r from-blue-500/10 to-blue-600/10 dark:from-blue-500/20 dark:to-blue-600/20 hover:from-blue-500/15 hover:to-blue-600/15 dark:hover:from-blue-500/25 dark:hover:to-blue-600/25 transition-all duration-200' : ''}`}>
                             {amount > 0 ? (
                               <div className="font-semibold text-gray-900 dark:text-white text-xs tracking-wide">
-                                ₹{(amount / 1000).toFixed(0)}k
+                                {formatCurrency(amount, expense.currency).replace('₹', '₹')}
                               </div>
                             ) : (
                               <span className="text-gray-400 dark:text-gray-500 font-medium text-xs">—</span>
@@ -156,7 +182,7 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
                     {months.map((month, monthIndex) => (
                       <TableCell key={month} className="text-center font-semibold bg-gradient-to-r from-blue-500/20 to-blue-600/20 dark:from-blue-500/30 dark:to-blue-600/30 py-3 px-1 min-w-[50px] max-w-[50px]">
                         <div className="text-gray-900 dark:text-white text-xs font-semibold tracking-wide">
-                          ₹{(getMonthlyTotal(monthIndex) / 1000).toFixed(0)}k
+                          {formatCurrency(getMonthlyTotal(monthIndex))}
                         </div>
                       </TableCell>
                     ))}

@@ -38,37 +38,37 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
       }
       
       // For EMIs, calculate the actual timeline
-      const totalMonths = expense.totalMonths || 0;
-      const remainingMonths = expense.remainingMonths || 0;
-      const completedMonths = totalMonths - remainingMonths;
-      
-      // Calculate when this EMI started and when it will end
-      const currentDate = new Date();
-      const currentMonthIndex = currentDate.getMonth();
-      const currentYear = currentDate.getFullYear();
-      
-      // EMI started 'completedMonths' months ago from current month
-      const startMonthIndex = currentMonthIndex - completedMonths;
-      const startYear = currentYear + Math.floor(startMonthIndex / 12);
-      const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
-      
-      // EMI will end 'remainingMonths' months from current month
-      const endMonthIndex = currentMonthIndex + remainingMonths;
-      const endYear = currentYear + Math.floor(endMonthIndex / 12);
-      const normalizedEndMonth = endMonthIndex % 12;
-      
-      // Check if the given month falls within the EMI period
-      const targetYear = selectedYear;
-      const targetMonth = monthIndex;
-      
-      // Convert dates to comparable format (year * 12 + month)
-      const startPeriod = startYear * 12 + normalizedStartMonth;
-      const endPeriod = endYear * 12 + normalizedEndMonth;
-      const targetPeriod = targetYear * 12 + targetMonth;
-      
-      // Include the expense if target month is within the EMI period
-      if (targetPeriod >= startPeriod && targetPeriod < endPeriod) {
-        return total + expense.amount;
+      if (expense.remainingMonths && expense.remainingMonths > 0 && expense.totalMonths) {
+        const currentDate = new Date();
+        const currentMonthIndex = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        
+        // Calculate completed months
+        const completedMonths = expense.totalMonths - expense.remainingMonths;
+        
+        // EMI started 'completedMonths' months ago from current month
+        const startMonthIndex = currentMonthIndex - completedMonths;
+        const startYear = currentYear + Math.floor(startMonthIndex / 12);
+        const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
+        
+        // EMI will end 'remainingMonths' months from current month
+        const endMonthIndex = currentMonthIndex + expense.remainingMonths;
+        const endYear = currentYear + Math.floor(endMonthIndex / 12);
+        const normalizedEndMonth = endMonthIndex % 12;
+        
+        // Check if the given month falls within the EMI period
+        const targetYear = selectedYear;
+        const targetMonth = monthIndex;
+        
+        // Convert dates to comparable format (year * 12 + month)
+        const startPeriod = startYear * 12 + normalizedStartMonth;
+        const endPeriod = endYear * 12 + normalizedEndMonth;
+        const targetPeriod = targetYear * 12 + targetMonth;
+        
+        // Include the expense if target month is within the EMI period
+        if (targetPeriod >= startPeriod && targetPeriod < endPeriod) {
+          return total + expense.amount;
+        }
       }
       
       return total;
