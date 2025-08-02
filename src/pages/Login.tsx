@@ -6,25 +6,54 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, TrendingUp, BarChart3, CreditCard, Shield } from "lucide-react";
+import { authAPI } from "@/services/api";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError("");
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    // Handle login/register logic here
-    console.log("Form submitted:", { email, password, isLogin });
-    
-    setIsLoading(false);
+    try {
+      if (isLogin) {
+        // Login
+        const response = await authAPI.login({ email, password });
+        console.log("Login successful:", response);
+        // Set last login date to today
+        localStorage.setItem('lastLoginDate', new Date().toDateString());
+        // Force page reload to trigger App re-evaluation
+        window.location.href = "/";
+      } else {
+        // Register
+        const response = await authAPI.register({ 
+          email, 
+          password, 
+          firstName, 
+          lastName 
+        });
+        console.log("Registration successful:", response);
+        // Set last login date to today
+        localStorage.setItem('lastLoginDate', new Date().toDateString());
+        // Force page reload to trigger App re-evaluation
+        window.location.href = "/";
+      }
+    } catch (error: any) {
+      console.error("Auth error:", error);
+      setError(error.message || "An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const features = [
@@ -80,11 +109,11 @@ const Login = () => {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="mb-8 text-center"
             >
-              <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
-                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
-                  Exight
-                </span>
-              </h1>
+                          <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
+              <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+                Exight
+              </span>
+            </h1>
               <p className="text-lg text-muted-foreground">
                 Insights for your expenses
               </p>
@@ -122,7 +151,42 @@ const Login = () => {
                     </button>
                   </div>
 
+                  {error && (
+                    <div className="p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <p className="text-sm text-red-600">{error}</p>
+                    </div>
+                  )}
+
                   <form onSubmit={handleSubmit} className="space-y-5">
+                    {!isLogin && (
+                      <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                          <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">First Name</Label>
+                          <Input
+                            id="firstName"
+                            type="text"
+                            placeholder="First name"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            className="py-3 bg-white/70 border-white/30 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium"
+                            required={!isLogin}
+                          />
+                        </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="lastName" className="text-sm font-semibold text-foreground">Last Name</Label>
+                          <Input
+                            id="lastName"
+                            type="text"
+                            placeholder="Last name"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            className="py-3 bg-white/70 border-white/30 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium"
+                            required={!isLogin}
+                          />
+                        </div>
+                      </div>
+                    )}
+                    
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-sm font-semibold text-foreground">Email</Label>
                       <div className="relative group">
@@ -205,7 +269,7 @@ const Login = () => {
             >
               <h2 className="text-5xl font-bold text-foreground leading-tight">
                 Finally, know where your{" "}
-                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
                   money goes
                 </span>
               </h2>
@@ -229,19 +293,19 @@ const Login = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.6, delay: 1.2 + index * 0.1 }}
                   whileHover={{ scale: 1.05, y: -5 }}
-                  className="group"
+                  className="group h-32"
                 >
-                  <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl overflow-hidden">
-                    <CardContent className="p-6">
-                      <div className="flex items-start gap-4">
+                  <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl overflow-hidden h-full">
+                    <CardContent className="p-6 h-full flex flex-col justify-center">
+                      <div className="flex items-center gap-4">
                         <motion.div 
-                          className="p-4 rounded-2xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-110 transition-transform duration-300"
+                          className="p-3 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-110 transition-transform duration-300 flex-shrink-0"
                           whileHover={{ rotate: 5 }}
                         >
                           {feature.icon}
                         </motion.div>
-                        <div className="flex-1">
-                          <h3 className="font-bold text-foreground text-lg mb-2">{feature.title}</h3>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-bold text-foreground text-base mb-1">{feature.title}</h3>
                           <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                         </div>
                       </div>
@@ -265,7 +329,7 @@ const Login = () => {
           <div className="text-center space-y-4">
             <h2 className="text-3xl font-bold text-foreground leading-tight">
               Finally, know where your{" "}
-              <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
                 money goes
               </span>
             </h2>
@@ -283,20 +347,20 @@ const Login = () => {
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 transition={{ duration: 0.6, delay: 1.0 + index * 0.1 }}
                 whileHover={{ scale: 1.02 }}
-                className="group"
+                className="group h-24"
               >
-                <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl">
-                  <CardContent className="p-4">
-                    <div className="flex items-start gap-3">
+                <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl h-full">
+                  <CardContent className="p-4 h-full flex flex-col justify-center">
+                    <div className="flex items-center gap-3">
                       <motion.div 
-                        className="p-3 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent"
+                        className="p-2 rounded-lg bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent flex-shrink-0"
                         whileHover={{ rotate: 5 }}
                       >
                         {feature.icon}
                       </motion.div>
-                      <div className="flex-1">
-                        <h3 className="font-bold text-foreground text-base mb-1">{feature.title}</h3>
-                        <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-foreground text-sm mb-1">{feature.title}</h3>
+                        <p className="text-xs text-muted-foreground leading-relaxed">{feature.description}</p>
                       </div>
                     </div>
                   </CardContent>

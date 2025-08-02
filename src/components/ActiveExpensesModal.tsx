@@ -122,11 +122,14 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
 
   const handleDeleteExpense = (expenseId: string) => {
     if (onDeleteExpense) {
-      onDeleteExpense(expenseId);
-      toast({
-        title: "Success",
-        description: "Expense deleted successfully!"
-      });
+      // Add confirmation dialog
+      if (window.confirm('Are you sure you want to delete this expense? This action cannot be undone.')) {
+        onDeleteExpense(expenseId);
+        toast({
+          title: "Success",
+          description: "Expense deleted successfully!"
+        });
+      }
     }
   };
 

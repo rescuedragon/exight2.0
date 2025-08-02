@@ -126,9 +126,12 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
   }
 
   // Filter to show only active expenses (not completed)
-  const activeExpenses = expenses.filter(expense => 
-    expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0))
-  );
+  console.log('All expenses:', expenses);
+  const activeExpenses = expenses.filter(expense => {
+    const isActive = expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0));
+    console.log(`Expense ${expense.name}: isRecurring=${expense.isRecurring}, remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, isActive=${isActive}`);
+    return isActive;
+  });
 
   // Separate recurring and fixed-time expenses
   const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);

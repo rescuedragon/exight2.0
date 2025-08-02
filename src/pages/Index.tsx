@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Expense } from "@/types/expense";
 import { BarChart3, History, LogIn } from "lucide-react";
 import { Link } from "react-router-dom";
+import { expensesAPI, authAPI } from "@/services/api";
 
 interface ActionLog {
   id: string;
@@ -23,24 +24,53 @@ const Index = () => {
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
+  const [userProfile, setUserProfile] = useState<{ firstName?: string; lastName?: string } | null>(null);
 
-  // Load expenses and action logs from localStorage on component mount
+  // Load user profile and expenses from API on component mount
   useEffect(() => {
-    const savedExpenses = localStorage.getItem('emi-expenses');
-    if (savedExpenses) {
-      const parsed = JSON.parse(savedExpenses);
-      // Convert date strings back to Date objects
-      const expensesWithDates = parsed.map((expense: any) => ({
-        ...expense,
-        createdAt: new Date(expense.createdAt),
-        partialPayments: expense.partialPayments?.map((payment: any) => ({
-          ...payment,
-          date: new Date(payment.date)
-        })) || []
-      }));
-      setExpenses(expensesWithDates);
-    }
+    const loadData = async () => {
+      try {
+        // Load user profile
+        console.log('Loading user profile...');
+        const profileResponse = await authAPI.getProfile();
+        console.log('Profile response:', profileResponse);
+        setUserProfile(profileResponse.user);
+        
+        // Load expenses
+        console.log('Loading expenses from API...');
+        const response = await expensesAPI.getAll();
+        console.log('API response:', response);
+        const expensesWithDates = response.expenses.map((expense: any) => ({
+          id: expense.id.toString(),
+          name: expense.name,
+          amount: parseFloat(expense.amount),
+          currency: expense.currency,
+          type: expense.type,
+          deductionDay: expense.deduction_day,
+          isRecurring: expense.is_recurring,
+          totalMonths: expense.total_months,
+          remainingMonths: expense.remaining_months,
+          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : undefined,
+          createdAt: new Date(expense.created_at),
+          partialPayments: expense.partial_payments?.map((payment: any) => ({
+            id: payment.id.toString(),
+            amount: parseFloat(payment.amount),
+            date: new Date(payment.paymentDate),
+            description: payment.description
+          })) || []
+        }));
+        console.log('Processed expenses:', expensesWithDates);
+        setExpenses(expensesWithDates);
+      } catch (error) {
+        console.error('Failed to load data:', error);
+      }
+    };
 
+    loadData();
+  }, []);
+
+  // Load action logs from localStorage (keeping this for now)
+  useEffect(() => {
     const savedLogs = localStorage.getItem('action-logs');
     if (savedLogs) {
       const parsed = JSON.parse(savedLogs);
@@ -51,11 +81,6 @@ const Index = () => {
       setActionLogs(logsWithDates);
     }
   }, []);
-
-  // Save expenses to localStorage whenever expenses change
-  useEffect(() => {
-    localStorage.setItem('emi-expenses', JSON.stringify(expenses));
-  }, [expenses]);
 
   // Save action logs to localStorage whenever logs change
   useEffect(() => {
@@ -73,45 +98,96 @@ const Index = () => {
     setActionLogs(prev => [newLog, ...prev]);
   };
 
-  const handleAddExpense = (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
-    const newExpense: Expense = {
-      ...newExpenseData,
-      id: Date.now().toString(),
-      createdAt: new Date(),
-      partialPayments: []
-    };
-    setExpenses(prev => [...prev, newExpense]);
-    addActionLog(
-      'Added New Expense',
-      `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
-      'add'
-    );
+  const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
+    try {
+      const response = await expensesAPI.create({
+        name: newExpenseData.name,
+        amount: newExpenseData.amount,
+        currency: newExpenseData.currency,
+        type: newExpenseData.type,
+        deductionDay: newExpenseData.deductionDay,
+        isRecurring: newExpenseData.isRecurring,
+        totalMonths: newExpenseData.totalMonths,
+        remainingMonths: newExpenseData.remainingMonths,
+        remainingAmount: newExpenseData.remainingAmount
+      });
+
+      const newExpense: Expense = {
+        ...newExpenseData,
+        id: response.expense.id.toString(),
+        createdAt: new Date(response.expense.created_at),
+        partialPayments: []
+      };
+      
+      setExpenses(prev => [...prev, newExpense]);
+      addActionLog(
+        'Added New Expense',
+        `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
+        'add'
+      );
+    } catch (error) {
+      console.error('Failed to add expense:', error);
+      // You might want to show a toast notification here
+    }
   };
 
-  const handleUpdateExpense = (updatedExpense: Expense) => {
-    const originalExpense = expenses.find(e => e.id === updatedExpense.id);
-    setExpenses(prev => 
-      prev.map(expense => 
-        expense.id === updatedExpense.id ? updatedExpense : expense
-      )
-    );
-    
-    if (originalExpense) {
-      // Check if it's a partial payment
-      if (updatedExpense.partialPayments.length > originalExpense.partialPayments.length) {
-        const latestPayment = updatedExpense.partialPayments[updatedExpense.partialPayments.length - 1];
-        addActionLog(
-          'Partial Payment Made',
-          `Paid ₹${latestPayment.amount} towards ${updatedExpense.name}`,
-          'payment'
-        );
-      } else {
-        addActionLog(
-          'Updated Expense',
-          `Modified ${updatedExpense.name}`,
-          'update'
-        );
+  const handleDeleteExpense = async (expenseId: string) => {
+    try {
+      await expensesAPI.delete(expenseId);
+      setExpenses(prev => prev.filter(expense => expense.id !== expenseId));
+      addActionLog(
+        'Deleted Expense',
+        'Expense removed from tracking',
+        'delete'
+      );
+    } catch (error) {
+      console.error('Failed to delete expense:', error);
+    }
+  };
+
+  const handleUpdateExpense = async (updatedExpense: Expense) => {
+    try {
+      const originalExpense = expenses.find(e => e.id === updatedExpense.id);
+      
+      // Update in database
+      await expensesAPI.update(updatedExpense.id, {
+        name: updatedExpense.name,
+        amount: updatedExpense.amount,
+        currency: updatedExpense.currency,
+        type: updatedExpense.type,
+        deductionDay: updatedExpense.deductionDay,
+        isRecurring: updatedExpense.isRecurring,
+        totalMonths: updatedExpense.totalMonths,
+        remainingMonths: updatedExpense.remainingMonths,
+        remainingAmount: updatedExpense.remainingAmount
+      });
+
+      // Update local state
+      setExpenses(prev => 
+        prev.map(expense => 
+          expense.id === updatedExpense.id ? updatedExpense : expense
+        )
+      );
+      
+      if (originalExpense) {
+        // Check if it's a partial payment
+        if (updatedExpense.partialPayments.length > originalExpense.partialPayments.length) {
+          const latestPayment = updatedExpense.partialPayments[updatedExpense.partialPayments.length - 1];
+          addActionLog(
+            'Partial Payment Made',
+            `Paid ₹${latestPayment.amount} towards ${updatedExpense.name}`,
+            'payment'
+          );
+        } else {
+          addActionLog(
+            'Updated Expense',
+            `Modified ${updatedExpense.name}`,
+            'update'
+          );
+        }
       }
+    } catch (error) {
+      console.error('Failed to update expense:', error);
     }
   };
 
@@ -128,6 +204,15 @@ const Index = () => {
         <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
           Insights for your expenses.
         </p>
+        
+        {/* Greeting */}
+        {userProfile?.firstName && (
+          <div className="animate-fade-in-up stagger-4">
+            <p className="text-lg font-semibold text-foreground">
+              Hi, {userProfile.firstName}!
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Theme Toggle - Top Right */}
@@ -183,7 +268,7 @@ const Index = () => {
         </div>
 
         {/* Info Bar */}
-        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} />
+        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} />
 
         {/* Dashboard */}
         <div className="animate-fade-in-up stagger-5">

@@ -8,9 +8,10 @@ import { ActiveExpensesModal } from "@/components/ActiveExpensesModal";
 interface InfoBarProps {
   expenses: Expense[];
   onUpdateExpense: (expense: Expense) => void;
+  onDeleteExpense?: (expenseId: string) => void;
 }
 
-export const InfoBar = ({ expenses, onUpdateExpense }: InfoBarProps) => {
+export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarProps) => {
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
   const [showYearlyModal, setShowYearlyModal] = useState(false);
   const [showActiveModal, setShowActiveModal] = useState(false);
@@ -115,6 +116,7 @@ export const InfoBar = ({ expenses, onUpdateExpense }: InfoBarProps) => {
           expenses={expenses}
           onClose={() => setShowActiveModal(false)}
           onUpdateExpense={onUpdateExpense}
+          onDeleteExpense={onDeleteExpense}
         />
       )}
     </>
