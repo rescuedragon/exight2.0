@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { TrendingUp, Calendar, Wallet, IndianRupee } from "lucide-react";
+import { IndianRupee } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { MonthlyExpensesModal } from "@/components/MonthlyExpensesModal";
 import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
@@ -53,8 +53,21 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
             className="flex items-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
             onClick={() => setShowMonthlyModal(true)}
           >
-            <div className="p-4 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-2xl shadow-lg">
-              <Calendar className="h-7 w-7 text-blue-accent" />
+            <div className="p-4 rounded-2xl shadow-lg" style={{ backgroundColor: '#5c5aeb' }}>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-7 w-7 text-white"
+              >
+                <path d="M3 3V21H21" />
+                <path d="M9 9L12 6L16 10L21 5" />
+              </svg>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">Monthly Expenses</p>
@@ -69,8 +82,20 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
             className="flex items-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
             onClick={() => setShowYearlyModal(true)}
           >
-            <div className="p-4 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-2xl shadow-lg">
-              <TrendingUp className="h-7 w-7 text-emerald-accent" />
+            <div className="p-4 bg-green-500 rounded-2xl shadow-lg">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-7 w-7 text-white"
+              >
+                <path d="M22 12H18L15 21L9 3L6 12H2" />
+              </svg>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">Yearly Projection</p>
@@ -85,8 +110,21 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
             className="flex items-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
             onClick={() => setShowActiveModal(true)}
           >
-            <div className="p-4 bg-gradient-to-br from-purple-accent/20 to-purple-accent/10 rounded-2xl shadow-lg">
-              <Wallet className="h-7 w-7 text-purple-accent" />
+            <div className="p-4 bg-purple-500 rounded-2xl shadow-lg">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="h-7 w-7 text-white"
+              >
+                <rect x="1" y="4" width="22" height="16" rx="2" ry="2" />
+                <line x1="1" y1="10" x2="23" y2="10" />
+              </svg>
             </div>
             <div className="space-y-1">
               <p className="text-sm font-medium text-muted-foreground">Active Expenses</p>
