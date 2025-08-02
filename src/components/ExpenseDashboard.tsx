@@ -37,11 +37,11 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
   const getExpenseIcon = (type: ExpenseType) => {
     switch (type) {
       case 'EMI':
-        return <CreditCard className="h-4 w-4" />;
+        return <div className="h-2 w-2 rounded-full bg-foreground" />;
       case 'Personal Loan':
-        return <Banknote className="h-4 w-4" />;
+        return <div className="h-2 w-2 rounded-full bg-foreground" />;
       case 'Borrowed from Someone':
-        return <Users className="h-4 w-4" />;
+        return <div className="h-2 w-2 rounded-full bg-foreground" />;
     }
   };
 
@@ -301,8 +301,21 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
             onClick={() => setIsRecurringExpanded(!isRecurringExpanded)}
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-xl">
-                <Repeat className="h-5 w-5 text-emerald-accent" />
+              <div className="p-2 rounded-xl" style={{ backgroundColor: '#f59e0b' }}>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-5 w-5 text-white"
+                >
+                  <path d="M3 3V21H21" />
+                  <path d="M9 9L12 6L16 10L21 5" />
+                </svg>
               </div>
               <div>
                 <h3 className="text-lg font-bold text-foreground">Recurring Expenses</h3>
@@ -339,8 +352,20 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
             onClick={() => setIsFixedTimeExpanded(!isFixedTimeExpanded)}
           >
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-xl">
-                <Timer className="h-5 w-5 text-blue-accent" />
+              <div className="p-2 rounded-xl" style={{ backgroundColor: '#ec4899' }}>
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  className="h-5 w-5 text-white"
+                >
+                  <path d="M22 12H18L15 21L9 3L6 12H2" />
+                </svg>
               </div>
               <div>
                 <h3 className="text-lg font-bold text-foreground">Fixed-Term Expenses</h3>

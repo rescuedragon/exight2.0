@@ -65,11 +65,11 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
   const getExpenseIcon = (type: ExpenseType) => {
     switch (type) {
       case 'EMI':
-        return <CreditCard className="h-4 w-4" />;
+        return <div className="h-2 w-2 rounded-full bg-foreground" />;
       case 'Personal Loan':
-        return <Banknote className="h-4 w-4" />;
+        return <div className="h-2 w-2 rounded-full bg-foreground" />;
       case 'Borrowed from Someone':
-        return <Users className="h-4 w-4" />;
+        return <div className="h-2 w-2 rounded-full bg-foreground" />;
     }
   };
 

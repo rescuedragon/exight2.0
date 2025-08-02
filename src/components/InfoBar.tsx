@@ -48,9 +48,9 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
   return (
     <>
       <div className="w-full premium-card p-8 mb-8 animate-fade-in-up stagger-1">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-3 gap-6 justify-items-center">
           <div
-            className="flex items-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg w-full max-w-xs"
             onClick={() => setShowMonthlyModal(true)}
           >
             <div className="p-4 rounded-2xl shadow-lg" style={{ backgroundColor: '#5c5aeb' }}>
@@ -79,7 +79,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
           </div>
 
           <div
-            className="flex items-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg w-full max-w-xs"
             onClick={() => setShowYearlyModal(true)}
           >
             <div className="p-4 bg-green-500 rounded-2xl shadow-lg">
@@ -107,7 +107,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
           </div>
 
           <div
-            className="flex items-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer hover:bg-muted/10 rounded-2xl p-4 -m-4 transition-all duration-300 hover:scale-105 hover:shadow-lg w-full max-w-xs"
             onClick={() => setShowActiveModal(true)}
           >
             <div className="p-4 bg-purple-500 rounded-2xl shadow-lg">
