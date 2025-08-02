@@ -7,7 +7,8 @@ import { DetailedView } from "@/components/DetailedView";
 import { ExpenseHistory } from "@/components/ExpenseHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Expense } from "@/types/expense";
-import { BarChart3, History } from "lucide-react";
+import { BarChart3, History, LogIn } from "lucide-react";
+import { Link } from "react-router-dom";
 
 interface ActionLog {
   id: string;
@@ -145,6 +146,20 @@ const Index = () => {
           <History className="h-5 w-5" />
           <span className="sr-only">History</span>
         </Button>
+      </div>
+
+      {/* Login Button - Below History Button */}
+      <div className="fixed top-32 right-6 z-40">
+        <Link to="/login">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-12 w-12 rounded-full bg-gradient-card border-border/40 shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105"
+          >
+            <LogIn className="h-5 w-5" />
+            <span className="sr-only">Login</span>
+          </Button>
+        </Link>
       </div>
 
       <div className="container mx-auto px-6 py-12 max-w-7xl">
