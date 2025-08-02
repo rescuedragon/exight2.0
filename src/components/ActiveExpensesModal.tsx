@@ -100,17 +100,30 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
   const handleSaveEdit = () => {
     if (!editingExpense) return;
 
+    const monthlyPayment = parseFloat(editForm.amount);
+    const remainingMonths = parseInt(editForm.remainingMonths);
+    const calculatedRemainingAmount = monthlyPayment * remainingMonths;
+
+    console.log('Edit Debug:', {
+      monthlyPayment,
+      remainingMonths,
+      calculatedRemainingAmount,
+      editForm
+    });
+
     const updatedExpense: Expense = {
       ...editingExpense,
       name: editForm.name,
-      amount: parseFloat(editForm.amount),
+      amount: monthlyPayment,
       type: editForm.type,
       deductionDay: parseInt(editForm.deductionDay),
       isRecurring: editForm.isRecurring,
       totalMonths: editForm.isRecurring ? undefined : parseInt(editForm.totalMonths),
-      remainingMonths: editForm.isRecurring ? undefined : parseInt(editForm.remainingMonths),
-      remainingAmount: editForm.isRecurring ? undefined : (editingExpense.remainingAmount || parseFloat(editForm.amount) * parseInt(editForm.remainingMonths))
+      remainingMonths: editForm.isRecurring ? undefined : remainingMonths,
+      remainingAmount: editForm.isRecurring ? undefined : calculatedRemainingAmount
     };
+
+    console.log('Updated Expense:', updatedExpense);
 
     onUpdateExpense(updatedExpense);
     setEditingExpense(null);
@@ -167,7 +180,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                         <Edit3 className="h-4 w-4" />
                       </Button>
                     </DialogTrigger>
-                    <DialogContent className="sm:max-w-[500px] premium-card">
+                    <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto premium-card">
                       <DialogHeader>
                         <DialogTitle>Edit Expense</DialogTitle>
                       </DialogHeader>
@@ -248,11 +261,15 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                           </div>
                         )}
                         
-                        <div className="flex justify-end space-x-3 pt-4">
+                        <div className="flex justify-end space-x-3 pt-6 border-t border-border/20 mt-6">
                           <Button variant="outline" onClick={() => setEditingExpense(null)}>
                             Cancel
                           </Button>
-                          <Button variant="gradient" onClick={handleSaveEdit}>
+                          <Button 
+                            variant="gradient" 
+                            onClick={handleSaveEdit}
+                            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                          >
                             Save Changes
                           </Button>
                         </div>

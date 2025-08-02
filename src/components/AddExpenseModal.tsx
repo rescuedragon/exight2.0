@@ -64,11 +64,13 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
 
     if (!formData.isRecurring) {
       const totalMonths = parseInt(formData.totalMonths);
-      const remainingMonths = formData.remainingMonths ? parseInt(formData.remainingMonths) : totalMonths;
+      const repaidMonths = formData.remainingMonths ? parseInt(formData.remainingMonths) : 0; // Repaid months (how many already paid)
+      const remainingMonths = totalMonths - repaidMonths; // Calculate remaining months
+      
       const remainingAmount = formData.remainingAmount ? parseFloat(formData.remainingAmount) : amount * remainingMonths;
       
       expenseData.totalMonths = totalMonths;
-      expenseData.remainingMonths = remainingMonths;
+      expenseData.remainingMonths = remainingMonths; // Store the calculated remaining months
       expenseData.remainingAmount = remainingAmount;
     }
 
@@ -214,13 +216,13 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
 
                   <div className="grid grid-cols-2 gap-4">
                     <div className="space-y-3">
-                      <Label htmlFor="remainingMonths" className="text-sm font-semibold text-foreground">Remaining Months</Label>
+                      <Label htmlFor="remainingMonths" className="text-sm font-semibold text-foreground">Repaid Months</Label>
                       <Input
                         id="remainingMonths"
                         type="number"
                         value={formData.remainingMonths}
                         onChange={(e) => setFormData(prev => ({ ...prev, remainingMonths: e.target.value }))}
-                        placeholder="Auto calculated"
+                        placeholder="0 (how many months already paid)"
                         className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
                       />
                     </div>

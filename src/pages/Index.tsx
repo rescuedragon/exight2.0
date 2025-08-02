@@ -172,10 +172,12 @@ const Index = () => {
 
   const handleUpdateExpense = async (updatedExpense: Expense) => {
     try {
+      console.log('Updating expense:', updatedExpense);
       const originalExpense = expenses.find(e => e.id === updatedExpense.id);
+      console.log('Original expense:', originalExpense);
       
       // Update in database
-      await expensesAPI.update(updatedExpense.id, {
+      const updateData = {
         name: updatedExpense.name,
         amount: updatedExpense.amount,
         currency: updatedExpense.currency,
@@ -185,14 +187,19 @@ const Index = () => {
         totalMonths: updatedExpense.totalMonths,
         remainingMonths: updatedExpense.remainingMonths,
         remainingAmount: updatedExpense.remainingAmount
-      });
+      };
+      console.log('Update data being sent:', updateData);
+      
+      await expensesAPI.update(updatedExpense.id, updateData);
 
       // Update local state
-      setExpenses(prev => 
-        prev.map(expense => 
+      setExpenses(prev => {
+        const updated = prev.map(expense => 
           expense.id === updatedExpense.id ? updatedExpense : expense
-        )
-      );
+        );
+        console.log('Updated expenses state:', updated);
+        return updated;
+      });
       
       if (originalExpense) {
         // Check if it's a partial payment
