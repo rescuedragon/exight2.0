@@ -66,24 +66,29 @@ const Index = () => {
         console.log('Loading expenses from API...');
         const response = await expensesAPI.getAll();
         console.log('API response:', response);
-        const expensesWithDates = response.expenses.map((expense: any) => ({
-          id: expense.id.toString(),
+        
+        // Handle different response structures
+        const expensesArray = response.expenses || response || [];
+        console.log('Expenses array:', expensesArray);
+        
+        const expensesWithDates = expensesArray.map((expense: any) => ({
+          id: expense.id?.toString() || expense.id,
           name: expense.name,
           amount: parseFloat(expense.amount),
-          currency: expense.currency,
+          currency: expense.currency || 'INR',
           type: expense.type,
-          deductionDay: expense.deduction_day,
-          isRecurring: expense.is_recurring,
-          totalMonths: expense.total_months,
-          remainingMonths: expense.remaining_months,
-          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : undefined,
-          createdAt: new Date(expense.created_at),
-          partialPayments: expense.partial_payments?.map((payment: any) => ({
-            id: payment.id.toString(),
+          deductionDay: expense.deduction_day || expense.deductionDay || 1,
+          isRecurring: expense.is_recurring || expense.isRecurring || false,
+          totalMonths: expense.total_months || expense.totalMonths,
+          remainingMonths: expense.remaining_months || expense.remainingMonths || 0,
+          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : (expense.remainingAmount ? parseFloat(expense.remainingAmount) : undefined),
+          createdAt: new Date(expense.created_at || expense.createdAt || Date.now()),
+          partialPayments: (expense.partial_payments || expense.partialPayments || []).map((payment: any) => ({
+            id: payment.id?.toString() || payment.id,
             amount: parseFloat(payment.amount),
-            date: new Date(payment.paymentDate),
+            date: new Date(payment.paymentDate || payment.date),
             description: payment.description
-          })) || []
+          }))
         }));
         console.log('Processed expenses:', expensesWithDates);
         setExpenses(expensesWithDates);
@@ -313,42 +318,24 @@ const Index = () => {
       </div>
 
               <div className="container mx-auto px-6 py-12 max-w-7xl">
-        {/* Header - Greeting only */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4 animate-fade-in-up pt-24">
+        {/* Header - Greeting positioned at top left */}
+        <div className="flex justify-start items-start mb-6 animate-fade-in-up pt-24">
           {/* Greeting - Left side */}
           {userProfile?.firstName && (
-            <div className="animate-fade-in-up stagger-3 md:ml-8">
-              <p className="text-lg font-semibold text-foreground text-center md:text-left">
+            <div className="animate-fade-in-up stagger-3">
+              <p className="text-xl font-semibold text-foreground">
                 Hi, {userProfile.firstName}!
               </p>
             </div>
           )}
         </div>
 
-          {/* TestSpace Button - Below Login Button */}
-          <div 
-            className="fixed top-44 right-6 z-40 transition-opacity duration-300 ease-out"
-            style={{ opacity: scrollOpacity }}
-          >
-            <Link to="/testspace">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-12 w-12 rounded-full bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-300/40 shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 hover:from-purple-500/20 hover:to-blue-500/20"
-                title="TestSpace - Expense Sharing System"
-              >
-                <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">🧪</span>
-                <span className="sr-only">TestSpace</span>
-              </Button>
-            </Link>
-          </div>
+
 
         {/* Info Bar with Navigation Buttons */}
-        <div className="relative">
-          <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} />
-          
-          {/* Navigation Buttons - Positioned on top right of InfoBar */}
-          <div className="absolute top-0 right-0 flex flex-wrap gap-4 animate-fade-in-up stagger-4 z-10">
+        <div className="space-y-6">
+          {/* Navigation Buttons - Positioned above InfoBar with proper spacing */}
+          <div className="flex flex-wrap justify-end gap-4 animate-fade-in-up stagger-4 mb-4">
             {/* Privacy Toggle */}
             <Button
               variant="ghost"
@@ -382,6 +369,8 @@ const Index = () => {
               <AddExpenseModal onAddExpense={handleAddExpense} />
             </div>
           </div>
+
+          <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} />
         </div>
 
         {/* Dashboard */}
