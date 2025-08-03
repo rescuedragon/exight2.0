@@ -11,12 +11,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Middleware
-app.use(cors({
-  origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.com'] 
-    : ['http://localhost:5173', 'http://localhost:3000', 'http://localhost:3001', 'http://localhost:3002', 'http://localhost:3003', 'http://localhost:3004', 'http://localhost:3005', 'http://localhost:3006', 'http://localhost:3007', 'http://localhost:3008', 'http://localhost:3009', 'http://localhost:3010'],
-  credentials: true
-}));
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -25,6 +20,14 @@ app.get('/health', (req, res) => {
   res.json({ 
     status: 'OK', 
     message: 'Exight API is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Test endpoint
+app.get('/test', (req, res) => {
+  res.json({ 
+    message: 'Test endpoint working',
     timestamp: new Date().toISOString()
   });
 });
