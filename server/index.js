@@ -1,9 +1,6 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import authRoutes from './routes/auth.js';
-import expenseRoutes from './routes/expenses.js';
-import { authenticateToken } from './middleware/auth.js';
 
 dotenv.config();
 
@@ -87,16 +84,27 @@ app.get('/api/init-db', async (req, res) => {
   }
 });
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/expenses', expenseRoutes);
+// Simple auth endpoints (temporary)
+app.post('/api/auth/register', async (req, res) => {
+  try {
+    res.json({ 
+      message: 'Registration endpoint working',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
 
-// Protected route example
-app.get('/api/protected', authenticateToken, (req, res) => {
-  res.json({ 
-    message: 'This is a protected route',
-    user: req.user 
-  });
+app.post('/api/auth/login', async (req, res) => {
+  try {
+    res.json({ 
+      message: 'Login endpoint working',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // Error handling middleware
