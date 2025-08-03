@@ -69,180 +69,31 @@ const Index = () => {
         const response = await expensesAPI.getAll();
         console.log('API response:', response);
         
-        if (response.expenses && Array.isArray(response.expenses)) {
-          const expensesWithDates = response.expenses.map((expense: any) => ({
-            id: expense.id.toString(),
-            name: expense.name,
-            amount: parseFloat(expense.amount),
-            currency: expense.currency,
-            type: expense.type,
-            deductionDay: expense.deduction_day,
-            isRecurring: expense.is_recurring,
-            totalMonths: expense.total_months,
-            remainingMonths: expense.remaining_months,
-            remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : undefined,
-            createdAt: new Date(expense.created_at),
-            partialPayments: expense.partial_payments?.map((payment: any) => ({
-              id: payment.id.toString(),
-              amount: parseFloat(payment.amount),
-              date: new Date(payment.paymentDate),
-              description: payment.description
-            })) || []
-          }));
-          console.log('Processed expenses:', expensesWithDates);
-          setExpenses(expensesWithDates);
-        } else {
-          console.log('No expenses found or invalid response format');
-          // Add sample data for demonstration
-          const sampleExpenses: Expense[] = [
-            {
-              id: '1',
-              name: 'Home Loan EMI',
-              amount: 25000,
-              currency: 'INR',
-              type: 'EMI',
-              deductionDay: 15,
-              isRecurring: true,
-              totalMonths: 240,
-              remainingMonths: 180,
-              remainingAmount: 4500000,
-              createdAt: new Date('2024-01-15'),
-              partialPayments: []
-            },
-            {
-              id: '2',
-              name: 'Car Loan',
-              amount: 12000,
-              currency: 'INR',
-              type: 'Personal Loan',
-              deductionDay: 5,
-              isRecurring: false,
-              totalMonths: 60,
-              remainingMonths: 24,
-              remainingAmount: 288000,
-              createdAt: new Date('2023-06-10'),
-              partialPayments: [
-                {
-                  id: '1',
-                  amount: 50000,
-                  date: new Date('2024-01-15'),
-                  description: 'Partial payment'
-                }
-              ]
-            },
-            {
-              id: '3',
-              name: 'Netflix Subscription',
-              amount: 499,
-              currency: 'INR',
-              type: 'Borrowed from Someone',
-              deductionDay: 1,
-              isRecurring: true,
-              totalMonths: 12,
-              remainingMonths: 12,
-              remainingAmount: undefined,
-              createdAt: new Date('2024-01-01'),
-              partialPayments: []
-            }
-          ];
-          setExpenses(sampleExpenses);
-          // Only set demo user if profile loading failed
-          if (!userProfile) {
-            setUserProfile({ firstName: 'Demo', lastName: 'User' });
-          }
-        }
+        const expensesWithDates = response.expenses.map((expense: any) => ({
+          id: expense.id.toString(),
+          name: expense.name,
+          amount: parseFloat(expense.amount),
+          currency: expense.currency,
+          type: expense.type,
+          deductionDay: expense.deduction_day,
+          isRecurring: expense.is_recurring,
+          totalMonths: expense.total_months,
+          remainingMonths: expense.remaining_months,
+          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : undefined,
+          createdAt: new Date(expense.created_at),
+          partialPayments: expense.partial_payments?.map((payment: any) => ({
+            id: payment.id.toString(),
+            amount: parseFloat(payment.amount),
+            date: new Date(payment.paymentDate),
+            description: payment.description
+          })) || []
+        }));
+        console.log('Processed expenses:', expensesWithDates);
+        setExpenses(expensesWithDates);
       } catch (error) {
         console.error('Failed to load data:', error);
-        // Add sample data for demonstration when API fails
-        const sampleExpenses: Expense[] = [
-          {
-            id: '1',
-            name: 'Home Loan EMI',
-            amount: 25000,
-            currency: 'INR',
-            type: 'EMI',
-            deductionDay: 15,
-            isRecurring: true,
-            totalMonths: 240,
-            remainingMonths: 180,
-            remainingAmount: 4500000,
-            createdAt: new Date('2024-01-15'),
-            partialPayments: []
-          },
-          {
-            id: '2',
-            name: 'Car Loan',
-            amount: 12000,
-            currency: 'INR',
-            type: 'Personal Loan',
-            deductionDay: 5,
-            isRecurring: false,
-            totalMonths: 60,
-            remainingMonths: 24,
-            remainingAmount: 288000,
-            createdAt: new Date('2023-06-10'),
-            partialPayments: [
-              {
-                id: '1',
-                amount: 50000,
-                date: new Date('2024-01-15'),
-                description: 'Partial payment'
-              }
-            ]
-          },
-          {
-            id: '3',
-            name: 'Netflix Subscription',
-            amount: 499,
-            currency: 'INR',
-            type: 'Borrowed from Someone',
-            deductionDay: 1,
-            isRecurring: true,
-            totalMonths: 12,
-            remainingMonths: 12,
-            remainingAmount: undefined,
-            createdAt: new Date('2024-01-01'),
-            partialPayments: []
-          }
-        ];
-        setExpenses(sampleExpenses);
-        // Only set demo user if profile loading failed
-        if (!userProfile) {
-          setUserProfile({ firstName: 'Demo', lastName: 'User' });
-        }
-        
-        // Add sample action logs
-        const sampleActionLogs: ActionLog[] = [
-          {
-            id: '1',
-            action: 'Added New Expense',
-            details: 'Created EMI: Home Loan EMI - ₹25000/month',
-            timestamp: new Date('2024-01-15'),
-            type: 'add'
-          },
-          {
-            id: '2',
-            action: 'Added New Expense',
-            details: 'Created Personal Loan: Car Loan - ₹12000/month',
-            timestamp: new Date('2023-06-10'),
-            type: 'add'
-          },
-          {
-            id: '3',
-            action: 'Partial Payment Made',
-            details: 'Paid ₹50000 towards Car Loan',
-            timestamp: new Date('2024-01-15'),
-            type: 'payment'
-          },
-          {
-            id: '4',
-            action: 'Added New Expense',
-            details: 'Created Borrowed from Someone: Netflix Subscription - ₹499/month',
-            timestamp: new Date('2024-01-01'),
-            type: 'add'
-          }
-        ];
-        setActionLogs(sampleActionLogs);
+        setExpenses([]);
+        setUserProfile(null);
       }
     };
 
