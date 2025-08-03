@@ -68,7 +68,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
         return <div className="h-2 w-2 rounded-full bg-foreground" />;
       case 'Personal Loan':
         return <div className="h-2 w-2 rounded-full bg-foreground" />;
-      case 'Borrowed from Someone':
+      case 'Borrowed':
         return <div className="h-2 w-2 rounded-full bg-foreground" />;
     }
   };
@@ -79,7 +79,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
         return 'bg-gradient-to-r from-blue-accent/20 to-blue-accent/10 text-blue-accent border-blue-accent/30';
       case 'Personal Loan':
         return 'bg-gradient-to-r from-purple-accent/20 to-purple-accent/10 text-purple-accent border-purple-accent/30';
-      case 'Borrowed from Someone':
+      case 'Borrowed':
         return 'bg-gradient-to-r from-emerald-accent/20 to-emerald-accent/10 text-emerald-accent border-emerald-accent/30';
     }
   };

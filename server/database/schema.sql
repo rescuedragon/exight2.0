@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS expenses (
     name VARCHAR(255) NOT NULL,
     amount DECIMAL(10,2) NOT NULL,
     currency VARCHAR(3) NOT NULL DEFAULT 'INR',
-    type VARCHAR(50) NOT NULL CHECK (type IN ('EMI', 'Personal Loan', 'Borrowed from Someone')),
+    type VARCHAR(50) NOT NULL CHECK (type IN ('EMI', 'Personal Loan', 'Borrowed')),
     deduction_day INTEGER NOT NULL CHECK (deduction_day >= 1 AND deduction_day <= 31),
     is_recurring BOOLEAN DEFAULT true,
     total_months INTEGER,

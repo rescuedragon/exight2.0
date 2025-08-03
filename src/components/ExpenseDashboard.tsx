@@ -43,7 +43,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
         return <div className="h-2 w-2 rounded-full bg-foreground" />;
       case 'Personal Loan':
         return <div className="h-2 w-2 rounded-full bg-foreground" />;
-      case 'Borrowed from Someone':
+      case 'Borrowed':
         return <div className="h-2 w-2 rounded-full bg-foreground" />;
     }
   };
@@ -394,9 +394,14 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">
-                {formatCurrency(fixedTimeExpenses.reduce((sum, exp) => sum + exp.amount, 0))} / month
-              </span>
+              <div className="text-right">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">
+                  {formatCurrency(fixedTimeExpenses.reduce((sum, exp) => sum + exp.amount, 0))} / month
+                </span>
+                <div className="text-xs text-muted-foreground">
+                  Total due: {formatCurrency(fixedTimeExpenses.reduce((sum, exp) => sum + (exp.remainingAmount || 0), 0))}
+                </div>
+              </div>
               {isFixedTimeExpanded ? (
                 <ChevronUp className="h-5 w-5 text-gray-600 dark:text-gray-400 transition-transform duration-300" />
               ) : (
