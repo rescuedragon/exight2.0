@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import authRoutes from './routes/auth.js';
+import expenseRoutes from './routes/expenses.js';
+import { authenticateToken } from './middleware/auth.js';
 
 dotenv.config();
 
@@ -20,7 +23,9 @@ app.get('/', (req, res) => {
     endpoints: {
       health: '/health',
       test: '/test',
-      api: '/api/hello'
+      api: '/api/hello',
+      auth: '/api/auth',
+      expenses: '/api/expenses'
     },
     timestamp: new Date().toISOString()
   });
@@ -48,6 +53,18 @@ app.get('/api/hello', (req, res) => {
   res.json({ 
     message: 'Hello from Exight API!',
     timestamp: new Date().toISOString()
+  });
+});
+
+// Routes
+app.use('/api/auth', authRoutes);
+app.use('/api/expenses', expenseRoutes);
+
+// Protected route example
+app.get('/api/protected', authenticateToken, (req, res) => {
+  res.json({ 
+    message: 'This is a protected route',
+    user: req.user 
   });
 });
 
