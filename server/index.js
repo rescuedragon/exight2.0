@@ -87,11 +87,11 @@ app.get('/api/init-db', async (req, res) => {
 // Import required modules
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
-import pool from './database/connection.js';
 
-// Initialize database tables
+// Initialize database tables (only when needed)
 async function initializeDatabase() {
   try {
+    const pool = await import('./database/connection.js');
     const fs = await import('fs');
     const path = await import('path');
     const { fileURLToPath } = await import('url');
@@ -104,7 +104,7 @@ async function initializeDatabase() {
     const schema = fs.readFileSync(schemaPath, 'utf8');
     
     // Execute the schema
-    await pool.query(schema);
+    await pool.default.query(schema);
     console.log('✅ Database tables created successfully!');
   } catch (error) {
     console.error('❌ Database initialization error:', error);
