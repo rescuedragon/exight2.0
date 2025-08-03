@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, TrendingUp, IndianRupee, Target, Calendar } from "lucide-react";
+import { ConnectedLineChart } from "@/components/ConnectedLineChart";
 import { Expense } from "@/types/expense";
 
 interface YearlyProjectionModalProps {
@@ -170,118 +171,20 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
 
             {/* Cumulative Chart */}
             <Card className="premium-card">
-              <CardHeader>
-                <CardTitle className="text-xl font-bold">Cumulative Spending Curve</CardTitle>
-              </CardHeader>
               <CardContent className="p-6">
-                <div className="space-y-6">
-                  
-                  <div className="relative h-80 bg-muted/5 rounded-xl p-6">
-                    {/* Y-axis labels */}
-                    <div className="absolute left-0 top-6 bottom-12 flex flex-col justify-between text-xs text-muted-foreground">
-                      <span>₹{(maxCumulative / 100000).toFixed(1)}L</span>
-                      <span>₹{(maxCumulative * 0.75 / 100000).toFixed(1)}L</span>
-                      <span>₹{(maxCumulative * 0.5 / 100000).toFixed(1)}L</span>
-                      <span>₹{(maxCumulative * 0.25 / 100000).toFixed(1)}L</span>
-                      <span>₹0</span>
-                    </div>
-                    
-                    {/* Chart area */}
-                    <div className="ml-12 mr-4 h-full relative">
-                      {/* Grid lines */}
-                      <div className="absolute inset-0 grid grid-rows-4">
-                        {[...Array(5)].map((_, i) => (
-                          <div key={i} className="border-t border-border/20 first:border-t-0"></div>
-                        ))}
-                      </div>
-                      
-                      {/* Chart SVG */}
-                      <svg className="absolute inset-0 w-full h-full overflow-visible">
-                        <defs>
-                          <linearGradient id="cumulativeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
-                            <stop offset="50%" stopColor="#10b981" stopOpacity="0.15" />
-                            <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
-                          </linearGradient>
-                        </defs>
-                        
-                        {/* Area under curve */}
-                        <path
-                          d={`M 0% 100% ${monthlyData.map((data, index) => {
-                            const x = (index / (monthlyData.length - 1)) * 100;
-                            const y = 100 - ((data.cumulativeAmount / maxCumulative) * 100);
-                            return `L ${x}% ${y}%`;
-                          }).join(' ')} L 100% 100% Z`}
-                          fill="url(#cumulativeGradient)"
-                          className="animate-fade-in-up"
-                          style={{ animationDelay: '300ms' }}
-                        />
-                        
-                        {/* Smooth connecting line - Made very visible */}
-                        <path
-                          d={`M ${monthlyData.map((data, index) => {
-                            const x = (index / (monthlyData.length - 1)) * 100;
-                            const y = 100 - ((data.cumulativeAmount / maxCumulative) * 100);
-                            return `${index === 0 ? `${x}% ${y}%` : `L ${x}% ${y}%`}`;
-                          }).join(' ')}`}
-                          stroke="#10b981"
-                          strokeWidth="2"
-                          fill="none"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          className="animate-fade-in-up"
-                          style={{ 
-                            animationDelay: '500ms',
-                            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
-                          }}
-                        />
-                        
-                        {/* Data points */}
-                        {monthlyData.map((data, index) => {
-                          const x = (index / (monthlyData.length - 1)) * 100;
-                          const y = 100 - ((data.cumulativeAmount / maxCumulative) * 100);
-                          
-                          return (
-                            <g key={index}>
-                              <circle
-                                cx={`${x}%`}
-                                cy={`${y}%`}
-                                r="4"
-                                fill={data.isPast || data.isCurrent ? 'hsl(var(--emerald-accent))' : 'hsl(var(--blue-accent))'}
-                                stroke="white"
-                                strokeWidth="1.5"
-                                className="animate-fade-in-up transition-all duration-200 cursor-pointer"
-                                style={{ 
-                                  animationDelay: `${700 + index * 50}ms`,
-                                  filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))'
-                                }}
-                              />
-                              {/* Value labels on hover */}
-                              <text
-                                x={`${x}%`}
-                                y={`${Math.max(y - 8, 5)}%`}
-                                textAnchor="middle"
-                                className="text-xs font-medium fill-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
-                                style={{ animationDelay: `${700 + index * 50}ms` }}
-                              >
-                                ₹{(data.cumulativeAmount / 100000).toFixed(1)}L
-                              </text>
-                            </g>
-                          );
-                        })}
-                      </svg>
-                      
-                      {/* X-axis labels */}
-                      <div className="absolute -bottom-6 left-0 right-0 grid grid-cols-12 gap-1 text-xs text-muted-foreground">
-                        {monthlyData.map((data, index) => (
-                          <span key={index} className={`text-center truncate ${data.isCurrent ? 'font-bold text-emerald-accent' : ''}`}>
-                            {data.month}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <ConnectedLineChart 
+                  data={monthlyData.map((data, index) => ({
+                    label: data.month,
+                    value: data.cumulativeAmount,
+                    isPast: data.isPast,
+                    isCurrent: data.isCurrent,
+                    isFuture: data.isFuture
+                  }))}
+                  formatValue={(value) => `₹${(value / 100000).toFixed(1)}L`}
+                  title="Cumulative Spending Curve"
+                  color="#10b981"
+                  height={400}
+                />
               </CardContent>
             </Card>
           </div>

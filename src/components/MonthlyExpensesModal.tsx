@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Calendar, TrendingUp, IndianRupee } from "lucide-react";
 import { Expense } from "@/types/expense";
-import { SimpleChart } from "@/components/SimpleChart";
+import { ConnectedLineChart } from "@/components/ConnectedLineChart";
 
 interface MonthlyExpensesModalProps {
   expenses: Expense[];
@@ -30,15 +30,14 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
   };
 
   const getMonthlyExpense = (monthIndex: number) => {
-    const allExpenses = expenses;
-
-    return allExpenses.reduce((total, expense) => {
+    return expenses.reduce((total, expense) => {
+      // Recurring expenses (like rent) are active every month
       if (expense.isRecurring) {
         return total + expense.amount;
       }
       
-      // For non-recurring (EMI/Loan), calculate the timeline properly
-      if (expense.remainingMonths && expense.remainingMonths > 0 && expense.totalMonths) {
+      // For EMIs/Loans, use the same logic as DetailedView
+      if (expense.remainingMonths && expense.remainingMonths > 0) {
         const currentDate = new Date();
         const currentMonthIndex = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
@@ -76,10 +75,10 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
   };
 
   const getMonthlyExpenseDetails = (monthIndex: number) => {
-    const allExpenses = expenses;
     const monthExpenses: Array<{name: string, amount: number, type: string}> = [];
 
-    allExpenses.forEach(expense => {
+    expenses.forEach(expense => {
+      // Recurring expenses are active every month
       if (expense.isRecurring) {
         monthExpenses.push({
           name: expense.name,
@@ -89,35 +88,42 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
         return;
       }
       
-      const totalMonths = expense.totalMonths || 0;
-      const remainingMonths = expense.remainingMonths || 0;
-      const completedMonths = totalMonths - remainingMonths;
-      
-      const currentDate = new Date();
-      const currentMonthIndex = currentDate.getMonth();
-      const currentYear = currentDate.getFullYear();
-      
-      const startMonthIndex = currentMonthIndex - completedMonths;
-      const startYear = currentYear + Math.floor(startMonthIndex / 12);
-      const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
-      
-      const endMonthIndex = currentMonthIndex + remainingMonths;
-      const endYear = currentYear + Math.floor(endMonthIndex / 12);
-      const normalizedEndMonth = endMonthIndex % 12;
-      
-      const targetYear = selectedYear;
-      const targetMonth = monthIndex;
-      
-      const startPeriod = startYear * 12 + normalizedStartMonth;
-      const endPeriod = endYear * 12 + normalizedEndMonth;
-      const targetPeriod = targetYear * 12 + targetMonth;
-      
-      if (targetPeriod >= startPeriod && targetPeriod < endPeriod) {
-        monthExpenses.push({
-          name: expense.name,
-          amount: expense.amount,
-          type: expense.type
-        });
+      // For EMIs/Loans, use the same logic as DetailedView
+      if (expense.remainingMonths && expense.remainingMonths > 0) {
+        const currentDate = new Date();
+        const currentMonthIndex = currentDate.getMonth();
+        const currentYear = currentDate.getFullYear();
+        
+        // Calculate completed months
+        const completedMonths = expense.totalMonths - expense.remainingMonths;
+        
+        // EMI started 'completedMonths' months ago from current month
+        const startMonthIndex = currentMonthIndex - completedMonths;
+        const startYear = currentYear + Math.floor(startMonthIndex / 12);
+        const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
+        
+        // EMI will end 'remainingMonths' months from current month
+        const endMonthIndex = currentMonthIndex + expense.remainingMonths;
+        const endYear = currentYear + Math.floor(endMonthIndex / 12);
+        const normalizedEndMonth = endMonthIndex % 12;
+        
+        // Check if the target month falls within the EMI period
+        const targetYear = selectedYear;
+        const targetMonth = monthIndex;
+        
+        // Convert dates to comparable format (year * 12 + month)
+        const startPeriod = startYear * 12 + normalizedStartMonth;
+        const endPeriod = endYear * 12 + normalizedEndMonth;
+        const targetPeriod = targetYear * 12 + targetMonth;
+        
+        // Include the expense if target month is within the EMI period
+        if (targetPeriod >= startPeriod && targetPeriod < endPeriod) {
+          monthExpenses.push({
+            name: expense.name,
+            amount: expense.amount,
+            type: expense.type
+          });
+        }
       }
     });
 
@@ -212,14 +218,18 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
                 <CardTitle className="text-xl font-bold">Monthly Breakdown</CardTitle>
               </CardHeader>
               <CardContent className="p-6">
-                <SimpleChart 
+                <ConnectedLineChart 
                   data={monthlyData.map((data, index) => ({
-                    ...data,
+                    label: data.month,
+                    value: data.amount,
+                    isPast: data.isPast,
+                    isCurrent: data.isCurrent,
+                    isFuture: data.isFuture,
                     expenses: getMonthlyExpenseDetails(index)
                   }))}
-                  maxAmount={maxAmount}
-                  formatCurrency={formatCurrency}
-                  selectedYear={selectedYear}
+                  formatValue={formatCurrency}
+                  title="Monthly Spending Trend"
+                  color="#3b82f6"
                 />
               </CardContent>
             </Card>
