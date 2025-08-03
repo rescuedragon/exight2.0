@@ -146,6 +146,10 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
   // Separate recurring and fixed-time expenses
   const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);
   const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
+  
+  console.log('Active expenses:', activeExpenses);
+  console.log('Recurring expenses:', recurringExpenses);
+  console.log('Fixed time expenses:', fixedTimeExpenses);
 
   const renderExpenseCard = (expense: Expense, index: number) => {
     const progressPercentage = expense.isRecurring ? 0 : Math.round((((expense.totalMonths || 0) - (expense.remainingMonths || 0)) / (expense.totalMonths || 1)) * 100);
