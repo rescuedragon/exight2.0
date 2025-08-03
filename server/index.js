@@ -56,6 +56,37 @@ app.get('/api/hello', (req, res) => {
   });
 });
 
+// Initialize database endpoint
+app.get('/api/init-db', async (req, res) => {
+  try {
+    const fs = await import('fs');
+    const path = await import('path');
+    const { fileURLToPath } = await import('url');
+    const pool = await import('./database/connection.js');
+    
+    const __filename = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(__filename);
+    
+    // Read the schema file
+    const schemaPath = path.join(__dirname, './database/schema.sql');
+    const schema = fs.readFileSync(schemaPath, 'utf8');
+    
+    // Execute the schema
+    await pool.default.query(schema);
+    
+    res.json({ 
+      message: 'Database initialized successfully!',
+      tables: ['users', 'expenses', 'partial_payments']
+    });
+  } catch (error) {
+    console.error('Database initialization error:', error);
+    res.status(500).json({ 
+      error: 'Database initialization failed',
+      message: error.message 
+    });
+  }
+});
+
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/expenses', expenseRoutes);
