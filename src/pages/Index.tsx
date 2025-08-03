@@ -312,8 +312,8 @@ const Index = () => {
         </Link>
       </div>
 
-      <div className="container mx-auto px-6 py-12 max-w-7xl">
-        {/* Header - Greeting and Buttons on same level */}
+              <div className="container mx-auto px-6 py-12 max-w-7xl">
+        {/* Header - Greeting only */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4 animate-fade-in-up pt-24">
           {/* Greeting - Left side */}
           {userProfile?.firstName && (
@@ -323,9 +323,32 @@ const Index = () => {
               </p>
             </div>
           )}
+        </div>
+
+          {/* TestSpace Button - Below Login Button */}
+          <div 
+            className="fixed top-44 right-6 z-40 transition-opacity duration-300 ease-out"
+            style={{ opacity: scrollOpacity }}
+          >
+            <Link to="/testspace">
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-300/40 shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 hover:from-purple-500/20 hover:to-blue-500/20"
+                title="TestSpace - Expense Sharing System"
+              >
+                <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">🧪</span>
+                <span className="sr-only">TestSpace</span>
+              </Button>
+            </Link>
+          </div>
+
+        {/* Info Bar with Navigation Buttons */}
+        <div className="relative">
+          <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} />
           
-          {/* Buttons - Right side */}
-          <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
+          {/* Navigation Buttons - Positioned on top right of InfoBar */}
+          <div className="absolute top-0 right-0 flex flex-wrap gap-4 animate-fade-in-up stagger-4 z-10">
             {/* Privacy Toggle */}
             <Button
               variant="ghost"
@@ -359,28 +382,7 @@ const Index = () => {
               <AddExpenseModal onAddExpense={handleAddExpense} />
             </div>
           </div>
-
-          {/* TestSpace Button - Below Login Button */}
-          <div 
-            className="fixed top-44 right-6 z-40 transition-opacity duration-300 ease-out"
-            style={{ opacity: scrollOpacity }}
-          >
-            <Link to="/testspace">
-              <Button
-                variant="outline"
-                size="icon"
-                className="h-12 w-12 rounded-full bg-gradient-to-r from-purple-500/10 to-blue-500/10 border-purple-300/40 shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105 hover:from-purple-500/20 hover:to-blue-500/20"
-                title="TestSpace - Expense Sharing System"
-              >
-                <span className="text-lg font-bold bg-gradient-to-r from-purple-600 to-blue-600 bg-clip-text text-transparent">🧪</span>
-                <span className="sr-only">TestSpace</span>
-              </Button>
-            </Link>
-          </div>
         </div>
-
-        {/* Info Bar */}
-        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} />
 
         {/* Dashboard */}
         <div className="animate-fade-in-up stagger-5">
