@@ -66,29 +66,24 @@ const Index = () => {
         console.log('Loading expenses from API...');
         const response = await expensesAPI.getAll();
         console.log('API response:', response);
-        
-        // Handle different response structures
-        const expensesArray = response.expenses || response || [];
-        console.log('Expenses array:', expensesArray);
-        
-        const expensesWithDates = expensesArray.map((expense: any) => ({
-          id: expense.id?.toString() || expense.id,
+        const expensesWithDates = response.expenses.map((expense: any) => ({
+          id: expense.id.toString(),
           name: expense.name,
           amount: parseFloat(expense.amount),
-          currency: expense.currency || 'INR',
+          currency: expense.currency,
           type: expense.type,
-          deductionDay: expense.deduction_day || expense.deductionDay || 1,
-          isRecurring: expense.is_recurring || expense.isRecurring || false,
-          totalMonths: expense.total_months || expense.totalMonths,
-          remainingMonths: expense.remaining_months || expense.remainingMonths || 0,
-          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : (expense.remainingAmount ? parseFloat(expense.remainingAmount) : undefined),
-          createdAt: new Date(expense.created_at || expense.createdAt || Date.now()),
-          partialPayments: (expense.partial_payments || expense.partialPayments || []).map((payment: any) => ({
-            id: payment.id?.toString() || payment.id,
+          deductionDay: expense.deduction_day,
+          isRecurring: expense.is_recurring,
+          totalMonths: expense.total_months,
+          remainingMonths: expense.remaining_months,
+          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : undefined,
+          createdAt: new Date(expense.created_at),
+          partialPayments: expense.partial_payments?.map((payment: any) => ({
+            id: payment.id.toString(),
             amount: parseFloat(payment.amount),
-            date: new Date(payment.paymentDate || payment.date),
+            date: new Date(payment.paymentDate),
             description: payment.description
-          }))
+          })) || []
         }));
         console.log('Processed expenses:', expensesWithDates);
         setExpenses(expensesWithDates);
@@ -333,9 +328,9 @@ const Index = () => {
 
 
         {/* Info Bar with Navigation Buttons */}
-        <div className="space-y-6">
-          {/* Navigation Buttons - Positioned above InfoBar with proper spacing */}
-          <div className="flex flex-wrap justify-end gap-4 animate-fade-in-up stagger-4 mb-4">
+        <div className="space-y-4">
+          {/* Navigation Buttons - Positioned above InfoBar */}
+          <div className="flex flex-wrap justify-end gap-4 animate-fade-in-up stagger-4">
             {/* Privacy Toggle */}
             <Button
               variant="ghost"
