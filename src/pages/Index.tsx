@@ -60,7 +60,9 @@ const Index = () => {
         console.log('Loading user profile...');
         const profileResponse = await authAPI.getProfile();
         console.log('Profile response:', profileResponse);
-        setUserProfile(profileResponse.user);
+        if (profileResponse.user && profileResponse.user.firstName) {
+          setUserProfile(profileResponse.user);
+        }
         
         // Load expenses
         console.log('Loading expenses from API...');
@@ -144,7 +146,10 @@ const Index = () => {
             }
           ];
           setExpenses(sampleExpenses);
-          setUserProfile({ firstName: 'Demo', lastName: 'User' });
+          // Only set demo user if profile loading failed
+          if (!userProfile) {
+            setUserProfile({ firstName: 'Demo', lastName: 'User' });
+          }
         }
       } catch (error) {
         console.error('Failed to load data:', error);
@@ -201,7 +206,10 @@ const Index = () => {
           }
         ];
         setExpenses(sampleExpenses);
-        setUserProfile({ firstName: 'Demo', lastName: 'User' });
+        // Only set demo user if profile loading failed
+        if (!userProfile) {
+          setUserProfile({ firstName: 'Demo', lastName: 'User' });
+        }
         
         // Add sample action logs
         const sampleActionLogs: ActionLog[] = [
