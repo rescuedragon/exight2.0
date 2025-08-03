@@ -138,8 +138,19 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
   // Filter to show only active expenses (not completed)
   console.log('All expenses:', expenses);
   const activeExpenses = expenses.filter(expense => {
-    const isActive = expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0));
-    console.log(`Expense ${expense.name}: isRecurring=${expense.isRecurring}, remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, isActive=${isActive}`);
+    // Show recurring expenses always
+    if (expense.isRecurring) {
+      console.log(`Expense ${expense.name}: isRecurring=true, isActive=true`);
+      return true;
+    }
+
+    // For non-recurring expenses, show if they have remaining months OR remaining amount OR valid total months
+    const hasRemainingMonths = expense.remainingMonths > 0;
+    const hasRemainingAmount = expense.remainingAmount === undefined || expense.remainingAmount > 0;
+    const hasValidTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+    const isActive = hasRemainingMonths || hasRemainingAmount || hasValidTotalMonths;
+
+    console.log(`Expense ${expense.name}: isRecurring=${expense.isRecurring}, remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, totalMonths=${expense.totalMonths}, hasRemainingMonths=${hasRemainingMonths}, hasRemainingAmount=${hasRemainingAmount}, hasValidTotalMonths=${hasValidTotalMonths}, isActive=${isActive}`);
     return isActive;
   });
 
