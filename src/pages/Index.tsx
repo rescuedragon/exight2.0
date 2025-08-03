@@ -318,18 +318,20 @@ const Index = () => {
       </div>
 
               <div className="container mx-auto px-6 py-12 max-w-7xl">
-        {/* Header - Greeting positioned above InfoBar on left */}
-        <div className="flex justify-between items-center mb-6 animate-fade-in-up pt-24">
+        {/* Header - Greeting only */}
+        <div className="flex justify-between items-center mb-4 animate-fade-in-up pt-24">
           {/* Greeting - Left side */}
           {userProfile?.firstName && (
             <div className="animate-fade-in-up stagger-3">
-              <p className="text-2xl font-bold text-foreground">
+              <p className="text-lg font-semibold text-foreground">
                 Hi, {userProfile.firstName}!
               </p>
             </div>
           )}
-          
-          {/* Navigation Buttons - Positioned on the right, aligned with greeting */}
+        </div>
+
+        {/* Navigation Buttons - Above InfoBar */}
+        <div className="flex justify-end mb-4">
           <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
             {/* Privacy Toggle */}
             <Button
@@ -360,18 +362,15 @@ const Index = () => {
               <BarChart3 className="h-5 w-5" />
               Analytics
             </Button>
+            
             <div className="animate-fade-in-up stagger-5">
               <AddExpenseModal onAddExpense={handleAddExpense} />
             </div>
           </div>
         </div>
 
-
-
-        {/* Info Bar */}
-        <div className="space-y-4">
-          <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} />
-        </div>
+        {/* Info Bar - Original size */}
+        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} userProfile={userProfile} />
 
         {/* Dashboard */}
         <div className="animate-fade-in-up stagger-5">

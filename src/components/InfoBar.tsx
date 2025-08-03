@@ -10,9 +10,10 @@ interface InfoBarProps {
   onUpdateExpense: (expense: Expense) => void;
   onDeleteExpense?: (expenseId: string) => void;
   isPrivacyMode?: boolean;
+  userProfile?: { firstName?: string; lastName?: string } | null;
 }
 
-export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false }: InfoBarProps) => {
+export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false, userProfile }: InfoBarProps) => {
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
   const [showYearlyModal, setShowYearlyModal] = useState(false);
   const [showActiveModal, setShowActiveModal] = useState(false);
@@ -56,6 +57,15 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
   return (
     <>
       <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-6 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
+        {/* Greeting - Left top */}
+        {userProfile?.firstName && (
+          <div className="mb-4 animate-fade-in-up stagger-1">
+            <p className="text-lg font-semibold text-foreground">
+              Hi, {userProfile.firstName}!
+            </p>
+          </div>
+        )}
+        
         <div className="grid grid-cols-3 gap-6 justify-items-center">
           <div
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 hover:bg-white/30 dark:hover:bg-gray-800/40 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md border border-white/30 dark:border-transparent w-full max-w-xs group"
