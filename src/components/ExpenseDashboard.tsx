@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { 
@@ -17,7 +18,8 @@ import {
   ChevronDown,
   ChevronUp,
   Repeat,
-  Timer
+  Timer,
+  MoreVertical
 } from "lucide-react";
 import { Expense, ExpenseType } from "@/types/expense";
 import { useToast } from "@/hooks/use-toast";
@@ -154,7 +156,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
         key={expense.id} 
         className={`backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 border border-white/30 dark:border-gray-600/30 rounded-2xl hover:shadow-xl group transition-all duration-500 compact-expense-card animate-fade-in-up ${staggerClass} hover:scale-[1.02] hover:backdrop-blur-lg`}
       >
-        <div className="p-4 pb-3 flex-shrink-0">
+        <div className="p-3 pb-2 flex-shrink-0">
           <div className="flex items-center justify-between min-h-[1.5rem]">
             <div className="flex items-center gap-2 text-base font-bold">
               <div className="p-1 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-md backdrop-blur-sm">
@@ -167,17 +169,26 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
                 {expense.type}
               </Badge>
               {!expense.isRecurring && (
-                <Dialog>
-                  <DialogTrigger asChild>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
                     <Button 
-                      variant="premium" 
+                      variant="ghost" 
                       size="sm"
-                      className="rounded-full px-3 py-1 text-xs hover:scale-105 transition-transform duration-200 h-6 backdrop-blur-sm bg-gradient-to-r from-blue-500/90 to-purple-500/90 hover:from-blue-500 to-purple-500"
-                      onClick={() => setSelectedExpense(expense)}
+                      className="h-6 w-6 p-0 rounded-full hover:bg-white/20 dark:hover:bg-gray-800/30 transition-colors duration-200"
                     >
-                      Partial Payment
+                      <MoreVertical className="h-4 w-4 text-muted-foreground" />
                     </Button>
-                  </DialogTrigger>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <Dialog>
+                      <DialogTrigger asChild>
+                        <DropdownMenuItem 
+                          className="cursor-pointer"
+                          onClick={() => setSelectedExpense(expense)}
+                        >
+                          Record part payment
+                        </DropdownMenuItem>
+                      </DialogTrigger>
                   <DialogContent className="sm:max-w-[425px] backdrop-blur-xl bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-900/30 dark:via-gray-800/20 dark:to-gray-900/30 border border-white/30 dark:border-gray-600/30">
                     <DialogHeader>
                       <DialogTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">Make Partial Payment</DialogTitle>
@@ -213,15 +224,17 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
                       </div>
                     </div>
                   </DialogContent>
-                </Dialog>
+                    </Dialog>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               )}
             </div>
           </div>
         </div>
         
-        <div className="flex flex-col h-full px-4 pb-4 pt-0">
+        <div className="flex flex-col h-full px-3 pb-3 pt-0">
           {/* Stats Grid - Ultra Compact */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3 justify-items-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2 justify-items-center">
             <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="text-center">
                 <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Amount</p>
@@ -307,7 +320,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
             onClick={() => setIsRecurringExpanded(!isRecurringExpanded)}
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-amber-500/90 to-amber-600/90 hover:from-amber-500 to-amber-600 transition-all duration-300" style={{ backgroundColor: '#f59e0b' }}>
+              <div className="p-3 rounded-3xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-amber-500/90 to-amber-600/90 hover:from-amber-500 to-amber-600 transition-all duration-300" style={{ backgroundColor: '#f59e0b' }}>
                 <svg
                   width="20"
                   height="20"
@@ -359,7 +372,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
             onClick={() => setIsFixedTimeExpanded(!isFixedTimeExpanded)}
           >
             <div className="flex items-center gap-4">
-              <div className="p-3 rounded-2xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-pink-500/90 to-pink-600/90 hover:from-pink-500 to-pink-600 transition-all duration-300" style={{ backgroundColor: '#ec4899' }}>
+              <div className="p-3 rounded-3xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-pink-500/90 to-pink-600/90 hover:from-pink-500 to-pink-600 transition-all duration-300" style={{ backgroundColor: '#ec4899' }}>
                 <svg
                   width="20"
                   height="20"

@@ -170,7 +170,7 @@ body {
 
 /* Compact expense card styles */
 .compact-expense-card {
-  min-height: 120px;
+  min-height: 96px;
   display: flex;
   flex-direction: column;
 }
