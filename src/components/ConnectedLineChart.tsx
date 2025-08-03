@@ -60,38 +60,104 @@ export const ConnectedLineChart = ({
           {/* Chart container with proper dimensions */}
           <div className="absolute inset-0" style={{ paddingTop: '5%', paddingBottom: '15%' }}>
             
-            {/* Lines connecting each pair of dots */}
-            {data.map((point, index) => {
-              if (index === data.length - 1) return null;
+            {/* Area fill and line */}
+            <svg 
+              className="absolute inset-0 w-full h-full pointer-events-none" 
+              style={{ zIndex: 5 }}
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+            >
+              <defs>
+                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stopColor={color} stopOpacity="0.2" />
+                  <stop offset="50%" stopColor={color} stopOpacity="0.1" />
+                  <stop offset="100%" stopColor={color} stopOpacity="0.02" />
+                </linearGradient>
+              </defs>
               
-              const x1 = (index / (data.length - 1)) * 100;
-              const y1 = 100 - (point.value / maxValue) * 100;
-              const x2 = ((index + 1) / (data.length - 1)) * 100;
-              const y2 = 100 - (data[index + 1].value / maxValue) * 100;
+              {/* Smooth area fill */}
+              <path
+                d={(() => {
+                  if (data.length === 0) return '';
+                  
+                  // Generate smooth curve path for area fill
+                  let path = '';
+                  const points = data.map((point, index) => ({
+                    x: (index / (data.length - 1)) * 100,
+                    y: 100 - (point.value / maxValue) * 100
+                  }));
+                  
+                  // Start from bottom left
+                  path = `M 0 100`;
+                  
+                  // Add smooth curve to first point
+                  path += ` L ${points[0].x} ${points[0].y}`;
+                  
+                  // Create smooth curves between points (same as line)
+                  for (let i = 1; i < points.length; i++) {
+                    const prev = points[i - 1];
+                    const curr = points[i];
+                    
+                    // Calculate control points for smooth curve (same as line)
+                    const cp1x = prev.x + (curr.x - prev.x) * 0.3;
+                    const cp1y = prev.y;
+                    const cp2x = curr.x - (curr.x - prev.x) * 0.3;
+                    const cp2y = curr.y;
+                    
+                    path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+                  }
+                  
+                  // Close the path to bottom right
+                  path += ` L 100 100 Z`;
+                  
+                  return path;
+                })()}
+                fill="url(#areaGradient)"
+              />
               
-              return (
-                <svg
-                  key={`line-${index}`}
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                  style={{ zIndex: 5 }}
-                >
-                  <line
-                    x1={`${x1}%`}
-                    y1={`${y1}%`}
-                    x2={`${x2}%`}
-                    y2={`${y2}%`}
-                    stroke={color}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    style={{
-                      filter: 'drop-shadow(0 2px 4px rgba(0,0,0,0.15))',
-                      strokeDasharray: 'none',
-                      opacity: 0.9
-                    }}
-                  />
-                </svg>
-              );
-            })}
+              {/* Smooth connecting line */}
+              <path
+                d={(() => {
+                  if (data.length === 0) return '';
+                  
+                  // Generate smooth curve path using cubic bezier curves
+                  let path = '';
+                  const points = data.map((point, index) => ({
+                    x: (index / (data.length - 1)) * 100,
+                    y: 100 - (point.value / maxValue) * 100
+                  }));
+                  
+                  // Start with first point
+                  path = `M ${points[0].x} ${points[0].y}`;
+                  
+                  // Create smooth curves between points
+                  for (let i = 1; i < points.length; i++) {
+                    const prev = points[i - 1];
+                    const curr = points[i];
+                    
+                    // Calculate control points for smooth curve
+                    const cp1x = prev.x + (curr.x - prev.x) * 0.3;
+                    const cp1y = prev.y;
+                    const cp2x = curr.x - (curr.x - prev.x) * 0.3;
+                    const cp2y = curr.y;
+                    
+                    path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+                  }
+                  
+                  return path;
+                })()}
+                stroke={color}
+                strokeWidth="0.8"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                vectorEffect="non-scaling-stroke"
+                style={{
+                  filter: 'drop-shadow(0 3px 6px rgba(0,0,0,0.2))',
+                  opacity: 0.95
+                }}
+              />
+            </svg>
 
             {/* Data points */}
             {data.map((point, index) => {
