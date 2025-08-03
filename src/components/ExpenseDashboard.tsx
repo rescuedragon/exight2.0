@@ -25,9 +25,10 @@ import { useToast } from "@/hooks/use-toast";
 interface ExpenseDashboardProps {
   expenses: Expense[];
   onUpdateExpense: (expense: Expense) => void;
+  isPrivacyMode?: boolean;
 }
 
-export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboardProps) => {
+export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [partialPayment, setPartialPayment] = useState('');
   const [isRecurringExpanded, setIsRecurringExpanded] = useState(true);
@@ -57,6 +58,9 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
   };
 
   const formatCurrency = (amount: number, currency: string = 'INR') => {
+    if (isPrivacyMode) {
+      return '••••••';
+    }
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency,
@@ -64,6 +68,10 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
       maximumFractionDigits: 0,
       currencyDisplay: 'symbol'
     }).format(amount).replace(/^₹/, '₹');
+  };
+
+  const formatNumber = (num: number) => {
+    return isPrivacyMode ? '••' : num.toString();
   };
 
   const handlePartialPayment = () => {
@@ -236,7 +244,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
                 <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
                   {expense.isRecurring 
                     ? formatCurrency(expense.amount * Math.min(new Date().getMonth() + 1, 12), expense.currency)
-                    : `${expense.remainingMonths} months`
+                    : `${formatNumber(expense.remainingMonths)} months`
                   }
                 </p>
               </div>
@@ -318,7 +326,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
               </div>
               <div>
                 <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">Recurring Expenses</h3>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 tracking-wide">{recurringExpenses.length} active recurring payment{recurringExpenses.length !== 1 ? 's' : ''}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 tracking-wide">{formatNumber(recurringExpenses.length)} active recurring payment{recurringExpenses.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">
@@ -369,7 +377,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense }: ExpenseDashboard
               </div>
               <div>
                 <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">Fixed-Term Expenses</h3>
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 tracking-wide">{fixedTimeExpenses.length} active EMI{fixedTimeExpenses.length !== 1 ? 's' : ''} & loan{fixedTimeExpenses.length !== 1 ? 's' : ''}</p>
+                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 tracking-wide">{formatNumber(fixedTimeExpenses.length)} active EMI{fixedTimeExpenses.length !== 1 ? 's' : ''} & loan{fixedTimeExpenses.length !== 1 ? 's' : ''}</p>
               </div>
             </div>
             <div className="flex items-center gap-3">

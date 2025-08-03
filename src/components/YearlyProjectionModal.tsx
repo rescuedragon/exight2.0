@@ -199,14 +199,15 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                       <svg className="absolute inset-0 w-full h-full overflow-visible">
                         <defs>
                           <linearGradient id="cumulativeGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                            <stop offset="0%" stopColor="hsl(var(--emerald-accent))" stopOpacity="0.2" />
-                            <stop offset="100%" stopColor="hsl(var(--emerald-accent))" stopOpacity="0.05" />
+                            <stop offset="0%" stopColor="#10b981" stopOpacity="0.3" />
+                            <stop offset="50%" stopColor="#10b981" stopOpacity="0.15" />
+                            <stop offset="100%" stopColor="#10b981" stopOpacity="0.05" />
                           </linearGradient>
                         </defs>
                         
                         {/* Area under curve */}
                         <path
-                          d={`M 0 100% ${monthlyData.map((data, index) => {
+                          d={`M 0% 100% ${monthlyData.map((data, index) => {
                             const x = (index / (monthlyData.length - 1)) * 100;
                             const y = 100 - ((data.cumulativeAmount / maxCumulative) * 100);
                             return `L ${x}% ${y}%`;
@@ -221,14 +222,17 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                           d={`M ${monthlyData.map((data, index) => {
                             const x = (index / (monthlyData.length - 1)) * 100;
                             const y = 100 - ((data.cumulativeAmount / maxCumulative) * 100);
-                            return `${index === 0 ? 'M' : 'L'} ${x}% ${y}%`;
+                            return `${index === 0 ? `${x}% ${y}%` : `L ${x}% ${y}%`}`;
                           }).join(' ')}`}
-                          stroke="#000000"
-                          strokeWidth="4"
+                          stroke="#10b981"
+                          strokeWidth="2"
                           fill="none"
-                          strokeDasharray="none"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          className="animate-fade-in-up"
                           style={{ 
-                            zIndex: 10
+                            animationDelay: '500ms',
+                            filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.1))'
                           }}
                         />
                         
@@ -242,11 +246,11 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                               <circle
                                 cx={`${x}%`}
                                 cy={`${y}%`}
-                                r="2.4"
+                                r="4"
                                 fill={data.isPast || data.isCurrent ? 'hsl(var(--emerald-accent))' : 'hsl(var(--blue-accent))'}
                                 stroke="white"
-                                strokeWidth="1"
-                                className="animate-fade-in-up hover:r-4 transition-all duration-200 cursor-pointer"
+                                strokeWidth="1.5"
+                                className="animate-fade-in-up transition-all duration-200 cursor-pointer"
                                 style={{ 
                                   animationDelay: `${700 + index * 50}ms`,
                                   filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.2))'
@@ -255,9 +259,9 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                               {/* Value labels on hover */}
                               <text
                                 x={`${x}%`}
-                                y={`${y - 10}%`}
+                                y={`${Math.max(y - 8, 5)}%`}
                                 textAnchor="middle"
-                                className="text-xs font-medium fill-foreground opacity-0 hover:opacity-100 transition-opacity duration-200"
+                                className="text-xs font-medium fill-foreground opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none"
                                 style={{ animationDelay: `${700 + index * 50}ms` }}
                               >
                                 ₹{(data.cumulativeAmount / 100000).toFixed(1)}L

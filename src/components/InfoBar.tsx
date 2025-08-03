@@ -9,9 +9,10 @@ interface InfoBarProps {
   expenses: Expense[];
   onUpdateExpense: (expense: Expense) => void;
   onDeleteExpense?: (expenseId: string) => void;
+  isPrivacyMode?: boolean;
 }
 
-export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarProps) => {
+export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false }: InfoBarProps) => {
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
   const [showYearlyModal, setShowYearlyModal] = useState(false);
   const [showActiveModal, setShowActiveModal] = useState(false);
@@ -36,6 +37,9 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
   }, 0);
 
   const formatCurrency = (amount: number) => {
+    if (isPrivacyMode) {
+      return '••••••';
+    }
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
       currency: 'INR',
@@ -43,6 +47,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
       maximumFractionDigits: 0,
       currencyDisplay: 'symbol'
     }).format(amount).replace(/^₹/, '₹');
+  };
+
+  const formatCount = (count: number) => {
+    return isPrivacyMode ? '••' : count.toString();
   };
 
   return (
@@ -128,7 +136,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense }: InfoBarP
             </div>
             <div className="space-y-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Active Expenses</p>
-              <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{activeExpenses.length}</p>
+              <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCount(activeExpenses.length)}</p>
             </div>
           </div>
         </div>

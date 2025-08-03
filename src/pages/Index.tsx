@@ -7,7 +7,7 @@ import { DetailedView } from "@/components/DetailedView";
 import { ExpenseHistory } from "@/components/ExpenseHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Expense } from "@/types/expense";
-import { BarChart3, History, LogIn } from "lucide-react";
+import { BarChart3, History, LogIn, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { expensesAPI, authAPI } from "@/services/api";
 
@@ -26,13 +26,14 @@ const Index = () => {
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
   const [userProfile, setUserProfile] = useState<{ firstName?: string; lastName?: string } | null>(null);
   const [scrollOpacity, setScrollOpacity] = useState(1);
+  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
 
   // Handle scroll-based fade effect - faster fade to prevent overlap
   useEffect(() => {
     const handleScroll = () => {
       const scrollY = window.scrollY;
-      const fadeStart = 5; // Start fading after just 5px scroll
-      const fadeEnd = 40; // Completely fade by 40px scroll (much faster fade)
+      const fadeStart = 2; // Start fading after just 2px scroll
+      const fadeEnd = 20; // Completely fade by 20px scroll (much faster fade)
       
       if (scrollY <= fadeStart) {
         setScrollOpacity(1);
@@ -283,19 +284,39 @@ const Index = () => {
       </div>
 
       <div className="container mx-auto px-6 py-12 max-w-7xl">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-center md:justify-end items-center mb-6 gap-8 animate-fade-in-up pt-16">
-          
-          {/* Greeting - Above buttons */}
+        {/* Header - Greeting and Buttons on same level */}
+        <div className="flex flex-col md:flex-row justify-between items-center mb-4 gap-4 animate-fade-in-up pt-24">
+          {/* Greeting - Left side */}
           {userProfile?.firstName && (
-            <div className="animate-fade-in-up stagger-3 mb-4 md:mb-0">
-              <p className="text-lg font-semibold text-foreground text-center md:text-right">
+            <div className="animate-fade-in-up stagger-3 md:ml-8">
+              <p className="text-lg font-semibold text-foreground text-center md:text-left">
                 Hi, {userProfile.firstName}!
               </p>
             </div>
           )}
           
+          {/* Buttons - Right side */}
           <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
+            {/* Privacy Toggle */}
+            <Button
+              variant="ghost"
+              size="lg"
+              onClick={() => setIsPrivacyMode(!isPrivacyMode)}
+              className="gap-3 rounded-full px-6 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
+            >
+              {isPrivacyMode ? (
+                <>
+                  <EyeOff className="h-5 w-5" />
+                  Show Data
+                </>
+              ) : (
+                <>
+                  <Eye className="h-5 w-5" />
+                  Hide Data
+                </>
+              )}
+            </Button>
+            
             <Button 
               variant="outline" 
               size="lg" 
@@ -312,13 +333,14 @@ const Index = () => {
         </div>
 
         {/* Info Bar */}
-        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} />
+        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} />
 
         {/* Dashboard */}
         <div className="animate-fade-in-up stagger-5">
           <ExpenseDashboard 
             expenses={expenses} 
             onUpdateExpense={handleUpdateExpense}
+            isPrivacyMode={isPrivacyMode}
           />
         </div>
 

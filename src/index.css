@@ -128,7 +128,7 @@ body {
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
+  animation: fade-in-up 0.3s ease-out forwards;
 }
 
 .animate-gradient-x {
