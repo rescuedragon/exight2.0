@@ -172,6 +172,40 @@ export const expensesAPI = {
   },
 };
 
+// Action Logs API functions
+export const actionLogsAPI = {
+  // Get all action logs
+  getAll: async () => {
+    return await apiRequest('/action-logs');
+  },
+
+  // Create new action log
+  create: async (data: {
+    action: string;
+    details: string;
+    type: 'add' | 'update' | 'payment' | 'delete';
+  }) => {
+    return await apiRequest('/action-logs', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  },
+
+  // Delete action log
+  delete: async (id: string) => {
+    return await apiRequest(`/action-logs/${id}`, {
+      method: 'DELETE',
+    });
+  },
+
+  // Clear all action logs
+  clear: async () => {
+    return await apiRequest('/action-logs/clear', {
+      method: 'DELETE',
+    });
+  },
+};
+
 // Health check
 export const healthCheck = async () => {
   try {
@@ -186,5 +220,6 @@ export const healthCheck = async () => {
 export default {
   auth: authAPI,
   expenses: expensesAPI,
+  actionLogs: actionLogsAPI,
   healthCheck,
 }; 

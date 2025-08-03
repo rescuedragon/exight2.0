@@ -9,7 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { Expense } from "@/types/expense";
 import { BarChart3, History, LogIn, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
-import { expensesAPI, authAPI } from "@/services/api";
+import { expensesAPI, authAPI, actionLogsAPI } from "@/services/api";
 
 interface ActionLog {
   id: string;
@@ -95,33 +95,62 @@ const Index = () => {
     loadData();
   }, []);
 
-  // Load action logs from localStorage (keeping this for now)
-  useEffect(() => {
-    const savedLogs = localStorage.getItem('action-logs');
-    if (savedLogs) {
-      const parsed = JSON.parse(savedLogs);
-      const logsWithDates = parsed.map((log: any) => ({
+  // Load action logs from database
+  const loadActionLogs = async () => {
+    try {
+      const logs = await actionLogsAPI.getAll();
+      const logsWithDates = logs.map((log: any) => ({
         ...log,
         timestamp: new Date(log.timestamp)
       }));
       setActionLogs(logsWithDates);
+    } catch (error) {
+      console.error('Failed to load action logs:', error);
+      // Fallback to localStorage for backward compatibility
+      const savedLogs = localStorage.getItem('action-logs');
+      if (savedLogs) {
+        const parsed = JSON.parse(savedLogs);
+        const logsWithDates = parsed.map((log: any) => ({
+          ...log,
+          timestamp: new Date(log.timestamp)
+        }));
+        setActionLogs(logsWithDates);
+      }
     }
+  };
+
+  useEffect(() => {
+    loadActionLogs();
   }, []);
 
-  // Save action logs to localStorage whenever logs change
-  useEffect(() => {
-    localStorage.setItem('action-logs', JSON.stringify(actionLogs));
-  }, [actionLogs]);
-
-  const addActionLog = (action: string, details: string, type: ActionLog['type']) => {
-    const newLog: ActionLog = {
-      id: Date.now().toString(),
-      action,
-      details,
-      timestamp: new Date(),
-      type
-    };
-    setActionLogs(prev => [newLog, ...prev]);
+  const addActionLog = async (action: string, details: string, type: ActionLog['type']) => {
+    try {
+      const newLog = await actionLogsAPI.create({
+        action,
+        details,
+        type
+      });
+      
+      const logWithDate: ActionLog = {
+        ...newLog,
+        timestamp: new Date(newLog.timestamp)
+      };
+      
+      setActionLogs(prev => [logWithDate, ...prev]);
+    } catch (error) {
+      console.error('Failed to save action log:', error);
+      // Fallback to localStorage
+      const newLog: ActionLog = {
+        id: Date.now().toString(),
+        action,
+        details,
+        timestamp: new Date(),
+        type
+      };
+      setActionLogs(prev => [newLog, ...prev]);
+      // Also save to localStorage as backup
+      localStorage.setItem('action-logs', JSON.stringify([newLog, ...actionLogs]));
+    }
   };
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
@@ -146,7 +175,7 @@ const Index = () => {
       };
       
       setExpenses(prev => [...prev, newExpense]);
-      addActionLog(
+      await addActionLog(
         'Added New Expense',
         `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
         'add'
@@ -161,7 +190,7 @@ const Index = () => {
     try {
       await expensesAPI.delete(expenseId);
       setExpenses(prev => prev.filter(expense => expense.id !== expenseId));
-      addActionLog(
+      await addActionLog(
         'Deleted Expense',
         'Expense removed from tracking',
         'delete'
@@ -206,13 +235,13 @@ const Index = () => {
         // Check if it's a partial payment
         if (updatedExpense.partialPayments.length > originalExpense.partialPayments.length) {
           const latestPayment = updatedExpense.partialPayments[updatedExpense.partialPayments.length - 1];
-          addActionLog(
+          await addActionLog(
             'Partial Payment Made',
             `Paid ₹${latestPayment.amount} towards ${updatedExpense.name}`,
             'payment'
           );
         } else {
-          addActionLog(
+          await addActionLog(
             'Updated Expense',
             `Modified ${updatedExpense.name}`,
             'update'

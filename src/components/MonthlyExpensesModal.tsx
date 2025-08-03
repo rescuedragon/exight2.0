@@ -165,7 +165,7 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
           </Button>
         </CardHeader>
         
-        <CardContent className="flex-1 overflow-auto p-8">
+        <CardContent className="flex-1 overflow-y-auto p-8 max-h-[calc(100vh-120px)]">
           <div className="space-y-8">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
