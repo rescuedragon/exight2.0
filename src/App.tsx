@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
 import NotFound from "./pages/NotFound";
+import TestSpace from "./pages/TestSpace";
 
 const queryClient = new QueryClient();
 
@@ -62,6 +63,7 @@ const App = () => {
           <Route path="/" element={shouldLogin ? <Navigate to="/login" /> : <Index />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={shouldLogin ? <Navigate to="/login" /> : <Index />} />
+          <Route path="/testspace" element={<TestSpace />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
