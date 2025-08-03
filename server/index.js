@@ -141,20 +141,43 @@ app.post('/api/auth/register', async (req, res) => {
       return res.status(400).json({ error: 'Password must be at least 8 characters long' });
     }
 
-    // For now, just return success without database
+    // Import database connection
+    const pool = await import('./database/connection.js');
+    
+    // Check if user already exists
+    const existingUser = await pool.default.query(
+      'SELECT * FROM users WHERE email = $1',
+      [email]
+    );
+
+    if (existingUser.rows.length > 0) {
+      return res.status(400).json({ error: 'User with this email already exists' });
+    }
+
+    // Hash password
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    // Create new user
+    const newUser = await pool.default.query(
+      'INSERT INTO users (email, password_hash, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name, created_at',
+      [email, passwordHash, firstName, lastName]
+    );
+
+    const user = newUser.rows[0];
     const token = jwt.sign(
-      { id: 1, email: email },
+      { id: user.id, email: user.email },
       process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
     res.status(201).json({
-      message: 'User registered successfully (demo mode)',
+      message: 'User registered successfully',
       user: {
-        id: 1,
-        email: email,
-        firstName: firstName,
-        lastName: lastName
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name
       },
       token
     });
@@ -174,8 +197,11 @@ app.post('/api/auth/login', async (req, res) => {
       return res.status(400).json({ error: 'Email and password are required' });
     }
 
+    // Import database connection
+    const pool = await import('./database/connection.js');
+
     // Find user by email
-    const user = await pool.query(
+    const user = await pool.default.query(
       'SELECT * FROM users WHERE email = $1',
       [email]
     );
