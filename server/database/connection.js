@@ -13,6 +13,8 @@ const pool = new Pool({
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
+  // Force IPv4 connection
+  family: 4
 });
 
 // Test the connection
