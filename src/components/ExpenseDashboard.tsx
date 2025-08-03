@@ -40,11 +40,11 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
   const getExpenseIcon = (type: ExpenseType) => {
     switch (type) {
       case 'EMI':
-        return <div className="h-2 w-2 rounded-full bg-foreground" />;
+        return <div className="h-1 w-1 rounded-full bg-green-600" />;
       case 'Personal Loan':
-        return <div className="h-2 w-2 rounded-full bg-foreground" />;
-      case 'Borrowed':
-        return <div className="h-2 w-2 rounded-full bg-foreground" />;
+        return <div className="h-1 w-1 rounded-full bg-green-600" />;
+      case 'Borrowed from Someone':
+        return <div className="h-1 w-1 rounded-full bg-green-600" />;
     }
   };
 
@@ -159,9 +159,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
         <div className="p-3 pb-2 flex-shrink-0">
           <div className="flex items-center justify-between min-h-[1.5rem]">
             <div className="flex items-center gap-2 text-base font-bold">
-              <div className="p-1 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-md backdrop-blur-sm">
-                {getExpenseIcon(expense.type)}
-              </div>
+              {getExpenseIcon(expense.type)}
               <span className="bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{expense.name}</span>
             </div>
             <div className="flex items-center gap-2">

@@ -65,11 +65,11 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
   const getExpenseIcon = (type: ExpenseType) => {
     switch (type) {
       case 'EMI':
-        return <div className="h-2 w-2 rounded-full bg-foreground" />;
+        return <div className="h-1 w-1 rounded-full bg-green-600" />;
       case 'Personal Loan':
-        return <div className="h-2 w-2 rounded-full bg-foreground" />;
-      case 'Borrowed':
-        return <div className="h-2 w-2 rounded-full bg-foreground" />;
+        return <div className="h-1 w-1 rounded-full bg-green-600" />;
+      case 'Borrowed from Someone':
+        return <div className="h-1 w-1 rounded-full bg-green-600" />;
     }
   };
 
@@ -156,9 +156,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="p-2 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-xl">
-                  {getExpenseIcon(expense.type)}
-                </div>
+                {getExpenseIcon(expense.type)}
                 <div>
                   <h3 className="font-bold text-lg text-foreground">{expense.name}</h3>
                   <Badge variant="outline" className={`${getExpenseColor(expense.type)} text-xs`}>
