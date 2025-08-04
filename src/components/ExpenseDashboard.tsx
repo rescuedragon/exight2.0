@@ -152,13 +152,17 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
       return true;
     }
 
-    // For non-recurring expenses, show if they have any remaining value
+    // For non-recurring expenses, be more permissive - show if:
+    // 1. Has remaining months > 0, OR
+    // 2. Has remaining amount > 0, OR  
+    // 3. Has total months (new expense), OR
+    // 4. No remaining data but has total months (newly created)
     const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
     const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
     const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+    const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
     
-    // Show if it has remaining months, remaining amount, or is a new expense with total months
-    const isActive = hasRemainingMonths || hasRemainingAmount || (hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0));
+    const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
 
     console.log(`ExpenseDashboard - Expense ${expense.name}: remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, totalMonths=${expense.totalMonths}, isActive=${isActive}`);
     return isActive;

@@ -229,22 +229,64 @@ const Index = () => {
         remainingAmount: newExpenseData.remainingAmount
       });
 
-      const newExpense: Expense = {
-        ...newExpenseData,
+      // Process the new expense with the same logic as API responses
+      const processedExpense: Expense = {
         id: response.expense.id.toString(),
+        name: newExpenseData.name,
+        amount: newExpenseData.amount,
+        currency: newExpenseData.currency || 'INR',
+        type: newExpenseData.type,
+        deductionDay: newExpenseData.deductionDay,
+        isRecurring: newExpenseData.isRecurring,
+        totalMonths: newExpenseData.totalMonths || null,
+        remainingMonths: newExpenseData.remainingMonths || newExpenseData.totalMonths || null,
+        remainingAmount: newExpenseData.remainingAmount || (newExpenseData.totalMonths ? newExpenseData.amount * newExpenseData.totalMonths : null),
         createdAt: new Date(response.expense.created_at),
         partialPayments: []
       };
       
-      setExpenses(prev => [...prev, newExpense]);
+      console.log('Adding new expense:', processedExpense);
+      setExpenses(prev => {
+        const updated = [...prev, processedExpense];
+        console.log('Updated expenses array:', updated);
+        return updated;
+      });
       await addActionLog(
         'Added New Expense',
         `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
         'add'
       );
     } catch (error) {
-      console.error('Failed to add expense:', error);
-      // You might want to show a toast notification here
+      console.error('Failed to add expense to API:', error);
+      
+      // Fallback: Add expense locally even if API fails
+      const fallbackExpense: Expense = {
+        id: `local-${Date.now()}`,
+        name: newExpenseData.name,
+        amount: newExpenseData.amount,
+        currency: newExpenseData.currency || 'INR',
+        type: newExpenseData.type,
+        deductionDay: newExpenseData.deductionDay,
+        isRecurring: newExpenseData.isRecurring,
+        totalMonths: newExpenseData.totalMonths || null,
+        remainingMonths: newExpenseData.remainingMonths || newExpenseData.totalMonths || null,
+        remainingAmount: newExpenseData.remainingAmount || (newExpenseData.totalMonths ? newExpenseData.amount * newExpenseData.totalMonths : null),
+        createdAt: new Date(),
+        partialPayments: []
+      };
+      
+      console.log('Adding expense locally due to API failure:', fallbackExpense);
+      setExpenses(prev => {
+        const updated = [...prev, fallbackExpense];
+        console.log('Updated expenses array (local):', updated);
+        return updated;
+      });
+      
+      await addActionLog(
+        'Added New Expense (Local)',
+        `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month (API unavailable)`,
+        'add'
+      );
     }
   };
 

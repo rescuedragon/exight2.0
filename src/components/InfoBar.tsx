@@ -25,13 +25,13 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
   const activeExpenses = expenses.filter(expense => {
     if (expense.isRecurring) return true;
     
-    // For non-recurring expenses, show if they have any remaining value
+    // For non-recurring expenses, be more permissive
     const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
     const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
     const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+    const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
     
-    // Show if it has remaining months, remaining amount, or is a new expense with total months
-    return hasRemainingMonths || hasRemainingAmount || (hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0));
+    return hasRemainingMonths || hasRemainingAmount || isNewExpense;
   });
   
   console.log('InfoBar - Active expenses:', activeExpenses);
