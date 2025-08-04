@@ -114,7 +114,7 @@ export const expensesAPI = {
     name: string;
     amount: number;
     currency?: string;
-    type: 'EMI' | 'Personal Loan' | 'Borrowed';
+    type: 'EMI' | 'Personal Loan' | 'Borrowed from Someone';
     deductionDay: number;
     isRecurring?: boolean;
     totalMonths?: number;
@@ -132,7 +132,7 @@ export const expensesAPI = {
     name: string;
     amount: number;
     currency: string;
-    type: 'EMI' | 'Personal Loan' | 'Borrowed';
+    type: 'EMI' | 'Personal Loan' | 'Borrowed from Someone';
     deductionDay: number;
     isRecurring: boolean;
     totalMonths: number;

@@ -58,10 +58,19 @@ const Index = () => {
       try {
         // Load user profile
         console.log('Loading user profile...');
-        const profileResponse = await authAPI.getProfile();
-        console.log('Profile response:', profileResponse);
-        if (profileResponse.user && profileResponse.user.firstName) {
-          setUserProfile(profileResponse.user);
+        try {
+          const profileResponse = await authAPI.getProfile();
+          console.log('Profile response:', profileResponse);
+          if (profileResponse.user && profileResponse.user.firstName) {
+            setUserProfile(profileResponse.user);
+          } else {
+            // Fallback to demo user if no profile found
+            setUserProfile({ firstName: 'Demo', lastName: 'User' });
+          }
+        } catch (profileError) {
+          console.log('Profile loading failed, using demo user:', profileError);
+          // Fallback to demo user if API fails
+          setUserProfile({ firstName: 'Demo', lastName: 'User' });
         }
         
         // Load expenses
@@ -69,26 +78,30 @@ const Index = () => {
         const response = await expensesAPI.getAll();
         console.log('API response:', response);
         
-        const expensesWithDates = response.expenses.map((expense: any) => ({
-          id: expense.id.toString(),
-          name: expense.name,
-          amount: parseFloat(expense.amount),
-          currency: expense.currency,
-          type: expense.type,
-          deductionDay: expense.deduction_day,
-          isRecurring: expense.is_recurring,
-          totalMonths: expense.total_months,
-          remainingMonths: expense.remaining_months,
-          remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : undefined,
-          createdAt: new Date(expense.created_at),
-          partialPayments: expense.partial_payments?.map((payment: any) => ({
-            id: payment.id.toString(),
-            amount: parseFloat(payment.amount),
-            date: new Date(payment.paymentDate),
-            description: payment.description
-          })) || []
-        }));
-        console.log('Processed expenses:', expensesWithDates);
+        const expensesWithDates = response.expenses.map((expense: any) => {
+          const processedExpense = {
+            id: expense.id.toString(),
+            name: expense.name,
+            amount: parseFloat(expense.amount),
+            currency: expense.currency || 'INR',
+            type: expense.type,
+            deductionDay: expense.deduction_day,
+            isRecurring: expense.is_recurring,
+            totalMonths: expense.total_months || null,
+            remainingMonths: expense.remaining_months || expense.total_months || null,
+            remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : (expense.total_months ? parseFloat(expense.amount) * expense.total_months : null),
+            createdAt: new Date(expense.created_at),
+            partialPayments: expense.partial_payments?.map((payment: any) => ({
+              id: payment.id.toString(),
+              amount: parseFloat(payment.amount),
+              date: new Date(payment.paymentDate),
+              description: payment.description
+            })) || []
+          };
+          console.log('Processing expense:', expense, '-> Processed:', processedExpense);
+          return processedExpense;
+        });
+        console.log('All processed expenses:', expensesWithDates);
         setExpenses(expensesWithDates);
       } catch (error) {
         console.error('Failed to load data:', error);
