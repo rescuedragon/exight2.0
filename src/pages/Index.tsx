@@ -383,7 +383,7 @@ const Index = () => {
 
       {/* Login Button - Below Theme Toggle */}
       <div 
-        className="fixed top-32 right-6 z-40 transition-opacity duration-300 ease-out"
+        className="fixed top-20 right-6 z-40 transition-opacity duration-300 ease-out"
         style={{ opacity: scrollOpacity }}
       >
         <Link to="/login">
