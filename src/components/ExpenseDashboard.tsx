@@ -136,11 +136,19 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
   }
 
   // Filter to show only active expenses (not completed)
-  console.log('All expenses in dashboard:', expenses);
+  console.log('ExpenseDashboard - All expenses:', expenses);
+  console.log('ExpenseDashboard - Expenses length:', expenses.length);
+  
+  if (expenses.length === 0) {
+    console.log('ExpenseDashboard - No expenses found, showing empty state');
+  }
+  
   const activeExpenses = expenses.filter(expense => {
+    console.log('ExpenseDashboard - Processing expense:', expense);
+    
     // Show recurring expenses always
     if (expense.isRecurring) {
-      console.log(`Expense ${expense.name}: isRecurring=true, showing`);
+      console.log(`ExpenseDashboard - Expense ${expense.name}: isRecurring=true, showing`);
       return true;
     }
 
@@ -152,9 +160,12 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
     // Show if it has remaining months, remaining amount, or is a new expense with total months
     const isActive = hasRemainingMonths || hasRemainingAmount || (hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0));
 
-    console.log(`Expense ${expense.name}: remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, totalMonths=${expense.totalMonths}, isActive=${isActive}`);
+    console.log(`ExpenseDashboard - Expense ${expense.name}: remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, totalMonths=${expense.totalMonths}, isActive=${isActive}`);
     return isActive;
   });
+  
+  console.log('ExpenseDashboard - Active expenses:', activeExpenses);
+  console.log('ExpenseDashboard - Active expenses length:', activeExpenses.length);
 
   // Separate recurring and fixed-time expenses
   const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);

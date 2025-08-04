@@ -19,6 +19,9 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
   const [showActiveModal, setShowActiveModal] = useState(false);
 
   // Filter to show only active expenses
+  console.log('InfoBar - All expenses:', expenses);
+  console.log('InfoBar - UserProfile:', userProfile);
+  
   const activeExpenses = expenses.filter(expense => {
     if (expense.isRecurring) return true;
     
@@ -30,6 +33,8 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
     // Show if it has remaining months, remaining amount, or is a new expense with total months
     return hasRemainingMonths || hasRemainingAmount || (hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0));
   });
+  
+  console.log('InfoBar - Active expenses:', activeExpenses);
 
   const totalMonthly = activeExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
@@ -66,10 +71,16 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
     <>
       <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-6 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
         {/* Greeting - Left top */}
-        {userProfile?.firstName && (
+        {userProfile?.firstName ? (
           <div className="mb-4 animate-fade-in-up stagger-1">
             <p className="text-lg font-semibold text-foreground">
               Hi, {userProfile.firstName}!
+            </p>
+          </div>
+        ) : (
+          <div className="mb-4 animate-fade-in-up stagger-1">
+            <p className="text-lg font-semibold text-foreground">
+              Hi, Demo!
             </p>
           </div>
         )}

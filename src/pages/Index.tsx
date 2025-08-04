@@ -75,34 +75,44 @@ const Index = () => {
         
         // Load expenses
         console.log('Loading expenses from API...');
-        const response = await expensesAPI.getAll();
-        console.log('API response:', response);
-        
-        const expensesWithDates = response.expenses.map((expense: any) => {
-          const processedExpense = {
-            id: expense.id.toString(),
-            name: expense.name,
-            amount: parseFloat(expense.amount),
-            currency: expense.currency || 'INR',
-            type: expense.type,
-            deductionDay: expense.deduction_day,
-            isRecurring: expense.is_recurring,
-            totalMonths: expense.total_months || null,
-            remainingMonths: expense.remaining_months || expense.total_months || null,
-            remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : (expense.total_months ? parseFloat(expense.amount) * expense.total_months : null),
-            createdAt: new Date(expense.created_at),
-            partialPayments: expense.partial_payments?.map((payment: any) => ({
-              id: payment.id.toString(),
-              amount: parseFloat(payment.amount),
-              date: new Date(payment.paymentDate),
-              description: payment.description
-            })) || []
-          };
-          console.log('Processing expense:', expense, '-> Processed:', processedExpense);
-          return processedExpense;
-        });
-        console.log('All processed expenses:', expensesWithDates);
-        setExpenses(expensesWithDates);
+        try {
+          const response = await expensesAPI.getAll();
+          console.log('API response:', response);
+          
+          if (response && response.expenses && Array.isArray(response.expenses)) {
+            const expensesWithDates = response.expenses.map((expense: any) => {
+              const processedExpense = {
+                id: expense.id.toString(),
+                name: expense.name,
+                amount: parseFloat(expense.amount),
+                currency: expense.currency || 'INR',
+                type: expense.type,
+                deductionDay: expense.deduction_day,
+                isRecurring: expense.is_recurring,
+                totalMonths: expense.total_months || null,
+                remainingMonths: expense.remaining_months || expense.total_months || null,
+                remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : (expense.total_months ? parseFloat(expense.amount) * expense.total_months : null),
+                createdAt: new Date(expense.created_at),
+                partialPayments: expense.partial_payments?.map((payment: any) => ({
+                  id: payment.id.toString(),
+                  amount: parseFloat(payment.amount),
+                  date: new Date(payment.paymentDate),
+                  description: payment.description
+                })) || []
+              };
+              console.log('Processing expense:', expense, '-> Processed:', processedExpense);
+              return processedExpense;
+            });
+            console.log('All processed expenses:', expensesWithDates);
+            setExpenses(expensesWithDates);
+          } else {
+            console.log('No expenses found in API response, setting empty array');
+            setExpenses([]);
+          }
+        } catch (expenseError) {
+          console.error('Failed to load expenses from API:', expenseError);
+          setExpenses([]);
+        }
       } catch (error) {
         console.error('Failed to load data:', error);
         setExpenses([]);
