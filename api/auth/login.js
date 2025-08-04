@@ -1,17 +1,15 @@
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import { Pool } from 'pg';
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const { Pool } = require('pg');
 
 const pool = new Pool({
-  host: process.env.DB_HOST || 'localhost',
-  port: process.env.DB_PORT || 5432,
-  database: process.env.DB_NAME || 'Exight',
-  user: process.env.DB_USER || 'postgres',
-  password: process.env.DB_PASSWORD,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  connectionString: `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
