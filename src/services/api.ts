@@ -33,6 +33,7 @@ const apiRequest = async (
 
   try {
     console.log(`Making API request to: ${API_BASE_URL}${endpoint}`);
+    console.log('Request config:', config);
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     
     if (!response.ok) {
@@ -47,6 +48,8 @@ const apiRequest = async (
     return data;
   } catch (error) {
     console.error('API request failed:', error);
+    console.error('Error type:', typeof error);
+    console.error('Error message:', error.message);
     
     // Check if it's a network error
     if (error instanceof TypeError && error.message.includes('fetch')) {
