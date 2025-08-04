@@ -21,6 +21,7 @@ A modern, intuitive expense tracking application built with React, TypeScript, a
 
 - Node.js (v18 or higher)
 - npm or yarn
+- PostgreSQL (for backend database)
 
 ### Installation
 
@@ -35,12 +36,22 @@ cd exight-expense-tracker
 npm install
 ```
 
-3. Start the development server:
+3. Set up the backend server:
 ```bash
+cd server
+cp env.example .env
+# Edit .env file with your database credentials
+npm install
 npm run dev
 ```
 
-4. Open your browser and navigate to `http://localhost:5173`
+4. Start the frontend development server:
+```bash
+# In the root directory
+npm run dev
+```
+
+5. Open your browser and navigate to `http://localhost:3000`
 
 ## 🛠️ Built With
 
