@@ -4,7 +4,6 @@ import { InfoBar } from "@/components/InfoBar";
 import { AddExpenseModal } from "@/components/AddExpenseModal";
 import { ExpenseDashboard } from "@/components/ExpenseDashboard";
 import { DetailedView } from "@/components/DetailedView";
-import { ExpenseHistory } from "@/components/ExpenseHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Expense } from "@/types/expense";
 import { BarChart3, LogIn, Eye, EyeOff } from "lucide-react";
