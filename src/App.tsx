@@ -13,6 +13,13 @@ const queryClient = new QueryClient();
 
 // Check if user should be logged in (once per day)
 const shouldShowLogin = () => {
+  // Check for demo mode - bypass login if demo mode is enabled
+  const demoMode = localStorage.getItem('demoMode') === 'true';
+  if (demoMode) {
+    console.log('Demo mode enabled, bypassing login');
+    return false;
+  }
+  
   const lastLogin = localStorage.getItem('lastLoginDate');
   const today = new Date().toDateString();
   

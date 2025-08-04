@@ -32,16 +32,27 @@ const apiRequest = async (
   };
 
   try {
+    console.log(`Making API request to: ${API_BASE_URL}${endpoint}`);
     const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
     
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+      const errorMessage = errorData.error || `HTTP error! status: ${response.status}`;
+      console.error('API request failed with status:', response.status, errorMessage);
+      throw new Error(errorMessage);
     }
     
-    return await response.json();
+    const data = await response.json();
+    console.log(`API request successful:`, data);
+    return data;
   } catch (error) {
     console.error('API request failed:', error);
+    
+    // Check if it's a network error
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      throw new Error('Network error: Unable to connect to server. Please check your internet connection or try again later.');
+    }
+    
     throw error;
   }
 };
