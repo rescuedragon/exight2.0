@@ -19,9 +19,16 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
   const [showActiveModal, setShowActiveModal] = useState(false);
 
   // Filter to show only active expenses
-  const activeExpenses = expenses.filter(expense =>
-    expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0))
-  );
+  const activeExpenses = expenses.filter(expense => {
+    if (expense.isRecurring) return true;
+    
+    // For non-recurring expenses, show if they are newly created OR have remaining months/amount
+    const isNewExpense = !expense.remainingMonths && !expense.remainingAmount && expense.totalMonths;
+    const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
+    const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
+    
+    return isNewExpense || hasRemainingMonths || hasRemainingAmount;
+  });
 
   const totalMonthly = activeExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 

@@ -318,17 +318,8 @@ const Index = () => {
       </div>
 
               <div className="container mx-auto px-6 py-12 max-w-7xl">
-        {/* Header - Greeting only */}
-        <div className="flex justify-between items-center mb-4 animate-fade-in-up pt-24">
-          {/* Greeting - Left side */}
-          {userProfile?.firstName && (
-            <div className="animate-fade-in-up stagger-3">
-              <p className="text-lg font-semibold text-foreground">
-                Hi, {userProfile.firstName}!
-              </p>
-            </div>
-          )}
-        </div>
+        {/* Spacer for layout */}
+        <div className="pt-24 mb-4"></div>
 
         {/* Navigation Buttons - Above InfoBar */}
         <div className="flex justify-end mb-4">
