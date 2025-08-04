@@ -1,4 +1,4 @@
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://server-lu4r4hg5d-rescuedragons-projects.vercel.app/api' : 'http://localhost:5001/api');
 
 // Helper function to get auth token
 const getAuthToken = (): string | null => {
