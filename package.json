@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Exight - Insights for your expenses. A modern expense tracking application built with React, TypeScript, and Tailwind CSS.",
   "type": "module",
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
