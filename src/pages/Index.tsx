@@ -111,7 +111,41 @@ const Index = () => {
           }
         } catch (expenseError) {
           console.error('Failed to load expenses from API:', expenseError);
-          setExpenses([]);
+          console.log('Using fallback test data due to API failure');
+          
+          // Fallback test data when API fails
+          const fallbackExpenses = [
+            {
+              id: 'test-1',
+              name: 'Test EMI',
+              amount: 5000,
+              currency: 'INR',
+              type: 'EMI' as const,
+              deductionDay: 15,
+              isRecurring: false,
+              totalMonths: 24,
+              remainingMonths: 18,
+              remainingAmount: 90000,
+              createdAt: new Date(),
+              partialPayments: []
+            },
+            {
+              id: 'test-2',
+              name: 'Test Recurring',
+              amount: 2000,
+              currency: 'INR',
+              type: 'Personal Loan' as const,
+              deductionDay: 1,
+              isRecurring: true,
+              totalMonths: null,
+              remainingMonths: null,
+              remainingAmount: null,
+              createdAt: new Date(),
+              partialPayments: []
+            }
+          ];
+          
+          setExpenses(fallbackExpenses);
         }
       } catch (error) {
         console.error('Failed to load data:', error);
@@ -382,6 +416,21 @@ const Index = () => {
             </div>
           </div>
         </div>
+
+        {/* Greeting - Above InfoBar */}
+        {userProfile?.firstName ? (
+          <div className="mb-4 animate-fade-in-up stagger-1">
+            <p className="text-lg font-semibold text-foreground">
+              Hi, {userProfile.firstName}!
+            </p>
+          </div>
+        ) : (
+          <div className="mb-4 animate-fade-in-up stagger-1">
+            <p className="text-lg font-semibold text-foreground">
+              Hi, Demo!
+            </p>
+          </div>
+        )}
 
         {/* Info Bar - Original size */}
         <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} userProfile={userProfile} />

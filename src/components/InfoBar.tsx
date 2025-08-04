@@ -70,20 +70,6 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
   return (
     <>
       <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-6 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
-        {/* Greeting - Left top */}
-        {userProfile?.firstName ? (
-          <div className="mb-4 animate-fade-in-up stagger-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi, {userProfile.firstName}!
-            </p>
-          </div>
-        ) : (
-          <div className="mb-4 animate-fade-in-up stagger-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi, Demo!
-            </p>
-          </div>
-        )}
         
         <div className="grid grid-cols-3 gap-6 justify-items-center">
           <div
