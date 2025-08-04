@@ -402,8 +402,24 @@ const Index = () => {
         {/* Spacer for layout */}
         <div className="pt-24 mb-4"></div>
 
-        {/* Navigation Buttons - Above InfoBar */}
-        <div className="flex justify-end mb-4">
+        {/* Greeting and Navigation Buttons - Horizontally Aligned */}
+        <div className="flex justify-between items-center mb-4">
+          {/* Greeting - Left side */}
+          {userProfile?.firstName ? (
+            <div className="animate-fade-in-up stagger-1">
+              <p className="text-lg font-semibold text-foreground">
+                Hi, {userProfile.firstName}!
+              </p>
+            </div>
+          ) : (
+            <div className="animate-fade-in-up stagger-1">
+              <p className="text-lg font-semibold text-foreground">
+                Hi, Demo!
+              </p>
+            </div>
+          )}
+
+          {/* Navigation Buttons - Right side */}
           <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
             {/* Privacy Toggle */}
             <Button
@@ -440,21 +456,6 @@ const Index = () => {
             </div>
           </div>
         </div>
-
-        {/* Greeting - Above InfoBar */}
-        {userProfile?.firstName ? (
-          <div className="mb-4 animate-fade-in-up stagger-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi, {userProfile.firstName}!
-            </p>
-          </div>
-        ) : (
-          <div className="mb-4 animate-fade-in-up stagger-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi, Demo!
-            </p>
-          </div>
-        )}
 
         {/* Info Bar - Original size */}
         <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} userProfile={userProfile} />
