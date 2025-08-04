@@ -28,13 +28,28 @@ app.get('/', (req, res) => {
   });
 });
 
-// Health check endpoint
-app.get('/health', (req, res) => {
-  res.json({ 
-    status: 'OK', 
-    message: 'Exight API is running',
-    timestamp: new Date().toISOString()
-  });
+// Health check endpoint with database test
+app.get('/health', async (req, res) => {
+  try {
+    // Test database connection
+    const pool = await import('./database/connection.js');
+    const result = await pool.default.query('SELECT NOW() as current_time');
+    
+    res.json({ 
+      status: 'OK', 
+      message: 'Exight API is running',
+      database: 'Connected',
+      timestamp: new Date().toISOString(),
+      db_time: result.rows[0].current_time
+    });
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'ERROR', 
+      message: 'Database connection failed',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // Test endpoint
