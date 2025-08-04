@@ -1,13 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { Pool } = require('pg');
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
-});
+const pool = require('../_db');
 
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -17,55 +10,38 @@ module.exports = async function handler(req, res) {
   try {
     const { email, password, firstName, lastName } = req.body;
 
-    // Validate input
     if (!email || !password) {
       return res.status(400).json({ error: 'Email and password are required' });
     }
-
     if (password.length < 8) {
       return res.status(400).json({ error: 'Password must be at least 8 characters long' });
     }
 
-    // Check if user already exists
-    const existingUser = await pool.query(
-      'SELECT * FROM users WHERE email = $1',
-      [email]
-    );
-
-    if (existingUser.rows.length > 0) {
-      return res.status(400).json({ error: 'User with this email already exists' });
+    const existing = await pool.query('SELECT id FROM users WHERE email=$1', [email]);
+    if (existing.rows.length) {
+      return res.status(400).json({ error: 'User already exists' });
     }
 
-    // Hash password
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(password, saltRounds);
-
-    // Create new user
-    const newUser = await pool.query(
-      'INSERT INTO users (email, password_hash, first_name, last_name) VALUES ($1, $2, $3, $4) RETURNING id, email, first_name, last_name, created_at',
-      [email, passwordHash, firstName, lastName]
+    const hash = await bcrypt.hash(password, 10);
+    const inserted = await pool.query(
+      'INSERT INTO users (email, password_hash, first_name, last_name) VALUES ($1,$2,$3,$4) RETURNING id, email, first_name, last_name',
+      [email, hash, firstName || null, lastName || null]
     );
-
-    const user = newUser.rows[0];
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      process.env.JWT_SECRET || 'your_jwt_secret_key_here',
-      { expiresIn: '24h' }
-    );
+    const user = inserted.rows[0];
+    const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET, { expiresIn: '24h' });
 
     res.status(201).json({
-      message: 'User registered successfully',
+      message: 'Registration successful',
       user: {
         id: user.id,
         email: user.email,
         firstName: user.first_name,
-        lastName: user.last_name
+        lastName: user.last_name,
       },
-      token
+      token,
     });
-
-  } catch (error) {
-    console.error('Registration error:', error);
+  } catch (err) {
+    console.error('Register error', err);
     res.status(500).json({ error: 'Internal server error' });
   }
-} 
+}; 

@@ -7,7 +7,7 @@ import { DetailedView } from "@/components/DetailedView";
 import { ExpenseHistory } from "@/components/ExpenseHistory";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Expense } from "@/types/expense";
-import { BarChart3, History, LogIn, Eye, EyeOff } from "lucide-react";
+import { BarChart3, LogIn, Eye, EyeOff } from "lucide-react";
 import { Link } from "react-router-dom";
 import { expensesAPI, authAPI, actionLogsAPI } from "@/services/api";
 
@@ -22,7 +22,6 @@ interface ActionLog {
 const Index = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [showDetailedView, setShowDetailedView] = useState(false);
-  const [showHistory, setShowHistory] = useState(false);
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
   const [userProfile, setUserProfile] = useState<{ firstName?: string; lastName?: string } | null>(null);
   const [scrollOpacity, setScrollOpacity] = useState(1);
@@ -383,23 +382,7 @@ const Index = () => {
         <ThemeToggle />
       </div>
 
-      {/* History Button - Below Theme Toggle */}
-      <div 
-        className="fixed top-20 right-6 z-40 transition-opacity duration-300 ease-out"
-        style={{ opacity: scrollOpacity }}
-      >
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setShowHistory(true)}
-          className="h-12 w-12 rounded-full bg-gradient-card border-border/40 shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105"
-        >
-          <History className="h-5 w-5" />
-          <span className="sr-only">History</span>
-        </Button>
-      </div>
-
-      {/* Login Button - Below History Button */}
+      {/* Login Button - Below Theme Toggle */}
       <div 
         className="fixed top-32 right-6 z-40 transition-opacity duration-300 ease-out"
         style={{ opacity: scrollOpacity }}
@@ -495,13 +478,7 @@ const Index = () => {
         )}
 
         {/* History Modal */}
-        {showHistory && (
-          <ExpenseHistory 
-            expenses={expenses} 
-            actionLogs={actionLogs}
-            onClose={() => setShowHistory(false)} 
-          />
-        )}
+        {/* Removed as per user request */}
       </div>
     </div>
   );
