@@ -100,10 +100,10 @@ router.post('/', authenticateToken, async (req, res) => {
     }
 
     // Validate type
-    const validTypes = ['EMI', 'Personal Loan', 'Borrowed'];
+    const validTypes = ['EMI', 'Personal Loan', 'Borrowed from Someone'];
     if (!validTypes.includes(type)) {
       return res.status(400).json({ 
-        error: 'Type must be one of: EMI, Personal Loan, Borrowed' 
+        error: 'Type must be one of: EMI, Personal Loan, Borrowed from Someone' 
       });
     }
 
