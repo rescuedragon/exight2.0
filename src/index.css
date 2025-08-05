@@ -205,9 +205,10 @@ body {
   background-clip: text;
 }
 
-/* Dark mode border removal for InfoBar */
+/* Dark mode styling for InfoBar */
 .dark .infobar-container {
   border: none !important;
   border-width: 0 !important;
   border-style: none !important;
+  background: linear-gradient(90deg, rgba(17, 24, 39, 0.3) 0%, rgba(17, 24, 39, 0.2) 50%, rgba(17, 24, 39, 0.3) 100%) !important;
 }
