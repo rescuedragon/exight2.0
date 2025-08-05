@@ -1,3 +1,5 @@
+export type Currency = 'INR' | 'USD' | 'EUR' | 'GBP' | 'JPY';
+
 export interface Loan {
   id: string;
   personName: string;

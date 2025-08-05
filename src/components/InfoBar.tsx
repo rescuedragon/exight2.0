@@ -10,17 +10,15 @@ interface InfoBarProps {
   onUpdateExpense: (expense: Expense) => void;
   onDeleteExpense?: (expenseId: string) => void;
   isPrivacyMode?: boolean;
-  userProfile?: { firstName?: string; lastName?: string } | null;
 }
 
-export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false, userProfile }: InfoBarProps) => {
+export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false }: InfoBarProps) => {
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
   const [showYearlyModal, setShowYearlyModal] = useState(false);
   const [showActiveModal, setShowActiveModal] = useState(false);
 
   // Filter to show only active expenses
   console.log('InfoBar - All expenses:', expenses);
-  console.log('InfoBar - UserProfile:', userProfile);
   
   const activeExpenses = expenses.filter(expense => {
     if (expense.isRecurring) return true;

@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { InfoBar } from "@/components/InfoBar";
+import { LoansInfoBar } from "@/components/LoansInfoBar";
 import { AddExpenseModal } from "@/components/AddExpenseModal";
+import { AddLoanModal } from "@/components/AddLoanModal";
 import { ExpenseDashboard } from "@/components/ExpenseDashboard";
+import { LoansDashboard } from "@/components/LoansDashboard";
 import { DetailedView } from "@/components/DetailedView";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Expense } from "@/types/expense";
-import { BarChart3, LogIn, Eye, EyeOff } from "lucide-react";
-import { Link } from "react-router-dom";
-import { expensesAPI, authAPI, actionLogsAPI } from "@/services/api";
+import { Loan } from "@/types/loan";
+import { BarChart3, Eye, EyeOff, HandCoins, Wallet } from "lucide-react";
 
 interface ActionLog {
   id: string;
@@ -20,11 +23,12 @@ interface ActionLog {
 
 const Index = () => {
   const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loans, setLoans] = useState<Loan[]>([]);
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
-  const [userProfile, setUserProfile] = useState<{ firstName?: string; lastName?: string } | null>(null);
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [isPrivacyMode, setIsPrivacyMode] = useState(false);
+  const [activeTab, setActiveTab] = useState('expenses');
 
   // Handle scroll-based fade effect - faster fade to prevent overlap
   useEffect(() => {
@@ -50,132 +54,50 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Load user profile and expenses from API on component mount
+  // Load data from localStorage on component mount
   useEffect(() => {
-    const loadData = async () => {
-      try {
-        // Load user profile
-        console.log('Loading user profile...');
-        try {
-          const profileResponse = await authAPI.getProfile();
-          console.log('Profile response:', profileResponse);
-          if (profileResponse.user && profileResponse.user.firstName) {
-            setUserProfile(profileResponse.user);
-          } else {
-            // Fallback to demo user if no profile found
-            setUserProfile({ firstName: 'Demo', lastName: 'User' });
-          }
-        } catch (profileError) {
-          console.log('Profile loading failed, using demo user:', profileError);
-          // Fallback to demo user if API fails
-          setUserProfile({ firstName: 'Demo', lastName: 'User' });
-        }
-        
-        // Load expenses
-        console.log('Loading expenses from API...');
-        try {
-          const response = await expensesAPI.getAll();
-          console.log('API response:', response);
-          
-          if (response && response.expenses && Array.isArray(response.expenses)) {
-            const expensesWithDates = response.expenses.map((expense: any) => {
-              const processedExpense = {
-                id: expense.id.toString(),
-                name: expense.name,
-                amount: parseFloat(expense.amount),
-                currency: expense.currency || 'INR',
-                type: expense.type,
-                deductionDay: expense.deduction_day,
-                isRecurring: expense.is_recurring,
-                totalMonths: expense.total_months || null,
-                remainingMonths: expense.remaining_months || expense.total_months || null,
-                remainingAmount: expense.remaining_amount ? parseFloat(expense.remaining_amount) : (expense.total_months ? parseFloat(expense.amount) * expense.total_months : null),
-                createdAt: new Date(expense.created_at),
-                partialPayments: expense.partial_payments?.map((payment: any) => ({
-                  id: payment.id.toString(),
-                  amount: parseFloat(payment.amount),
-                  date: new Date(payment.paymentDate),
-                  description: payment.description
-                })) || []
-              };
-              console.log('Processing expense:', expense, '-> Processed:', processedExpense);
-              return processedExpense;
-            });
-            console.log('All processed expenses:', expensesWithDates);
-            setExpenses(expensesWithDates);
-          } else {
-            console.log('No expenses found in API response, setting empty array');
-            setExpenses([]);
-          }
-        } catch (expenseError) {
-          console.error('Failed to load expenses from API:', expenseError);
-          console.log('Using fallback test data due to API failure');
-          
-          // Fallback test data when API fails
-          const fallbackExpenses = [
-            {
-              id: 'test-1',
-              name: 'Test EMI',
-              amount: 5000,
-              currency: 'INR',
-              type: 'EMI' as const,
-              deductionDay: 15,
-              isRecurring: false,
-              totalMonths: 24,
-              remainingMonths: 18,
-              remainingAmount: 90000,
-              createdAt: new Date(),
-              partialPayments: []
-            },
-            {
-              id: 'test-2',
-              name: 'Test Recurring',
-              amount: 2000,
-              currency: 'INR',
-              type: 'Personal Loan' as const,
-              deductionDay: 1,
-              isRecurring: true,
-              totalMonths: null,
-              remainingMonths: null,
-              remainingAmount: null,
-              createdAt: new Date(),
-              partialPayments: []
-            }
-          ];
-          
-          setExpenses(fallbackExpenses);
-        }
-      } catch (error) {
-        console.error('Failed to load data:', error);
-        setExpenses([]);
-        setUserProfile(null);
-      }
-    };
+    // Load expenses from localStorage
+    const savedExpenses = localStorage.getItem('expenses');
+    if (savedExpenses) {
+      const parsed = JSON.parse(savedExpenses);
+      const expensesWithDates = parsed.map((expense: any) => ({
+        ...expense,
+        createdAt: new Date(expense.createdAt),
+        partialPayments: expense.partialPayments?.map((payment: any) => ({
+          ...payment,
+          date: new Date(payment.date)
+        })) || []
+      }));
+      setExpenses(expensesWithDates);
+    }
 
-    loadData();
+    // Load loans from localStorage
+    const savedLoans = localStorage.getItem('loans');
+    if (savedLoans) {
+      const parsed = JSON.parse(savedLoans);
+      const loansWithDates = parsed.map((loan: any) => ({
+        ...loan,
+        dateGiven: new Date(loan.dateGiven),
+        createdAt: new Date(loan.createdAt),
+        payments: loan.payments?.map((payment: any) => ({
+          ...payment,
+          date: new Date(payment.date)
+        })) || []
+      }));
+      setLoans(loansWithDates);
+    }
   }, []);
 
-  // Load action logs from database
+  // Load action logs from localStorage
   const loadActionLogs = async () => {
-    try {
-      const logs = await actionLogsAPI.getAll();
-      const logsWithDates = logs.map((log: any) => ({
+    const savedLogs = localStorage.getItem('action-logs');
+    if (savedLogs) {
+      const parsed = JSON.parse(savedLogs);
+      const logsWithDates = parsed.map((log: any) => ({
         ...log,
         timestamp: new Date(log.timestamp)
       }));
       setActionLogs(logsWithDates);
-    } catch (error) {
-      console.error('Failed to load action logs:', error);
-      // Fallback to localStorage for backward compatibility
-      const savedLogs = localStorage.getItem('action-logs');
-      if (savedLogs) {
-        const parsed = JSON.parse(savedLogs);
-        const logsWithDates = parsed.map((log: any) => ({
-          ...log,
-          timestamp: new Date(log.timestamp)
-        }));
-        setActionLogs(logsWithDates);
-      }
     }
   };
 
@@ -183,177 +105,136 @@ const Index = () => {
     loadActionLogs();
   }, []);
 
+  // Save expenses to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+  }, [expenses]);
+
+  // Save loans to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('loans', JSON.stringify(loans));
+  }, [loans]);
+
   const addActionLog = async (action: string, details: string, type: ActionLog['type']) => {
-    try {
-      const newLog = await actionLogsAPI.create({
-        action,
-        details,
-        type
-      });
-      
-      const logWithDate: ActionLog = {
-        ...newLog,
-        timestamp: new Date(newLog.timestamp)
-      };
-      
-      setActionLogs(prev => [logWithDate, ...prev]);
-    } catch (error) {
-      console.error('Failed to save action log:', error);
-      // Fallback to localStorage
-      const newLog: ActionLog = {
-        id: Date.now().toString(),
-        action,
-        details,
-        timestamp: new Date(),
-        type
-      };
-      setActionLogs(prev => [newLog, ...prev]);
-      // Also save to localStorage as backup
-      localStorage.setItem('action-logs', JSON.stringify([newLog, ...actionLogs]));
-    }
+    const newLog: ActionLog = {
+      id: Date.now().toString(),
+      action,
+      details,
+      timestamp: new Date(),
+      type
+    };
+    const updatedLogs = [newLog, ...actionLogs];
+    setActionLogs(updatedLogs);
+    localStorage.setItem('action-logs', JSON.stringify(updatedLogs));
   };
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
-    try {
-      const response = await expensesAPI.create({
-        name: newExpenseData.name,
-        amount: newExpenseData.amount,
-        currency: newExpenseData.currency,
-        type: newExpenseData.type,
-        deductionDay: newExpenseData.deductionDay,
-        isRecurring: newExpenseData.isRecurring,
-        totalMonths: newExpenseData.totalMonths,
-        remainingMonths: newExpenseData.remainingMonths,
-        remainingAmount: newExpenseData.remainingAmount
-      });
+    const newExpense: Expense = {
+      id: Date.now().toString(),
+      name: newExpenseData.name,
+      amount: newExpenseData.amount,
+      currency: newExpenseData.currency || 'INR',
+      type: newExpenseData.type,
+      deductionDay: newExpenseData.deductionDay,
+      isRecurring: newExpenseData.isRecurring,
+      totalMonths: newExpenseData.totalMonths || null,
+      remainingMonths: newExpenseData.remainingMonths || newExpenseData.totalMonths || null,
+      remainingAmount: newExpenseData.remainingAmount || (newExpenseData.totalMonths ? newExpenseData.amount * newExpenseData.totalMonths : null),
+      createdAt: new Date(),
+      partialPayments: []
+    };
+    
+    setExpenses(prev => [...prev, newExpense]);
+    await addActionLog(
+      'Added New Expense',
+      `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
+      'add'
+    );
+  };
 
-      // Process the new expense with the same logic as API responses
-      const processedExpense: Expense = {
-        id: response.expense.id.toString(),
-        name: newExpenseData.name,
-        amount: newExpenseData.amount,
-        currency: newExpenseData.currency || 'INR',
-        type: newExpenseData.type,
-        deductionDay: newExpenseData.deductionDay,
-        isRecurring: newExpenseData.isRecurring,
-        totalMonths: newExpenseData.totalMonths || null,
-        remainingMonths: newExpenseData.remainingMonths || newExpenseData.totalMonths || null,
-        remainingAmount: newExpenseData.remainingAmount || (newExpenseData.totalMonths ? newExpenseData.amount * newExpenseData.totalMonths : null),
-        createdAt: new Date(response.expense.created_at),
-        partialPayments: []
-      };
-      
-      console.log('Adding new expense:', processedExpense);
-      setExpenses(prev => {
-        const updated = [...prev, processedExpense];
-        console.log('Updated expenses array:', updated);
-        return updated;
-      });
-      await addActionLog(
-        'Added New Expense',
-        `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
-        'add'
-      );
-    } catch (error) {
-      console.error('Failed to add expense to API:', error);
-      
-      // Fallback: Add expense locally even if API fails
-      const fallbackExpense: Expense = {
-        id: `local-${Date.now()}`,
-        name: newExpenseData.name,
-        amount: newExpenseData.amount,
-        currency: newExpenseData.currency || 'INR',
-        type: newExpenseData.type,
-        deductionDay: newExpenseData.deductionDay,
-        isRecurring: newExpenseData.isRecurring,
-        totalMonths: newExpenseData.totalMonths || null,
-        remainingMonths: newExpenseData.remainingMonths || newExpenseData.totalMonths || null,
-        remainingAmount: newExpenseData.remainingAmount || (newExpenseData.totalMonths ? newExpenseData.amount * newExpenseData.totalMonths : null),
-        createdAt: new Date(),
-        partialPayments: []
-      };
-      
-      console.log('Adding expense locally due to API failure:', fallbackExpense);
-      setExpenses(prev => {
-        const updated = [...prev, fallbackExpense];
-        console.log('Updated expenses array (local):', updated);
-        return updated;
-      });
-      
-      await addActionLog(
-        'Added New Expense (Local)',
-        `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month (API unavailable)`,
-        'add'
-      );
-    }
+  const handleAddLoan = async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
+    const newLoan: Loan = {
+      id: Date.now().toString(),
+      ...newLoanData,
+      status: 'active',
+      totalReceived: 0,
+      remainingAmount: newLoanData.amount,
+      createdAt: new Date(),
+      payments: []
+    };
+    
+    setLoans(prev => [...prev, newLoan]);
+    await addActionLog(
+      'Added New Loan',
+      `Lent ₹${newLoanData.amount} to ${newLoanData.personName}`,
+      'add'
+    );
   };
 
   const handleDeleteExpense = async (expenseId: string) => {
-    try {
-      await expensesAPI.delete(expenseId);
-      setExpenses(prev => prev.filter(expense => expense.id !== expenseId));
-      await addActionLog(
-        'Deleted Expense',
-        'Expense removed from tracking',
-        'delete'
-      );
-    } catch (error) {
-      console.error('Failed to delete expense:', error);
-    }
+    setExpenses(prev => prev.filter(expense => expense.id !== expenseId));
+    await addActionLog(
+      'Deleted Expense',
+      'Expense removed from tracking',
+      'delete'
+    );
   };
 
   const handleUpdateExpense = async (updatedExpense: Expense) => {
-    try {
-      console.log('Updating expense:', updatedExpense);
-      const originalExpense = expenses.find(e => e.id === updatedExpense.id);
-      console.log('Original expense:', originalExpense);
-      
-      // Update in database
-      const updateData = {
-        name: updatedExpense.name,
-        amount: updatedExpense.amount,
-        currency: updatedExpense.currency,
-        type: updatedExpense.type,
-        deductionDay: updatedExpense.deductionDay,
-        isRecurring: updatedExpense.isRecurring,
-        totalMonths: updatedExpense.totalMonths,
-        remainingMonths: updatedExpense.remainingMonths,
-        remainingAmount: updatedExpense.remainingAmount
-      };
-      console.log('Update data being sent:', updateData);
-      
-      await expensesAPI.update(updatedExpense.id, updateData);
-
-      // Update local state
-      setExpenses(prev => {
-        const updated = prev.map(expense => 
-          expense.id === updatedExpense.id ? updatedExpense : expense
+    const originalExpense = expenses.find(e => e.id === updatedExpense.id);
+    
+    setExpenses(prev => prev.map(expense => 
+      expense.id === updatedExpense.id ? updatedExpense : expense
+    ));
+    
+    if (originalExpense) {
+      // Check if it's a partial payment
+      if (updatedExpense.partialPayments.length > originalExpense.partialPayments.length) {
+        const latestPayment = updatedExpense.partialPayments[updatedExpense.partialPayments.length - 1];
+        await addActionLog(
+          'Partial Payment Made',
+          `Paid ₹${latestPayment.amount} towards ${updatedExpense.name}`,
+          'payment'
         );
-        console.log('Updated expenses state:', updated);
-        return updated;
-      });
-      
-      if (originalExpense) {
-        // Check if it's a partial payment
-        if (updatedExpense.partialPayments.length > originalExpense.partialPayments.length) {
-          const latestPayment = updatedExpense.partialPayments[updatedExpense.partialPayments.length - 1];
-          await addActionLog(
-            'Partial Payment Made',
-            `Paid ₹${latestPayment.amount} towards ${updatedExpense.name}`,
-            'payment'
-          );
-        } else {
-          await addActionLog(
-            'Updated Expense',
-            `Modified ${updatedExpense.name}`,
-            'update'
-          );
-        }
+      } else {
+        await addActionLog(
+          'Updated Expense',
+          `Modified ${updatedExpense.name}`,
+          'update'
+        );
       }
-    } catch (error) {
-      console.error('Failed to update expense:', error);
     }
   };
+
+  const handleUpdateLoan = async (updatedLoan: Loan) => {
+    const originalLoan = loans.find(l => l.id === updatedLoan.id);
+    
+    setLoans(prev => prev.map(loan => 
+      loan.id === updatedLoan.id ? updatedLoan : loan
+    ));
+    
+    if (originalLoan) {
+      // Check if it's a payment
+      if (updatedLoan.payments.length > originalLoan.payments.length) {
+        const latestPayment = updatedLoan.payments[updatedLoan.payments.length - 1];
+        const actionType = latestPayment.type === 'write-off' ? 'Written Off' : 'Payment Received';
+        await addActionLog(
+          actionType,
+          `₹${latestPayment.amount} ${latestPayment.type === 'write-off' ? 'written off' : 'received'} from ${updatedLoan.personName}`,
+          latestPayment.type === 'write-off' ? 'delete' : 'payment'
+        );
+      } else {
+        await addActionLog(
+          'Updated Loan',
+          `Modified loan for ${updatedLoan.personName}`,
+          'update'
+        );
+      }
+    }
+  };
+
+  // Get existing person names for autocomplete
+  const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
 
   return (
     <div className="min-h-screen bg-gradient-background">
@@ -381,43 +262,18 @@ const Index = () => {
         <ThemeToggle />
       </div>
 
-      {/* Login Button - Below Theme Toggle */}
-      <div 
-        className="fixed top-20 right-6 z-40 transition-opacity duration-300 ease-out"
-        style={{ opacity: scrollOpacity }}
-      >
-        <Link to="/login">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-12 w-12 rounded-full bg-gradient-card border-border/40 shadow-card hover:shadow-elevated transition-all duration-300 hover:scale-105"
-          >
-            <LogIn className="h-5 w-5" />
-            <span className="sr-only">Login</span>
-          </Button>
-        </Link>
-      </div>
-
-              <div className="container mx-auto px-6 py-12 max-w-7xl">
+      <div className="container mx-auto px-6 py-12 max-w-7xl">
         {/* Spacer for layout */}
         <div className="pt-24 mb-4"></div>
 
         {/* Greeting and Navigation Buttons - Horizontally Aligned */}
         <div className="flex justify-between items-center mb-4">
           {/* Greeting - Left side */}
-          {userProfile?.firstName ? (
-            <div className="animate-fade-in-up stagger-1">
-              <p className="text-lg font-semibold text-foreground">
-                Hi, {userProfile.firstName}!
-              </p>
-            </div>
-          ) : (
-            <div className="animate-fade-in-up stagger-1">
-              <p className="text-lg font-semibold text-foreground">
-                Hi, Demo!
-              </p>
-            </div>
-          )}
+          <div className="animate-fade-in-up stagger-1">
+            <p className="text-lg font-semibold text-foreground">
+              Welcome back!
+            </p>
+          </div>
 
           {/* Navigation Buttons - Right side */}
           <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
@@ -450,23 +306,70 @@ const Index = () => {
               <BarChart3 className="h-5 w-5" />
               Analytics
             </Button>
-            
-            <div className="animate-fade-in-up stagger-5">
-              <AddExpenseModal onAddExpense={handleAddExpense} />
-            </div>
           </div>
         </div>
 
-        {/* Info Bar - Original size */}
-        <InfoBar expenses={expenses} onUpdateExpense={handleUpdateExpense} onDeleteExpense={handleDeleteExpense} isPrivacyMode={isPrivacyMode} userProfile={userProfile} />
+        {/* Main Content with Tabs */}
+        <div className="space-y-6">
+          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+            <div className="flex justify-between items-center mb-6">
+              <TabsList className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm">
+                <TabsTrigger value="expenses" className="flex items-center gap-2 px-6">
+                  <Wallet className="h-4 w-4" />
+                  Expenses
+                </TabsTrigger>
+                <TabsTrigger value="loans" className="flex items-center gap-2 px-6">
+                  <HandCoins className="h-4 w-4" />
+                  Loans Given
+                </TabsTrigger>
+              </TabsList>
+              
+              <div className="animate-fade-in-up stagger-5">
+                {activeTab === 'expenses' ? (
+                  <AddExpenseModal onAddExpense={handleAddExpense} />
+                ) : (
+                  <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
+                )}
+              </div>
+            </div>
 
-        {/* Dashboard */}
-        <div className="animate-fade-in-up stagger-5">
-          <ExpenseDashboard 
-            expenses={expenses} 
-            onUpdateExpense={handleUpdateExpense}
-            isPrivacyMode={isPrivacyMode}
-          />
+            <TabsContent value="expenses" className="space-y-6">
+              {/* Info Bar */}
+              <InfoBar 
+                expenses={expenses} 
+                onUpdateExpense={handleUpdateExpense} 
+                onDeleteExpense={handleDeleteExpense} 
+                isPrivacyMode={isPrivacyMode} 
+              />
+
+              {/* Dashboard */}
+              <div className="animate-fade-in-up stagger-5">
+                <ExpenseDashboard 
+                  expenses={expenses} 
+                  onUpdateExpense={handleUpdateExpense}
+                  isPrivacyMode={isPrivacyMode}
+                />
+              </div>
+            </TabsContent>
+
+            <TabsContent value="loans" className="space-y-6">
+              {/* Loans Info Bar */}
+              <LoansInfoBar 
+                loans={loans} 
+                onUpdateLoan={handleUpdateLoan} 
+                isPrivacyMode={isPrivacyMode} 
+              />
+
+              {/* Loans Dashboard */}
+              <div className="animate-fade-in-up stagger-5">
+                <LoansDashboard 
+                  loans={loans} 
+                  onUpdateLoan={handleUpdateLoan}
+                  isPrivacyMode={isPrivacyMode}
+                />
+              </div>
+            </TabsContent>
+          </Tabs>
         </div>
 
         {/* Detailed View Modal */}
@@ -476,9 +379,6 @@ const Index = () => {
             onClose={() => setShowDetailedView(false)} 
           />
         )}
-
-        {/* History Modal */}
-        {/* Removed as per user request */}
       </div>
     </div>
   );
