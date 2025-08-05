@@ -100,7 +100,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
       <DialogTrigger asChild>
         <Button 
           size="lg" 
-          className="gap-3 rounded-full px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm"
+          className="gap-3 rounded-full px-8 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102 backdrop-blur-sm"
           onClick={() => setOpen(true)}
         >
           <Plus className="h-5 w-5" />

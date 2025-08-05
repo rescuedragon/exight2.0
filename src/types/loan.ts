@@ -10,6 +10,7 @@ export interface Loan {
   status: 'active' | 'completed' | 'written-off';
   totalReceived: number;
   remainingAmount: number;
+  writeOffDate?: Date;
   createdAt: Date;
   payments: LoanPayment[];
 }

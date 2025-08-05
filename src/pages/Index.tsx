@@ -7,11 +7,14 @@ import { AddLoanModal } from "@/components/AddLoanModal";
 import { ExpenseDashboard } from "@/components/ExpenseDashboard";
 import { LoansDashboard } from "@/components/LoansDashboard";
 import { DetailedView } from "@/components/DetailedView";
+import { LoanDetailedView } from "@/components/LoanDetailedView";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Expense } from "@/types/expense";
 import { Loan } from "@/types/loan";
-import { BarChart3, Eye, EyeOff, HandCoins, Wallet } from "lucide-react";
+import { BarChart3, Eye, EyeOff, HandCoins, Wallet, LogOut } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+
 
 interface ActionLog {
   id: string;
@@ -22,6 +25,7 @@ interface ActionLog {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loans, setLoans] = useState<Loan[]>([]);
   const [showDetailedView, setShowDetailedView] = useState(false);
@@ -56,10 +60,15 @@ const Index = () => {
 
   // Load data from localStorage on component mount
   useEffect(() => {
+    console.log("Loading data from localStorage...");
+    
     // Load expenses from localStorage
     const savedExpenses = localStorage.getItem('expenses');
+    console.log("Saved expenses:", savedExpenses);
+    
     if (savedExpenses) {
       const parsed = JSON.parse(savedExpenses);
+      console.log("Parsed expenses:", parsed.length, "entries");
       const expensesWithDates = parsed.map((expense: any) => ({
         ...expense,
         createdAt: new Date(expense.createdAt),
@@ -69,12 +78,18 @@ const Index = () => {
         })) || []
       }));
       setExpenses(expensesWithDates);
+      console.log("Expenses loaded:", expensesWithDates.length);
+    } else {
+      console.log("No expenses found in localStorage");
     }
 
     // Load loans from localStorage
     const savedLoans = localStorage.getItem('loans');
+    console.log("Saved loans:", savedLoans);
+    
     if (savedLoans) {
       const parsed = JSON.parse(savedLoans);
+      console.log("Parsed loans:", parsed.length, "entries");
       const loansWithDates = parsed.map((loan: any) => ({
         ...loan,
         dateGiven: new Date(loan.dateGiven),
@@ -85,6 +100,9 @@ const Index = () => {
         })) || []
       }));
       setLoans(loansWithDates);
+      console.log("Loans loaded:", loansWithDates.length);
+    } else {
+      console.log("No loans found in localStorage");
     }
   }, []);
 
@@ -236,11 +254,108 @@ const Index = () => {
   // Get existing person names for autocomplete
   const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
 
+  const handleLogout = () => {
+    localStorage.removeItem('lastLoginDate');
+    navigate('/login');
+  };
+
+  const addDemoData = () => {
+    // Import the addTestData function from Login component
+    const testExpenses: Expense[] = [
+      {
+        id: "1",
+        name: "Home Loan EMI",
+        amount: 45000,
+        currency: "INR" as const,
+        type: "EMI" as const,
+        deductionDay: 5,
+        isRecurring: true,
+        totalMonths: 240,
+        remainingMonths: 180,
+        remainingAmount: 8100000,
+        createdAt: new Date("2023-01-15"),
+        partialPayments: []
+      },
+      {
+        id: "2",
+        name: "Car Loan EMI",
+        amount: 15000,
+        currency: "INR" as const,
+        type: "EMI" as const,
+        deductionDay: 12,
+        isRecurring: true,
+        totalMonths: 60,
+        remainingMonths: 42,
+        remainingAmount: 630000,
+        createdAt: new Date("2023-06-20"),
+        partialPayments: []
+      },
+      {
+        id: "3",
+        name: "Netflix Subscription",
+        amount: 499,
+        currency: "INR" as const,
+        type: "EMI" as const,
+        deductionDay: 1,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date("2023-12-01"),
+        partialPayments: []
+      }
+    ];
+
+    const testLoans: Loan[] = [
+      {
+        id: "1",
+        personName: "Rahul Sharma",
+        amount: 25000,
+        currency: "INR",
+        dateGiven: new Date("2024-01-15"),
+        status: "active" as const,
+        totalReceived: 5000,
+        remainingAmount: 20000,
+        createdAt: new Date("2024-01-15"),
+        payments: [
+          {
+            id: "1",
+            amount: 5000,
+            date: new Date("2024-02-15"),
+            type: "payment" as const,
+            description: "Partial payment"
+          }
+        ]
+      },
+      {
+        id: "2",
+        personName: "Priya Patel",
+        amount: 15000,
+        currency: "INR",
+        dateGiven: new Date("2024-02-01"),
+        status: "active" as const,
+        totalReceived: 0,
+        remainingAmount: 15000,
+        createdAt: new Date("2024-02-01"),
+        payments: []
+      }
+    ];
+
+    localStorage.setItem('expenses', JSON.stringify(testExpenses));
+    localStorage.setItem('loans', JSON.stringify(testLoans));
+    
+    // Reload the data
+    setExpenses(testExpenses);
+    setLoans(testLoans);
+    
+    console.log("Demo data added manually");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-background">
       {/* Title - Top Left */}
       <div 
-        className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
+        className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-out"
         style={{ opacity: scrollOpacity }}
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
@@ -256,7 +371,7 @@ const Index = () => {
 
       {/* Theme Toggle - Top Right */}
       <div 
-        className="fixed top-6 right-6 z-40 transition-opacity duration-300 ease-out"
+        className="fixed top-6 right-6 z-40 transition-opacity duration-200 ease-out"
         style={{ opacity: scrollOpacity }}
       >
         <ThemeToggle />
@@ -273,6 +388,7 @@ const Index = () => {
             <p className="text-lg font-semibold text-foreground">
               Welcome back!
             </p>
+
           </div>
 
           {/* Navigation Buttons - Right side */}
@@ -282,7 +398,7 @@ const Index = () => {
               variant="ghost"
               size="lg"
               onClick={() => setIsPrivacyMode(!isPrivacyMode)}
-              className="gap-3 rounded-full px-6 text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
+              className="gap-3 rounded-full px-6 text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
             >
               {isPrivacyMode ? (
                 <>
@@ -297,34 +413,70 @@ const Index = () => {
               )}
             </Button>
             
+                          <Button 
+                variant="outline" 
+                size="lg" 
+                className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
+                onClick={() => setShowDetailedView(true)}
+              >
+                <BarChart3 className="h-5 w-5" />
+                {activeTab === 'expenses' ? 'Expense Analytics' : 'Loan Analytics'}
+              </Button>
+
+            {/* Add Demo Data Button */}
             <Button 
               variant="outline" 
               size="lg" 
-              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
-              onClick={() => setShowDetailedView(true)}
+              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-green-500/20 border-border/40 backdrop-blur-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
+              onClick={addDemoData}
             >
               <BarChart3 className="h-5 w-5" />
-              Analytics
+              Add Demo Data
+            </Button>
+
+            {/* Logout Button */}
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-red-500/20 border-border/40 backdrop-blur-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
+              onClick={handleLogout}
+            >
+              <LogOut className="h-5 w-5" />
+              Logout
             </Button>
           </div>
         </div>
 
         {/* Main Content with Tabs */}
         <div className="space-y-6">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <div className="w-full">
             <div className="flex justify-between items-center mb-6">
-              <TabsList className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm">
-                <TabsTrigger value="expenses" className="flex items-center gap-2 px-6">
+              <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
+                <button
+                  onClick={() => setActiveTab('expenses')}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    activeTab === 'expenses'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
                   <Wallet className="h-4 w-4" />
                   Expenses
-                </TabsTrigger>
-                <TabsTrigger value="loans" className="flex items-center gap-2 px-6">
+                </button>
+                <button
+                  onClick={() => setActiveTab('loans')}
+                  className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                    activeTab === 'loans'
+                      ? 'bg-background text-foreground shadow-sm'
+                      : 'text-muted-foreground hover:text-foreground'
+                  }`}
+                >
                   <HandCoins className="h-4 w-4" />
                   Loans Given
-                </TabsTrigger>
-              </TabsList>
+                </button>
+              </div>
               
-              <div className="animate-fade-in-up stagger-5">
+              <div>
                 {activeTab === 'expenses' ? (
                   <AddExpenseModal onAddExpense={handleAddExpense} />
                 ) : (
@@ -333,51 +485,67 @@ const Index = () => {
               </div>
             </div>
 
-            <TabsContent value="expenses" className="space-y-6">
-              {/* Info Bar */}
-              <InfoBar 
-                expenses={expenses} 
-                onUpdateExpense={handleUpdateExpense} 
-                onDeleteExpense={handleDeleteExpense} 
-                isPrivacyMode={isPrivacyMode} 
-              />
+            {/* Tab Content */}
+                          <div className="relative">
+                <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div className="space-y-6">
+                  {/* Info Bar */}
+                  <InfoBar 
+                    expenses={expenses} 
+                    onUpdateExpense={handleUpdateExpense} 
+                    onDeleteExpense={handleDeleteExpense} 
+                    isPrivacyMode={isPrivacyMode} 
+                  />
 
-              {/* Dashboard */}
-              <div className="animate-fade-in-up stagger-5">
-                <ExpenseDashboard 
-                  expenses={expenses} 
-                  onUpdateExpense={handleUpdateExpense}
-                  isPrivacyMode={isPrivacyMode}
-                />
+                  {/* Dashboard */}
+                  <div>
+                    <ExpenseDashboard 
+                      expenses={expenses} 
+                      onUpdateExpense={handleUpdateExpense}
+                      isPrivacyMode={isPrivacyMode}
+                    />
+                  </div>
+                </div>
               </div>
-            </TabsContent>
 
-            <TabsContent value="loans" className="space-y-6">
-              {/* Loans Info Bar */}
-              <LoansInfoBar 
-                loans={loans} 
-                onUpdateLoan={handleUpdateLoan} 
-                isPrivacyMode={isPrivacyMode} 
-              />
+                              <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div className="space-y-6">
+                  {/* Loans Info Bar */}
+                  <LoansInfoBar 
+                    loans={loans} 
+                    onUpdateLoan={handleUpdateLoan} 
+                    isPrivacyMode={isPrivacyMode} 
+                  />
 
-              {/* Loans Dashboard */}
-              <div className="animate-fade-in-up stagger-5">
-                <LoansDashboard 
-                  loans={loans} 
-                  onUpdateLoan={handleUpdateLoan}
-                  isPrivacyMode={isPrivacyMode}
-                />
+                  {/* Loans Dashboard */}
+                  <div>
+                    <LoansDashboard 
+                      loans={loans} 
+                      onUpdateLoan={handleUpdateLoan}
+                      isPrivacyMode={isPrivacyMode}
+                    />
+                  </div>
+                </div>
               </div>
-            </TabsContent>
-          </Tabs>
+            </div>
+          </div>
         </div>
 
         {/* Detailed View Modal */}
         {showDetailedView && (
-          <DetailedView 
-            expenses={expenses} 
-            onClose={() => setShowDetailedView(false)} 
-          />
+          <>
+            {activeTab === 'expenses' ? (
+              <DetailedView 
+                expenses={expenses} 
+                onClose={() => setShowDetailedView(false)} 
+              />
+            ) : (
+              <LoanDetailedView 
+                loans={loans} 
+                onClose={() => setShowDetailedView(false)} 
+              />
+            )}
+          </>
         )}
       </div>
     </div>

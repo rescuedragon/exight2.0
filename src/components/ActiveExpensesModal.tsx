@@ -150,7 +150,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     const progressPercentage = expense.isRecurring ? 0 : Math.round((((expense.totalMonths || 0) - (expense.remainingMonths || 0)) / (expense.totalMonths || 1)) * 100);
     
     return (
-      <Card key={expense.id} className={`premium-card transition-all duration-300 hover:shadow-lg ${isCompleted ? 'opacity-75' : ''}`}>
+              <Card key={expense.id} className={`premium-card transition-all duration-200 hover:shadow-lg ${isCompleted ? 'opacity-75' : ''}`}>
         <CardContent className="p-6">
           <div className="space-y-4">
             {/* Header */}
@@ -266,7 +266,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                           <Button 
                             variant="gradient" 
                             onClick={handleSaveEdit}
-                            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102"
                           >
                             Save Changes
                           </Button>
@@ -342,7 +342,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                 </div>
                 <div className="w-full bg-muted/20 rounded-full h-2">
                   <div 
-                    className="h-full bg-gradient-to-r from-blue-accent to-emerald-accent rounded-full transition-all duration-700"
+                    className="h-full bg-gradient-to-r from-blue-accent to-emerald-accent rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}
                   />
                 </div>

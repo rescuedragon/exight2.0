@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { X, HandCoins, Calendar, IndianRupee, Users, CheckCircle, AlertTriangle, Clock } from "lucide-react";
+import { X, HandCoins, Calendar, IndianRupee, Users, CheckCircle, AlertTriangle, Clock, TrendingDown, AlertCircle } from "lucide-react";
 import { Loan } from "@/types/loan";
 
 interface LoansDetailModalProps {
@@ -15,6 +15,15 @@ interface LoansDetailModalProps {
 
 export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailModalProps) => {
   const [activeTab, setActiveTab] = useState('overview');
+
+  const handleWriteOff = (loan: Loan) => {
+    const updatedLoan: Loan = {
+      ...loan,
+      status: 'written-off',
+      writeOffDate: new Date(),
+    };
+    onUpdateLoan(updatedLoan);
+  };
 
   const formatCurrency = (amount: number, currency: string = 'INR') => {
     return new Intl.NumberFormat('en-IN', {
@@ -218,6 +227,7 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                           <TableHead>Pending</TableHead>
                           <TableHead>Date Given</TableHead>
                           <TableHead>Progress</TableHead>
+                          <TableHead>Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
@@ -234,12 +244,23 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                                 <div className="flex items-center gap-2">
                                   <div className="w-20 bg-muted/20 rounded-full h-2">
                                     <div 
-                                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-700"
+                                      className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300"
                                       style={{ width: `${progress}%` }}
                                     />
                                   </div>
                                   <span className="text-xs font-medium">{progress}%</span>
                                 </div>
+                              </TableCell>
+                              <TableCell>
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleWriteOff(loan)}
+                                  className="gap-1 text-red-600 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20 border-red-200 hover:border-red-300"
+                                >
+                                  <AlertCircle className="h-3 w-3" />
+                                  Write Off
+                                </Button>
                               </TableCell>
                             </TableRow>
                           );
@@ -265,6 +286,7 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                           <TableHead>Amount Loaned</TableHead>
                           <TableHead>Amount Received</TableHead>
                           <TableHead>Date Given</TableHead>
+                          <TableHead>Date Completed/Written Off</TableHead>
                           <TableHead>Status</TableHead>
                         </TableRow>
                       </TableHeader>
@@ -277,6 +299,15 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                               {formatCurrency(loan.totalReceived, loan.currency)}
                             </TableCell>
                             <TableCell>{formatDate(loan.dateGiven)}</TableCell>
+                            <TableCell>
+                              {loan.status === 'written-off' && loan.writeOffDate ? (
+                                <span className="text-red-600 font-medium">{formatDate(loan.writeOffDate)}</span>
+                              ) : loan.status === 'completed' ? (
+                                <span className="text-emerald-600 font-medium">—</span>
+                              ) : (
+                                <span className="text-gray-400">—</span>
+                              )}
+                            </TableCell>
                             <TableCell>
                               <Badge variant="outline" className={getStatusColor(loan.status)}>
                                 {getStatusIcon(loan.status)}
