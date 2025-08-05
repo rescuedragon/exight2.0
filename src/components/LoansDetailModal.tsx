@@ -84,7 +84,7 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
   };
 
   return (
-    <div className="fixed inset-0 bg-background/90 backdrop-blur-xl z-50 flex items-center justify-center p-4 animate-fade-in-up">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg z-[100] flex items-center justify-center p-4 animate-fade-in-up">
       <Card className="w-full max-w-7xl h-[90vh] overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-emerald-accent/5 to-teal-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">

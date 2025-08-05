@@ -62,7 +62,7 @@ export const ExpenseHistory = ({ expenses, actionLogs, onClose }: ExpenseHistory
   };
 
   return (
-    <div className="fixed inset-0 bg-background/90 backdrop-blur-xl z-50 flex items-center justify-center p-4 animate-fade-in-up">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg z-[100] flex items-center justify-center p-4 animate-fade-in-up">
       <Card className="w-full max-w-6xl max-h-[90vh] overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in">
         <CardHeader className="flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-emerald-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">

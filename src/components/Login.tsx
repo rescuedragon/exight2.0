@@ -68,6 +68,10 @@ const Login = () => {
       // Set last login date to today
       localStorage.setItem('lastLoginDate', new Date().toDateString());
       
+      // Store user name (use firstName if registering, or extract from email if logging in)
+      const userName = isLogin ? (email.split('@')[0] || 'User') : firstName;
+      localStorage.setItem('userName', userName);
+      
       // Add test data if it doesn't exist
       addTestData();
       

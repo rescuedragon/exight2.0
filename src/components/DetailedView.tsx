@@ -122,7 +122,7 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/20 backdrop-blur-md z-50 animate-fade-in-up">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg z-[100] animate-fade-in-up">
       <Card className="w-full h-full overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-0 shadow-2xl rounded-none animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-4 px-6 bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 border-b border-gray-200/50 dark:border-gray-700/50">
           <div className="flex items-center gap-3">

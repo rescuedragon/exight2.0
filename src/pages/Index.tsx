@@ -33,6 +33,7 @@ const Index = () => {
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [isPrivacyMode, setIsPrivacyMode] = useState(false);
   const [activeTab, setActiveTab] = useState('expenses');
+  const [userName, setUserName] = useState<string>('User');
 
   // Handle scroll-based fade effect - faster fade to prevent overlap
   useEffect(() => {
@@ -103,6 +104,12 @@ const Index = () => {
       console.log("Loans loaded:", loansWithDates.length);
     } else {
       console.log("No loans found in localStorage");
+    }
+
+    // Load user name
+    const savedUserName = localStorage.getItem('userName');
+    if (savedUserName) {
+      setUserName(savedUserName);
     }
   }, []);
 
@@ -259,87 +266,94 @@ const Index = () => {
     navigate('/login');
   };
 
-  const addDemoData = () => {
-    // Import the addTestData function from Login component
-    const testExpenses: Expense[] = [
-      {
-        id: "1",
-        name: "Home Loan EMI",
-        amount: 45000,
-        currency: "INR" as const,
-        type: "EMI" as const,
-        deductionDay: 5,
-        isRecurring: true,
-        totalMonths: 240,
-        remainingMonths: 180,
-        remainingAmount: 8100000,
-        createdAt: new Date("2023-01-15"),
-        partialPayments: []
-      },
-      {
-        id: "2",
-        name: "Car Loan EMI",
-        amount: 15000,
-        currency: "INR" as const,
-        type: "EMI" as const,
-        deductionDay: 12,
-        isRecurring: true,
-        totalMonths: 60,
-        remainingMonths: 42,
-        remainingAmount: 630000,
-        createdAt: new Date("2023-06-20"),
-        partialPayments: []
-      },
-      {
-        id: "3",
-        name: "Netflix Subscription",
-        amount: 499,
-        currency: "INR" as const,
-        type: "EMI" as const,
-        deductionDay: 1,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date("2023-12-01"),
-        partialPayments: []
-      }
+    const addDemoData = () => {
+    // Generate random number of entries (10-20 for each section)
+    const numExpenses = Math.floor(Math.random() * 11) + 10; // 10-20
+    const numLoans = Math.floor(Math.random() * 11) + 10; // 10-20
+
+    // Sample data arrays for random generation
+    const expenseNames = [
+      "Home Loan EMI", "Car Loan EMI", "Personal Loan EMI", "Education Loan EMI",
+      "Netflix Subscription", "Amazon Prime", "Spotify Premium", "Disney+ Hotstar",
+      "Internet Bill", "Mobile Bill", "Electricity Bill", "Water Bill", "Gas Bill",
+      "Gym Membership", "Insurance Premium", "Credit Card Payment", "Rent",
+      "Grocery Shopping", "Fuel Expenses", "Medical Insurance", "Travel Insurance",
+      "Magazine Subscription", "Cloud Storage", "Software License", "Domain Renewal"
     ];
 
-    const testLoans: Loan[] = [
-      {
-        id: "1",
-        personName: "Rahul Sharma",
-        amount: 25000,
-        currency: "INR",
-        dateGiven: new Date("2024-01-15"),
-        status: "active" as const,
-        totalReceived: 5000,
-        remainingAmount: 20000,
-        createdAt: new Date("2024-01-15"),
-        payments: [
-          {
-            id: "1",
-            amount: 5000,
-            date: new Date("2024-02-15"),
-            type: "payment" as const,
-            description: "Partial payment"
-          }
-        ]
-      },
-      {
-        id: "2",
-        personName: "Priya Patel",
-        amount: 15000,
-        currency: "INR",
-        dateGiven: new Date("2024-02-01"),
-        status: "active" as const,
-        totalReceived: 0,
-        remainingAmount: 15000,
-        createdAt: new Date("2024-02-01"),
-        payments: []
-      }
+    const personNames = [
+      "Rahul Sharma", "Priya Patel", "Amit Kumar", "Sneha Singh", "Vikram Gupta",
+      "Kavya Reddy", "Arjun Nair", "Meera Joshi", "Ravi Agarwal", "Pooja Mehta",
+      "Sanjay Verma", "Anita Desai", "Kiran Rao", "Deepak Shah", "Sunita Iyer",
+      "Manoj Tiwari", "Rekha Bansal", "Ashish Khanna", "Nidhi Saxena", "Rohit Malhotra"
     ];
+
+    const loanStatuses: ("active" | "completed" | "written-off")[] = ["active", "completed", "written-off"];
+
+    // Generate random expenses
+    const testExpenses: Expense[] = [];
+    for (let i = 0; i < numExpenses; i++) {
+      const isRecurring = Math.random() > 0.3; // 70% chance of recurring
+      const amount = Math.floor(Math.random() * 50000) + 500; // 500-50500
+      const totalMonths = isRecurring ? (Math.random() > 0.5 ? null : Math.floor(Math.random() * 60) + 12) : Math.floor(Math.random() * 60) + 12;
+      const remainingMonths = totalMonths ? Math.floor(Math.random() * totalMonths) : null;
+      
+      testExpenses.push({
+        id: `exp_${i + 1}`,
+        name: expenseNames[Math.floor(Math.random() * expenseNames.length)],
+        amount,
+        currency: "INR" as const,
+        type: "EMI" as const,
+        deductionDay: Math.floor(Math.random() * 28) + 1, // 1-28
+        isRecurring,
+        totalMonths,
+        remainingMonths,
+        remainingAmount: remainingMonths ? remainingMonths * amount : null,
+        createdAt: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+        partialPayments: []
+      });
+    }
+
+    // Generate random loans
+    const testLoans: Loan[] = [];
+    for (let i = 0; i < numLoans; i++) {
+      const amount = Math.floor(Math.random() * 100000) + 5000; // 5000-105000
+      const status = loanStatuses[Math.floor(Math.random() * loanStatuses.length)];
+      const totalReceived = status === "completed" ? amount : Math.floor(Math.random() * amount);
+      const remainingAmount = amount - totalReceived;
+      const numPayments = Math.floor(Math.random() * 5); // 0-4 payments
+      
+      const payments = [];
+      let runningTotal = 0;
+      for (let j = 0; j < numPayments && runningTotal < totalReceived; j++) {
+        const paymentAmount = Math.min(
+          Math.floor(Math.random() * (totalReceived - runningTotal)) + 1000,
+          totalReceived - runningTotal
+        );
+        runningTotal += paymentAmount;
+        payments.push({
+          id: `payment_${i}_${j}`,
+          amount: paymentAmount,
+          date: new Date(2023 + Math.floor(Math.random() * 2), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+          type: "payment" as const,
+          description: `Payment ${j + 1}`
+        });
+      }
+
+      testLoans.push({
+        id: `loan_${i + 1}`,
+        personName: personNames[Math.floor(Math.random() * personNames.length)],
+        amount,
+        currency: "INR",
+        dateGiven: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+        status,
+        totalReceived,
+        remainingAmount,
+        writeOffDate: status === "written-off" ? new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1) : undefined,
+        createdAt: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+        payments
+      });
+    }
 
     localStorage.setItem('expenses', JSON.stringify(testExpenses));
     localStorage.setItem('loans', JSON.stringify(testLoans));
@@ -348,11 +362,11 @@ const Index = () => {
     setExpenses(testExpenses);
     setLoans(testLoans);
     
-    console.log("Demo data added manually");
+    console.log(`Demo data generated: ${numExpenses} expenses, ${numLoans} loans`);
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-background">
+      return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
       <div 
         className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-out"
@@ -369,121 +383,113 @@ const Index = () => {
         </p>
       </div>
 
-      {/* Theme Toggle - Top Right */}
-      <div 
-        className="fixed top-6 right-6 z-40 transition-opacity duration-200 ease-out"
-        style={{ opacity: scrollOpacity }}
-      >
-        <ThemeToggle />
-      </div>
+              {/* Top Right Controls */}
+        <div 
+          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-out"
+          style={{ opacity: scrollOpacity }}
+        >
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={addDemoData}
+            className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
+            title="Add Demo Data"
+          >
+            <BarChart3 className="h-4 w-4" />
+          </Button>
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleLogout}
+            className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
+            title="Logout"
+          >
+            <LogOut className="h-4 w-4" />
+          </Button>
+        </div>
 
-      <div className="container mx-auto px-6 py-12 max-w-7xl">
+      <div className="container mx-auto px-6 py-8 max-w-7xl min-h-screen">
         {/* Spacer for layout */}
-        <div className="pt-24 mb-4"></div>
+        <div className="pt-20 mb-6"></div>
 
-        {/* Greeting and Navigation Buttons - Horizontally Aligned */}
-        <div className="flex justify-between items-center mb-4">
-          {/* Greeting - Left side */}
-          <div className="animate-fade-in-up stagger-1">
+        {/* Navigation Bar with Tabs on Left and Actions on Right */}
+        <div className="flex justify-between items-center mb-6">
+          {/* Left side - Greeting and Tabs */}
+          <div className="flex items-center gap-6 animate-fade-in-up stagger-1">
             <p className="text-lg font-semibold text-foreground">
-              Welcome back!
+              Hi {userName}!
             </p>
-
+            
+            {/* Tab Buttons */}
+            <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
+              <button
+                onClick={() => setActiveTab('expenses')}
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  activeTab === 'expenses'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <Wallet className="h-4 w-4" />
+                Expenses
+              </button>
+              <button
+                onClick={() => setActiveTab('loans')}
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                  activeTab === 'loans'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <HandCoins className="h-4 w-4" />
+                Loans
+              </button>
+            </div>
           </div>
 
-          {/* Navigation Buttons - Right side */}
-          <div className="flex flex-wrap gap-4 animate-fade-in-up stagger-4">
-            {/* Privacy Toggle */}
+          {/* Right side - Action Buttons */}
+          <div className="flex items-center gap-4 animate-fade-in-up stagger-4">
+            {/* Privacy Toggle - Just Eye Icon */}
             <Button
               variant="ghost"
-              size="lg"
+              size="icon"
               onClick={() => setIsPrivacyMode(!isPrivacyMode)}
-              className="gap-3 rounded-full px-6 text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
+              className="h-10 w-10 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
+              title={isPrivacyMode ? "Show Data" : "Hide Data"}
             >
               {isPrivacyMode ? (
-                <>
-                  <EyeOff className="h-5 w-5" />
-                  Show Data
-                </>
+                <EyeOff className="h-5 w-5" />
               ) : (
-                <>
-                  <Eye className="h-5 w-5" />
-                  Hide Data
-                </>
+                <Eye className="h-5 w-5" />
               )}
             </Button>
             
-                          <Button 
-                variant="outline" 
-                size="lg" 
-                className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
-                onClick={() => setShowDetailedView(true)}
-              >
-                <BarChart3 className="h-5 w-5" />
-                {activeTab === 'expenses' ? 'Expense Analytics' : 'Loan Analytics'}
-              </Button>
-
-            {/* Add Demo Data Button */}
+            {/* Analytics Button */}
             <Button 
               variant="outline" 
               size="lg" 
-              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-green-500/20 border-border/40 backdrop-blur-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300"
-              onClick={addDemoData}
+              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
+              onClick={() => setShowDetailedView(true)}
             >
               <BarChart3 className="h-5 w-5" />
-              Add Demo Data
+              Analytics
             </Button>
 
-            {/* Logout Button */}
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-red-500/20 border-border/40 backdrop-blur-sm text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-5 w-5" />
-              Logout
-            </Button>
+            {/* Add Entry Button */}
+            <div>
+              {activeTab === 'expenses' ? (
+                <AddExpenseModal onAddExpense={handleAddExpense} />
+              ) : (
+                <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
+              )}
+            </div>
           </div>
         </div>
 
         {/* Main Content with Tabs */}
-        <div className="space-y-6">
+        <div className="space-y-4 pb-8">
           <div className="w-full">
-            <div className="flex justify-between items-center mb-6">
-              <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
-                <button
-                  onClick={() => setActiveTab('expenses')}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                    activeTab === 'expenses'
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <Wallet className="h-4 w-4" />
-                  Expenses
-                </button>
-                <button
-                  onClick={() => setActiveTab('loans')}
-                  className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
-                    activeTab === 'loans'
-                      ? 'bg-background text-foreground shadow-sm'
-                      : 'text-muted-foreground hover:text-foreground'
-                  }`}
-                >
-                  <HandCoins className="h-4 w-4" />
-                  Loans Given
-                </button>
-              </div>
-              
-              <div>
-                {activeTab === 'expenses' ? (
-                  <AddExpenseModal onAddExpense={handleAddExpense} />
-                ) : (
-                  <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
-                )}
-              </div>
-            </div>
 
             {/* Tab Content */}
                           <div className="relative">
@@ -542,7 +548,8 @@ const Index = () => {
             ) : (
               <LoanDetailedView 
                 loans={loans} 
-                onClose={() => setShowDetailedView(false)} 
+                onClose={() => setShowDetailedView(false)}
+                onUpdateLoan={handleUpdateLoan}
               />
             )}
           </>
