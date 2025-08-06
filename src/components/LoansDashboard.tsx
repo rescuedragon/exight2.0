@@ -171,7 +171,7 @@ export const LoansDashboard = ({ loans, onUpdateLoan, isPrivacyMode = false }: L
                           Record payment received
                         </DropdownMenuItem>
                       </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px] backdrop-blur-xl bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-900/30 dark:via-gray-800/20 dark:to-gray-900/30 border border-white/30 dark:border-gray-600/30">
+                      <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background backdrop-blur-xl bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-900/30 dark:via-gray-800/20 dark:to-gray-900/30 border border-white/30 dark:border-gray-600/30">
                         <DialogHeader>
                           <DialogTitle className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">Record Payment</DialogTitle>
                         </DialogHeader>

@@ -98,6 +98,30 @@ body {
 }
 
 /* Shadow Utilities */
+
+/* Modal Full Screen Styles */
+body[data-modal-open="true"] {
+  overflow: hidden !important;
+}
+
+/* Ensure modals completely hide background content */
+.dialog-overlay-fullscreen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+}
+
+/* Hide scrollbars and background content when modal is open */
+body[data-modal-open="true"] * {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+body[data-modal-open="true"] *::-webkit-scrollbar {
+  display: none;
+}
 .shadow-card {
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }

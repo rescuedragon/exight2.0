@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -79,7 +79,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
         return 'bg-gradient-to-r from-blue-accent/20 to-blue-accent/10 text-blue-accent border-blue-accent/30';
       case 'Personal Loan':
         return 'bg-gradient-to-r from-purple-accent/20 to-purple-accent/10 text-purple-accent border-purple-accent/30';
-      case 'Borrowed':
+      case 'Borrowed from Someone':
         return 'bg-gradient-to-r from-emerald-accent/20 to-emerald-accent/10 text-emerald-accent border-emerald-accent/30';
     }
   };
@@ -150,7 +150,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     const progressPercentage = expense.isRecurring ? 0 : Math.round((((expense.totalMonths || 0) - (expense.remainingMonths || 0)) / (expense.totalMonths || 1)) * 100);
     
     return (
-              <Card key={expense.id} className={`premium-card transition-all duration-200 hover:shadow-lg ${isCompleted ? 'opacity-75' : ''}`}>
+      <Card key={expense.id} className={`premium-card transition-all duration-200 hover:shadow-lg ${isCompleted ? 'opacity-75' : ''}`}>
         <CardContent className="p-6">
           <div className="space-y-4">
             {/* Header */}
@@ -167,22 +167,21 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
               
               {!isCompleted && (
                 <div className="flex items-center gap-2">
-                  <Dialog>
-                    <DialogTrigger asChild>
-                      <Button 
-                        variant="outline" 
-                        size="sm"
-                        className="rounded-full hover:bg-blue-accent/10"
-                        onClick={() => handleEditExpense(expense)}
-                      >
-                        <Edit3 className="h-4 w-4" />
-                      </Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto premium-card">
-                      <DialogHeader>
-                        <DialogTitle>Edit Expense</DialogTitle>
-                      </DialogHeader>
-                      <div className="space-y-4 mt-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    className="rounded-full hover:bg-blue-accent/10"
+                    onClick={() => handleEditExpense(expense)}
+                  >
+                    <Edit3 className="h-4 w-4" />
+                  </Button>
+                  {editingExpense?.id === expense.id && (
+                    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+                      <Card className="w-full max-w-lg overflow-hidden premium-card">
+                        <CardHeader>
+                          <CardTitle>Edit Expense</CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4 mt-4">
                         <div className="space-y-2">
                           <Label htmlFor="name">Expense Name</Label>
                           <Input
@@ -271,9 +270,10 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                             Save Changes
                           </Button>
                         </div>
-                      </div>
-                    </DialogContent>
-                  </Dialog>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  )}
                   
                   <Button 
                     variant="outline" 
@@ -355,8 +355,8 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg z-[100] flex items-center justify-center p-4 animate-fade-in-up">
-      <Card className="w-full max-w-7xl h-[90vh] overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in flex flex-col">
+    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+      <Card className="w-full h-full overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-purple-accent/20 to-purple-accent/10 rounded-2xl">

@@ -392,20 +392,20 @@ const Index = () => {
             variant="ghost"
             size="icon"
             onClick={addDemoData}
-            className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
+            className="h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
             title="Add Demo Data"
           >
-            <BarChart3 className="h-4 w-4" />
+            <BarChart3 className="h-5 w-5" />
           </Button>
           <ThemeToggle />
           <Button
             variant="ghost"
             size="icon"
             onClick={handleLogout}
-            className="h-10 w-10 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
+            className="h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
             title="Logout"
           >
-            <LogOut className="h-4 w-4" />
+            <LogOut className="h-5 w-5" />
           </Button>
         </div>
 

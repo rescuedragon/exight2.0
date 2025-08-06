@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { X, History, Plus, Edit, CreditCard, Trash2, Clock } from "lucide-react";
 import { Expense } from "@/types/expense";
 
@@ -62,8 +63,9 @@ export const ExpenseHistory = ({ expenses, actionLogs, onClose }: ExpenseHistory
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg z-[100] flex items-center justify-center p-4 animate-fade-in-up">
-      <Card className="w-full max-w-6xl max-h-[90vh] overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in">
+    <Dialog open={true} onOpenChange={() => onClose()}>
+      <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-hidden premium-card border-border/40 shadow-premium">
+        <Card className="w-full h-full overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in">
         <CardHeader className="flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-emerald-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-2xl">

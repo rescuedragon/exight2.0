@@ -223,7 +223,7 @@ const TestSpace = () => {
 
     return (
       <Dialog open={showAddExpense} onOpenChange={setShowAddExpense}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Add New Expense</DialogTitle>
           </DialogHeader>
@@ -399,7 +399,7 @@ const TestSpace = () => {
 
     return (
       <Dialog open={showAddGroup} onOpenChange={setShowAddGroup}>
-        <DialogContent className="max-w-lg">
+        <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold">Create New Group</DialogTitle>
           </DialogHeader>
@@ -511,7 +511,7 @@ const TestSpace = () => {
 
     return (
       <Dialog open={showReceiptUpload} onOpenChange={setShowReceiptUpload}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <Camera className="h-6 w-6" />
@@ -634,7 +634,7 @@ const TestSpace = () => {
 
     return (
       <Dialog open={showAnalytics} onOpenChange={setShowAnalytics}>
-        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <BarChart3 className="h-6 w-6" />

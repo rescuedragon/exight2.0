@@ -97,8 +97,9 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
   const maxCumulative = Math.max(...monthlyData.map(d => d.cumulativeAmount));
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-lg z-[100] animate-fade-in-up">
+    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
       <Card className="w-full h-full overflow-hidden premium-card border-0 shadow-premium animate-scale-in flex flex-col rounded-none">
+
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-emerald-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-2xl">

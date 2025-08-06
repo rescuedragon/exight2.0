@@ -84,7 +84,7 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
           Add Entry
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[900px] w-[90vw] max-h-[90vh] overflow-y-auto premium-card border-border/40 shadow-premium">
+      <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-y-auto premium-card border-border/40 shadow-premium">
         <DialogHeader className="pb-6">
           <DialogTitle className="text-2xl font-bold text-foreground">Add New Loan Entry</DialogTitle>
           <p className="text-muted-foreground">Record money you've lent to someone</p>
