@@ -69,9 +69,9 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
     <>
       <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-6 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
         
-        <div className="grid grid-cols-3 gap-6 justify-items-center">
+        <div className="grid grid-cols-3 gap-6 justify-start ml-20">
           <div
-            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
             onClick={() => setShowMonthlyModal(true)}
           >
             <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#5c5aeb' }}>
@@ -90,17 +90,17 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
                 <path d="M9 9L12 6L16 10L21 5" />
               </svg>
             </div>
-            <div className="space-y-1 min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Monthly Expenses</p>
-              <div className="flex items-center gap-2">
+            <div className="space-y-1 min-w-0 flex-1 w-full">
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide w-full">Monthly Expenses</p>
+              <div className="flex items-center gap-2 w-full">
                 <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200 flex-shrink-0" />
-                <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCurrency(totalMonthly).replace('₹', '')}</p>
+                <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight flex-1">{formatCurrency(totalMonthly).replace('₹', '')}</p>
               </div>
             </div>
           </div>
 
           <div
-            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
             onClick={() => setShowYearlyModal(true)}
           >
             <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
@@ -118,17 +118,17 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
                 <path d="M22 12H18L15 21L9 3L6 12H2" />
               </svg>
             </div>
-            <div className="space-y-1 min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Yearly Projection</p>
-              <div className="flex items-center gap-2">
+            <div className="space-y-1 min-w-0 flex-1 w-full">
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide w-full">Yearly Projection</p>
+              <div className="flex items-center gap-2 w-full">
                 <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200 flex-shrink-0" />
-                <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCurrency(totalYearly).replace('₹', '')}</p>
+                <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight flex-1">{formatCurrency(totalYearly).replace('₹', '')}</p>
               </div>
             </div>
           </div>
 
           <div
-            className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
             onClick={() => setShowActiveModal(true)}
           >
             <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
@@ -147,9 +147,9 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
                 <line x1="1" y1="10" x2="23" y2="10" />
               </svg>
             </div>
-            <div className="space-y-1 min-w-0 flex-1">
-              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Active Expenses</p>
-              <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCount(activeExpenses.length)}</p>
+            <div className="space-y-1 min-w-0 flex-1 w-full">
+              <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide w-full">Active Expenses</p>
+              <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight w-full">{formatCount(activeExpenses.length)}</p>
             </div>
           </div>
         </div>
