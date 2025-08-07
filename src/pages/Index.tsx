@@ -312,25 +312,33 @@ const TryMe = () => {
   const [activeTab, setActiveTab] = useState('expenses');
   const [userName, setUserName] = useState<string>('Demo User');
 
-  // Handle scroll-based fade effect
+  // Handle scroll-based fade effect - optimized to reduce flickering
   useEffect(() => {
+    let ticking = false;
+    let lastScrollY = 0;
+    
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const fadeStart = 2;
-      const fadeEnd = 20;
-      
-      if (scrollY <= fadeStart) {
-        setScrollOpacity(1);
-      } else if (scrollY >= fadeEnd) {
-        setScrollOpacity(0);
-      } else {
-        const progress = (scrollY - fadeStart) / (fadeEnd - fadeStart);
-        const opacity = 1 - Math.pow(progress, 0.5);
-        setScrollOpacity(Math.max(0, Math.min(1, opacity)));
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          
+          // Only update if there's a meaningful change to prevent flickering
+          if (Math.abs(scrollY - lastScrollY) > 2) {
+            if (scrollY > 5) {
+              setScrollOpacity(0);
+            } else {
+              setScrollOpacity(1);
+            }
+            lastScrollY = scrollY;
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -400,7 +408,7 @@ const TryMe = () => {
       {/* Title - Top Left */}
       {!isAnyModalOpen && (
         <div 
-          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
+          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-in-out"
           style={{ opacity: scrollOpacity }}
         >
         <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
@@ -415,7 +423,7 @@ const TryMe = () => {
       {/* Top Right Controls */}
       {!isAnyModalOpen && (
         <div 
-          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-300 ease-out"
+          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-in-out"
           style={{ opacity: scrollOpacity }}
         >
 
@@ -520,7 +528,7 @@ const TryMe = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div key="expenses-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -541,7 +549,7 @@ const TryMe = () => {
                 </div>
               </div>
 
-                              <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                              <div key="loans-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
@@ -608,29 +616,33 @@ const Index = () => {
   const [activeTab, setActiveTab] = useState('expenses');
   const [userName, setUserName] = useState<string>('User');
 
-
-
-  // Handle scroll-based fade effect - faster fade to prevent overlap
+  // Handle scroll-based fade effect - optimized to reduce flickering
   useEffect(() => {
+    let ticking = false;
+    let lastScrollY = 0;
+    
     const handleScroll = () => {
-      const scrollY = window.scrollY;
-      const fadeStart = 2; // Start fading after just 2px scroll
-      const fadeEnd = 20; // Completely fade by 20px scroll (much faster fade)
-      
-      if (scrollY <= fadeStart) {
-        setScrollOpacity(1);
-      } else if (scrollY >= fadeEnd) {
-        setScrollOpacity(0);
-      } else {
-        // Calculate opacity between fadeStart and fadeEnd
-        // Using an ease-out curve for a more natural feel
-        const progress = (scrollY - fadeStart) / (fadeEnd - fadeStart);
-        const opacity = 1 - Math.pow(progress, 0.5); // Square root for ease-out
-        setScrollOpacity(Math.max(0, Math.min(1, opacity)));
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          const scrollY = window.scrollY;
+          
+          // Only update if there's a meaningful change to prevent flickering
+          if (Math.abs(scrollY - lastScrollY) > 2) {
+            if (scrollY > 5) {
+              setScrollOpacity(0);
+            } else {
+              setScrollOpacity(1);
+            }
+            lastScrollY = scrollY;
+          }
+          
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -1455,7 +1467,7 @@ const Index = () => {
       {/* Title - Top Left */}
       {!isAnyModalOpen && (
         <div 
-          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
+          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-in-out"
           style={{ opacity: scrollOpacity }}
         >
         <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
@@ -1470,7 +1482,7 @@ const Index = () => {
               {/* Top Right Controls */}
       {!isAnyModalOpen && (
         <div 
-          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-300 ease-out"
+          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-in-out"
           style={{ opacity: scrollOpacity }}
         >
 
@@ -1575,7 +1587,7 @@ const Index = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div key="expenses-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -1596,7 +1608,7 @@ const Index = () => {
                 </div>
               </div>
 
-                              <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                              <div key="loans-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
