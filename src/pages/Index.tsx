@@ -403,7 +403,7 @@ const TryMe = () => {
           className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
           style={{ opacity: scrollOpacity }}
         >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
           </span>
@@ -436,15 +436,17 @@ const TryMe = () => {
         {/* Spacer for layout */}
         <div className="pt-20 mb-6"></div>
 
-        {/* Navigation Bar with Tabs on Left and Actions on Right */}
+        {/* Navigation Bar with all elements horizontally aligned */}
         <div className="flex justify-between items-center mb-6">
-          {/* Left side - Greeting and Tabs */}
+          {/* Left side - Greeting */}
           <div className="flex items-center gap-6 animate-fade-in-up stagger-1">
             <p className="text-lg font-semibold text-foreground">
               Hi {userName}!
             </p>
-            
-            {/* Tab Buttons */}
+          </div>
+
+          {/* Center - Tab Buttons */}
+          <div className="flex justify-center animate-fade-in-up stagger-1">
             <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -1454,7 +1456,7 @@ const Index = () => {
           className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
           style={{ opacity: scrollOpacity }}
         >
-        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
           </span>
@@ -1487,15 +1489,17 @@ const Index = () => {
         {/* Spacer for layout */}
         <div className="pt-20 mb-6"></div>
 
-        {/* Navigation Bar with Tabs on Left and Actions on Right */}
+        {/* Navigation Bar with all elements horizontally aligned */}
         <div className="flex justify-between items-center mb-6">
-          {/* Left side - Greeting and Tabs */}
+          {/* Left side - Greeting */}
           <div className="flex items-center gap-6 animate-fade-in-up stagger-1">
             <p className="text-lg font-semibold text-foreground">
               Hi {userName}!
             </p>
-            
-            {/* Tab Buttons */}
+          </div>
+
+          {/* Center - Tab Buttons */}
+          <div className="flex justify-center animate-fade-in-up stagger-1">
             <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -1568,7 +1572,7 @@ const Index = () => {
           <div className="w-full">
 
             {/* Tab Content */}
-                          <div className="relative">
+            <div className="relative">
                 <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
