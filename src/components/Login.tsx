@@ -450,15 +450,16 @@ const Login = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="fixed top-8 left-8 z-50"
+        className="fixed top-6 left-6 z-30 space-y-2"
       >
-        <h1 className="text-6xl font-bold text-foreground tracking-tight leading-none">
-          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+        <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
+          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
           </span>
         </h1>
-        <p className="text-base text-muted-foreground mt-1 font-medium tracking-wide">
-          Insights for your expenses
+        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
+        <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
+          Insights for your expenses.
         </p>
       </motion.div>
 

@@ -403,15 +403,12 @@ const TryMe = () => {
           className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
           style={{ opacity: scrollOpacity }}
         >
-        <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
           </span>
         </h1>
         <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
-        <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
-          Insights for your expenses.
-        </p>
         </div>
       )}
 
@@ -1457,15 +1454,12 @@ const Index = () => {
           className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
           style={{ opacity: scrollOpacity }}
         >
-        <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
+        <h1 className="text-4xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
           </span>
         </h1>
         <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
-        <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
-          Insights for your expenses.
-        </p>
         </div>
       )}
 
