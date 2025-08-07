@@ -607,8 +607,40 @@ const Login = () => {
         </p>
       </motion.div>
 
-      {/* Theme Toggle */}
-      <div className="fixed top-6 right-6 z-50">
+      {/* Theme Toggle and Try Me Button */}
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-3">
+        <button
+          onClick={() => {
+            console.log("Try me button clicked - setting up demo mode");
+            
+            // Set demo mode flag
+            localStorage.setItem('demoMode', 'true');
+            localStorage.setItem('userName', 'Demo User');
+            localStorage.setItem('lastLoginDate', new Date().toDateString());
+            
+            console.log("Demo mode set, adding test data...");
+            
+            // Add comprehensive sample data for showcase
+            addTestData();
+            
+            console.log("Test data added, navigating to dashboard...");
+            
+            // Navigate to dashboard
+            try {
+              navigate("/");
+              console.log("Navigation attempted");
+            } catch (error) {
+              console.error("Navigation error:", error);
+              // Fallback: try window.location
+              window.location.href = "/";
+            }
+          }}
+          className="group px-4 py-2 text-sm font-medium text-muted-foreground/60 hover:text-transparent bg-white/20 hover:bg-white/40 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/30 dark:border-border/30 rounded-3xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden"
+        >
+          <span className="relative z-10 group-hover:bg-gradient-to-r group-hover:from-blue-accent group-hover:via-purple-accent group-hover:to-emerald-accent group-hover:bg-clip-text group-hover:text-transparent group-hover:animate-gradient-x group-hover:bg-[length:200%_200%] transition-all duration-300">
+            Try me
+          </span>
+        </button>
         <ThemeToggle />
       </div>
 
