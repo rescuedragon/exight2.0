@@ -277,94 +277,289 @@ const Index = () => {
     window.location.href = '/login';
   };
 
-    const addDemoData = () => {
-    // Generate random number of entries (10-20 for each section)
-    const numExpenses = Math.floor(Math.random() * 11) + 10; // 10-20
-    const numLoans = Math.floor(Math.random() * 11) + 10; // 10-20
-
-    // Sample data arrays for random generation
-    const expenseNames = [
-      "Home Loan EMI", "Car Loan EMI", "Personal Loan EMI", "Education Loan EMI",
-      "Netflix Subscription", "Amazon Prime", "Spotify Premium", "Disney+ Hotstar",
-      "Internet Bill", "Mobile Bill", "Electricity Bill", "Water Bill", "Gas Bill",
-      "Gym Membership", "Insurance Premium", "Credit Card Payment", "Rent",
-      "Grocery Shopping", "Fuel Expenses", "Medical Insurance", "Travel Insurance",
-      "Magazine Subscription", "Cloud Storage", "Software License", "Domain Renewal"
-    ];
-
-    const personNames = [
-      "Rahul Sharma", "Priya Patel", "Amit Kumar", "Sneha Singh", "Vikram Gupta",
-      "Kavya Reddy", "Arjun Nair", "Meera Joshi", "Ravi Agarwal", "Pooja Mehta",
-      "Sanjay Verma", "Anita Desai", "Kiran Rao", "Deepak Shah", "Sunita Iyer",
-      "Manoj Tiwari", "Rekha Bansal", "Ashish Khanna", "Nidhi Saxena", "Rohit Malhotra"
-    ];
-
-    const loanStatuses: ("active" | "completed" | "written-off")[] = ["active", "completed", "written-off"];
-
-    // Generate random expenses
-    const testExpenses: Expense[] = [];
-    for (let i = 0; i < numExpenses; i++) {
-      const isRecurring = Math.random() > 0.3; // 70% chance of recurring
-      const amount = Math.floor(Math.random() * 50000) + 500; // 500-50500
-      const totalMonths = isRecurring ? (Math.random() > 0.5 ? null : Math.floor(Math.random() * 60) + 12) : Math.floor(Math.random() * 60) + 12;
-      const remainingMonths = totalMonths ? Math.floor(Math.random() * totalMonths) : null;
-      
-      testExpenses.push({
-        id: `exp_${i + 1}`,
-        name: expenseNames[Math.floor(Math.random() * expenseNames.length)],
-        amount,
-        currency: "INR" as const,
-        type: "EMI" as const,
-        deductionDay: Math.floor(Math.random() * 28) + 1, // 1-28
-        isRecurring,
-        totalMonths,
-        remainingMonths,
-        remainingAmount: remainingMonths ? remainingMonths * amount : null,
-        createdAt: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
+  const addDemoData = () => {
+    // Create specific demo expenses as requested
+    const testExpenses: Expense[] = [
+      // 4 Recurring expenses
+      {
+        id: 'exp_1',
+        name: 'Rent',
+        amount: 25000,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 1,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 1),
         partialPayments: []
-      });
-    }
-
-    // Generate random loans
-    const testLoans: Loan[] = [];
-    for (let i = 0; i < numLoans; i++) {
-      const amount = Math.floor(Math.random() * 100000) + 5000; // 5000-105000
-      const status = loanStatuses[Math.floor(Math.random() * loanStatuses.length)];
-      const totalReceived = status === "completed" ? amount : Math.floor(Math.random() * amount);
-      const remainingAmount = amount - totalReceived;
-      const numPayments = Math.floor(Math.random() * 5); // 0-4 payments
-      
-      const payments = [];
-      let runningTotal = 0;
-      for (let j = 0; j < numPayments && runningTotal < totalReceived; j++) {
-        const paymentAmount = Math.min(
-          Math.floor(Math.random() * (totalReceived - runningTotal)) + 1000,
-          totalReceived - runningTotal
-        );
-        runningTotal += paymentAmount;
-        payments.push({
-          id: `payment_${i}_${j}`,
-          amount: paymentAmount,
-          date: new Date(2023 + Math.floor(Math.random() * 2), Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
-          type: "payment" as const,
-          description: `Payment ${j + 1}`
-        });
+      },
+      {
+        id: 'exp_2',
+        name: 'Google Drive',
+        amount: 165,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 15,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 15),
+        partialPayments: []
+      },
+      {
+        id: 'exp_3',
+        name: 'YouTube Premium',
+        amount: 650,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 10,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 10),
+        partialPayments: []
+      },
+      {
+        id: 'exp_4',
+        name: 'Netflix',
+        amount: 650,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 5,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 5),
+        partialPayments: []
+      },
+      // 4 Fixed term expenses
+      {
+        id: 'exp_5',
+        name: 'Home Loan EMI',
+        amount: 45000,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 7,
+        isRecurring: false,
+        totalMonths: 240, // 20 years
+        remainingMonths: 180, // 15 years remaining
+        remainingAmount: 45000 * 180,
+        createdAt: new Date(2019, 5, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_6',
+        name: 'Car Loan EMI',
+        amount: 18500,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 12,
+        isRecurring: false,
+        totalMonths: 60, // 5 years
+        remainingMonths: 32, // 2.7 years remaining
+        remainingAmount: 18500 * 32,
+        createdAt: new Date(2022, 2, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_7',
+        name: 'Education Loan',
+        amount: 12000,
+        currency: 'INR' as const,
+        type: 'Personal Loan' as const,
+        deductionDay: 20,
+        isRecurring: false,
+        totalMonths: 84, // 7 years
+        remainingMonths: 45, // 3.75 years remaining
+        remainingAmount: 12000 * 45,
+        createdAt: new Date(2021, 8, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_8',
+        name: 'MacBook',
+        amount: 8500,
+        currency: 'INR' as const,
+        type: 'Personal Loan' as const,
+        deductionDay: 25,
+        isRecurring: false,
+        totalMonths: 24, // 2 years
+        remainingMonths: 8, // 8 months remaining
+        remainingAmount: 8500 * 8,
+        createdAt: new Date(2023, 3, 1),
+        partialPayments: []
       }
+    ];
 
-      testLoans.push({
-        id: `loan_${i + 1}`,
-        personName: personNames[Math.floor(Math.random() * personNames.length)],
-        amount,
-        currency: "INR",
-        dateGiven: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
-        status,
-        totalReceived,
-        remainingAmount,
-        writeOffDate: status === "written-off" ? new Date(2024, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1) : undefined,
-        createdAt: new Date(2023, Math.floor(Math.random() * 12), Math.floor(Math.random() * 28) + 1),
-        payments
-      });
-    }
+    // Create specific demo loans as requested
+    const testLoans: Loan[] = [
+      // 4 Active loans (2 with partial payments)
+      {
+        id: 'loan_1',
+        personName: 'Rahul Sharma',
+        amount: 50000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 2, 15),
+        status: 'active',
+        totalReceived: 20000, // Partial payment
+        remainingAmount: 30000,
+        createdAt: new Date(2024, 2, 15),
+        payments: [
+          {
+            id: 'payment_1_1',
+            amount: 15000,
+            date: new Date(2024, 4, 10),
+            type: 'payment',
+            description: 'First installment'
+          },
+          {
+            id: 'payment_1_2',
+            amount: 5000,
+            date: new Date(2024, 6, 5),
+            type: 'payment',
+            description: 'Partial payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_2',
+        personName: 'Priya Patel',
+        amount: 75000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 1, 20),
+        status: 'active',
+        totalReceived: 35000, // Partial payment
+        remainingAmount: 40000,
+        createdAt: new Date(2024, 1, 20),
+        payments: [
+          {
+            id: 'payment_2_1',
+            amount: 25000,
+            date: new Date(2024, 3, 15),
+            type: 'payment',
+            description: 'First payment'
+          },
+          {
+            id: 'payment_2_2',
+            amount: 10000,
+            date: new Date(2024, 5, 20),
+            type: 'payment',
+            description: 'Second payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_3',
+        personName: 'Amit Kumar',
+        amount: 25000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 4, 10),
+        status: 'active',
+        totalReceived: 0,
+        remainingAmount: 25000,
+        createdAt: new Date(2024, 4, 10),
+        payments: []
+      },
+      {
+        id: 'loan_4',
+        personName: 'Sneha Singh',
+        amount: 40000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 3, 5),
+        status: 'active',
+        totalReceived: 0,
+        remainingAmount: 40000,
+        createdAt: new Date(2024, 3, 5),
+        payments: []
+      },
+      // 4 Completed loans (2 written off)
+      {
+        id: 'loan_5',
+        personName: 'Vikram Gupta',
+        amount: 30000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 8, 15),
+        status: 'completed',
+        totalReceived: 30000,
+        remainingAmount: 0,
+        createdAt: new Date(2023, 8, 15),
+        payments: [
+          {
+            id: 'payment_5_1',
+            amount: 30000,
+            date: new Date(2024, 1, 10),
+            type: 'payment',
+            description: 'Full payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_6',
+        personName: 'Kavya Reddy',
+        amount: 20000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 10, 20),
+        status: 'completed',
+        totalReceived: 20000,
+        remainingAmount: 0,
+        createdAt: new Date(2023, 10, 20),
+        payments: [
+          {
+            id: 'payment_6_1',
+            amount: 10000,
+            date: new Date(2024, 0, 15),
+            type: 'payment',
+            description: 'First installment'
+          },
+          {
+            id: 'payment_6_2',
+            amount: 10000,
+            date: new Date(2024, 2, 20),
+            type: 'payment',
+            description: 'Final payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_7',
+        personName: 'Arjun Nair',
+        amount: 35000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 6, 10),
+        status: 'written-off',
+        totalReceived: 10000,
+        remainingAmount: 25000,
+        writeOffDate: new Date(2024, 5, 15),
+        createdAt: new Date(2023, 6, 10),
+        payments: [
+          {
+            id: 'payment_7_1',
+            amount: 10000,
+            date: new Date(2023, 9, 5),
+            type: 'payment',
+            description: 'Partial payment before write-off'
+          }
+        ]
+      },
+      {
+        id: 'loan_8',
+        personName: 'Meera Joshi',
+        amount: 15000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 5, 25),
+        status: 'written-off',
+        totalReceived: 0,
+        remainingAmount: 15000,
+        writeOffDate: new Date(2024, 4, 30),
+        createdAt: new Date(2023, 5, 25),
+        payments: []
+      }
+    ];
 
     localStorage.setItem('expenses', JSON.stringify(testExpenses));
     localStorage.setItem('loans', JSON.stringify(testLoans));
@@ -373,20 +568,18 @@ const Index = () => {
     setExpenses(testExpenses);
     setLoans(testLoans);
     
-    console.log(`Demo data generated: ${numExpenses} expenses, ${numLoans} loans`);
+    console.log('Demo data loaded: 8 expenses (4 recurring, 4 fixed-term), 8 loans (4 active, 4 completed)');
   };
 
       return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
-      <div 
-        className="fixed top-6 left-6 z-30 space-y-2 transition-all duration-200 ease-out"
-        style={{ 
-          opacity: isAnyModalOpen ? 0 : scrollOpacity,
-          display: isAnyModalOpen ? 'none' : 'block',
-          visibility: isAnyModalOpen ? 'hidden' : 'visible'
-        }}
-      >
+      {!isAnyModalOpen && (
+        <div 
+          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-300 ease-out"
+          style={{ opacity: scrollOpacity }}
+        >
+      )}
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
             Exight
@@ -396,17 +589,16 @@ const Index = () => {
         <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
           Insights for your expenses.
         </p>
-      </div>
+        </div>
+      )}
 
               {/* Top Right Controls */}
+      {!isAnyModalOpen && (
         <div 
-          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-all duration-200 ease-out"
-          style={{ 
-            opacity: isAnyModalOpen ? 0 : scrollOpacity,
-            display: isAnyModalOpen ? 'none' : 'flex',
-            visibility: isAnyModalOpen ? 'hidden' : 'visible'
-          }}
+          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-300 ease-out"
+          style={{ opacity: scrollOpacity }}
         >
+      )}
 
           <ThemeToggle />
           <Button
@@ -419,6 +611,7 @@ const Index = () => {
             <LogOut className="h-5 w-5" />
           </Button>
         </div>
+      )}
 
       <div className="container mx-auto px-6 py-8 max-w-7xl min-h-screen">
         {/* Spacer for layout */}
