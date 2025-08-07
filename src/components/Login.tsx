@@ -60,21 +60,21 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
-    
+
     try {
       // Accept any credentials - no actual authentication
       console.log("Login successful with:", { email, password });
-      
+
       // Set last login date to today
       localStorage.setItem('lastLoginDate', new Date().toDateString());
-      
+
       // Store user name (use firstName if registering, or extract from email if logging in)
       const userName = isLogin ? (email.split('@')[0] || 'User') : firstName;
       localStorage.setItem('userName', userName);
-      
+
       // Add test data if it doesn't exist
       addTestData();
-      
+
       // Navigate to dashboard
       navigate("/");
     } catch (error: any) {
@@ -89,11 +89,11 @@ const Login = () => {
     // Check if test data already exists
     const existingExpenses = localStorage.getItem('expenses');
     const existingLoans = localStorage.getItem('loans');
-    
+
     console.log("Adding test data...");
     console.log("Existing expenses:", existingExpenses);
     console.log("Existing loans:", existingLoans);
-    
+
     if (!existingExpenses) {
       console.log("Adding expense test data...");
       const testExpenses = [
@@ -269,7 +269,7 @@ const Login = () => {
       localStorage.setItem('expenses', JSON.stringify(testExpenses));
       console.log("Expenses saved:", testExpenses.length, "entries");
     }
-    
+
     if (!existingLoans) {
       console.log("Adding loan test data...");
       const testLoans = [
@@ -525,48 +525,45 @@ const Login = () => {
   const features = [
     {
       icon: <TrendingUp className="h-6 w-6" />,
-      title: "Track Annual EMIs",
-      description: "Never miss a payment with smart reminders"
-    },
-    {
-      icon: <BarChart3 className="h-6 w-6" />,
-      title: "Visualize Monthly Expenses",
-      description: "Beautiful charts show your spending patterns"
+      title: "EMI & Expense Tracking",
+      description: "Track annual EMIs and visualize monthly spending patterns with smart reminders"
     },
     {
       icon: <HandCoins className="h-6 w-6" />,
-      title: "Manage Loans Given",
-      description: "Track money you've lent to friends and family"
-    },
-    {
-      icon: <Calculator className="h-6 w-6" />,
-      title: "Smart Payment Tracking",
-      description: "Monitor partial payments and outstanding amounts"
-    },
-    {
-      icon: <Users className="h-6 w-6" />,
-      title: "Person-wise Loan History",
-      description: "Keep track of who owes you what"
-    },
-    {
-      icon: <Receipt className="h-6 w-6" />,
-      title: "Payment Receipts",
-      description: "Record and track all loan payments received"
+      title: "Loan Management",
+      description: "Manage loans given to friends with person-wise history and payment tracking"
     },
     {
       icon: <CreditCard className="h-6 w-6" />,
-      title: "Smart Recurring Insights",
-      description: "AI-powered analysis of your spending habits"
+      title: "Smart Insights & Analytics",
+      description: "AI-powered analysis of spending habits with detailed payment receipts"
     },
     {
       icon: <Shield className="h-6 w-6" />,
       title: "Secure & Private",
-      description: "Your financial data stays on your device"
+      description: "Your financial data stays completely secure on your device"
     }
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative">
+      {/* Brand - Top Left */}
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="fixed top-6 left-6 z-50"
+      >
+        <h1 className="text-5xl font-bold text-foreground tracking-tight">
+          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+            Exight
+          </span>
+        </h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Insights for your expenses
+        </p>
+      </motion.div>
+
       {/* Theme Toggle */}
       <div className="fixed top-6 right-6 z-50">
         <ThemeToggle />
@@ -575,58 +572,41 @@ const Login = () => {
       {/* Main Container */}
       <div className="relative z-40 flex min-h-screen">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex items-center justify-center p-12 max-lg:w-full max-lg:p-8">
+        <div className="w-2/5 flex flex-col justify-start items-center pt-32 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-24">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="w-full max-w-md mx-auto"
+            className="w-full max-w-lg mx-auto flex flex-col items-center"
           >
-            {/* Brand */}
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: 0.1 }}
-              className="mb-8 text-center"
-            >
-              <h1 className="text-4xl font-bold text-foreground tracking-tight mb-2">
-                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
-                  Exight
-                </span>
-              </h1>
-              <p className="text-lg text-muted-foreground">
-                Insights for your expenses
-              </p>
-            </motion.div>
+
 
             {/* Form Card */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: 0.15 }}
-              className="flex justify-center"
+              className="flex justify-start"
             >
-              <div className="w-full max-w-sm rounded-xl bg-white/50 dark:bg-background/40 backdrop-blur-sm border border-border/20 dark:border-border/30 shadow-sm hover:shadow-md transition-all duration-300 hover:-translate-y-1 group-hover:opacity-100 hover:!opacity-100 group-hover:scale-100 hover:!scale-100">
-                <CardContent className="p-8">
+              <div className="w-[450px] rounded-2xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl">
+                <CardContent className="p-10">
                   {/* Tab Navigation */}
-                  <div className="flex mb-4 bg-muted/30 dark:bg-muted/10 rounded-xl p-1.5">
+                  <div className="flex mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-2xl p-2 backdrop-blur-sm">
                     <button
                       onClick={() => setIsLogin(true)}
-                      className={`flex-1 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                        isLogin 
-                          ? "bg-white dark:bg-accent text-foreground shadow-lg backdrop-blur-sm dark:bg-accent/90 dark:text-accent-foreground" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-accent/30 dark:text-muted-foreground dark:hover:text-foreground"
-                      }`}
+                      className={`flex-1 py-3 px-8 rounded-xl text-base font-bold transition-all duration-300 ${isLogin
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
+                        }`}
                     >
                       Sign In
                     </button>
                     <button
                       onClick={() => setIsLogin(false)}
-                      className={`flex-1 py-2.5 px-6 rounded-lg text-sm font-semibold transition-all duration-200 ${
-                        !isLogin 
-                          ? "bg-white dark:bg-accent text-foreground shadow-lg backdrop-blur-sm dark:bg-accent/90 dark:text-accent-foreground" 
-                          : "text-muted-foreground hover:text-foreground hover:bg-white/20 dark:hover:bg-accent/30 dark:text-muted-foreground dark:hover:text-foreground"
-                      }`}
+                      className={`flex-1 py-3 px-8 rounded-xl text-base font-bold transition-all duration-300 ${!isLogin
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
+                        : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
+                        }`}
                     >
                       Register
                     </button>
@@ -638,79 +618,106 @@ const Login = () => {
                     </div>
                   )}
 
-                  <form onSubmit={handleSubmit} className="space-y-4">
-                    {!isLogin && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-1.5">
-                          <Label htmlFor="firstName" className="text-sm font-semibold text-foreground">First Name</Label>
-                          <Input
-                            id="firstName"
-                            type="text"
-                            placeholder="First name"
-                            value={firstName}
-                            onChange={(e) => setFirstName(e.target.value)}
-                            className="py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
-                            required={!isLogin}
-                          />
-                        </div>
-                        <div className="space-y-1.5">
-                          <Label htmlFor="lastName" className="text-sm font-semibold text-foreground">Last Name</Label>
-                          <Input
-                            id="lastName"
-                            type="text"
-                            placeholder="Last name"
-                            value={lastName}
-                            onChange={(e) => setLastName(e.target.value)}
-                            className="py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-200 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
-                            required={!isLogin}
-                          />
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div className="space-y-1.5">
-                      <Label htmlFor="email" className="text-sm font-semibold text-foreground">Email</Label>
+                  <form onSubmit={handleSubmit} className="space-y-6 min-h-[280px]">
+                    <AnimatePresence mode="wait">
+                      {!isLogin && (
+                        <motion.div
+                          key="name-fields"
+                          initial={{ opacity: 0, height: 0, marginBottom: 0 }}
+                          animate={{ opacity: 1, height: "auto", marginBottom: 24 }}
+                          exit={{ opacity: 0, height: 0, marginBottom: 0 }}
+                          transition={{ duration: 0.3, ease: "easeInOut" }}
+                          style={{ overflow: "hidden" }}
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <Label htmlFor="firstName" className="text-base font-bold text-foreground">First Name</Label>
+                              <Input
+                                id="firstName"
+                                type="text"
+                                placeholder="Enter first name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
+                                className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                                required={!isLogin}
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <Label htmlFor="lastName" className="text-base font-bold text-foreground">Last Name</Label>
+                              <Input
+                                id="lastName"
+                                type="text"
+                                placeholder="Enter last name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
+                                className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                                required={!isLogin}
+                              />
+                            </div>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="email" className="text-base font-bold text-foreground">Email Address</Label>
                       <div className="relative group">
-                        <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-blue-accent transition-colors duration-200" />
+                        <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-muted-foreground group-focus-within:text-blue-accent transition-colors duration-300" />
                         <Input
                           id="email"
                           type="email"
                           placeholder="Enter your email address"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="pl-12 pr-4 py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-150 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
+                          className="pl-14 pr-4 py-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                           required
                         />
                       </div>
                     </div>
-                    
-                    <div className="space-y-1.5">
-                      <Label htmlFor="password" className="text-sm font-semibold text-foreground">Password</Label>
+
+                    <div className="space-y-2">
+                      <Label htmlFor="password" className="text-base font-bold text-foreground">Password</Label>
                       <div className="relative group">
-                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-muted-foreground group-focus-within:text-blue-accent transition-colors duration-200" />
+                        <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 h-6 w-6 text-muted-foreground group-focus-within:text-blue-accent transition-colors duration-300" />
                         <Input
                           id="password"
                           type={showPassword ? "text" : "password"}
                           placeholder="Enter your password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="pl-12 pr-12 py-2.5 bg-white/50 dark:bg-muted/20 border-border/30 dark:border-border/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl focus:ring-2 focus:ring-blue-accent/20 focus:border-blue-accent/50 transition-all duration-150 font-medium dark:bg-background/50 dark:border-border/40 dark:focus:ring-blue-accent/30 dark:focus:border-blue-accent/50"
+                          className="pl-14 pr-14 py-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                           required
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors duration-200"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-blue-accent transition-colors duration-300 p-1"
                         >
-                          {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                          {showPassword ? <EyeOff className="h-6 w-6" /> : <Eye className="h-6 w-6" />}
                         </button>
                       </div>
                     </div>
 
-                    <Button 
-                      type="submit" 
+                    {/* Forgot Password - Only show in Sign In mode */}
+                    {isLogin && (
+                      <div className="text-right">
+                        <button
+                          type="button"
+                          className="text-sm text-blue-accent hover:text-blue-accent/80 transition-colors duration-200 font-medium"
+                          onClick={() => {
+                            // Handle forgot password logic here
+                            alert("Forgot password functionality would be implemented here");
+                          }}
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
+                    )}
+
+                    <Button
+                      type="submit"
                       disabled={isLoading}
-                      className="w-full group bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-600/90 hover:to-purple-600/90 text-white shadow-lg hover:shadow-blue-500/20 dark:shadow-blue-900/50 hover:shadow-blue-500/30 dark:hover:shadow-blue-900/60 transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0 mt-4"
+                      className="w-full group bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-500 hover:via-blue-600 hover:to-purple-500 text-white font-bold text-lg py-4 px-8 shadow-2xl hover:shadow-blue-500/30 dark:shadow-blue-900/50 hover:shadow-blue-500/40 dark:hover:shadow-blue-900/70 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 mt-8 rounded-xl"
                     >
                       {isLoading ? (
                         <motion.div
@@ -753,7 +760,7 @@ const Login = () => {
                   expenses & loans
                 </span>
               </h2>
-              
+
               <p className="text-xl text-muted-foreground/90 dark:text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
                 Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.
               </p>
@@ -778,7 +785,7 @@ const Login = () => {
                   <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl overflow-hidden h-full">
                     <CardContent className="p-6 h-full flex flex-col justify-center">
                       <div className="flex items-center gap-4">
-                        <motion.div 
+                        <motion.div
                           className="p-3 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-105 transition-transform duration-200 flex-shrink-0"
                           whileHover={{ rotate: 2 }}
                         >
@@ -813,7 +820,7 @@ const Login = () => {
                 expenses & loans
               </span>
             </h2>
-            
+
             <p className="text-lg text-muted-foreground leading-relaxed">
               Monitor EMIs, track loans given to friends, and get smart insights.
             </p>
@@ -832,7 +839,7 @@ const Login = () => {
                 <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl h-full">
                   <CardContent className="p-4 h-full flex flex-col justify-center">
                     <div className="flex items-center gap-3">
-                      <motion.div 
+                      <motion.div
                         className="p-2 rounded-lg bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent flex-shrink-0"
                         whileHover={{ rotate: 2 }}
                       >
