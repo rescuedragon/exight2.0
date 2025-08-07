@@ -436,17 +436,17 @@ const TryMe = () => {
         {/* Spacer for layout */}
         <div className="pt-20 mb-6"></div>
 
-        {/* Navigation Bar with all elements horizontally aligned */}
-        <div className="flex justify-between items-center mb-6">
+        {/* Navigation Bar with balanced horizontal alignment */}
+        <div className="flex items-center mb-6">
           {/* Left side - Greeting */}
-          <div className="flex items-center gap-6 animate-fade-in-up stagger-1">
+          <div className="flex items-center gap-6 animate-fade-in-up stagger-1 flex-1">
             <p className="text-lg font-semibold text-foreground">
               Hi {userName}!
             </p>
           </div>
 
           {/* Center - Tab Buttons */}
-          <div className="flex justify-center animate-fade-in-up stagger-1">
+          <div className="flex justify-center animate-fade-in-up stagger-1 flex-1">
             <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -474,7 +474,7 @@ const TryMe = () => {
           </div>
 
           {/* Right side - Action Buttons */}
-          <div className="flex items-center gap-4 animate-fade-in-up stagger-4">
+          <div className="flex items-center gap-4 animate-fade-in-up stagger-4 flex-1 justify-end">
             {/* Privacy Toggle - Just Eye Icon */}
             <Button
               variant="ghost"
@@ -509,6 +509,8 @@ const TryMe = () => {
                 <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
               )}
             </div>
+            
+
           </div>
         </div>
 
@@ -518,7 +520,7 @@ const TryMe = () => {
 
             {/* Tab Content */}
             <div className="relative">
-              <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -539,7 +541,7 @@ const TryMe = () => {
                 </div>
               </div>
 
-              <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                              <div className={`transition-opacity duration-100 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
@@ -1489,17 +1491,17 @@ const Index = () => {
         {/* Spacer for layout */}
         <div className="pt-20 mb-6"></div>
 
-        {/* Navigation Bar with all elements horizontally aligned */}
-        <div className="flex justify-between items-center mb-6">
+        {/* Navigation Bar with balanced horizontal alignment */}
+        <div className="flex items-center mb-6">
           {/* Left side - Greeting */}
-          <div className="flex items-center gap-6 animate-fade-in-up stagger-1">
+          <div className="flex items-center gap-6 animate-fade-in-up stagger-1 flex-1">
             <p className="text-lg font-semibold text-foreground">
               Hi {userName}!
             </p>
           </div>
 
           {/* Center - Tab Buttons */}
-          <div className="flex justify-center animate-fade-in-up stagger-1">
+          <div className="flex justify-center animate-fade-in-up stagger-1 flex-1">
             <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -1527,7 +1529,7 @@ const Index = () => {
           </div>
 
           {/* Right side - Action Buttons */}
-          <div className="flex items-center gap-4 animate-fade-in-up stagger-4">
+          <div className="flex items-center gap-4 animate-fade-in-up stagger-4 flex-1 justify-end">
             {/* Privacy Toggle - Just Eye Icon */}
             <Button
               variant="ghost"
