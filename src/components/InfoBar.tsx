@@ -71,10 +71,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
         
         <div className="grid grid-cols-3 gap-6 justify-start ml-20">
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
             onClick={() => setShowMonthlyModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#5c5aeb' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#5c5aeb' }}>
               <svg
                 width="24"
                 height="24"
@@ -100,10 +100,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
           </div>
 
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
             onClick={() => setShowYearlyModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
               <svg
                 width="24"
                 height="24"
@@ -128,10 +128,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
           </div>
 
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
             onClick={() => setShowActiveModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
               <svg
                 width="24"
                 height="24"

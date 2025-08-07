@@ -40,10 +40,10 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
         
         <div className="grid grid-cols-3 gap-6 justify-start ml-20">
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
             onClick={() => setShowDetailModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
               <Send className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
             <div className="space-y-1 min-w-0 flex-1 w-full">
@@ -56,10 +56,10 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
           </div>
 
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
             onClick={() => setShowDetailModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#3b82f6' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#3b82f6' }}>
               <IndianRupee className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
             <div className="space-y-1 min-w-0 flex-1 w-full">
@@ -72,10 +72,10 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
           </div>
 
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full group"
+            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
             onClick={() => setShowDetailModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 group-hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
               <Users className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
             <div className="space-y-1 min-w-0 flex-1 w-full">
