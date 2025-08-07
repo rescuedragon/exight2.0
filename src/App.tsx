@@ -4,7 +4,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import Index from "./pages/Index";
+import Index, { TryMe } from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TestSpace from "./pages/TestSpace";
 import Login from "./components/Login";
@@ -15,11 +15,15 @@ const queryClient = new QueryClient();
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
     // Check if user is authenticated (has lastLoginDate)
     const lastLoginDate = localStorage.getItem('lastLoginDate');
+    const demoMode = localStorage.getItem('demoMode');
+    
     setIsAuthenticated(!!lastLoginDate);
+    setIsDemoMode(demoMode === 'true');
     setIsLoading(false);
   }, []);
 
@@ -42,8 +46,20 @@ const App = () => {
           <Sonner />
           <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-            <Route path="/" element={isAuthenticated ? <Index /> : <Navigate to="/login" />} />
-            <Route path="/dashboard" element={isAuthenticated ? <Index /> : <Navigate to="/login" />} />
+            <Route path="/" element={
+              isAuthenticated ? (
+                isDemoMode ? <TryMe /> : <Index />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } />
+            <Route path="/dashboard" element={
+              isAuthenticated ? (
+                isDemoMode ? <TryMe /> : <Index />
+              ) : (
+                <Navigate to="/login" />
+              )
+            } />
             <Route path="/testspace" element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />

@@ -78,8 +78,7 @@ const Login = () => {
       const userName = isLogin ? (email.split('@')[0] || 'User') : firstName;
       localStorage.setItem('userName', userName);
 
-      // Add test data if it doesn't exist
-      addTestData();
+      // No demo data will be added automatically
 
       // Navigate to dashboard
       navigate("/");
@@ -128,442 +127,298 @@ const Login = () => {
     setConfirmPassword("");
   };
 
-  const addTestData = () => {
-    // Check if test data already exists
-    const existingExpenses = localStorage.getItem('expenses');
-    const existingLoans = localStorage.getItem('loans');
+  const addDemoData = () => {
+    // Create specific demo expenses as requested
+    const demoExpenses = [
+      // 4 Recurring expenses
+      {
+        id: 'exp_1',
+        name: 'Rent',
+        amount: 25000,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 1,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_2',
+        name: 'Google Drive',
+        amount: 165,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 15,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 15),
+        partialPayments: []
+      },
+      {
+        id: 'exp_3',
+        name: 'YouTube Premium',
+        amount: 650,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 10,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 10),
+        partialPayments: []
+      },
+      {
+        id: 'exp_4',
+        name: 'Netflix',
+        amount: 650,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 5,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
+        createdAt: new Date(2024, 0, 5),
+        partialPayments: []
+      },
+      // 4 Fixed term expenses
+      {
+        id: 'exp_5',
+        name: 'Home Loan EMI',
+        amount: 45000,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 7,
+        isRecurring: false,
+        totalMonths: 240, // 20 years
+        remainingMonths: 180, // 15 years remaining
+        remainingAmount: 45000 * 180,
+        createdAt: new Date(2019, 5, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_6',
+        name: 'Car Loan EMI',
+        amount: 18500,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 12,
+        isRecurring: false,
+        totalMonths: 60, // 5 years
+        remainingMonths: 32, // 2.7 years remaining
+        remainingAmount: 18500 * 32,
+        createdAt: new Date(2022, 2, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_7',
+        name: 'Education Loan',
+        amount: 12000,
+        currency: 'INR',
+        type: 'Personal Loan',
+        deductionDay: 20,
+        isRecurring: false,
+        totalMonths: 84, // 7 years
+        remainingMonths: 45, // 3.75 years remaining
+        remainingAmount: 12000 * 45,
+        createdAt: new Date(2021, 8, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_8',
+        name: 'MacBook',
+        amount: 8500,
+        currency: 'INR',
+        type: 'Personal Loan',
+        deductionDay: 25,
+        isRecurring: false,
+        totalMonths: 24, // 2 years
+        remainingMonths: 8, // 8 months remaining
+        remainingAmount: 8500 * 8,
+        createdAt: new Date(2023, 3, 1),
+        partialPayments: []
+      }
+    ];
 
-    console.log("Adding test data...");
-    console.log("Existing expenses:", existingExpenses);
-    console.log("Existing loans:", existingLoans);
+    // Create specific demo loans as requested
+    const demoLoans = [
+      // 4 Active loans (2 with partial payments)
+      {
+        id: 'loan_1',
+        personName: 'Rahul Sharma',
+        amount: 50000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 2, 15),
+        status: 'active',
+        totalReceived: 20000, // Partial payment
+        remainingAmount: 30000,
+        createdAt: new Date(2024, 2, 15),
+        payments: [
+          {
+            id: 'payment_1_1',
+            amount: 15000,
+            date: new Date(2024, 4, 10),
+            type: 'payment' as const,
+            description: 'First installment'
+          },
+          {
+            id: 'payment_1_2',
+            amount: 5000,
+            date: new Date(2024, 6, 5),
+            type: 'payment' as const,
+            description: 'Partial payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_2',
+        personName: 'Priya Patel',
+        amount: 75000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 1, 20),
+        status: 'active',
+        totalReceived: 35000, // Partial payment
+        remainingAmount: 40000,
+        createdAt: new Date(2024, 1, 20),
+        payments: [
+          {
+            id: 'payment_2_1',
+            amount: 25000,
+            date: new Date(2024, 3, 15),
+            type: 'payment' as const,
+            description: 'First payment'
+          },
+          {
+            id: 'payment_2_2',
+            amount: 10000,
+            date: new Date(2024, 5, 20),
+            type: 'payment' as const,
+            description: 'Second payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_3',
+        personName: 'Amit Kumar',
+        amount: 25000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 4, 10),
+        status: 'active',
+        totalReceived: 0,
+        remainingAmount: 25000,
+        createdAt: new Date(2024, 4, 10),
+        payments: []
+      },
+      {
+        id: 'loan_4',
+        personName: 'Sneha Singh',
+        amount: 40000,
+        currency: 'INR',
+        dateGiven: new Date(2024, 3, 5),
+        status: 'active',
+        totalReceived: 0,
+        remainingAmount: 40000,
+        createdAt: new Date(2024, 3, 5),
+        payments: []
+      },
+      // 4 Completed loans (2 written off)
+      {
+        id: 'loan_5',
+        personName: 'Vikram Gupta',
+        amount: 30000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 8, 15),
+        status: 'completed',
+        totalReceived: 30000,
+        remainingAmount: 0,
+        createdAt: new Date(2023, 8, 15),
+        payments: [
+          {
+            id: 'payment_5_1',
+            amount: 30000,
+            date: new Date(2024, 1, 10),
+            type: 'payment' as const,
+            description: 'Full payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_6',
+        personName: 'Kavya Reddy',
+        amount: 20000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 10, 20),
+        status: 'completed',
+        totalReceived: 20000,
+        remainingAmount: 0,
+        createdAt: new Date(2023, 10, 20),
+        payments: [
+          {
+            id: 'payment_6_1',
+            amount: 10000,
+            date: new Date(2024, 0, 15),
+            type: 'payment' as const,
+            description: 'First installment'
+          },
+          {
+            id: 'payment_6_2',
+            amount: 10000,
+            date: new Date(2024, 2, 20),
+            type: 'payment' as const,
+            description: 'Final payment'
+          }
+        ]
+      },
+      {
+        id: 'loan_7',
+        personName: 'Arjun Nair',
+        amount: 35000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 6, 10),
+        status: 'written-off',
+        totalReceived: 10000,
+        remainingAmount: 25000,
+        writeOffDate: new Date(2024, 5, 15),
+        createdAt: new Date(2023, 6, 10),
+        payments: [
+          {
+            id: 'payment_7_1',
+            amount: 10000,
+            date: new Date(2023, 9, 5),
+            type: 'payment' as const,
+            description: 'Partial payment before write-off'
+          }
+        ]
+      },
+      {
+        id: 'loan_8',
+        personName: 'Meera Joshi',
+        amount: 15000,
+        currency: 'INR',
+        dateGiven: new Date(2023, 5, 25),
+        status: 'written-off',
+        totalReceived: 0,
+        remainingAmount: 15000,
+        writeOffDate: new Date(2024, 4, 30),
+        createdAt: new Date(2023, 5, 25),
+        payments: []
+      }
+    ];
 
-    if (!existingExpenses) {
-      console.log("Adding expense test data...");
-      const testExpenses = [
-        {
-          id: "1",
-          name: "Home Loan EMI",
-          amount: 45000,
-          currency: "INR",
-          type: "EMI",
-          deductionDay: 5,
-          isRecurring: true,
-          totalMonths: 240,
-          remainingMonths: 180,
-          remainingAmount: 8100000,
-          createdAt: new Date("2023-01-15"),
-          partialPayments: []
-        },
-        {
-          id: "2",
-          name: "Car Loan EMI",
-          amount: 15000,
-          currency: "INR",
-          type: "EMI",
-          deductionDay: 12,
-          isRecurring: true,
-          totalMonths: 60,
-          remainingMonths: 42,
-          remainingAmount: 630000,
-          createdAt: new Date("2023-06-20"),
-          partialPayments: []
-        },
-        {
-          id: "3",
-          name: "Personal Loan EMI",
-          amount: 8000,
-          currency: "INR",
-          type: "EMI",
-          deductionDay: 25,
-          isRecurring: true,
-          totalMonths: 36,
-          remainingMonths: 24,
-          remainingAmount: 192000,
-          createdAt: new Date("2023-09-10"),
-          partialPayments: []
-        },
-        {
-          id: "4",
-          name: "Netflix Subscription",
-          amount: 499,
-          currency: "INR",
-          type: "Recurring",
-          deductionDay: 1,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
-          createdAt: new Date("2023-12-01"),
-          partialPayments: []
-        },
-        {
-          id: "5",
-          name: "Gym Membership",
-          amount: 2000,
-          currency: "INR",
-          type: "Recurring",
-          deductionDay: 15,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
-          createdAt: new Date("2023-11-01"),
-          partialPayments: []
-        },
-        {
-          id: "6",
-          name: "Amazon Prime",
-          amount: 1499,
-          currency: "INR",
-          type: "Recurring",
-          deductionDay: 10,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
-          createdAt: new Date("2023-10-15"),
-          partialPayments: []
-        },
-        {
-          id: "7",
-          name: "Spotify Premium",
-          amount: 119,
-          currency: "INR",
-          type: "Recurring",
-          deductionDay: 20,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
-          createdAt: new Date("2023-08-01"),
-          partialPayments: []
-        },
-        {
-          id: "8",
-          name: "Credit Card EMI",
-          amount: 3500,
-          currency: "INR",
-          type: "EMI",
-          deductionDay: 28,
-          isRecurring: true,
-          totalMonths: 12,
-          remainingMonths: 8,
-          remainingAmount: 28000,
-          createdAt: new Date("2024-01-05"),
-          partialPayments: []
-        },
-        {
-          id: "9",
-          name: "Education Loan EMI",
-          amount: 12000,
-          currency: "INR",
-          type: "EMI",
-          deductionDay: 8,
-          isRecurring: true,
-          totalMonths: 84,
-          remainingMonths: 72,
-          remainingAmount: 864000,
-          createdAt: new Date("2022-06-15"),
-          partialPayments: []
-        },
-        {
-          id: "10",
-          name: "Bike Loan EMI",
-          amount: 6000,
-          currency: "INR",
-          type: "EMI",
-          deductionDay: 18,
-          isRecurring: true,
-          totalMonths: 36,
-          remainingMonths: 30,
-          remainingAmount: 180000,
-          createdAt: new Date("2023-03-10"),
-          partialPayments: []
-        },
-        {
-          id: "11",
-          name: "Insurance Premium",
-          amount: 3500,
-          currency: "INR",
-          type: "Recurring",
-          deductionDay: 22,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
-          createdAt: new Date("2023-07-01"),
-          partialPayments: []
-        },
-        {
-          id: "12",
-          name: "Internet Bill",
-          amount: 999,
-          currency: "INR",
-          type: "Recurring",
-          deductionDay: 3,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
-          createdAt: new Date("2023-05-01"),
-          partialPayments: []
-        }
-      ];
-      localStorage.setItem('expenses', JSON.stringify(testExpenses));
-      console.log("Expenses saved:", testExpenses.length, "entries");
-    }
-
-    if (!existingLoans) {
-      console.log("Adding loan test data...");
-      const testLoans = [
-        {
-          id: "1",
-          personName: "Rahul Sharma",
-          amount: 25000,
-          currency: "INR",
-          dateGiven: new Date("2024-01-15"),
-          status: "active",
-          totalReceived: 5000,
-          remainingAmount: 20000,
-          createdAt: new Date("2024-01-15"),
-          payments: [
-            {
-              id: "1",
-              amount: 5000,
-              date: new Date("2024-02-15"),
-              type: "payment",
-              notes: "Partial payment"
-            }
-          ]
-        },
-        {
-          id: "2",
-          personName: "Priya Patel",
-          amount: 15000,
-          currency: "INR",
-          dateGiven: new Date("2024-02-01"),
-          status: "active",
-          totalReceived: 0,
-          remainingAmount: 15000,
-          createdAt: new Date("2024-02-01"),
-          payments: []
-        },
-        {
-          id: "3",
-          personName: "Amit Kumar",
-          amount: 50000,
-          currency: "INR",
-          dateGiven: new Date("2023-12-10"),
-          status: "active",
-          totalReceived: 30000,
-          remainingAmount: 20000,
-          createdAt: new Date("2023-12-10"),
-          payments: [
-            {
-              id: "2",
-              amount: 20000,
-              date: new Date("2024-01-10"),
-              type: "payment",
-              notes: "First installment"
-            },
-            {
-              id: "3",
-              amount: 10000,
-              date: new Date("2024-02-10"),
-              type: "payment",
-              notes: "Second installment"
-            }
-          ]
-        },
-        {
-          id: "4",
-          personName: "Neha Singh",
-          amount: 10000,
-          currency: "INR",
-          dateGiven: new Date("2024-03-01"),
-          status: "active",
-          totalReceived: 0,
-          remainingAmount: 10000,
-          createdAt: new Date("2024-03-01"),
-          payments: []
-        },
-        {
-          id: "5",
-          personName: "Vikram Mehta",
-          amount: 75000,
-          currency: "INR",
-          dateGiven: new Date("2023-11-20"),
-          status: "active",
-          totalReceived: 45000,
-          remainingAmount: 30000,
-          createdAt: new Date("2023-11-20"),
-          payments: [
-            {
-              id: "4",
-              amount: 25000,
-              date: new Date("2024-01-20"),
-              type: "payment",
-              notes: "First payment"
-            },
-            {
-              id: "5",
-              amount: 20000,
-              date: new Date("2024-02-20"),
-              type: "payment",
-              notes: "Second payment"
-            }
-          ]
-        },
-        {
-          id: "6",
-          personName: "Sneha Reddy",
-          amount: 30000,
-          currency: "INR",
-          dateGiven: new Date("2024-01-25"),
-          status: "active",
-          totalReceived: 10000,
-          remainingAmount: 20000,
-          createdAt: new Date("2024-01-25"),
-          payments: [
-            {
-              id: "6",
-              amount: 10000,
-              date: new Date("2024-02-25"),
-              type: "payment",
-              notes: "First payment"
-            }
-          ]
-        },
-        {
-          id: "7",
-          personName: "Arjun Malhotra",
-          amount: 45000,
-          currency: "INR",
-          dateGiven: new Date("2023-10-15"),
-          status: "active",
-          totalReceived: 30000,
-          remainingAmount: 15000,
-          createdAt: new Date("2023-10-15"),
-          payments: [
-            {
-              id: "7",
-              amount: 15000,
-              date: new Date("2023-12-15"),
-              type: "payment",
-              notes: "First installment"
-            },
-            {
-              id: "8",
-              amount: 15000,
-              date: new Date("2024-01-15"),
-              type: "payment",
-              notes: "Second installment"
-            }
-          ]
-        },
-        {
-          id: "8",
-          personName: "Kavya Iyer",
-          amount: 8000,
-          currency: "INR",
-          dateGiven: new Date("2024-02-10"),
-          status: "active",
-          totalReceived: 0,
-          remainingAmount: 8000,
-          createdAt: new Date("2024-02-10"),
-          payments: []
-        },
-        {
-          id: "9",
-          personName: "Rohan Desai",
-          amount: 60000,
-          currency: "INR",
-          dateGiven: new Date("2023-09-05"),
-          status: "active",
-          totalReceived: 40000,
-          remainingAmount: 20000,
-          createdAt: new Date("2023-09-05"),
-          payments: [
-            {
-              id: "9",
-              amount: 20000,
-              date: new Date("2023-11-05"),
-              type: "payment",
-              notes: "First payment"
-            },
-            {
-              id: "10",
-              amount: 20000,
-              date: new Date("2024-01-05"),
-              type: "payment",
-              notes: "Second payment"
-            }
-          ]
-        },
-        {
-          id: "10",
-          personName: "Ananya Gupta",
-          amount: 12000,
-          currency: "INR",
-          dateGiven: new Date("2024-03-05"),
-          status: "active",
-          totalReceived: 0,
-          remainingAmount: 12000,
-          createdAt: new Date("2024-03-05"),
-          payments: []
-        },
-        {
-          id: "11",
-          personName: "Dhruv Kapoor",
-          amount: 35000,
-          currency: "INR",
-          dateGiven: new Date("2023-12-20"),
-          status: "active",
-          totalReceived: 25000,
-          remainingAmount: 10000,
-          createdAt: new Date("2023-12-20"),
-          payments: [
-            {
-              id: "11",
-              amount: 15000,
-              date: new Date("2024-01-20"),
-              type: "payment",
-              notes: "First payment"
-            },
-            {
-              id: "12",
-              amount: 10000,
-              date: new Date("2024-02-20"),
-              type: "payment",
-              notes: "Second payment"
-            }
-          ]
-        },
-        {
-          id: "12",
-          personName: "Zara Khan",
-          amount: 18000,
-          currency: "INR",
-          dateGiven: new Date("2024-01-30"),
-          status: "active",
-          totalReceived: 6000,
-          remainingAmount: 12000,
-          createdAt: new Date("2024-01-30"),
-          payments: [
-            {
-              id: "13",
-              amount: 6000,
-              date: new Date("2024-02-28"),
-              type: "payment",
-              notes: "Partial payment"
-            }
-          ]
-        }
-      ];
-      localStorage.setItem('loans', JSON.stringify(testLoans));
-      console.log("Loans saved:", testLoans.length, "entries");
-    }
+    localStorage.setItem('expenses', JSON.stringify(demoExpenses));
+    localStorage.setItem('loans', JSON.stringify(demoLoans));
+    
+    console.log('Demo data loaded: 8 expenses (4 recurring, 4 fixed-term), 8 loans (4 active, 4 completed)');
+    console.log('Saved expenses to localStorage:', demoExpenses);
+    console.log('Saved loans to localStorage:', demoLoans);
   };
+
 
   const features = [
     {
@@ -618,15 +473,300 @@ const Login = () => {
             localStorage.setItem('userName', 'Demo User');
             localStorage.setItem('lastLoginDate', new Date().toDateString());
             
-            console.log("Demo mode set, adding test data...");
+            console.log("Demo mode set, adding demo data...");
             
-            // Add comprehensive sample data for showcase
-            addTestData();
+            // Add complete demo data directly
+            const demoExpenses = [
+              // 4 Recurring expenses
+              {
+                id: 'exp_1',
+                name: 'Rent',
+                amount: 25000,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 1,
+                isRecurring: true,
+                totalMonths: null,
+                remainingMonths: null,
+                remainingAmount: null,
+                createdAt: new Date(2024, 0, 1),
+                partialPayments: []
+              },
+              {
+                id: 'exp_2',
+                name: 'Google Drive',
+                amount: 165,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 15,
+                isRecurring: true,
+                totalMonths: null,
+                remainingMonths: null,
+                remainingAmount: null,
+                createdAt: new Date(2024, 0, 15),
+                partialPayments: []
+              },
+              {
+                id: 'exp_3',
+                name: 'YouTube Premium',
+                amount: 650,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 10,
+                isRecurring: true,
+                totalMonths: null,
+                remainingMonths: null,
+                remainingAmount: null,
+                createdAt: new Date(2024, 0, 10),
+                partialPayments: []
+              },
+              {
+                id: 'exp_4',
+                name: 'Netflix',
+                amount: 650,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 5,
+                isRecurring: true,
+                totalMonths: null,
+                remainingMonths: null,
+                remainingAmount: null,
+                createdAt: new Date(2024, 0, 5),
+                partialPayments: []
+              },
+              // 4 Fixed term expenses
+              {
+                id: 'exp_5',
+                name: 'Home Loan EMI',
+                amount: 45000,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 7,
+                isRecurring: false,
+                totalMonths: 240, // 20 years
+                remainingMonths: 180, // 15 years remaining
+                remainingAmount: 45000 * 180,
+                createdAt: new Date(2019, 5, 1),
+                partialPayments: []
+              },
+              {
+                id: 'exp_6',
+                name: 'Car Loan EMI',
+                amount: 18500,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 12,
+                isRecurring: false,
+                totalMonths: 60, // 5 years
+                remainingMonths: 32, // 2.7 years remaining
+                remainingAmount: 18500 * 32,
+                createdAt: new Date(2022, 2, 1),
+                partialPayments: []
+              },
+              {
+                id: 'exp_7',
+                name: 'Education Loan',
+                amount: 12000,
+                currency: 'INR',
+                type: 'Personal Loan',
+                deductionDay: 20,
+                isRecurring: false,
+                totalMonths: 84, // 7 years
+                remainingMonths: 45, // 3.75 years remaining
+                remainingAmount: 12000 * 45,
+                createdAt: new Date(2021, 8, 1),
+                partialPayments: []
+              },
+              {
+                id: 'exp_8',
+                name: 'MacBook',
+                amount: 8500,
+                currency: 'INR',
+                type: 'Personal Loan',
+                deductionDay: 25,
+                isRecurring: false,
+                totalMonths: 24, // 2 years
+                remainingMonths: 8, // 8 months remaining
+                remainingAmount: 8500 * 8,
+                createdAt: new Date(2023, 3, 1),
+                partialPayments: []
+              }
+            ];
+
+            const demoLoans = [
+              // 4 Active loans (2 with partial payments)
+              {
+                id: 'loan_1',
+                personName: 'Rahul Sharma',
+                amount: 50000,
+                currency: 'INR',
+                dateGiven: new Date(2024, 2, 15),
+                status: 'active',
+                totalReceived: 20000, // Partial payment
+                remainingAmount: 30000,
+                createdAt: new Date(2024, 2, 15),
+                payments: [
+                  {
+                    id: 'payment_1_1',
+                    amount: 15000,
+                    date: new Date(2024, 4, 10),
+                    type: 'payment' as const,
+                    description: 'First installment'
+                  },
+                  {
+                    id: 'payment_1_2',
+                    amount: 5000,
+                    date: new Date(2024, 6, 5),
+                    type: 'payment' as const,
+                    description: 'Partial payment'
+                  }
+                ]
+              },
+              {
+                id: 'loan_2',
+                personName: 'Priya Patel',
+                amount: 75000,
+                currency: 'INR',
+                dateGiven: new Date(2024, 1, 20),
+                status: 'active',
+                totalReceived: 35000, // Partial payment
+                remainingAmount: 40000,
+                createdAt: new Date(2024, 1, 20),
+                payments: [
+                  {
+                    id: 'payment_2_1',
+                    amount: 25000,
+                    date: new Date(2024, 3, 15),
+                    type: 'payment' as const,
+                    description: 'First payment'
+                  },
+                  {
+                    id: 'payment_2_2',
+                    amount: 10000,
+                    date: new Date(2024, 5, 20),
+                    type: 'payment' as const,
+                    description: 'Second payment'
+                  }
+                ]
+              },
+              {
+                id: 'loan_3',
+                personName: 'Amit Kumar',
+                amount: 25000,
+                currency: 'INR',
+                dateGiven: new Date(2024, 4, 10),
+                status: 'active',
+                totalReceived: 0,
+                remainingAmount: 25000,
+                createdAt: new Date(2024, 4, 10),
+                payments: []
+              },
+              {
+                id: 'loan_4',
+                personName: 'Sneha Singh',
+                amount: 40000,
+                currency: 'INR',
+                dateGiven: new Date(2024, 3, 5),
+                status: 'active',
+                totalReceived: 0,
+                remainingAmount: 40000,
+                createdAt: new Date(2024, 3, 5),
+                payments: []
+              },
+              // 4 Completed loans (2 written off)
+              {
+                id: 'loan_5',
+                personName: 'Vikram Gupta',
+                amount: 30000,
+                currency: 'INR',
+                dateGiven: new Date(2023, 8, 15),
+                status: 'completed',
+                totalReceived: 30000,
+                remainingAmount: 0,
+                createdAt: new Date(2023, 8, 15),
+                payments: [
+                  {
+                    id: 'payment_5_1',
+                    amount: 30000,
+                    date: new Date(2024, 1, 10),
+                    type: 'payment' as const,
+                    description: 'Full payment'
+                  }
+                ]
+              },
+              {
+                id: 'loan_6',
+                personName: 'Kavya Reddy',
+                amount: 20000,
+                currency: 'INR',
+                dateGiven: new Date(2023, 10, 20),
+                status: 'completed',
+                totalReceived: 20000,
+                remainingAmount: 0,
+                createdAt: new Date(2023, 10, 20),
+                payments: [
+                  {
+                    id: 'payment_6_1',
+                    amount: 10000,
+                    date: new Date(2024, 0, 15),
+                    type: 'payment' as const,
+                    description: 'First installment'
+                  },
+                  {
+                    id: 'payment_6_2',
+                    amount: 10000,
+                    date: new Date(2024, 2, 20),
+                    type: 'payment' as const,
+                    description: 'Final payment'
+                  }
+                ]
+              },
+              {
+                id: 'loan_7',
+                personName: 'Arjun Nair',
+                amount: 35000,
+                currency: 'INR',
+                dateGiven: new Date(2023, 6, 10),
+                status: 'written-off',
+                totalReceived: 10000,
+                remainingAmount: 25000,
+                writeOffDate: new Date(2024, 5, 15),
+                createdAt: new Date(2023, 6, 10),
+                payments: [
+                  {
+                    id: 'payment_7_1',
+                    amount: 10000,
+                    date: new Date(2023, 9, 5),
+                    type: 'payment' as const,
+                    description: 'Partial payment before write-off'
+                  }
+                ]
+              },
+              {
+                id: 'loan_8',
+                personName: 'Meera Joshi',
+                amount: 15000,
+                currency: 'INR',
+                dateGiven: new Date(2023, 5, 25),
+                status: 'written-off',
+                totalReceived: 0,
+                remainingAmount: 15000,
+                writeOffDate: new Date(2024, 4, 30),
+                createdAt: new Date(2023, 5, 25),
+                payments: []
+              }
+            ];
+
+            localStorage.setItem('expenses', JSON.stringify(demoExpenses));
+            localStorage.setItem('loans', JSON.stringify(demoLoans));
             
-            console.log("Test data added, reloading to dashboard...");
+            console.log("Demo data added, reloading to dashboard...");
             
-            // Force page reload to trigger authentication check
-            window.location.href = "/";
+            // Add a small delay to ensure localStorage is saved before reload
+            setTimeout(() => {
+              // Force page reload to trigger authentication check
+              window.location.href = "/";
+            }, 100);
           }}
           className="group px-4 py-2 text-sm font-medium text-muted-foreground/60 hover:text-transparent bg-white/20 hover:bg-white/40 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/30 dark:border-border/30 rounded-3xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden"
         >
