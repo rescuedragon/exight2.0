@@ -1,20 +1,44 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from 'react';
 import { Button } from "@/components/ui/button";
 import { InfoBar } from "@/components/InfoBar";
-import { LoansInfoBar } from "@/components/LoansInfoBar";
-import { AddExpenseModal } from "@/components/AddExpenseModal";
-import { AddLoanModal } from "@/components/AddLoanModal";
 import { ExpenseDashboard } from "@/components/ExpenseDashboard";
 import { LoansDashboard } from "@/components/LoansDashboard";
 import { DetailedView } from "@/components/DetailedView";
+import { MonthlyExpensesModal } from "@/components/MonthlyExpensesModal";
+import { ActiveExpensesModal } from "@/components/ActiveExpensesModal";
+import { ExpenseHistory } from "@/components/ExpenseHistory";
 import { LoanDetailedView } from "@/components/LoanDetailedView";
+import { AddExpenseModal } from "@/components/AddExpenseModal";
+import { AddLoanModal } from "@/components/AddLoanModal";
+import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useModal } from "@/contexts/ModalContext";
+import { useNavigate } from "react-router-dom";
+import { 
+  Wallet, 
+  HandCoins, 
+  BarChart3, 
+  Eye, 
+  EyeOff, 
+  LogOut,
+  Calendar,
+  TrendingUp,
+  History,
+  Users,
+  Settings,
+  Play,
+  TestTube,
+  Target,
+  ArrowRight,
+  Plus,
+  X,
+  CheckCircle,
+  AlertTriangle,
+  Clock
+} from "lucide-react";
 import { Expense } from "@/types/expense";
 import { Loan } from "@/types/loan";
-import { BarChart3, Eye, EyeOff, HandCoins, Wallet, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { useModal } from "@/contexts/ModalContext";
+import { LoansInfoBar } from "@/components/LoansInfoBar";
 
 // Try Me Component with hardcoded demo data
 const TryMe = () => {
@@ -368,6 +392,12 @@ const TryMe = () => {
   const [isPrivacyMode, setIsPrivacyMode] = useState(false);
   const [activeTab, setActiveTab] = useState('expenses');
   const [userName, setUserName] = useState<string>('Demo User');
+  const [shimmerKey, setShimmerKey] = useState(0);
+
+  // Handle tab switching with shimmer animation
+  const handleTabSwitch = (tab: string) => {
+    setActiveTab(tab);
+  };
 
   // Handle scroll-based fade effect - optimized to reduce flickering
   useEffect(() => {
@@ -512,27 +542,27 @@ const TryMe = () => {
 
           {/* Center - Tab Buttons */}
           <div className="flex justify-center flex-1">
-            <div className="grid w-auto grid-cols-2 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
+            <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'expenses'
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <Wallet className={`h-4 w-4 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
+                <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
                 Expenses
               </button>
               <button
                 onClick={() => setActiveTab('loans')}
-                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'loans'
                     ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <HandCoins className={`h-4 w-4 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
+                <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
                 Loans
               </button>
             </div>
@@ -585,7 +615,7 @@ const TryMe = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div key="expenses-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div key="expenses-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -606,7 +636,7 @@ const TryMe = () => {
                 </div>
               </div>
 
-                              <div key="loans-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                              <div key="loans-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
@@ -660,18 +690,30 @@ interface ActionLog {
 }
 
 const Index = () => {
-  const navigate = useNavigate();
-  const { isAnyModalOpen, openModal, closeModal } = useModal();
+  const [activeTab, setActiveTab] = useState('expenses');
+  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
+  const [showDetailedView, setShowDetailedView] = useState(false);
+  const [showMonthlyExpenses, setShowMonthlyExpenses] = useState(false);
+  const [showActiveExpenses, setShowActiveExpenses] = useState(false);
+  const [showExpenseHistory, setShowExpenseHistory] = useState(false);
+  const [showLoanDetailedView, setShowLoanDetailedView] = useState(false);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loans, setLoans] = useState<Loan[]>([]);
-  const [showDetailedView, setShowDetailedView] = useState(false);
-
-
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
+  const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
+  const [userName, setUserName] = useState('User');
   const [scrollOpacity, setScrollOpacity] = useState(1);
-  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
-  const [activeTab, setActiveTab] = useState('expenses');
-  const [userName, setUserName] = useState<string>('User');
+  const [isLoading, setIsLoading] = useState(true);
+  const [hasData, setHasData] = useState(false);
+  const [showTryMe, setShowTryMe] = useState(false);
+  const [showTestSpace, setShowTestSpace] = useState(false);
+  const [showYearlyProjection, setShowYearlyProjection] = useState(false);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+
+  // Handle tab switching with shimmer animation
+  const handleTabSwitch = (tab: string) => {
+    setActiveTab(tab);
+  };
 
   // Handle scroll-based fade effect - optimized to reduce flickering
   useEffect(() => {
@@ -1685,27 +1727,27 @@ const Index = () => {
 
           {/* Center - Tab Buttons */}
           <div className="flex justify-center flex-1">
-            <div className="grid w-auto grid-cols-2 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
+            <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'expenses'
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <Wallet className={`h-4 w-4 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
+                <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
                 Expenses
               </button>
               <button
                 onClick={() => setActiveTab('loans')}
-                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
+                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'loans'
                     ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <HandCoins className={`h-4 w-4 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
+                <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
                 Loans
               </button>
             </div>
@@ -1758,7 +1800,7 @@ const Index = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div key="expenses-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'expenses' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                <div key="expenses-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -1779,7 +1821,7 @@ const Index = () => {
                 </div>
               </div>
 
-                              <div key="loans-tab" className={`transition-opacity duration-300 will-change-[opacity] ${activeTab === 'loans' ? 'opacity-100' : 'opacity-0 absolute inset-0 pointer-events-none'}`}>
+                              <div key="loans-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 

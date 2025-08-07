@@ -142,6 +142,15 @@ body[data-modal-open="true"] *::-webkit-scrollbar {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
 @keyframes gradient-x {
   0%, 100% {
     background-position: 0% 50%;
@@ -150,25 +159,6 @@ body[data-modal-open="true"] *::-webkit-scrollbar {
     background-position: 100% 50%;
   }
 }
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.4s ease-out forwards;
-  will-change: opacity, transform;
-}
-
-.animate-gradient-x {
-  background-size: 200% 200%;
-  animation: gradient-x 3s ease infinite;
-  will-change: background-position;
-}
-
-/* Stagger Animation Delays - Reduced to prevent conflicts */
-.stagger-1 { animation-delay: 0.1s; }
-.stagger-2 { animation-delay: 0.2s; }
-.stagger-3 { animation-delay: 0.3s; }
-.stagger-4 { animation-delay: 0.4s; }
-.stagger-5 { animation-delay: 0.5s; }
-.stagger-6 { animation-delay: 0.6s; }
 
 /* Scroll-based fade transitions - Optimized */
 .scroll-fade {
