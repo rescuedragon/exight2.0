@@ -186,16 +186,22 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
     return (
       <div 
         key={expense.id} 
-        className={`backdrop-blur-md bg-gradient-to-r from-white/20 via-white/10 to-white/20 dark:from-gray-800/30 dark:via-gray-700/20 dark:to-gray-800/30 border border-white/30 dark:border-gray-600/30 rounded-2xl hover:shadow-xl group transition-all duration-500 compact-expense-card animate-fade-in-up ${staggerClass} hover:scale-[1.02] hover:backdrop-blur-lg`}
+        className={`relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-white/40 via-white/25 to-white/40 dark:from-gray-800/50 dark:via-gray-700/30 dark:to-gray-800/50 border border-white/40 dark:border-gray-600/40 rounded-3xl hover:shadow-2xl group transition-all duration-500 compact-expense-card animate-fade-in-up ${staggerClass} hover:scale-[1.02] hover:backdrop-blur-2xl hover:border-white/60 dark:hover:border-gray-500/60`}
+        style={{
+          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1)',
+        }}
       >
-        <div className="p-3 pb-2 flex-shrink-0">
-          <div className="flex items-center justify-between min-h-[1.5rem]">
+        {/* Subtle inner glow effect */}
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-white/5 dark:from-gray-100/5 dark:via-transparent dark:to-gray-100/5 rounded-3xl pointer-events-none" />
+        
+        <div className="p-2.5 pb-1.5 flex-shrink-0 relative z-10">
+          <div className="flex items-center justify-between min-h-[1.25rem]">
             <div className="flex items-center gap-2 text-base font-bold">
-              {getExpenseIcon(expense.type)}
-              <span className="bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{expense.name}</span>
+              <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 shadow-sm" />
+              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent font-semibold tracking-tight">{expense.name}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`${getExpenseColor(expense.type)} px-2 py-1 rounded-full font-semibold text-xs backdrop-blur-sm border-white/30 dark:border-gray-600/30`}>
+              <Badge variant="outline" className={`${getExpenseColor(expense.type)} px-2.5 py-1 rounded-full font-medium text-xs backdrop-blur-md border-white/40 dark:border-gray-600/40 shadow-sm`}>
                 {expense.type}
               </Badge>
               {!expense.isRecurring && (
@@ -204,9 +210,9 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
                     <Button 
                       variant="ghost" 
                       size="sm"
-                      className="h-6 w-6 p-0 rounded-full hover:bg-white/20 dark:hover:bg-gray-800/30 transition-colors duration-200"
+                      className="h-6 w-6 p-0 rounded-full hover:bg-white/30 dark:hover:bg-gray-800/40 transition-all duration-200 hover:scale-105"
                     >
-                      <MoreVertical className="h-4 w-4 text-muted-foreground" />
+                      <MoreVertical className="h-3.5 w-3.5 text-muted-foreground" />
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="w-48">
@@ -262,29 +268,29 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
           </div>
         </div>
         
-        <div className="flex flex-col h-full px-3 pb-3 pt-0">
-          {/* Stats Grid - Ultra Compact */}
+        <div className="flex flex-col h-full px-2.5 pb-2.5 pt-0 relative z-10">
+          {/* Stats Grid - Enhanced with Apple aesthetics */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-2 justify-items-center">
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="text-center">
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Amount</p>
-                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{formatCurrency(expense.amount, expense.currency)}</p>
+              <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">Amount</p>
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">{formatCurrency(expense.amount, expense.currency)}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="text-center">
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">Due Day</p>
-                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
+              <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">Due Day</p>
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
               </div>
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="text-center">
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+              <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">
                   {expense.isRecurring ? 'Paid YTD' : 'Remaining'}
                 </p>
-                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
                   {expense.isRecurring 
                     ? formatCurrency(expense.amount * Math.min(new Date().getMonth() + 1, 12), expense.currency)
                     : `${formatNumber(expense.remainingMonths)} months`
@@ -294,11 +300,11 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
             </div>
             
             <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="text-center">
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wide">
+              <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
+                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">
                   {expense.isRecurring ? 'Avg/Month' : 'Balance'}
                 </p>
-                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">
+                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
                   {expense.isRecurring 
                     ? formatCurrency(expense.amount, expense.currency)
                     : formatCurrency(expense.remainingAmount || 0, expense.currency)
@@ -308,16 +314,16 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
             </div>
           </div>
           
-          {/* Progress Section - Only for fixed-time expenses */}
+          {/* Progress Section - Enhanced with Apple aesthetics */}
           {!expense.isRecurring && (
-            <div className="text-center">
+            <div className="text-center p-2 rounded-2xl bg-gradient-to-br from-white/10 to-white/5 dark:from-gray-800/20 dark:to-gray-700/10 backdrop-blur-sm border border-white/20 dark:border-gray-600/20">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">Progress</span>
-                <span className="text-xs font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent">{progressPercentage}%</span>
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-400 tracking-wide">Progress</span>
+                <span className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">{progressPercentage}%</span>
               </div>
-              <div className="w-full backdrop-blur-sm bg-white/20 dark:bg-gray-800/20 rounded-full h-2 overflow-hidden border border-white/30 dark:border-gray-600/30">
+              <div className="w-full backdrop-blur-sm bg-white/30 dark:bg-gray-800/30 rounded-full h-2 overflow-hidden border border-white/40 dark:border-gray-600/40 shadow-inner">
                 <div 
-                  className="h-full bg-gradient-to-r from-blue-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-lg"
+                  className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-emerald-500 rounded-full transition-all duration-700 ease-out shadow-lg"
                   style={{ 
                     width: `${progressPercentage}%`,
                     transitionDelay: `${index * 100 + 200}ms`
