@@ -447,27 +447,27 @@ const TryMe = () => {
 
           {/* Center - Tab Buttons */}
           <div className="flex justify-center animate-fade-in-up stagger-1 flex-1">
-            <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
+            <div className="grid w-auto grid-cols-2 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                   activeTab === 'expenses'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <Wallet className="h-4 w-4" />
+                <Wallet className={`h-4 w-4 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
                 Expenses
               </button>
               <button
                 onClick={() => setActiveTab('loans')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                   activeTab === 'loans'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <HandCoins className="h-4 w-4" />
+                <HandCoins className={`h-4 w-4 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
                 Loans
               </button>
             </div>
@@ -1502,27 +1502,27 @@ const Index = () => {
 
           {/* Center - Tab Buttons */}
           <div className="flex justify-center animate-fade-in-up stagger-1 flex-1">
-            <div className="grid w-auto grid-cols-2 bg-muted/20 backdrop-blur-sm rounded-lg p-1">
+            <div className="grid w-auto grid-cols-2 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                   activeTab === 'expenses'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <Wallet className="h-4 w-4" />
+                <Wallet className={`h-4 w-4 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
                 Expenses
               </button>
               <button
                 onClick={() => setActiveTab('loans')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-200 ${
+                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-300 ${
                   activeTab === 'loans'
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <HandCoins className="h-4 w-4" />
+                <HandCoins className={`h-4 w-4 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
                 Loans
               </button>
             </div>

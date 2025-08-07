@@ -137,56 +137,56 @@ const Login = () => {
         amount: 25000,
         currency: 'INR',
         type: 'EMI',
-        deductionDay: 1,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
+          deductionDay: 1,
+          isRecurring: true,
+          totalMonths: null,
+          remainingMonths: null,
+          remainingAmount: null,
         createdAt: new Date(2024, 0, 1),
-        partialPayments: []
-      },
-      {
+          partialPayments: []
+        },
+        {
         id: 'exp_2',
         name: 'Google Drive',
         amount: 165,
         currency: 'INR',
         type: 'EMI',
-        deductionDay: 15,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
+          deductionDay: 15,
+          isRecurring: true,
+          totalMonths: null,
+          remainingMonths: null,
+          remainingAmount: null,
         createdAt: new Date(2024, 0, 15),
-        partialPayments: []
-      },
-      {
+          partialPayments: []
+        },
+        {
         id: 'exp_3',
         name: 'YouTube Premium',
         amount: 650,
         currency: 'INR',
         type: 'EMI',
-        deductionDay: 10,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
+          deductionDay: 10,
+          isRecurring: true,
+          totalMonths: null,
+          remainingMonths: null,
+          remainingAmount: null,
         createdAt: new Date(2024, 0, 10),
-        partialPayments: []
-      },
-      {
+          partialPayments: []
+        },
+        {
         id: 'exp_4',
         name: 'Netflix',
         amount: 650,
         currency: 'INR',
         type: 'EMI',
         deductionDay: 5,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
+          isRecurring: true,
+          totalMonths: null,
+          remainingMonths: null,
+          remainingAmount: null,
         createdAt: new Date(2024, 0, 5),
-        partialPayments: []
-      },
+          partialPayments: []
+        },
       // 4 Fixed term expenses
       {
         id: 'exp_5',
@@ -200,9 +200,9 @@ const Login = () => {
         remainingMonths: 180, // 15 years remaining
         remainingAmount: 45000 * 180,
         createdAt: new Date(2019, 5, 1),
-        partialPayments: []
-      },
-      {
+          partialPayments: []
+        },
+        {
         id: 'exp_6',
         name: 'Car Loan EMI',
         amount: 18500,
@@ -214,9 +214,9 @@ const Login = () => {
         remainingMonths: 32, // 2.7 years remaining
         remainingAmount: 18500 * 32,
         createdAt: new Date(2022, 2, 1),
-        partialPayments: []
-      },
-      {
+          partialPayments: []
+        },
+        {
         id: 'exp_7',
         name: 'Education Loan',
         amount: 12000,
@@ -228,9 +228,9 @@ const Login = () => {
         remainingMonths: 45, // 3.75 years remaining
         remainingAmount: 12000 * 45,
         createdAt: new Date(2021, 8, 1),
-        partialPayments: []
-      },
-      {
+          partialPayments: []
+        },
+        {
         id: 'exp_8',
         name: 'MacBook',
         amount: 8500,
@@ -242,9 +242,9 @@ const Login = () => {
         remainingMonths: 8, // 8 months remaining
         remainingAmount: 8500 * 8,
         createdAt: new Date(2023, 3, 1),
-        partialPayments: []
-      }
-    ];
+          partialPayments: []
+        }
+      ];
 
     // Create specific demo loans as requested
     const demoLoans = [
@@ -259,8 +259,8 @@ const Login = () => {
         totalReceived: 20000, // Partial payment
         remainingAmount: 30000,
         createdAt: new Date(2024, 2, 15),
-        payments: [
-          {
+          payments: [
+            {
             id: 'payment_1_1',
             amount: 15000,
             date: new Date(2024, 4, 10),
@@ -269,14 +269,14 @@ const Login = () => {
           },
           {
             id: 'payment_1_2',
-            amount: 5000,
+              amount: 5000,
             date: new Date(2024, 6, 5),
             type: 'payment' as const,
             description: 'Partial payment'
-          }
-        ]
-      },
-      {
+            }
+          ]
+        },
+        {
         id: 'loan_2',
         personName: 'Priya Patel',
         amount: 75000,
@@ -286,8 +286,8 @@ const Login = () => {
         totalReceived: 35000, // Partial payment
         remainingAmount: 40000,
         createdAt: new Date(2024, 1, 20),
-        payments: [
-          {
+          payments: [
+            {
             id: 'payment_2_1',
             amount: 25000,
             date: new Date(2024, 3, 15),
@@ -296,26 +296,26 @@ const Login = () => {
           },
           {
             id: 'payment_2_2',
-            amount: 10000,
+              amount: 10000,
             date: new Date(2024, 5, 20),
             type: 'payment' as const,
             description: 'Second payment'
-          }
-        ]
-      },
-      {
+            }
+          ]
+        },
+        {
         id: 'loan_3',
         personName: 'Amit Kumar',
         amount: 25000,
         currency: 'INR',
         dateGiven: new Date(2024, 4, 10),
         status: 'active',
-        totalReceived: 0,
+          totalReceived: 0,
         remainingAmount: 25000,
         createdAt: new Date(2024, 4, 10),
-        payments: []
-      },
-      {
+          payments: []
+        },
+        {
         id: 'loan_4',
         personName: 'Sneha Singh',
         amount: 40000,
@@ -331,24 +331,24 @@ const Login = () => {
       {
         id: 'loan_5',
         personName: 'Vikram Gupta',
-        amount: 30000,
+          amount: 30000,
         currency: 'INR',
         dateGiven: new Date(2023, 8, 15),
         status: 'completed',
-        totalReceived: 30000,
+          totalReceived: 30000,
         remainingAmount: 0,
         createdAt: new Date(2023, 8, 15),
-        payments: [
-          {
+          payments: [
+            {
             id: 'payment_5_1',
             amount: 30000,
             date: new Date(2024, 1, 10),
             type: 'payment' as const,
             description: 'Full payment'
-          }
-        ]
-      },
-      {
+            }
+          ]
+        },
+        {
         id: 'loan_6',
         personName: 'Kavya Reddy',
         amount: 20000,
@@ -358,8 +358,8 @@ const Login = () => {
         totalReceived: 20000,
         remainingAmount: 0,
         createdAt: new Date(2023, 10, 20),
-        payments: [
-          {
+          payments: [
+            {
             id: 'payment_6_1',
             amount: 10000,
             date: new Date(2024, 0, 15),
@@ -372,13 +372,13 @@ const Login = () => {
             date: new Date(2024, 2, 20),
             type: 'payment' as const,
             description: 'Final payment'
-          }
-        ]
-      },
-      {
+            }
+          ]
+        },
+        {
         id: 'loan_7',
         personName: 'Arjun Nair',
-        amount: 35000,
+          amount: 35000,
         currency: 'INR',
         dateGiven: new Date(2023, 6, 10),
         status: 'written-off',
@@ -386,17 +386,17 @@ const Login = () => {
         remainingAmount: 25000,
         writeOffDate: new Date(2024, 5, 15),
         createdAt: new Date(2023, 6, 10),
-        payments: [
-          {
+          payments: [
+            {
             id: 'payment_7_1',
-            amount: 10000,
+              amount: 10000,
             date: new Date(2023, 9, 5),
             type: 'payment' as const,
             description: 'Partial payment before write-off'
-          }
-        ]
-      },
-      {
+            }
+          ]
+        },
+        {
         id: 'loan_8',
         personName: 'Meera Joshi',
         amount: 15000,
@@ -765,8 +765,8 @@ const Login = () => {
             
             // Add a small delay to ensure localStorage is saved before reload
             setTimeout(() => {
-              // Force page reload to trigger authentication check
-              window.location.href = "/";
+            // Force page reload to trigger authentication check
+            window.location.href = "/";
             }, 100);
           }}
           className="group px-4 py-2 text-sm font-medium text-muted-foreground/60 hover:text-transparent bg-white/20 hover:bg-white/40 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/30 dark:border-border/30 rounded-3xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden"
