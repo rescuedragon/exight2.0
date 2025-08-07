@@ -74,7 +74,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
             onClick={() => setShowMonthlyModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#5c5aeb' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#5c5aeb' }}>
               <svg
                 width="24"
                 height="24"
@@ -90,10 +90,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
                 <path d="M9 9L12 6L16 10L21 5" />
               </svg>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Monthly Expenses</p>
               <div className="flex items-center gap-2">
-                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200 flex-shrink-0" />
                 <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCurrency(totalMonthly).replace('₹', '')}</p>
               </div>
             </div>
@@ -103,7 +103,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
             onClick={() => setShowYearlyModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#10b981' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
               <svg
                 width="24"
                 height="24"
@@ -118,10 +118,10 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
                 <path d="M22 12H18L15 21L9 3L6 12H2" />
               </svg>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Yearly Projection</p>
               <div className="flex items-center gap-2">
-                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200 flex-shrink-0" />
                 <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCurrency(totalYearly).replace('₹', '')}</p>
               </div>
             </div>
@@ -131,7 +131,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
             onClick={() => setShowActiveModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#8b5cf6' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
               <svg
                 width="24"
                 height="24"
@@ -147,7 +147,7 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
                 <line x1="1" y1="10" x2="23" y2="10" />
               </svg>
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Active Expenses</p>
               <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCount(activeExpenses.length)}</p>
             </div>

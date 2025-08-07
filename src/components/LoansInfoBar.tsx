@@ -43,13 +43,13 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
             onClick={() => setShowDetailModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#10b981' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#10b981' }}>
               <Send className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Total Loaned</p>
               <div className="flex items-center gap-2">
-                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200 flex-shrink-0" />
                 <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCurrency(totalLoaned).replace('₹', '')}</p>
               </div>
             </div>
@@ -59,13 +59,13 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
             onClick={() => setShowDetailModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#3b82f6' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#3b82f6' }}>
               <IndianRupee className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Amount Received</p>
               <div className="flex items-center gap-2">
-                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200" />
+                <IndianRupee className="h-5 w-5 text-gray-800 dark:text-gray-200 flex-shrink-0" />
                 <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCurrency(totalReceived).replace('₹', '')}</p>
               </div>
             </div>
@@ -75,10 +75,10 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
             className="flex items-center justify-center space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md hover:bg-white/20 dark:hover:bg-gray-800/20 rounded-2xl p-4 -m-4 transition-all duration-200 hover:scale-[1.01] hover:shadow-md w-full max-w-xs group"
             onClick={() => setShowDetailModal(true)}
           >
-            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#8b5cf6' }}>
+            <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110 flex items-center justify-center flex-shrink-0" style={{ backgroundColor: '#8b5cf6' }}>
               <Users className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 min-w-0 flex-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">People</p>
               <p className="text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">{formatCount(uniquePersons)}</p>
             </div>
