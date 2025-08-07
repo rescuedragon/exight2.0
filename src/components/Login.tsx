@@ -554,12 +554,12 @@ const Login = () => {
         transition={{ duration: 0.3, ease: "easeOut" }}
         className="fixed top-6 left-6 z-50"
       >
-        <h1 className="text-5xl font-bold text-foreground tracking-tight">
+        <h1 className="text-7xl font-bold text-foreground tracking-tight">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
             Exight
           </span>
         </h1>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-lg text-muted-foreground mt-2 font-medium">
           Insights for your expenses
         </p>
       </motion.div>
@@ -572,7 +572,7 @@ const Login = () => {
       {/* Main Container */}
       <div className="relative z-40 flex min-h-screen">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex flex-col justify-start items-center pt-32 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-24">
+        <div className="w-2/5 flex flex-col justify-start items-center pt-48 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-36">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -588,13 +588,13 @@ const Login = () => {
               transition={{ duration: 0.25, delay: 0.15 }}
               className="flex justify-start"
             >
-              <div className="w-[450px] rounded-2xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl">
+              <div className="w-[450px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl">
                 <CardContent className="p-10">
                   {/* Tab Navigation */}
-                  <div className="flex mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-2xl p-2 backdrop-blur-sm">
+                  <div className="flex mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm">
                     <button
                       onClick={() => setIsLogin(true)}
-                      className={`flex-1 py-3 px-8 rounded-xl text-base font-bold transition-all duration-300 ${isLogin
+                      className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${isLogin
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
                         }`}
@@ -603,7 +603,7 @@ const Login = () => {
                     </button>
                     <button
                       onClick={() => setIsLogin(false)}
-                      className={`flex-1 py-3 px-8 rounded-xl text-base font-bold transition-all duration-300 ${!isLogin
+                      className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${!isLogin
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
                         }`}
@@ -613,7 +613,7 @@ const Login = () => {
                   </div>
 
                   {error && (
-                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-lg border border-red-200 dark:border-red-800/50 backdrop-blur-sm mb-4">
+                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-2xl border border-red-200 dark:border-red-800/50 backdrop-blur-sm mb-4">
                       <p className="text-sm text-red-600">{error}</p>
                     </div>
                   )}
@@ -638,7 +638,7 @@ const Login = () => {
                                 placeholder="Enter first name"
                                 value={firstName}
                                 onChange={(e) => setFirstName(e.target.value)}
-                                className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                                className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                                 required={!isLogin}
                               />
                             </div>
@@ -650,7 +650,7 @@ const Login = () => {
                                 placeholder="Enter last name"
                                 value={lastName}
                                 onChange={(e) => setLastName(e.target.value)}
-                                className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                                className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                                 required={!isLogin}
                               />
                             </div>
@@ -669,7 +669,7 @@ const Login = () => {
                           placeholder="Enter your email address"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
-                          className="pl-14 pr-4 py-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          className="pl-14 pr-4 py-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                           required
                         />
                       </div>
@@ -685,7 +685,7 @@ const Login = () => {
                           placeholder="Enter your password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
-                          className="pl-14 pr-14 py-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          className="pl-14 pr-14 py-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                           required
                         />
                         <button
@@ -717,7 +717,7 @@ const Login = () => {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full group bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-500 hover:via-blue-600 hover:to-purple-500 text-white font-bold text-lg py-4 px-8 shadow-2xl hover:shadow-blue-500/30 dark:shadow-blue-900/50 hover:shadow-blue-500/40 dark:hover:shadow-blue-900/70 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 mt-8 rounded-xl"
+                      className="w-full group bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-500 hover:via-blue-600 hover:to-purple-500 text-white font-bold text-lg py-4 px-8 shadow-2xl hover:shadow-blue-500/30 dark:shadow-blue-900/50 hover:shadow-blue-500/40 dark:hover:shadow-blue-900/70 transition-all duration-300 transform hover:-translate-y-1 active:translate-y-0 mt-8 rounded-3xl"
                     >
                       {isLoading ? (
                         <motion.div
@@ -782,11 +782,11 @@ const Login = () => {
                   whileHover={{ scale: 1.02, y: -2 }}
                   className="group h-32"
                 >
-                  <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl overflow-hidden h-full">
+                  <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl overflow-hidden h-full">
                     <CardContent className="p-6 h-full flex flex-col justify-center">
                       <div className="flex items-center gap-4">
                         <motion.div
-                          className="p-3 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-105 transition-transform duration-200 flex-shrink-0"
+                          className="p-3 rounded-2xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-105 transition-transform duration-200 flex-shrink-0"
                           whileHover={{ rotate: 2 }}
                         >
                           {feature.icon}
@@ -836,11 +836,11 @@ const Login = () => {
                 whileHover={{ scale: 1.01 }}
                 className="group h-24"
               >
-                <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-2xl h-full">
+                <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl h-full">
                   <CardContent className="p-4 h-full flex flex-col justify-center">
                     <div className="flex items-center gap-3">
                       <motion.div
-                        className="p-2 rounded-lg bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent flex-shrink-0"
+                        className="p-2 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent flex-shrink-0"
                         whileHover={{ rotate: 2 }}
                       >
                         {feature.icon}
