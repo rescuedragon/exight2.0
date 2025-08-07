@@ -18,6 +18,12 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showForgotPassword, setShowForgotPassword] = useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = useState(1); // 1: Email & OTP, 2: New Password, 3: Success
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [otp, setOtp] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   // Optimized animation variants
   const containerVariants = {
@@ -83,6 +89,43 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleForgotPasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (forgotPasswordStep === 1) {
+      // Simulate OTP verification
+      if (forgotEmail && otp.length === 6) {
+        setForgotPasswordStep(2);
+      } else {
+        alert("Please enter a valid email and 6-digit OTP");
+      }
+    } else {
+      // Handle password reset
+      if (newPassword === confirmPassword && newPassword.length >= 6) {
+        setForgotPasswordStep(3); // Show success screen
+        // Auto close after 2 seconds
+        setTimeout(() => {
+          setShowForgotPassword(false);
+          setForgotPasswordStep(1);
+          setForgotEmail("");
+          setOtp("");
+          setNewPassword("");
+          setConfirmPassword("");
+        }, 2000);
+      } else {
+        alert("Passwords don't match or are too short (minimum 6 characters)");
+      }
+    }
+  };
+
+  const closeForgotPassword = () => {
+    setShowForgotPassword(false);
+    setForgotPasswordStep(1);
+    setForgotEmail("");
+    setOtp("");
+    setNewPassword("");
+    setConfirmPassword("");
   };
 
   const addTestData = () => {
@@ -552,14 +595,14 @@ const Login = () => {
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="fixed top-6 left-6 z-50"
+        className="fixed top-8 left-8 z-50"
       >
-        <h1 className="text-7xl font-bold text-foreground tracking-tight">
+        <h1 className="text-6xl font-bold text-foreground tracking-tight leading-none">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
             Exight
           </span>
         </h1>
-        <p className="text-lg text-muted-foreground mt-2 font-medium">
+        <p className="text-base text-muted-foreground mt-1 font-medium tracking-wide">
           Insights for your expenses
         </p>
       </motion.div>
@@ -704,10 +747,7 @@ const Login = () => {
                         <button
                           type="button"
                           className="text-sm text-blue-accent hover:text-blue-accent/80 transition-colors duration-200 font-medium"
-                          onClick={() => {
-                            // Handle forgot password logic here
-                            alert("Forgot password functionality would be implemented here");
-                          }}
+                          onClick={() => setShowForgotPassword(true)}
                         >
                           Forgot Password?
                         </button>
@@ -857,6 +897,165 @@ const Login = () => {
           </div>
         </motion.div>
       </div>
+
+      {/* Forgot Password Modal */}
+      <AnimatePresence>
+        {showForgotPassword && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] flex items-center justify-center p-4"
+            onClick={closeForgotPassword}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              transition={{ duration: 0.15 }}
+              className="w-full max-w-md bg-white/90 dark:bg-background/90 backdrop-blur-xl border border-white/30 dark:border-border/40 rounded-3xl shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-8">
+                {forgotPasswordStep === 3 ? (
+                  // Success Screen
+                  <div className="text-center py-8">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ duration: 0.5, type: "spring", bounce: 0.3 }}
+                      className="w-20 h-20 mx-auto mb-6 bg-gradient-to-r from-green-400 to-green-600 rounded-full flex items-center justify-center"
+                    >
+                      <motion.svg
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.8, delay: 0.2 }}
+                        className="w-10 h-10 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <motion.path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={3}
+                          d="M5 13l4 4L19 7"
+                        />
+                      </motion.svg>
+                    </motion.div>
+                    <motion.h2
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="text-2xl font-bold text-foreground mb-2"
+                    >
+                      Password Reset Successful!
+                    </motion.h2>
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.4 }}
+                      className="text-muted-foreground"
+                    >
+                      Your password has been updated successfully
+                    </motion.p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="text-center mb-6">
+                      <h2 className="text-2xl font-bold text-foreground mb-2">
+                        {forgotPasswordStep === 1 ? "Reset Password" : "Create New Password"}
+                      </h2>
+                      <p className="text-muted-foreground">
+                        {forgotPasswordStep === 1 
+                          ? "Enter your email and the OTP sent to you" 
+                          : "Enter your new password"}
+                      </p>
+                    </div>
+
+                <form onSubmit={handleForgotPasswordSubmit} className="space-y-6">
+                  {forgotPasswordStep === 1 ? (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="forgotEmail" className="text-base font-bold text-foreground">Email Address</Label>
+                        <Input
+                          id="forgotEmail"
+                          type="email"
+                          placeholder="Enter your email address"
+                          value={forgotEmail}
+                          onChange={(e) => setForgotEmail(e.target.value)}
+                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="otp" className="text-base font-bold text-foreground">6-Digit OTP</Label>
+                        <Input
+                          id="otp"
+                          type="text"
+                          placeholder="Enter 6-digit OTP"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium text-center text-2xl tracking-widest"
+                          maxLength={6}
+                          required
+                        />
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-2">
+                        <Label htmlFor="newPassword" className="text-base font-bold text-foreground">New Password</Label>
+                        <Input
+                          id="newPassword"
+                          type="password"
+                          placeholder="Enter new password"
+                          value={newPassword}
+                          onChange={(e) => setNewPassword(e.target.value)}
+                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <Label htmlFor="confirmPassword" className="text-base font-bold text-foreground">Confirm Password</Label>
+                        <Input
+                          id="confirmPassword"
+                          type="password"
+                          placeholder="Confirm new password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          required
+                        />
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex gap-3 pt-4">
+                    <Button
+                      type="button"
+                      onClick={closeForgotPassword}
+                      className="flex-1 py-4 px-6 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-bold text-base rounded-3xl transition-all duration-300"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      className="flex-1 py-4 px-6 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-600 hover:from-blue-500 hover:via-blue-600 hover:to-purple-500 text-white font-bold text-base rounded-3xl shadow-xl transition-all duration-300"
+                    >
+                      {forgotPasswordStep === 1 ? "Verify OTP" : "Reset Password"}
+                    </Button>
+                  </div>
+                </form>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
