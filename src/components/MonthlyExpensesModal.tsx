@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Calendar, TrendingUp, IndianRupee } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { ConnectedLineChart } from "@/components/ConnectedLineChart";
+import { useModal } from "@/contexts/ModalContext";
 
 interface MonthlyExpensesModalProps {
   expenses: Expense[];
@@ -11,8 +12,26 @@ interface MonthlyExpensesModalProps {
 }
 
 export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModalProps) => {
+  const { openModal, closeModal } = useModal();
   const [selectedYear] = useState(new Date().getFullYear());
   const currentMonth = new Date().getMonth();
+
+  // Register modal when component mounts
+  useEffect(() => {
+    openModal();
+    return () => {
+      closeModal();
+    };
+  }, [openModal, closeModal]);
+
+  // Prevent body scrolling when modal is open
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
 
   const months = [
     'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
@@ -143,7 +162,7 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
   const projectedRemaining = monthlyData.slice(currentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
 
   return (
-    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+    <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
       <Card className="w-full h-full overflow-hidden premium-card border-0 shadow-premium animate-scale-in flex flex-col rounded-none">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-accent/5 to-purple-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">

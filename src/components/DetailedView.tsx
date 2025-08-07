@@ -6,6 +6,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { X, IndianRupee, Calendar } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { ExpenseChart } from "@/components/ExpenseChart";
+import { useModal } from "@/contexts/ModalContext";
 
 interface DetailedViewProps {
   expenses: Expense[];
@@ -13,7 +14,16 @@ interface DetailedViewProps {
 }
 
 export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
+  const { openModal, closeModal } = useModal();
   const [selectedYear] = useState(new Date().getFullYear());
+
+  // Register modal when component mounts
+  useEffect(() => {
+    openModal();
+    return () => {
+      closeModal();
+    };
+  }, [openModal, closeModal]);
 
   // Prevent body scrolling when modal is open
   useEffect(() => {
@@ -123,9 +133,9 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
-        <Card className="w-full h-full overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-0 shadow-2xl rounded-none animate-scale-in flex flex-col">
-        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-4 px-6 bg-gradient-to-br from-gray-50/80 to-white/60 dark:from-gray-800/80 dark:to-gray-900/60 border-b border-gray-200/50 dark:border-gray-700/50">
+    <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+        <Card className="w-full h-full overflow-hidden premium-card border-0 shadow-premium rounded-none animate-scale-in flex flex-col">
+        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-accent/5 to-purple-accent/5 border-b border-border/20">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-br from-blue-500/10 to-blue-600/10 rounded-xl backdrop-blur-sm">
               <IndianRupee className="h-5 w-5 text-blue-600 dark:text-blue-400" />

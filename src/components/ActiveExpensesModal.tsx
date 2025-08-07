@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Expense, ExpenseType } from "@/types/expense";
 import { useToast } from "@/hooks/use-toast";
+import { useModal } from "@/contexts/ModalContext";
 
 interface ActiveExpensesModalProps {
   expenses: Expense[];
@@ -32,6 +33,7 @@ interface ActiveExpensesModalProps {
 }
 
 export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDeleteExpense }: ActiveExpensesModalProps) => {
+  const { openModal, closeModal } = useModal();
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [editForm, setEditForm] = useState({
     name: '',
@@ -43,6 +45,23 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     remainingMonths: ''
   });
   const { toast } = useToast();
+
+  // Register modal when component mounts
+  useEffect(() => {
+    openModal();
+    return () => {
+      closeModal();
+    };
+  }, [openModal, closeModal]);
+
+  // Prevent body scrolling when modal is open
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
 
   const activeExpenses = expenses.filter(expense => 
     expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0))
@@ -176,7 +195,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                     <Edit3 className="h-4 w-4" />
                   </Button>
                   {editingExpense?.id === expense.id && (
-                    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+                    <div className="fixed inset-0 bg-background z-[10000] flex items-center justify-center p-4 animate-fade-in-up">
                       <Card className="w-full max-w-lg overflow-hidden premium-card">
                         <CardHeader>
                           <CardTitle>Edit Expense</CardTitle>
@@ -355,7 +374,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
   };
 
   return (
-    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+    <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
       <Card className="w-full h-full overflow-hidden premium-card border-border/40 shadow-premium animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">

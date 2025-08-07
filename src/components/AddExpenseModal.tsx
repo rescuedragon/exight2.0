@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -7,12 +7,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Plus } from "lucide-react";
 import { Expense, ExpenseType, Currency } from "@/types/expense";
 import { useToast } from "@/hooks/use-toast";
+import { useModal } from "@/contexts/ModalContext";
 
 interface AddExpenseModalProps {
   onAddExpense: (expense: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => void;
 }
 
 export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
+  const { openModal, closeModal } = useModal();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -26,6 +28,15 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     remainingAmount: ''
   });
   const { toast } = useToast();
+
+  // Track modal state
+  useEffect(() => {
+    if (open) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [open, openModal, closeModal]);
 
 
 

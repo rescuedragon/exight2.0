@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import {
   ChevronRight
 } from "lucide-react";
 import { Loan } from "@/types/loan";
+import { useModal } from "@/contexts/ModalContext";
 
 interface LoanDetailedViewProps {
   loans: Loan[];
@@ -25,8 +26,26 @@ interface LoanDetailedViewProps {
 }
 
 export const LoanDetailedView = ({ loans, onClose, onUpdateLoan }: LoanDetailedViewProps) => {
+  const { openModal, closeModal } = useModal();
   const [selectedYear] = useState(new Date().getFullYear());
   const [expandedPersons, setExpandedPersons] = useState<Set<string>>(new Set());
+
+  // Register modal when component mounts
+  useEffect(() => {
+    openModal();
+    return () => {
+      closeModal();
+    };
+  }, [openModal, closeModal]);
+
+  // Prevent body scrolling when modal is open
+  useEffect(() => {
+    const originalStyle = window.getComputedStyle(document.body).overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = originalStyle;
+    };
+  }, []);
   const [isPersonSummaryExpanded, setIsPersonSummaryExpanded] = useState(false);
 
   const formatCurrency = (amount: number, currency: string = 'INR') => {
@@ -152,9 +171,9 @@ export const LoanDetailedView = ({ loans, onClose, onUpdateLoan }: LoanDetailedV
   }, {} as Record<string, Loan[]>);
 
   return (
-    <div className="fixed inset-0 bg-black/95 backdrop-blur-sm z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
-      <Card className="w-full h-full overflow-hidden bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl border-0 shadow-2xl rounded-none animate-scale-in flex flex-col">
-        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-4 px-6 bg-gradient-to-br from-emerald-50/80 to-teal-50/60 dark:from-emerald-900/80 dark:to-teal-900/60 border-b border-emerald-200/50 dark:border-emerald-700/50">
+    <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+      <Card className="w-full h-full overflow-hidden premium-card border-0 shadow-premium rounded-none animate-scale-in flex flex-col">
+        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-emerald-accent/5 to-teal-accent/5 border-b border-border/20">
           <div className="flex items-center gap-3">
             <div className="p-2 bg-gradient-to-br from-emerald-500/10 to-emerald-600/10 rounded-xl backdrop-blur-sm">
               <HandCoins className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />

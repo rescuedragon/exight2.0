@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Plus } from "lucide-react";
 import { Loan, Currency } from "@/types/loan";
 import { useToast } from "@/hooks/use-toast";
+import { useModal } from "@/contexts/ModalContext";
 
 interface AddLoanModalProps {
   onAddLoan: (loan: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => void;
@@ -15,6 +16,7 @@ interface AddLoanModalProps {
 }
 
 export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) => {
+  const { openModal, closeModal } = useModal();
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     personName: '',
@@ -24,6 +26,15 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
     description: ''
   });
   const { toast } = useToast();
+
+  // Track modal state
+  useEffect(() => {
+    if (open) {
+      openModal();
+    } else {
+      closeModal();
+    }
+  }, [open, openModal, closeModal]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

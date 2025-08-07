@@ -14,6 +14,7 @@ import { Expense } from "@/types/expense";
 import { Loan } from "@/types/loan";
 import { BarChart3, Eye, EyeOff, HandCoins, Wallet, LogOut } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useModal } from "@/contexts/ModalContext";
 
 
 interface ActionLog {
@@ -26,14 +27,19 @@ interface ActionLog {
 
 const Index = () => {
   const navigate = useNavigate();
+  const { isAnyModalOpen, openModal, closeModal } = useModal();
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loans, setLoans] = useState<Loan[]>([]);
   const [showDetailedView, setShowDetailedView] = useState(false);
+
+
   const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
   const [scrollOpacity, setScrollOpacity] = useState(1);
   const [isPrivacyMode, setIsPrivacyMode] = useState(false);
   const [activeTab, setActiveTab] = useState('expenses');
   const [userName, setUserName] = useState<string>('User');
+
+
 
   // Handle scroll-based fade effect - faster fade to prevent overlap
   useEffect(() => {
@@ -374,8 +380,12 @@ const Index = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
       <div 
-        className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-out"
-        style={{ opacity: scrollOpacity }}
+        className="fixed top-6 left-6 z-30 space-y-2 transition-all duration-200 ease-out"
+        style={{ 
+          opacity: isAnyModalOpen ? 0 : scrollOpacity,
+          display: isAnyModalOpen ? 'none' : 'block',
+          visibility: isAnyModalOpen ? 'hidden' : 'visible'
+        }}
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
           <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
@@ -390,8 +400,12 @@ const Index = () => {
 
               {/* Top Right Controls */}
         <div 
-          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-out"
-          style={{ opacity: scrollOpacity }}
+          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-all duration-200 ease-out"
+          style={{ 
+            opacity: isAnyModalOpen ? 0 : scrollOpacity,
+            display: isAnyModalOpen ? 'none' : 'flex',
+            visibility: isAnyModalOpen ? 'hidden' : 'visible'
+          }}
         >
 
           <ThemeToggle />

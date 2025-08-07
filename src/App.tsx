@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TestSpace from "./pages/TestSpace";
 import Login from "./components/Login";
+import { ModalProvider } from "@/contexts/ModalContext";
 
 const queryClient = new QueryClient();
 
@@ -36,16 +37,18 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <Routes>
-          <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-          <Route path="/" element={isAuthenticated ? <Index /> : <Navigate to="/login" />} />
-          <Route path="/dashboard" element={isAuthenticated ? <Index /> : <Navigate to="/login" />} />
-          <Route path="/testspace" element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <ModalProvider>
+          <Toaster />
+          <Sonner />
+          <Routes>
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+            <Route path="/" element={isAuthenticated ? <Index /> : <Navigate to="/login" />} />
+            <Route path="/dashboard" element={isAuthenticated ? <Index /> : <Navigate to="/login" />} />
+            <Route path="/testspace" element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </ModalProvider>
       </TooltipProvider>
     </QueryClientProvider>
   );
