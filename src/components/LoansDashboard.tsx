@@ -329,7 +329,7 @@ export const LoansDashboard = ({ loans, onUpdateLoan, isPrivacyMode = false }: L
           >
             <div className="flex items-center gap-4">
               <div className="p-3 rounded-3xl shadow-xl backdrop-blur-sm bg-gradient-to-br from-emerald-500/90 to-emerald-600/90 hover:from-emerald-500 hover:to-emerald-600 transition-all duration-300">
-                <HandCoins className="h-5 w-5 text-white drop-shadow-lg" />
+                <Clock className="h-5 w-5 text-white drop-shadow-lg" />
               </div>
               <div>
                 <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">Active Loans</h3>

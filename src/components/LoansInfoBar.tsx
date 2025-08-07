@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { IndianRupee, HandCoins, TrendingDown, Users } from "lucide-react";
+import { IndianRupee, HandCoins, TrendingDown, Users, Send } from "lucide-react";
 import { Loan } from "@/types/loan";
 import { LoansDetailModal } from "@/components/LoansDetailModal";
 
@@ -45,7 +45,7 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
             onClick={() => setShowDetailModal(true)}
           >
             <div className="p-4 rounded-3xl shadow-xl backdrop-blur-sm transition-all duration-300 hover:scale-110" style={{ backgroundColor: '#10b981' }}>
-              <HandCoins className="h-7 w-7 text-white drop-shadow-lg" />
+              <Send className="h-7 w-7 text-white drop-shadow-lg" />
             </div>
             <div className="space-y-1">
               <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 tracking-wide">Total Loaned</p>

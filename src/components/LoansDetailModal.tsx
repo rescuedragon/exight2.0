@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { X, HandCoins, Calendar, IndianRupee, Users, CheckCircle, AlertTriangle, Clock, TrendingDown, AlertCircle } from "lucide-react";
+import { X, HandCoins, Calendar, IndianRupee, Users, CheckCircle, AlertTriangle, Clock, TrendingDown, AlertCircle, Send } from "lucide-react";
 import { Loan } from "@/types/loan";
 import { useModal } from "@/contexts/ModalContext";
 
@@ -187,7 +187,7 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3">
                         <div className="p-2 bg-purple-accent/10 rounded-xl">
-                          <Users className="h-5 w-5 text-purple-accent" />
+                          <Clock className="h-5 w-5 text-purple-accent" />
                         </div>
                         <div>
                           <p className="text-sm font-medium text-muted-foreground">Active Loans</p>
