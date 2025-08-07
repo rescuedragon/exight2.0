@@ -88,16 +88,16 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
       <DialogTrigger asChild>
         <Button 
           size="lg" 
-          className="gap-3 rounded-full px-8 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102 backdrop-blur-sm"
+          className="gap-3 rounded-full px-8 w-40 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102 backdrop-blur-sm"
           onClick={() => setOpen(true)}
         >
           <Plus className="h-5 w-5" />
-          Add Entry
+          Add Loan
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto bg-background premium-card border-border/40 shadow-premium">
         <DialogHeader className="pb-6">
-          <DialogTitle className="text-2xl font-bold text-foreground">Add New Loan Entry</DialogTitle>
+          <DialogTitle className="text-2xl font-bold text-foreground">Add New Loan</DialogTitle>
           <p className="text-muted-foreground">Record money you've lent to someone</p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-8 mt-6">
