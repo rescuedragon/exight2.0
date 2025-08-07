@@ -14,7 +14,13 @@ interface MonthlyExpensesModalProps {
 export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModalProps) => {
   const { openModal, closeModal } = useModal();
   const [selectedYear] = useState(new Date().getFullYear());
-  const currentMonth = new Date().getMonth();
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  // Use actual current month, but can be overridden for testing
+  const currentMonth = currentDate.getMonth();
+  
+  // For testing: if we want to simulate April 2025, uncomment the next line
+  // const currentMonth = 3; // April
 
   // Register modal when component mounts
   useEffect(() => {
@@ -49,28 +55,22 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
   };
 
   const getMonthlyExpense = (monthIndex: number) => {
-    return expenses.reduce((total, expense) => {
+    const monthTotal = expenses.reduce((total, expense) => {
       // Recurring expenses (like rent) are active every month
       if (expense.isRecurring) {
         return total + expense.amount;
       }
       
-      // For EMIs/Loans, use the same logic as DetailedView
-      if (expense.remainingMonths && expense.remainingMonths > 0) {
-        const currentDate = new Date();
-        const currentMonthIndex = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-        
-        // Calculate completed months
+      // For EMIs/Loans, check if they are active in the target month
+      if (expense.remainingMonths && expense.remainingMonths > 0 && expense.totalMonths) {
+        // Calculate when the EMI started
         const completedMonths = expense.totalMonths - expense.remainingMonths;
-        
-        // EMI started 'completedMonths' months ago from current month
-        const startMonthIndex = currentMonthIndex - completedMonths;
+        const startMonthIndex = currentMonth - completedMonths;
         const startYear = currentYear + Math.floor(startMonthIndex / 12);
         const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
         
-        // EMI will end 'remainingMonths' months from current month
-        const endMonthIndex = currentMonthIndex + expense.remainingMonths;
+        // Calculate when the EMI will end
+        const endMonthIndex = currentMonth + expense.remainingMonths;
         const endYear = currentYear + Math.floor(endMonthIndex / 12);
         const normalizedEndMonth = endMonthIndex % 12;
         
@@ -91,6 +91,8 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
       
       return total;
     }, 0);
+
+    return monthTotal;
   };
 
   const getMonthlyExpenseDetails = (monthIndex: number) => {
@@ -107,22 +109,16 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
         return;
       }
       
-      // For EMIs/Loans, use the same logic as DetailedView
-      if (expense.remainingMonths && expense.remainingMonths > 0) {
-        const currentDate = new Date();
-        const currentMonthIndex = currentDate.getMonth();
-        const currentYear = currentDate.getFullYear();
-        
-        // Calculate completed months
+      // For EMIs/Loans, check if they are active in the target month
+      if (expense.remainingMonths && expense.remainingMonths > 0 && expense.totalMonths) {
+        // Calculate when the EMI started
         const completedMonths = expense.totalMonths - expense.remainingMonths;
-        
-        // EMI started 'completedMonths' months ago from current month
-        const startMonthIndex = currentMonthIndex - completedMonths;
+        const startMonthIndex = currentMonth - completedMonths;
         const startYear = currentYear + Math.floor(startMonthIndex / 12);
         const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
         
-        // EMI will end 'remainingMonths' months from current month
-        const endMonthIndex = currentMonthIndex + expense.remainingMonths;
+        // Calculate when the EMI will end
+        const endMonthIndex = currentMonth + expense.remainingMonths;
         const endYear = currentYear + Math.floor(endMonthIndex / 12);
         const normalizedEndMonth = endMonthIndex % 12;
         
@@ -149,17 +145,21 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
     return monthExpenses;
   };
 
+  // Determine the effective current month for the selected year
+  const effectiveCurrentMonth = selectedYear === currentYear ? currentMonth : 
+                               selectedYear < currentYear ? 11 : 0;
+
   const monthlyData = months.map((month, index) => ({
     month,
     amount: getMonthlyExpense(index),
-    isPast: index < currentMonth,
-    isCurrent: index === currentMonth,
-    isFuture: index > currentMonth
+    isPast: index < effectiveCurrentMonth,
+    isCurrent: index === effectiveCurrentMonth,
+    isFuture: index > effectiveCurrentMonth
   }));
 
   const maxAmount = Math.max(...monthlyData.map(d => d.amount));
-  const totalSpentSoFar = monthlyData.slice(0, currentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
-  const projectedRemaining = monthlyData.slice(currentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
+  const totalSpentSoFar = monthlyData.slice(0, effectiveCurrentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
+  const projectedRemaining = monthlyData.slice(effectiveCurrentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
 
   return (
     <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">

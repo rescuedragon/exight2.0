@@ -137,56 +137,56 @@ const Login = () => {
         amount: 25000,
         currency: 'INR',
         type: 'EMI',
-          deductionDay: 1,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
+        deductionDay: 1,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
         createdAt: new Date(2024, 0, 1),
-          partialPayments: []
-        },
-        {
+        partialPayments: []
+      },
+      {
         id: 'exp_2',
         name: 'Google Drive',
         amount: 165,
         currency: 'INR',
         type: 'EMI',
-          deductionDay: 15,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
+        deductionDay: 15,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
         createdAt: new Date(2024, 0, 15),
-          partialPayments: []
-        },
-        {
+        partialPayments: []
+      },
+      {
         id: 'exp_3',
         name: 'YouTube Premium',
         amount: 650,
         currency: 'INR',
         type: 'EMI',
-          deductionDay: 10,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
+        deductionDay: 10,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
         createdAt: new Date(2024, 0, 10),
-          partialPayments: []
-        },
-        {
+        partialPayments: []
+      },
+      {
         id: 'exp_4',
         name: 'Netflix',
         amount: 650,
         currency: 'INR',
         type: 'EMI',
         deductionDay: 5,
-          isRecurring: true,
-          totalMonths: null,
-          remainingMonths: null,
-          remainingAmount: null,
+        isRecurring: true,
+        totalMonths: null,
+        remainingMonths: null,
+        remainingAmount: null,
         createdAt: new Date(2024, 0, 5),
-          partialPayments: []
-        },
+        partialPayments: []
+      },
       // 4 Fixed term expenses
       {
         id: 'exp_5',
@@ -200,9 +200,9 @@ const Login = () => {
         remainingMonths: 180, // 15 years remaining
         remainingAmount: 45000 * 180,
         createdAt: new Date(2019, 5, 1),
-          partialPayments: []
-        },
-        {
+        partialPayments: []
+      },
+      {
         id: 'exp_6',
         name: 'Car Loan EMI',
         amount: 18500,
@@ -214,9 +214,9 @@ const Login = () => {
         remainingMonths: 32, // 2.7 years remaining
         remainingAmount: 18500 * 32,
         createdAt: new Date(2022, 2, 1),
-          partialPayments: []
-        },
-        {
+        partialPayments: []
+      },
+      {
         id: 'exp_7',
         name: 'Education Loan',
         amount: 12000,
@@ -228,9 +228,9 @@ const Login = () => {
         remainingMonths: 45, // 3.75 years remaining
         remainingAmount: 12000 * 45,
         createdAt: new Date(2021, 8, 1),
-          partialPayments: []
-        },
-        {
+        partialPayments: []
+      },
+      {
         id: 'exp_8',
         name: 'MacBook',
         amount: 8500,
@@ -242,9 +242,66 @@ const Login = () => {
         remainingMonths: 8, // 8 months remaining
         remainingAmount: 8500 * 8,
         createdAt: new Date(2023, 3, 1),
-          partialPayments: []
-        }
-      ];
+        partialPayments: []
+      },
+      // Additional seasonal expenses to create dynamic graph
+      {
+        id: 'exp_9',
+        name: 'iPhone 16',
+        amount: 29500,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 15,
+        isRecurring: false,
+        totalMonths: 12, // 1 year
+        remainingMonths: 8, // 8 months remaining (started in Jan)
+        remainingAmount: 29500 * 8,
+        createdAt: new Date(2024, 0, 15),
+        partialPayments: []
+      },
+      {
+        id: 'exp_10',
+        name: 'Summer Vacation',
+        amount: 35000,
+        currency: 'INR',
+        type: 'Personal Loan',
+        deductionDay: 1,
+        isRecurring: false,
+        totalMonths: 6, // 6 months
+        remainingMonths: 3, // 3 months remaining (started in Jun)
+        remainingAmount: 35000 * 3,
+        createdAt: new Date(2024, 5, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_11',
+        name: 'Diwali Shopping',
+        amount: 25000,
+        currency: 'INR',
+        type: 'Personal Loan',
+        deductionDay: 10,
+        isRecurring: false,
+        totalMonths: 4, // 4 months
+        remainingMonths: 2, // 2 months remaining (started in Sep)
+        remainingAmount: 25000 * 2,
+        createdAt: new Date(2024, 8, 10),
+        partialPayments: []
+      },
+      {
+        id: 'exp_12',
+        name: 'Year-End Bonus Tax',
+        amount: 15000,
+        currency: 'INR',
+        type: 'EMI',
+        deductionDay: 31,
+        isRecurring: false,
+        totalMonths: 3, // 3 months
+        remainingMonths: 1, // 1 month remaining (started in Oct)
+        remainingAmount: 15000 * 1,
+        createdAt: new Date(2024, 9, 31),
+        partialPayments: []
+      }
+    ];
 
     // Create specific demo loans as requested
     const demoLoans = [
@@ -590,6 +647,63 @@ const Login = () => {
                 remainingMonths: 8, // 8 months remaining
                 remainingAmount: 8500 * 8,
                 createdAt: new Date(2023, 3, 1),
+                partialPayments: []
+              },
+              // Additional seasonal expenses to create dynamic graph
+              {
+                id: 'exp_9',
+                name: 'iPhone 16',
+                amount: 29500,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 15,
+                isRecurring: false,
+                totalMonths: 12, // 1 year
+                remainingMonths: 8, // 8 months remaining (started in Jan)
+                remainingAmount: 29500 * 8,
+                createdAt: new Date(2024, 0, 15),
+                partialPayments: []
+              },
+              {
+                id: 'exp_10',
+                name: 'Summer Vacation',
+                amount: 35000,
+                currency: 'INR',
+                type: 'Personal Loan',
+                deductionDay: 1,
+                isRecurring: false,
+                totalMonths: 6, // 6 months
+                remainingMonths: 3, // 3 months remaining (started in Jun)
+                remainingAmount: 35000 * 3,
+                createdAt: new Date(2024, 5, 1),
+                partialPayments: []
+              },
+              {
+                id: 'exp_11',
+                name: 'Diwali Shopping',
+                amount: 25000,
+                currency: 'INR',
+                type: 'Personal Loan',
+                deductionDay: 10,
+                isRecurring: false,
+                totalMonths: 4, // 4 months
+                remainingMonths: 2, // 2 months remaining (started in Sep)
+                remainingAmount: 25000 * 2,
+                createdAt: new Date(2024, 8, 10),
+                partialPayments: []
+              },
+              {
+                id: 'exp_12',
+                name: 'Year-End Bonus Tax',
+                amount: 15000,
+                currency: 'INR',
+                type: 'EMI',
+                deductionDay: 31,
+                isRecurring: false,
+                totalMonths: 3, // 3 months
+                remainingMonths: 1, // 1 month remaining (started in Oct)
+                remainingAmount: 15000 * 1,
+                createdAt: new Date(2024, 9, 31),
                 partialPayments: []
               }
             ];

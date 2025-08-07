@@ -46,10 +46,17 @@ export const ConnectedLineChart = ({
     <div className="w-full">
       <div className="relative bg-muted/5 rounded-xl p-6" style={{ height }}>
         
-        {/* Y-axis labels - removed for cleaner look */}
+        {/* Y-axis labels */}
+        <div className="absolute left-0 top-6 bottom-12 flex flex-col justify-between text-xs text-muted-foreground font-medium">
+          <span>{formatValue(maxValue)}</span>
+          <span>{formatValue(maxValue * 0.75)}</span>
+          <span>{formatValue(maxValue * 0.5)}</span>
+          <span>{formatValue(maxValue * 0.25)}</span>
+          <span>{formatValue(0)}</span>
+        </div>
 
         {/* Chart area */}
-        <div className="ml-4 mr-4 h-full relative">
+        <div className="ml-12 mr-4 h-full relative">
           {/* Grid lines */}
           <div className="absolute inset-0 grid grid-rows-4">
             {[...Array(5)].map((_, i) => (
@@ -63,7 +70,7 @@ export const ConnectedLineChart = ({
             {/* Area fill and line */}
             <svg 
               className="absolute inset-0 w-full h-full pointer-events-none" 
-              style={{ zIndex: 5 }}
+              style={{ zIndex: 5, opacity: hoveredIndex !== null ? 0 : 1 }}
               viewBox="0 0 100 100"
               preserveAspectRatio="none"
             >
@@ -80,7 +87,7 @@ export const ConnectedLineChart = ({
                 d={(() => {
                   if (data.length === 0) return '';
                   
-                  // Generate smooth curve path for area fill
+                  // Generate straight line path for area fill
                   let path = '';
                   const points = data.map((point, index) => ({
                     x: (index / (data.length - 1)) * 100,
@@ -90,21 +97,13 @@ export const ConnectedLineChart = ({
                   // Start from bottom left
                   path = `M 0 100`;
                   
-                  // Add smooth curve to first point
+                  // Add straight line to first point
                   path += ` L ${points[0].x} ${points[0].y}`;
                   
-                  // Create smooth curves between points (same as line)
+                  // Create straight lines between points
                   for (let i = 1; i < points.length; i++) {
-                    const prev = points[i - 1];
                     const curr = points[i];
-                    
-                    // Calculate control points for smooth curve (same as line)
-                    const cp1x = prev.x + (curr.x - prev.x) * 0.3;
-                    const cp1y = prev.y;
-                    const cp2x = curr.x - (curr.x - prev.x) * 0.3;
-                    const cp2y = curr.y;
-                    
-                    path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+                    path += ` L ${curr.x} ${curr.y}`;
                   }
                   
                   // Close the path to bottom right
@@ -115,12 +114,12 @@ export const ConnectedLineChart = ({
                 fill="url(#areaGradient)"
               />
               
-              {/* Smooth connecting line */}
+              {/* Straight connecting line */}
               <path
                 d={(() => {
                   if (data.length === 0) return '';
                   
-                  // Generate smooth curve path using cubic bezier curves
+                  // Generate straight line path using simple line segments
                   let path = '';
                   const points = data.map((point, index) => ({
                     x: (index / (data.length - 1)) * 100,
@@ -130,18 +129,10 @@ export const ConnectedLineChart = ({
                   // Start with first point
                   path = `M ${points[0].x} ${points[0].y}`;
                   
-                  // Create smooth curves between points
+                  // Create straight lines between points
                   for (let i = 1; i < points.length; i++) {
-                    const prev = points[i - 1];
                     const curr = points[i];
-                    
-                    // Calculate control points for smooth curve
-                    const cp1x = prev.x + (curr.x - prev.x) * 0.3;
-                    const cp1y = prev.y;
-                    const cp2x = curr.x - (curr.x - prev.x) * 0.3;
-                    const cp2y = curr.y;
-                    
-                    path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${curr.x} ${curr.y}`;
+                    path += ` L ${curr.x} ${curr.y}`;
                   }
                   
                   return path;
@@ -186,7 +177,9 @@ export const ConnectedLineChart = ({
                                      point.isFuture ? '#8b5cf6' : color,
                       filter: 'drop-shadow(0 3px 8px rgba(0,0,0,0.25))',
                       border: '3px solid white',
-                      boxShadow: '0 0 0 1px rgba(0,0,0,0.1)'
+                      boxShadow: '0 0 0 1px rgba(0,0,0,0.1)',
+                      // Hide all circles when any tooltip is shown
+                      opacity: hoveredIndex !== null ? 0 : 1
                     }}
                   />
 
@@ -195,8 +188,8 @@ export const ConnectedLineChart = ({
                     // Smart positioning based on dot location
                     let tooltipStyle: React.CSSProperties = {
                       position: 'fixed',
-                      zIndex: 1000,
-                      backgroundColor: 'rgba(255, 255, 255, 0.98)',
+                      zIndex: 9999,
+                      backgroundColor: 'white',
                       border: '1px solid rgba(0, 0, 0, 0.1)',
                       borderRadius: '16px',
                       padding: '20px',
@@ -206,7 +199,8 @@ export const ConnectedLineChart = ({
                       maxHeight: '70vh',
                       overflowY: 'auto',
                       pointerEvents: 'none',
-                      backdropFilter: 'blur(12px)'
+                      // Remove backdrop filter and ensure solid background
+                      isolation: 'isolate'
                     };
 
                     // Determine position based on dot location

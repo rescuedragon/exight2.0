@@ -136,6 +136,63 @@ const TryMe = () => {
       remainingAmount: 8500 * 8,
       createdAt: new Date(2023, 3, 1),
       partialPayments: []
+    },
+    // Additional seasonal expenses to create dynamic graph
+    {
+      id: 'exp_9',
+      name: 'iPhone 16',
+      amount: 29500,
+      currency: 'INR' as const,
+      type: 'EMI' as const,
+      deductionDay: 15,
+      isRecurring: false,
+      totalMonths: 12, // 1 year
+      remainingMonths: 8, // 8 months remaining (started in Jan)
+      remainingAmount: 29500 * 8,
+      createdAt: new Date(2024, 0, 15),
+      partialPayments: []
+    },
+    {
+      id: 'exp_10',
+      name: 'Summer Vacation',
+      amount: 35000,
+      currency: 'INR' as const,
+      type: 'Personal Loan' as const,
+      deductionDay: 1,
+      isRecurring: false,
+      totalMonths: 6, // 6 months
+      remainingMonths: 3, // 3 months remaining (started in Jun)
+      remainingAmount: 35000 * 3,
+      createdAt: new Date(2024, 5, 1),
+      partialPayments: []
+    },
+    {
+      id: 'exp_11',
+      name: 'Diwali Shopping',
+      amount: 25000,
+      currency: 'INR' as const,
+      type: 'Personal Loan' as const,
+      deductionDay: 10,
+      isRecurring: false,
+      totalMonths: 4, // 4 months
+      remainingMonths: 2, // 2 months remaining (started in Sep)
+      remainingAmount: 25000 * 2,
+      createdAt: new Date(2024, 8, 10),
+      partialPayments: []
+    },
+    {
+      id: 'exp_12',
+      name: 'Year-End Bonus Tax',
+      amount: 15000,
+      currency: 'INR' as const,
+      type: 'EMI' as const,
+      deductionDay: 31,
+      isRecurring: false,
+      totalMonths: 3, // 3 months
+      remainingMonths: 1, // 1 month remaining (started in Oct)
+      remainingAmount: 15000 * 1,
+      createdAt: new Date(2024, 9, 31),
+      partialPayments: []
     }
   ];
 
@@ -976,6 +1033,63 @@ const Index = () => {
         remainingAmount: 8500 * 8,
         createdAt: new Date(2023, 3, 1),
         partialPayments: []
+      },
+      // Additional seasonal expenses to create dynamic graph
+      {
+        id: 'exp_9',
+        name: 'iPhone 16',
+        amount: 29500,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 15,
+        isRecurring: false,
+        totalMonths: 12, // 1 year
+        remainingMonths: 8, // 8 months remaining (started in Jan)
+        remainingAmount: 29500 * 8,
+        createdAt: new Date(2024, 0, 15),
+        partialPayments: []
+      },
+      {
+        id: 'exp_10',
+        name: 'Summer Vacation',
+        amount: 35000,
+        currency: 'INR' as const,
+        type: 'Personal Loan' as const,
+        deductionDay: 1,
+        isRecurring: false,
+        totalMonths: 6, // 6 months
+        remainingMonths: 3, // 3 months remaining (started in Jun)
+        remainingAmount: 35000 * 3,
+        createdAt: new Date(2024, 5, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_11',
+        name: 'Diwali Shopping',
+        amount: 25000,
+        currency: 'INR' as const,
+        type: 'Personal Loan' as const,
+        deductionDay: 10,
+        isRecurring: false,
+        totalMonths: 4, // 4 months
+        remainingMonths: 2, // 2 months remaining (started in Sep)
+        remainingAmount: 25000 * 2,
+        createdAt: new Date(2024, 8, 10),
+        partialPayments: []
+      },
+      {
+        id: 'exp_12',
+        name: 'Year-End Bonus Tax',
+        amount: 15000,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 31,
+        isRecurring: false,
+        totalMonths: 3, // 3 months
+        remainingMonths: 1, // 1 month remaining (started in Oct)
+        remainingAmount: 15000 * 1,
+        createdAt: new Date(2024, 9, 31),
+        partialPayments: []
       }
     ];
 
@@ -988,7 +1102,7 @@ const Index = () => {
         amount: 50000,
         currency: 'INR',
         dateGiven: new Date(2024, 2, 15),
-        status: 'active',
+        status: 'active' as const,
         totalReceived: 20000, // Partial payment
         remainingAmount: 30000,
         createdAt: new Date(2024, 2, 15),
@@ -1015,7 +1129,7 @@ const Index = () => {
         amount: 75000,
         currency: 'INR',
         dateGiven: new Date(2024, 1, 20),
-        status: 'active',
+        status: 'active' as const,
         totalReceived: 35000, // Partial payment
         remainingAmount: 40000,
         createdAt: new Date(2024, 1, 20),
@@ -1042,7 +1156,7 @@ const Index = () => {
         amount: 25000,
         currency: 'INR',
         dateGiven: new Date(2024, 4, 10),
-        status: 'active',
+        status: 'active' as const,
         totalReceived: 0,
         remainingAmount: 25000,
         createdAt: new Date(2024, 4, 10),
@@ -1054,7 +1168,7 @@ const Index = () => {
         amount: 40000,
         currency: 'INR',
         dateGiven: new Date(2024, 3, 5),
-        status: 'active',
+        status: 'active' as const,
         totalReceived: 0,
         remainingAmount: 40000,
         createdAt: new Date(2024, 3, 5),
@@ -1284,6 +1398,63 @@ const Index = () => {
         remainingMonths: 8, // 8 months remaining
         remainingAmount: 8500 * 8,
         createdAt: new Date(2023, 3, 1),
+        partialPayments: []
+      },
+      // Additional seasonal expenses to create dynamic graph
+      {
+        id: 'exp_9',
+        name: 'iPhone 16',
+        amount: 29500,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 15,
+        isRecurring: false,
+        totalMonths: 12, // 1 year
+        remainingMonths: 8, // 8 months remaining (started in Jan)
+        remainingAmount: 29500 * 8,
+        createdAt: new Date(2024, 0, 15),
+        partialPayments: []
+      },
+      {
+        id: 'exp_10',
+        name: 'Summer Vacation',
+        amount: 35000,
+        currency: 'INR' as const,
+        type: 'Personal Loan' as const,
+        deductionDay: 1,
+        isRecurring: false,
+        totalMonths: 6, // 6 months
+        remainingMonths: 3, // 3 months remaining (started in Jun)
+        remainingAmount: 35000 * 3,
+        createdAt: new Date(2024, 5, 1),
+        partialPayments: []
+      },
+      {
+        id: 'exp_11',
+        name: 'Diwali Shopping',
+        amount: 25000,
+        currency: 'INR' as const,
+        type: 'Personal Loan' as const,
+        deductionDay: 10,
+        isRecurring: false,
+        totalMonths: 4, // 4 months
+        remainingMonths: 2, // 2 months remaining (started in Sep)
+        remainingAmount: 25000 * 2,
+        createdAt: new Date(2024, 8, 10),
+        partialPayments: []
+      },
+      {
+        id: 'exp_12',
+        name: 'Year-End Bonus Tax',
+        amount: 15000,
+        currency: 'INR' as const,
+        type: 'EMI' as const,
+        deductionDay: 31,
+        isRecurring: false,
+        totalMonths: 3, // 3 months
+        remainingMonths: 1, // 1 month remaining (started in Oct)
+        remainingAmount: 15000 * 1,
+        createdAt: new Date(2024, 9, 31),
         partialPayments: []
       }
     ];
