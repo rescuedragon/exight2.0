@@ -262,8 +262,13 @@ const Index = () => {
   const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
 
   const handleLogout = () => {
+    // Clear all authentication data
     localStorage.removeItem('lastLoginDate');
-    navigate('/login');
+    localStorage.removeItem('userName');
+    localStorage.removeItem('demoMode');
+    
+    // Force page reload to trigger authentication check
+    window.location.href = '/login';
   };
 
     const addDemoData = () => {
@@ -388,15 +393,7 @@ const Index = () => {
           className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-out"
           style={{ opacity: scrollOpacity }}
         >
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={addDemoData}
-            className="h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-green-50 dark:hover:bg-green-900/20 text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
-            title="Add Demo Data"
-          >
-            <BarChart3 className="h-5 w-5" />
-          </Button>
+
           <ThemeToggle />
           <Button
             variant="ghost"

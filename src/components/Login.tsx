@@ -623,17 +623,10 @@ const Login = () => {
             // Add comprehensive sample data for showcase
             addTestData();
             
-            console.log("Test data added, navigating to dashboard...");
+            console.log("Test data added, reloading to dashboard...");
             
-            // Navigate to dashboard
-            try {
-              navigate("/");
-              console.log("Navigation attempted");
-            } catch (error) {
-              console.error("Navigation error:", error);
-              // Fallback: try window.location
-              window.location.href = "/";
-            }
+            // Force page reload to trigger authentication check
+            window.location.href = "/";
           }}
           className="group px-4 py-2 text-sm font-medium text-muted-foreground/60 hover:text-transparent bg-white/20 hover:bg-white/40 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/30 dark:border-border/30 rounded-3xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden"
         >
