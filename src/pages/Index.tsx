@@ -411,12 +411,12 @@ const TryMe = () => {
           className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-in-out"
           style={{ opacity: scrollOpacity }}
         >
-        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
-          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
+          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
             Exight
           </span>
         </h1>
-        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
+        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full"></div>
         </div>
       )}
 
@@ -447,14 +447,14 @@ const TryMe = () => {
         {/* Navigation Bar with balanced horizontal alignment */}
         <div className="flex items-center mb-6">
           {/* Left side - Greeting */}
-          <div className="flex items-center gap-6 animate-fade-in-up stagger-1 flex-1">
+          <div className="flex items-center gap-6 flex-1">
             <p className="text-lg font-semibold text-foreground">
               Hi {userName}!
             </p>
           </div>
 
           {/* Center - Tab Buttons */}
-          <div className="flex justify-center animate-fade-in-up stagger-1 flex-1">
+          <div className="flex justify-center flex-1">
             <div className="grid w-auto grid-cols-2 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -482,7 +482,7 @@ const TryMe = () => {
           </div>
 
           {/* Right side - Action Buttons */}
-          <div className="flex items-center gap-4 animate-fade-in-up stagger-4 flex-1 justify-end">
+          <div className="flex items-center gap-4 flex-1 justify-end">
             {/* Privacy Toggle - Just Eye Icon */}
             <Button
               variant="ghost"
@@ -1470,12 +1470,12 @@ const Index = () => {
           className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-in-out"
           style={{ opacity: scrollOpacity }}
         >
-        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
-          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
+          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
             Exight
           </span>
         </h1>
-        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
+        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full"></div>
         </div>
       )}
 
@@ -1506,14 +1506,14 @@ const Index = () => {
         {/* Navigation Bar with balanced horizontal alignment */}
         <div className="flex items-center mb-6">
           {/* Left side - Greeting */}
-          <div className="flex items-center gap-6 animate-fade-in-up stagger-1 flex-1">
+          <div className="flex items-center gap-6 flex-1">
             <p className="text-lg font-semibold text-foreground">
               Hi {userName}!
             </p>
           </div>
 
           {/* Center - Tab Buttons */}
-          <div className="flex justify-center animate-fade-in-up stagger-1 flex-1">
+          <div className="flex justify-center flex-1">
             <div className="grid w-auto grid-cols-2 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -1541,7 +1541,7 @@ const Index = () => {
           </div>
 
           {/* Right side - Action Buttons */}
-          <div className="flex items-center gap-4 animate-fade-in-up stagger-4 flex-1 justify-end">
+          <div className="flex items-center gap-4 flex-1 justify-end">
             {/* Privacy Toggle - Just Eye Icon */}
             <Button
               variant="ghost"

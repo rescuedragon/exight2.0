@@ -125,7 +125,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
 
   if (expenses.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
+      <div className="flex flex-col items-center justify-center py-20 text-center">
         <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
           <Coins className="h-12 w-12 text-blue-accent" />
         </div>
@@ -186,7 +186,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
     return (
       <div 
         key={expense.id} 
-        className={`relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-white/40 via-white/25 to-white/40 dark:from-gray-800/50 dark:via-gray-700/30 dark:to-gray-800/50 border border-white/40 dark:border-gray-600/40 rounded-3xl hover:shadow-2xl group transition-all duration-500 compact-expense-card animate-fade-in-up ${staggerClass} hover:scale-[1.02] hover:backdrop-blur-2xl hover:border-white/60 dark:hover:border-gray-500/60`}
+        className={`relative overflow-hidden backdrop-blur-xl bg-gradient-to-br from-white/40 via-white/25 to-white/40 dark:from-gray-800/50 dark:via-gray-700/30 dark:to-gray-800/50 border border-white/40 dark:border-gray-600/40 rounded-3xl hover:shadow-2xl group transition-all duration-500 compact-expense-card hover:scale-[1.02] hover:backdrop-blur-2xl hover:border-white/60 dark:hover:border-gray-500/60`}
         style={{
           boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.1)',
         }}
@@ -392,7 +392,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
           
           {isRecurringExpanded && (
             <div className="border-t border-white/20 dark:border-gray-700/30 backdrop-blur-md bg-gradient-to-b from-white/5 to-transparent dark:from-gray-800/10 dark:to-transparent">
-              <div className="p-6 space-y-4 animate-fade-in-up">
+              <div className="p-6 space-y-4">
                 {recurringExpenses.map((expense, index) => renderExpenseCard(expense, index))}
               </div>
             </div>
@@ -448,7 +448,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
           
           {isFixedTimeExpanded && (
             <div className="border-t border-white/20 dark:border-gray-700/30 backdrop-blur-md bg-gradient-to-b from-white/5 to-transparent dark:from-gray-800/10 dark:to-transparent">
-              <div className="p-6 space-y-4 animate-fade-in-up">
+              <div className="p-6 space-y-4">
                 {fixedTimeExpenses.map((expense, index) => renderExpenseCard(expense, index))}
               </div>
             </div>
@@ -458,7 +458,7 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
       
       {/* Empty State */}
       {activeExpenses.length === 0 && (
-        <div className="flex flex-col items-center justify-center py-20 text-center animate-fade-in-up">
+        <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
             <Coins className="h-12 w-12 text-blue-accent" />
           </div>
