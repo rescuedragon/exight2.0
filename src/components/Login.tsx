@@ -558,6 +558,8 @@ const Login = () => {
             localStorage.setItem('lastLoginDate', new Date().toDateString());
             
             console.log("Demo mode set, adding demo data...");
+            console.log("localStorage demoMode:", localStorage.getItem('demoMode'));
+            console.log("localStorage lastLoginDate:", localStorage.getItem('lastLoginDate'));
             
             // Add complete demo data directly
             const demoExpenses = [
@@ -903,11 +905,8 @@ const Login = () => {
             
             console.log("Demo data added, reloading to dashboard...");
             
-            // Add a small delay to ensure localStorage is saved before reload
-            setTimeout(() => {
             // Force page reload to trigger authentication check
             window.location.href = "/";
-            }, 100);
           }}
           className="group px-4 py-2 text-sm font-medium text-muted-foreground/60 hover:text-transparent bg-white/20 hover:bg-white/40 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/30 dark:border-border/30 rounded-3xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden"
         >

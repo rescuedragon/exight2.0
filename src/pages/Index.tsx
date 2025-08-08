@@ -447,8 +447,8 @@ const TryMe = () => {
       localStorage.removeItem('loans');
       localStorage.removeItem('action-logs');
       
-      // Use navigate instead of window.location.href
-      navigate('/login');
+      // Force navigation to login page
+      window.location.href = '/login';
     }
   };
 

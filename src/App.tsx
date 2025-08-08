@@ -24,21 +24,28 @@ const App = () => {
         // Check if user has auth token
         const token = localStorage.getItem('authToken');
         const demoMode = localStorage.getItem('demoMode');
+        const lastLoginDate = localStorage.getItem('lastLoginDate');
+        
+        // Set demo mode first
+        setIsDemoMode(demoMode === 'true');
         
         if (token) {
-          // Verify token with API
-          const isAuthValid = await apiService.checkAuth();
-          setIsAuthenticated(isAuthValid);
+          try {
+            // Try to verify token with API
+            const isAuthValid = await apiService.checkAuth();
+            setIsAuthenticated(isAuthValid);
+          } catch (apiError) {
+            console.error('API auth check failed:', apiError);
+            // Fallback to localStorage check
+            setIsAuthenticated(!!lastLoginDate);
+          }
         } else {
-          // Fallback to localStorage check for demo mode
-          const lastLoginDate = localStorage.getItem('lastLoginDate');
+          // No token, check for demo mode or last login
           setIsAuthenticated(!!lastLoginDate);
         }
-        
-        setIsDemoMode(demoMode === 'true');
       } catch (error) {
         console.error('Auth check failed:', error);
-        // Fallback to localStorage check
+        // Final fallback to localStorage check
         const lastLoginDate = localStorage.getItem('lastLoginDate');
         setIsAuthenticated(!!lastLoginDate);
       } finally {
