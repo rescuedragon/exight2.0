@@ -12,6 +12,7 @@ import { AddExpenseModal } from "@/components/AddExpenseModal";
 import { AddLoanModal } from "@/components/AddLoanModal";
 import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { NotificationSystem } from "@/components/NotificationSystem";
 import { useModal } from "@/contexts/ModalContext";
 import { useNavigate } from "react-router-dom";
 import { 
