@@ -13,8 +13,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("demo@exight.com");
+  const [password, setPassword] = useState("demo123");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -71,6 +71,7 @@ const Login = () => {
     try {
       if (isLogin) {
         // Login flow
+        console.log("Attempting login with:", { email, password });
         const response = await apiService.login({ email, password });
         console.log("Login successful:", response.user);
         
@@ -86,6 +87,7 @@ const Login = () => {
         navigate("/");
       } else {
         // Register flow
+        console.log("Attempting registration with:", { firstName, lastName, email, password });
         const response = await apiService.register({ 
           firstName, 
           lastName, 

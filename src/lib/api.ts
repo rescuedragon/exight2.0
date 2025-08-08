@@ -1,4 +1,5 @@
-const API_BASE_URL = 'http://13.60.70.116/api';
+// Mock authentication system - no backend required
+const API_BASE_URL = 'http://13.60.70.116/api'; // Fallback URL (not used in mock mode)
 
 export interface LoginRequest {
   email: string;
@@ -31,6 +32,56 @@ export interface ApiResponse<T> {
 
 class ApiService {
   private token: string | null = null;
+  private mockUsers: Map<string, { password: string; user: any }> = new Map();
+
+  constructor() {
+    // Initialize with some mock users
+    this.mockUsers.set('demo@exight.com', {
+      password: 'demo123',
+      user: {
+        id: '1',
+        firstName: 'Demo',
+        lastName: 'User',
+        email: 'demo@exight.com'
+      }
+    });
+    
+    this.mockUsers.set('admin@exight.com', {
+      password: 'admin123',
+      user: {
+        id: '2',
+        firstName: 'Admin',
+        lastName: 'User',
+        email: 'admin@exight.com'
+      }
+    });
+
+    // Load any additional users from localStorage
+    this.loadMockUsersFromStorage();
+  }
+
+  private loadMockUsersFromStorage() {
+    try {
+      const storedUsers = localStorage.getItem('mockUsers');
+      if (storedUsers) {
+        const users = JSON.parse(storedUsers);
+        users.forEach((userData: any) => {
+          this.mockUsers.set(userData.email, userData);
+        });
+      }
+    } catch (error) {
+      console.log('No stored mock users found');
+    }
+  }
+
+  private saveMockUsersToStorage() {
+    try {
+      const users = Array.from(this.mockUsers.values());
+      localStorage.setItem('mockUsers', JSON.stringify(users));
+    } catch (error) {
+      console.error('Failed to save mock users to storage');
+    }
+  }
 
   setToken(token: string) {
     this.token = token;
@@ -49,49 +100,162 @@ class ApiService {
     localStorage.removeItem('authToken');
   }
 
+  private generateMockToken(): string {
+    return 'mock_token_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now();
+  }
+
+  private async mockRequest<T>(
+    endpoint: string,
+    options: RequestInit = {}
+  ): Promise<ApiResponse<T>> {
+    console.log("Mock request called for endpoint:", endpoint);
+    // Simulate network delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    const body = options.body ? JSON.parse(options.body as string) : {};
+    console.log("Mock request body:", body);
+    
+    switch (endpoint) {
+      case '/auth/login':
+        return this.handleMockLogin(body) as ApiResponse<T>;
+      case '/auth/register':
+        return this.handleMockRegister(body) as ApiResponse<T>;
+      case '/auth/logout':
+        return this.handleMockLogout() as ApiResponse<T>;
+      case '/auth/me':
+        return this.handleMockCheckAuth() as ApiResponse<T>;
+      default:
+        throw new Error('Endpoint not found');
+    }
+  }
+
+  private handleMockLogin(credentials: LoginRequest): ApiResponse<AuthResponse> {
+    console.log("Mock login called with:", credentials);
+    const userData = this.mockUsers.get(credentials.email);
+    console.log("Found user data:", userData);
+    
+    if (!userData || userData.password !== credentials.password) {
+      console.log("Login failed - invalid credentials");
+      return {
+        success: false,
+        message: 'Invalid email or password'
+      };
+    }
+
+    const token = this.generateMockToken();
+    this.setToken(token);
+    console.log("Mock login successful, token generated:", token);
+
+    return {
+      success: true,
+      data: {
+        token,
+        user: userData.user
+      }
+    };
+  }
+
+  private handleMockRegister(userData: RegisterRequest): ApiResponse<AuthResponse> {
+    // Check if user already exists
+    if (this.mockUsers.has(userData.email)) {
+      return {
+        success: false,
+        message: 'User with this email already exists'
+      };
+    }
+
+    // Create new mock user
+    const newUser = {
+      id: Date.now().toString(),
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email
+    };
+
+    this.mockUsers.set(userData.email, {
+      password: userData.password,
+      user: newUser
+    });
+
+    // Save to localStorage
+    this.saveMockUsersToStorage();
+
+    const token = this.generateMockToken();
+    this.setToken(token);
+
+    return {
+      success: true,
+      data: {
+        token,
+        user: newUser
+      }
+    };
+  }
+
+  private handleMockLogout(): ApiResponse<void> {
+    this.clearToken();
+    return {
+      success: true
+    };
+  }
+
+  private handleMockCheckAuth(): ApiResponse<any> {
+    const token = this.getToken();
+    if (!token) {
+      return {
+        success: false,
+        message: 'No valid token found'
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        id: '1',
+        firstName: 'Demo',
+        lastName: 'User',
+        email: 'demo@exight.com'
+      }
+    };
+  }
+
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const token = this.getToken();
-
-    const config: RequestInit = {
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token && { Authorization: `Bearer ${token}` }),
-        ...options.headers,
-      },
-      ...options,
-    };
-
-    try {
-      const response = await fetch(url, config);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || `HTTP error! status: ${response.status}`);
-      }
-
-      return data;
-    } catch (error) {
-      console.error('API request failed:', error);
-      throw error;
-    }
+    console.log("=== REQUEST METHOD START ===");
+    console.log("Endpoint:", endpoint);
+    console.log("Options:", options);
+    
+    // Skip real API for now, use mock authentication directly
+    console.log('Using mock authentication directly');
+    const result = await this.mockRequest<T>(endpoint, options);
+    console.log("Mock request result:", result);
+    console.log("=== REQUEST METHOD END ===");
+    return result;
   }
 
   // Authentication methods
   async login(credentials: LoginRequest): Promise<AuthResponse> {
+    console.log("=== API LOGIN START ===");
+    console.log("Login credentials:", credentials);
+    
     const response = await this.request<AuthResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
 
+    console.log("API response:", response);
+
     if (response.success && response.data) {
+      console.log("Login successful, setting token");
       this.setToken(response.data.token);
+      console.log("=== API LOGIN END ===");
       return response.data;
     }
 
+    console.log("Login failed:", response.message);
+    console.log("=== API LOGIN END ===");
     throw new Error(response.message || 'Login failed');
   }
 

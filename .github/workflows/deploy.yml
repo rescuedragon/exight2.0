@@ -45,7 +45,7 @@ jobs:
           sudo rm -f /var/www/html/.htaccess
           sudo rm -rf /var/www/html/dist
           
-          # Set proper permissions
+          # Set proper permissions for upload
           sudo chown -R ec2-user:ec2-user /var/www/html/
           sudo chmod -R 755 /var/www/html/
     
@@ -59,17 +59,27 @@ jobs:
         target: "/var/www/html/"
         strip_components: 0
     
-    - name: Set final permissions
+    - name: Clean up and set permissions
       uses: appleboy/ssh-action@v0.1.5
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.KEY }}
         script: |
+          # Remove any nested dist folder if created
+          if [ -d "/var/www/html/dist" ]; then
+            sudo mv /var/www/html/dist/* /var/www/html/ 2>/dev/null || true
+            sudo rm -rf /var/www/html/dist
+          fi
+          
           # Set final permissions
           sudo chown -R ec2-user:apache /var/www/html/
           sudo chmod -R 750 /var/www/html/
           sudo chmod -R g+rx /var/www/html/
           
           # Restart backend if needed
-          sudo systemctl restart exight-backend.service 
+          sudo systemctl restart exight-backend.service
+          
+          # Verify files are in correct location
+          echo "Files in /var/www/html/:"
+          ls -la /var/www/html/ 
