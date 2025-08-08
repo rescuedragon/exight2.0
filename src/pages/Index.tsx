@@ -12,9 +12,9 @@ import { AddExpenseModal } from "@/components/AddExpenseModal";
 import { AddLoanModal } from "@/components/AddLoanModal";
 import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import { NotificationSystem } from "@/components/NotificationSystem";
 import { useModal } from "@/contexts/ModalContext";
 import { useNavigate } from "react-router-dom";
+import { apiService } from "@/lib/api";
 import { 
   Wallet, 
   HandCoins, 
@@ -430,11 +430,26 @@ const TryMe = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('lastLoginDate');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('demoMode');
-    window.location.href = '/login';
+  const handleLogout = async () => {
+    try {
+      // Call logout API
+      await apiService.logout();
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+    } finally {
+      // Clear all local storage including data
+      localStorage.removeItem('lastLoginDate');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('demoMode');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('expenses');
+      localStorage.removeItem('loans');
+      localStorage.removeItem('action-logs');
+      
+      // Use navigate instead of window.location.href
+      navigate('/login');
+    }
   };
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
@@ -691,6 +706,7 @@ interface ActionLog {
 }
 
 const Index = () => {
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('expenses');
   const [isPrivacyMode, setIsPrivacyMode] = useState(false);
   const [showDetailedView, setShowDetailedView] = useState(false);
@@ -750,6 +766,13 @@ const Index = () => {
   useEffect(() => {
     console.log("Loading data from localStorage...");
     
+    // Check if user is in demo mode
+    const isDemoMode = localStorage.getItem('demoMode') === 'true';
+    const hasAuthToken = localStorage.getItem('authToken');
+    
+    console.log("Demo mode:", isDemoMode);
+    console.log("Has auth token:", !!hasAuthToken);
+    
     // Load expenses from localStorage
     const savedExpenses = localStorage.getItem('expenses');
     console.log("Saved expenses:", savedExpenses);
@@ -768,9 +791,14 @@ const Index = () => {
       setExpenses(expensesWithDates);
       console.log("Expenses loaded:", expensesWithDates.length);
     } else {
-      console.log("No expenses found in localStorage, loading demo data...");
-      // Load demo data automatically if no data exists
-      testLoadDemoData();
+      // Only load demo data if in demo mode
+      if (isDemoMode) {
+        console.log("No expenses found in localStorage, loading demo data for demo mode...");
+        testLoadDemoData();
+      } else {
+        console.log("No expenses found in localStorage, starting with empty dashboard for new user");
+        setExpenses([]);
+      }
     }
 
     // Load loans from localStorage
@@ -792,7 +820,14 @@ const Index = () => {
       setLoans(loansWithDates);
       console.log("Loans loaded:", loansWithDates.length);
     } else {
-      console.log("No loans found in localStorage, demo data will be loaded by testLoadDemoData");
+      // Only load demo data if in demo mode AND we haven't already loaded it
+      if (isDemoMode && !savedExpenses) {
+        console.log("No loans found in localStorage, demo data will be loaded by testLoadDemoData");
+        // testLoadDemoData() already called above for expenses, so don't call it again
+      } else if (!isDemoMode) {
+        console.log("No loans found in localStorage, starting with empty loans for new user");
+        setLoans([]);
+      }
     }
 
     // Load user name
@@ -950,14 +985,26 @@ const Index = () => {
   // Get existing person names for autocomplete
   const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
 
-  const handleLogout = () => {
-    // Clear all authentication data
-    localStorage.removeItem('lastLoginDate');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('demoMode');
-    
-    // Force page reload to trigger authentication check
-    window.location.href = '/login';
+  const handleLogout = async () => {
+    try {
+      // Call logout API
+      await apiService.logout();
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+    } finally {
+      // Clear all authentication data and user data
+      localStorage.removeItem('lastLoginDate');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('demoMode');
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('expenses');
+      localStorage.removeItem('loans');
+      localStorage.removeItem('action-logs');
+      
+      // Use navigate instead of window.location.href
+      navigate('/login');
+    }
   };
 
   const addDemoData = () => {

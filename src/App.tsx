@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import TestSpace from "./pages/TestSpace";
 import Login from "./components/Login";
 import { ModalProvider } from "@/contexts/ModalContext";
+import { apiService } from "@/lib/api";
 
 const queryClient = new QueryClient();
 
@@ -18,13 +19,34 @@ const App = () => {
   const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
-    // Check if user is authenticated (has lastLoginDate)
-    const lastLoginDate = localStorage.getItem('lastLoginDate');
-    const demoMode = localStorage.getItem('demoMode');
-    
-    setIsAuthenticated(!!lastLoginDate);
-    setIsDemoMode(demoMode === 'true');
-    setIsLoading(false);
+    const checkAuth = async () => {
+      try {
+        // Check if user has auth token
+        const token = localStorage.getItem('authToken');
+        const demoMode = localStorage.getItem('demoMode');
+        
+        if (token) {
+          // Verify token with API
+          const isAuthValid = await apiService.checkAuth();
+          setIsAuthenticated(isAuthValid);
+        } else {
+          // Fallback to localStorage check for demo mode
+          const lastLoginDate = localStorage.getItem('lastLoginDate');
+          setIsAuthenticated(!!lastLoginDate);
+        }
+        
+        setIsDemoMode(demoMode === 'true');
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        // Fallback to localStorage check
+        const lastLoginDate = localStorage.getItem('lastLoginDate');
+        setIsAuthenticated(!!lastLoginDate);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
   if (isLoading) {

@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { Eye, EyeOff, Mail, Lock, ArrowRight, TrendingUp, BarChart3, CreditCard, Shield, HandCoins, Users, Calculator, Receipt } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { apiService } from "@/lib/api";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -68,20 +69,45 @@ const Login = () => {
     setError("");
 
     try {
-      // Accept any credentials - no actual authentication
-      console.log("Login successful with:", { email, password });
-
-      // Set last login date to today
-      localStorage.setItem('lastLoginDate', new Date().toDateString());
-
-      // Store user name (use firstName if registering, or extract from email if logging in)
-      const userName = isLogin ? (email.split('@')[0] || 'User') : firstName;
-      localStorage.setItem('userName', userName);
-
-      // No demo data will be added automatically
-
-      // Navigate to dashboard
-      navigate("/");
+      if (isLogin) {
+        // Login flow
+        const response = await apiService.login({ email, password });
+        console.log("Login successful:", response.user);
+        
+        // Store user info
+        localStorage.setItem('lastLoginDate', new Date().toDateString());
+        localStorage.setItem('userName', `${response.user.firstName} ${response.user.lastName}`);
+        localStorage.setItem('userId', response.user.id);
+        
+        // Ensure authenticated users don't get demo data
+        localStorage.removeItem('demoMode');
+        
+        // Navigate to dashboard
+        navigate("/");
+      } else {
+        // Register flow
+        const response = await apiService.register({ 
+          firstName, 
+          lastName, 
+          email, 
+          password 
+        });
+        console.log("Registration successful:", response.user);
+        
+        // Store user info
+        localStorage.setItem('lastLoginDate', new Date().toDateString());
+        localStorage.setItem('userName', `${response.user.firstName} ${response.user.lastName}`);
+        localStorage.setItem('userId', response.user.id);
+        
+        // Ensure new users start with empty data (not demo data)
+        localStorage.removeItem('expenses');
+        localStorage.removeItem('loans');
+        localStorage.removeItem('action-logs');
+        localStorage.removeItem('demoMode');
+        
+        // Navigate to dashboard
+        navigate("/");
+      }
     } catch (error: any) {
       console.error("Auth error:", error);
       setError(error.message || "An error occurred");

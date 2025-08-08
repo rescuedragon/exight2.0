@@ -118,7 +118,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           Add Expense
         </Button>
       </DialogTrigger>
-      <DialogContent className="fixed inset-0 z-[10000] w-full h-full bg-background overflow-y-auto premium-card border-border/40 shadow-premium">
+      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-sm premium-card border-border/40 shadow-premium">
         <DialogHeader className="pb-6">
           <DialogTitle className="text-2xl font-bold text-foreground">Add New Expense</DialogTitle>
           <p className="text-muted-foreground">Create a new EMI or recurring expense to track</p>
