@@ -37,12 +37,17 @@ jobs:
           # Backup current files
           sudo cp -r /var/www/html /var/www/html.backup.$(date +%Y%m%d_%H%M%S)
           
-          # Remove old files (except backend)
+          # Remove old frontend files (preserve backend)
           sudo rm -rf /var/www/html/assets
           sudo rm -f /var/www/html/index.html
           sudo rm -f /var/www/html/placeholder.svg
           sudo rm -f /var/www/html/robots.txt
           sudo rm -f /var/www/html/.htaccess
+          sudo rm -rf /var/www/html/dist
+          
+          # Set proper permissions
+          sudo chown -R ec2-user:ec2-user /var/www/html/
+          sudo chmod -R 755 /var/www/html/
     
     - name: Upload files
       uses: appleboy/scp-action@v0.1.4
@@ -52,4 +57,19 @@ jobs:
         key: ${{ secrets.KEY }}
         source: "dist/*"
         target: "/var/www/html/"
-        strip_components: 0 
+        strip_components: 0
+    
+    - name: Set final permissions
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          # Set final permissions
+          sudo chown -R ec2-user:apache /var/www/html/
+          sudo chmod -R 750 /var/www/html/
+          sudo chmod -R g+rx /var/www/html/
+          
+          # Restart backend if needed
+          sudo systemctl restart exight-backend.service 
