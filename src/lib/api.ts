@@ -223,15 +223,15 @@ class ApiService {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    console.log("=== REQUEST METHOD START ===");
+    console.log("=== FORCED MOCK AUTH ===");
     console.log("Endpoint:", endpoint);
     console.log("Options:", options);
     
-    // Skip real API for now, use mock authentication directly
-    console.log('Using mock authentication directly');
+    // Force mock authentication - no real API calls at all
+    console.log('FORCING mock authentication - no real API calls');
     const result = await this.mockRequest<T>(endpoint, options);
     console.log("Mock request result:", result);
-    console.log("=== REQUEST METHOD END ===");
+    console.log("=== FORCED MOCK AUTH END ===");
     return result;
   }
 
