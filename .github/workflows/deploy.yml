@@ -28,6 +28,23 @@ jobs:
       run: ls -la dist/
     
     - name: Deploy to EC2
+      uses: appleboy/ssh-action@v0.1.5
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          # Backup current files
+          sudo cp -r /var/www/html /var/www/html.backup.$(date +%Y%m%d_%H%M%S)
+          
+          # Remove old files (except backend)
+          sudo rm -rf /var/www/html/assets
+          sudo rm -f /var/www/html/index.html
+          sudo rm -f /var/www/html/placeholder.svg
+          sudo rm -f /var/www/html/robots.txt
+          sudo rm -f /var/www/html/.htaccess
+    
+    - name: Upload files
       uses: appleboy/scp-action@v0.1.4
       with:
         host: ${{ secrets.HOST }}
