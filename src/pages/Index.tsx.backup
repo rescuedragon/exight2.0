@@ -616,7 +616,7 @@ const TryMe = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                <div key="expenses-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -637,7 +637,7 @@ const TryMe = () => {
                 </div>
               </div>
 
-                              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                              <div key="loans-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
@@ -1801,7 +1801,7 @@ const Index = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                <div key="expenses-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -1822,7 +1822,7 @@ const Index = () => {
                 </div>
               </div>
 
-                              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                              <div key="loans-tab" className={`transition-all duration-150 ease-out will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
