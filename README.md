@@ -1,6 +1,6 @@
 # Exight - Expense Tracker
 
-**Insights for your expenses.**
+**Insights for your expenses.** 🚀 Auto-deployment enabled!
 
 A modern, intuitive expense tracking application built with React, TypeScript, and Tailwind CSS. Track your EMIs, recurring expenses, and get detailed insights into your financial commitments.
 
