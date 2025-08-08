@@ -30,11 +30,18 @@ const App = () => {
         setIsDemoMode(demoMode === 'true');
         
         if (token) {
-          // Skip API call - just check if we have a token and last login
-          setIsAuthenticated(!!lastLoginDate);
+          try {
+            // Try to verify token with API
+            const isAuthValid = await apiService.checkAuth();
+            setIsAuthenticated(isAuthValid);
+          } catch (apiError) {
+            console.error('API auth check failed:', apiError);
+            // Fallback to token check
+            setIsAuthenticated(!!token);
+          }
         } else {
-          // No token, check for demo mode or last login
-          setIsAuthenticated(!!lastLoginDate);
+          // No token, check for demo mode
+          setIsAuthenticated(demoMode === 'true');
         }
       } catch (error) {
         console.error('Auth check failed:', error);

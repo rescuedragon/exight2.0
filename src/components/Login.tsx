@@ -65,47 +65,32 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("=== FORM SUBMITTED ===");
-    console.log("Email:", email, "Password:", password);
-    
     setIsLoading(true);
     setError("");
 
     try {
       if (isLogin) {
         // Login flow
-        console.log("=== LOGIN ATTEMPT ===");
-        console.log("Attempting login with:", { email, password });
-        
-        // Force immediate success for testing
-        localStorage.setItem('lastLoginDate', new Date().toDateString());
-        localStorage.setItem('userName', 'Demo User');
-        localStorage.setItem('userId', 'demo-1');
-        localStorage.removeItem('demoMode');
-        
-        console.log("=== FORCED LOGIN SUCCESS ===");
-        console.log("localStorage set, navigating...");
+        const response = await apiService.login({ email, password });
         
         // Navigate to dashboard
         navigate("/");
-        console.log("Navigation called");
       } else {
-        // Register flow - same as login for now
-        console.log("=== REGISTER ATTEMPT ===");
-        localStorage.setItem('lastLoginDate', new Date().toDateString());
-        localStorage.setItem('userName', `${firstName} ${lastName}`);
-        localStorage.setItem('userId', Date.now().toString());
-        localStorage.removeItem('demoMode');
+        // Register flow
+        const response = await apiService.register({ 
+          firstName, 
+          lastName, 
+          email, 
+          password 
+        });
         
-        console.log("=== FORCED REGISTER SUCCESS ===");
+        // Navigate to dashboard
         navigate("/");
       }
     } catch (error: any) {
-      console.error("=== ERROR ===");
       console.error("Auth error:", error);
-      setError("Login failed - please try again");
+      setError(error.message || "An error occurred");
     } finally {
-      console.log("Setting loading to false");
       setIsLoading(false);
     }
   };

@@ -431,18 +431,18 @@ const TryMe = () => {
   }, []);
 
   const handleLogout = async () => {
-    // Skip API call - just clear localStorage and redirect
-    localStorage.removeItem('lastLoginDate');
-    localStorage.removeItem('userName');
-    localStorage.removeItem('demoMode');
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('expenses');
-    localStorage.removeItem('loans');
-    localStorage.removeItem('action-logs');
-    
-    // Force navigation to login page
-    window.location.href = '/login';
+    try {
+      // Call logout API
+      await apiService.logout();
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+    } finally {
+      // Clear auth token
+      localStorage.removeItem('authToken');
+      
+      // Force navigation to login page
+      window.location.href = '/login';
+    }
   };
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
