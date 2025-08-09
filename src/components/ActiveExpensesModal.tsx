@@ -9,6 +9,16 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { 
   X, 
   Wallet, 
   Edit3, 
@@ -37,6 +47,7 @@ interface ActiveExpensesModalProps {
 export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDeleteExpense }: ActiveExpensesModalProps) => {
   const { openModal, closeModal } = useModal();
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
   const [editForm, setEditForm] = useState({
     name: '',
     amount: '',
@@ -155,16 +166,15 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
   };
 
   const handleDeleteExpense = (expenseId: string) => {
-    if (onDeleteExpense) {
-      // Add confirmation dialog
-      if (window.confirm('Are you sure you want to delete this expense? This action cannot be undone.')) {
-        onDeleteExpense(expenseId);
-        toast({
-          title: "Success",
-          description: "Expense deleted successfully!"
-        });
-      }
-    }
+    if (!onDeleteExpense) return;
+    setPendingDeleteId(expenseId);
+  };
+
+  const confirmDelete = () => {
+    if (!onDeleteExpense || !pendingDeleteId) return;
+    onDeleteExpense(pendingDeleteId);
+    setPendingDeleteId(null);
+    toast({ title: "Success", description: "Expense deleted successfully!" });
   };
 
   const renderExpenseCard = (expense: Expense, isCompleted = false) => {
@@ -451,6 +461,25 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
         </CardContent>
       </Card>
     </div>,
+    document.body
+  );
+
+  // Styled delete confirmation dialog
+  return createPortal(
+    <AlertDialog open={!!pendingDeleteId} onOpenChange={(o) => { if (!o) setPendingDeleteId(null); }}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete expense?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. The expense will be permanently removed.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>,
     document.body
   );
 };
