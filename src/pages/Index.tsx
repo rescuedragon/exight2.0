@@ -645,73 +645,76 @@ const TryMe = () => {
 
             {/* Tab Content */}
             <div className="relative">
+              {activeTab === 'expenses' && (
                 <motion.div
                   key="expenses-tab"
                   id="panel-expenses"
                   role="tabpanel"
                   aria-labelledby="tab-expenses"
-                  className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}
                   variants={tabVariants}
-                  animate={activeTab === 'expenses' ? 'active' : 'inactive'}
+                  initial="inactive"
+                  animate="active"
                   data-allow-motion
                 >
-                <div className="space-y-6">
-                  {/* Info Bar */}
-                  <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
-                    <InfoBar 
-                      expenses={expenses} 
-                      onUpdateExpense={handleUpdateExpense} 
-                      onDeleteExpense={handleDeleteExpense} 
-                      isPrivacyMode={isPrivacyMode} 
-                    />
-                  </Suspense>
-
-                  {/* Dashboard */}
-                  <div>
-                    <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
-                      <ExpenseDashboard 
+                  <div className="space-y-6">
+                    {/* Info Bar */}
+                    <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
+                      <InfoBar 
                         expenses={expenses} 
-                        onUpdateExpense={handleUpdateExpense}
-                        isPrivacyMode={isPrivacyMode}
+                        onUpdateExpense={handleUpdateExpense} 
+                        onDeleteExpense={handleDeleteExpense} 
+                        isPrivacyMode={isPrivacyMode} 
                       />
                     </Suspense>
+
+                    {/* Dashboard */}
+                    <div>
+                      <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
+                        <ExpenseDashboard 
+                          expenses={expenses} 
+                          onUpdateExpense={handleUpdateExpense}
+                          isPrivacyMode={isPrivacyMode}
+                        />
+                      </Suspense>
+                    </div>
                   </div>
-                </div>
                 </motion.div>
-              
+              )}
 
-              <motion.div
-                key="loans-tab"
-                id="panel-loans"
-                role="tabpanel"
-                aria-labelledby="tab-loans"
-                className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}
-                variants={tabVariants}
-                animate={activeTab === 'loans' ? 'active' : 'inactive'}
-                data-allow-motion
-              >
-                <div className="space-y-6">
-                  {/* Loans Info Bar */}
-                  <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
-                    <LoansInfoBar 
-                      loans={loans} 
-                      onUpdateLoan={handleUpdateLoan} 
-                      isPrivacyMode={isPrivacyMode} 
-                    />
-                  </Suspense>
-
-                  {/* Loans Dashboard */}
-                  <div>
-                    <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
-                      <LoansDashboard 
+              {activeTab === 'loans' && (
+                <motion.div
+                  key="loans-tab"
+                  id="panel-loans"
+                  role="tabpanel"
+                  aria-labelledby="tab-loans"
+                  variants={tabVariants}
+                  initial="inactive"
+                  animate="active"
+                  data-allow-motion
+                >
+                  <div className="space-y-6">
+                    {/* Loans Info Bar */}
+                    <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
+                      <LoansInfoBar 
                         loans={loans} 
-                        onUpdateLoan={handleUpdateLoan}
-                        isPrivacyMode={isPrivacyMode}
+                        onUpdateLoan={handleUpdateLoan} 
+                        isPrivacyMode={isPrivacyMode} 
                       />
                     </Suspense>
+
+                    {/* Loans Dashboard */}
+                    <div>
+                      <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
+                        <LoansDashboard 
+                          loans={loans} 
+                          onUpdateLoan={handleUpdateLoan}
+                          isPrivacyMode={isPrivacyMode}
+                        />
+                      </Suspense>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
+                </motion.div>
+              )}
             </div>
           </div>
         </div>

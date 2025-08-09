@@ -118,10 +118,10 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           Add Expense
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-sm premium-card border-border/40 shadow-premium">
+      <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto bg-background/98 backdrop-blur-md rounded-2xl shadow-2xl border border-border/40">
         <DialogHeader className="pb-6">
           <DialogTitle className="text-2xl font-bold text-foreground">Add New Expense</DialogTitle>
-          <p className="text-muted-foreground">Create a new EMI or recurring expense to track</p>
+          <p className="text-muted-foreground">Create an expense to track monthly payments</p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-8 mt-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -167,19 +167,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                 </div>
               </div>
 
-              <div className="space-y-3">
-                <Label htmlFor="type" className="text-sm font-semibold text-foreground">Expense Type</Label>
-                <Select value={formData.type} onValueChange={(value: ExpenseType) => setFormData(prev => ({ ...prev, type: value }))}>
-                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent className="premium-card border-border/40">
-                    <SelectItem value="EMI">EMI</SelectItem>
-                    <SelectItem value="Personal Loan">Personal Loan</SelectItem>
-                    <SelectItem value="Borrowed from Someone">Borrowed from Someone</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              {/* Expense Type removed per request (defaults to EMI under the hood) */}
             </div>
 
             {/* Right Column */}
