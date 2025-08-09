@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, TrendingUp, IndianRupee, Target, Calendar } from "lucide-react";
@@ -115,7 +116,7 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
   const remainingToSpend = projectedYearEnd - totalSpentSoFar;
   const maxCumulative = Math.max(...monthlyData.map(d => d.cumulativeAmount));
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
       <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
 
@@ -210,6 +211,7 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div>,
+    document.body
   );
 };

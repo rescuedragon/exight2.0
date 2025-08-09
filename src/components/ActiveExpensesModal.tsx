@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -373,7 +374,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     );
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
       <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
@@ -448,6 +449,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div>,
+    document.body
   );
 };

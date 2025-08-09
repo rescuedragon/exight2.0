@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Calendar, TrendingUp, IndianRupee } from "lucide-react";
@@ -161,7 +162,7 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
   const totalSpentSoFar = monthlyData.slice(0, effectiveCurrentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
   const projectedRemaining = monthlyData.slice(effectiveCurrentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
       <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-accent/5 to-purple-accent/5 border-b border-border/20">
@@ -255,6 +256,7 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
           </div>
         </CardContent>
       </Card>
-    </div>
+    </div>,
+    document.body
   );
 };
