@@ -984,38 +984,38 @@ const Login = () => {
                   </div>
 
                   {error && (
-                    <div className="p-4 text-sm bg-red-50/90 dark:bg-red-900/30 rounded-3xl border border-red-200 dark:border-red-800/40 backdrop-blur-sm mb-4">
-                      <p className="font-semibold text-red-700 dark:text-red-300">{error}</p>
-                      {badCreds && isLogin && (
-                        <div className="mt-3 grid grid-cols-1 gap-3">
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm text-muted-foreground">Do you want to register?</span>
-                            <Button
-                              type="button"
-                              variant="outline"
-                              className="h-8 px-3 rounded-full"
-                              onClick={() => {
-                                setIsLogin(false);
-                                // Keep email/password typed to help user
-                              }}
-                            >
-                              Yes, register
-                            </Button>
+                    <div className="relative overflow-hidden rounded-3xl border bg-white/90 dark:bg-transparent dark:dark-surface shadow-ambient p-4 mb-5">
+                      <div className="absolute inset-0 pointer-events-none opacity-70" style={{background:"radial-gradient(600px 120px at 10% -10%, rgba(99,102,241,.15), transparent 60%)"}}></div>
+                      <div className="relative">
+                        <p className="font-semibold text-red-700 dark:text-red-300 mb-2">{error}</p>
+                        {badCreds && isLogin && (
+                          <div className="mt-2 grid grid-cols-1 gap-3">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-sm text-muted-foreground">Do you want to register?</span>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="h-8 px-3 rounded-full dark:border-white/15 dark:hover:bg-white/10"
+                                onClick={() => setIsLogin(false)}
+                              >
+                                Yes, register
+                              </Button>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
+                              <Input
+                                type="password"
+                                value={retryPassword}
+                                onChange={(e) => setRetryPassword(e.target.value)}
+                                placeholder="Retry password"
+                                className="h-10 rounded-2xl"
+                              />
+                              <Button type="button" className="h-10 rounded-2xl btn-gradient text-white" onClick={handleRetryLogin}>
+                                Retry
+                              </Button>
+                            </div>
                           </div>
-                          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
-                            <Input
-                              type="password"
-                              value={retryPassword}
-                              onChange={(e) => setRetryPassword(e.target.value)}
-                              placeholder="Retry password"
-                              className="h-10 rounded-2xl"
-                            />
-                            <Button type="button" className="h-10 rounded-2xl" onClick={handleRetryLogin}>
-                              Retry
-                            </Button>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   )}
 
