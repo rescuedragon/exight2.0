@@ -770,8 +770,41 @@ const Index = () => {
 
   // Load user's first name for greeting
   useEffect(() => {
+    const getFirstFromToken = (): string | null => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return null;
+        const parts = token.split('.');
+        if (parts.length < 2) return null;
+        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
+        const raw = payload.firstName || payload.given_name || payload.name || payload.email;
+        if (!raw || typeof raw !== 'string') return null;
+        const first = raw.includes('@') ? raw.split('@')[0] : raw.split(/\s+/)[0];
+        return first || null;
+      } catch {
+        return null;
+      }
+    };
+
     const loadUserName = async () => {
-      // Prefer server user first; fallback to local demoName
+      // 1) Stored friendly name
+      const stored = localStorage.getItem('userName');
+      if (stored) {
+        const first = stored.trim().split(/\s+/)[0];
+        if (first) {
+          setUserName(first);
+          return;
+        }
+      }
+
+      // 2) Derive from JWT payload
+      const tokenFirst = getFirstFromToken();
+      if (tokenFirst) {
+        setUserName(tokenFirst);
+        return;
+      }
+
+      // 3) Ask server (/auth/me)
       try {
         const currentUser = await apiService.getCurrentUser?.();
         if (currentUser && (currentUser.firstName || currentUser.email)) {
@@ -780,12 +813,8 @@ const Index = () => {
           return;
         }
       } catch {}
-      const stored = localStorage.getItem('userName');
-      if (stored) {
-        // If a full name is stored, use just the first token
-        const first = stored.trim().split(/\s+/)[0];
-        setUserName(first || 'User');
-      }
+
+      setUserName('User');
     };
     loadUserName();
   }, []);
