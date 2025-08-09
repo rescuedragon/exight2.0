@@ -1145,7 +1145,7 @@ const Login = () => {
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="max-w-2xl space-y-8"
+            className="max-w-2xl space-y-6"
           >
             {/* Hero Section */}
             <motion.div
@@ -1181,7 +1181,7 @@ const Login = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
-              className="grid grid-cols-2 gap-6"
+              className="grid grid-cols-2 gap-4"
             >
               {features.map((feature, index) => (
                 <motion.div
@@ -1192,10 +1192,10 @@ const Login = () => {
                   whileHover={{ scale: 1.02, y: -2 }}
                   className="group"
                 >
-                  <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface min-h-[180px]">
-                    <CardContent className="p-6 h-full flex items-center">
-                      <div className="flex items-center gap-5">
-                        <div className="relative h-12 w-12 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
+                  <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface min-h-[120px]">
+                    <CardContent className="p-5 h-full flex items-center">
+                      <div className="flex items-center gap-4">
+                        <div className="relative h-10 w-10 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
                           <div className="absolute inset-0 rounded-3xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -8px 22px rgba(0,0,0,.14)'}} />
                           <div className="relative text-blue-accent/90">{feature.icon}</div>
                         </div>

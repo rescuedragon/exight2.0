@@ -907,3 +907,9 @@ No functional logic changed (auth, API, data). Purely presentational, a11y, and 
 - Adjusted the main container to use `items-stretch` so both columns align in height.
 - Removed the fixed height from the right promotional column and let it fill available height with `h-full`.
 - Files: `src/components/Login.tsx` (container class edits only). No behavior changes.
+
+2025-08-09 — Reduced promo feature card heights (client UI)
+
+- Tightened spacing: hero wrapper `space-y-8` → `space-y-6`, grid gap `gap-6` → `gap-4`.
+- Shrunk cards: `min-h-[180px]` → `min-h-[120px]`, padding `p-6` → `p-5`, icon `h-12 w-12` → `h-10 w-10`.
+- Result: Right-side stack height aligns with the sign-in container without excessive whitespace.
