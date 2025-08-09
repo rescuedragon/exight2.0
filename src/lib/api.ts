@@ -286,9 +286,15 @@ class ApiService {
   }
 
   async register(userData: RegisterRequest): Promise<AuthResponse> {
+    // Backend expects { email, password, name } in prod; dev should also work.
+    const payload: any = {
+      email: (userData as any).email || (userData as any).username || '',
+      password: (userData as any).password || '',
+      name: `${(userData as any).firstName || ''} ${(userData as any).lastName || ''}`.trim() || ((userData as any).name || ''),
+    };
     const res = await this.request<any>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(userData),
+      body: JSON.stringify(payload),
     });
 
     if (res && res.token) {

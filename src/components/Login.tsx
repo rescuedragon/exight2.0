@@ -13,8 +13,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("demo@exight.com");
-  const [password, setPassword] = useState("demo123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -527,22 +527,22 @@ const Login = () => {
     {
       icon: <TrendingUp className="h-6 w-6" />,
       title: "EMI & Expense Tracking",
-      description: "Track annual EMIs and visualize monthly spending patterns with smart reminders"
+      description: "Plan EMIs confidently with clear monthly views and gentle reminders"
     },
     {
       icon: <HandCoins className="h-6 w-6" />,
       title: "Loan Management",
-      description: "Manage loans given to friends with person-wise history and payment tracking"
+      description: "Track money lent to friends with timelines, status, and payment history"
     },
     {
       icon: <CreditCard className="h-6 w-6" />,
       title: "Smart Insights & Analytics",
-      description: "AI-powered analysis of spending habits with detailed payment receipts"
+      description: "Smart insights that highlight patterns and help you make better decisions"
     },
     {
       icon: <Shield className="h-6 w-6" />,
       title: "Secure & Private",
-      description: "Your financial data stays completely secure on your device"
+      description: "Your financial data is private and protected—always"
     }
   ];
 
@@ -938,9 +938,9 @@ const Login = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-40 flex min-h-[720px] items-start">
+      <div className="relative z-40 flex min-h-screen items-stretch overflow-hidden pt-32 md:pt-36">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 min-h-[720px] flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
+        <div className="w-2/5 min-h-[520px] flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -956,14 +956,14 @@ const Login = () => {
               transition={{ duration: 0.25, delay: 0.15 }}
               className="flex justify-start"
             >
-              <div className="w-[450px] min-h-[560px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl flex flex-col">
+              <div className="w-[450px] min-h-[480px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl flex flex-col">
                 <CardContent className="p-10 flex-1 flex flex-col">
                   {/* Tab Navigation */}
-                  <div className="flex h-14 mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm">
+                  <div className="flex h-14 mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm gap-2">
                     <button
                       onClick={() => { setIsLogin(true); setError(""); setBadCreds(false); }}
-                      className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${isLogin
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
+                      className={`flex-1 h-12 flex items-center justify-center rounded-3xl text-base font-bold leading-none transition-all duration-300 ${isLogin
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
                         }`}
                     >
@@ -971,8 +971,8 @@ const Login = () => {
                     </button>
                     <button
                       onClick={() => { setIsLogin(false); setError(""); setBadCreds(false); }}
-                      className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${!isLogin
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
+                      className={`flex-1 h-12 flex items-center justify-center rounded-3xl text-base font-bold leading-none transition-all duration-300 ${!isLogin
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
                         }`}
                     >
@@ -1030,7 +1030,7 @@ const Login = () => {
                           animate={{ opacity: 1, height: "auto", marginBottom: 24 }}
                           exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
-                          style={{ overflow: "hidden" }}
+                          style={{}}
                         >
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
@@ -1140,7 +1140,7 @@ const Login = () => {
         </div>
 
         {/* Promotional Content - Right Side */}
-        <div className="w-3/5 flex items-center justify-center p-12 max-lg:hidden">
+        <div className="w-3/5 flex flex-col h-full p-16 max-lg:hidden">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1172,7 +1172,7 @@ const Login = () => {
               </h2>
 
               <p className="text-xl text-muted-foreground/90 dark:text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
-                Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.
+                Understand your spending, plan EMIs with clarity, and manage loans with ease—all in one calm, private place.
               </p>
             </motion.div>
 
@@ -1190,9 +1190,9 @@ const Login = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.2, delay: 0.4 + index * 0.05 }}
                   whileHover={{ scale: 1.02, y: -2 }}
-                  className="group h-32"
+                  className="group"
                 >
-                  <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
+                  <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface min-h-[180px]">
                     <CardContent className="p-6 h-full flex items-center">
                       <div className="flex items-center gap-5">
                         <div className="relative h-12 w-12 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">

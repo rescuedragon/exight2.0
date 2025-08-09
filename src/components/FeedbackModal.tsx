@@ -32,7 +32,14 @@ export const FeedbackModal = () => {
         email: form.email?.trim() || undefined,
         message: form.message.trim(),
       });
-      toast({ title: "Thanks for the feedback!", description: "We received your message at feedback@exight.in" });
+      toast({
+        title: "Thanks for the feedback.",
+        description: (
+          <span className="inline-flex items-center gap-2">
+            <svg className="h-4 w-4 text-emerald-500 animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M2 12l6 6 14-14-2-2L8 14 4 10z"/></svg>
+          </span>
+        ) as unknown as string,
+      });
       setForm({ message: "" });
       setOpen(false);
     } catch (err: any) {

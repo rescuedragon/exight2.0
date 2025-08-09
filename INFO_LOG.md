@@ -901,3 +901,9 @@ Notes: Aligns app with server-only data flow and better UX while keeping the sub
 - Build verified (`npm run build`)—successful. Lint warnings for Tailwind/PostCSS at-rules are expected.
 
 No functional logic changed (auth, API, data). Purely presentational, a11y, and performance improvements.
+
+2025-08-09 — Login hero height matched to sign-in card (client UI)
+
+- Adjusted the main container to use `items-stretch` so both columns align in height.
+- Removed the fixed height from the right promotional column and let it fill available height with `h-full`.
+- Files: `src/components/Login.tsx` (container class edits only). No behavior changes.
