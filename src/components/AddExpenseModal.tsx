@@ -16,6 +16,8 @@ interface AddExpenseModalProps {
 export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
   const { openModal, closeModal } = useModal();
   const [open, setOpen] = useState(false);
+  type Frequency = 'weekly' | 'monthly' | 'quarterly' | 'half-yearly' | 'yearly';
+
   const [formData, setFormData] = useState({
     name: '',
     amount: '',
@@ -23,6 +25,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     type: 'EMI' as ExpenseType,
     deductionDay: '',
     isRecurring: false,
+    frequency: 'monthly' as Frequency,
     totalMonths: '',
     remainingMonths: '',
     remainingAmount: ''
@@ -39,6 +42,23 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
   }, [open, openModal, closeModal]);
 
 
+
+  const frequencyToMonthly = (amount: number, frequency: Frequency): number => {
+    switch (frequency) {
+      case 'weekly':
+        return (amount * 52) / 12;
+      case 'monthly':
+        return amount;
+      case 'quarterly':
+        return amount / 3;
+      case 'half-yearly':
+        return amount / 6;
+      case 'yearly':
+        return amount / 12;
+      default:
+        return amount;
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -61,7 +81,8 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
       return;
     }
 
-    const amount = parseFloat(formData.amount);
+    const inputAmount = parseFloat(formData.amount);
+    const amount = frequencyToMonthly(inputAmount, formData.frequency);
     const deductionDay = formData.deductionDay ? parseInt(formData.deductionDay) : 1; // Default to 1st if not specified
     
     const expenseData: any = {
@@ -94,6 +115,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
       type: 'EMI',
       deductionDay: '',
       isRecurring: false,
+      frequency: 'monthly',
       totalMonths: '',
       remainingMonths: '',
       remainingAmount: ''
@@ -121,12 +143,25 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
       <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto rounded-[28px] shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-3xl font-extrabold gradient-text animate-gradient-x">Add New Expense</DialogTitle>
-          <p className="text-sm text-muted-foreground">Track monthly payments with optional remaining balance auto-calc</p>
+          <p className="text-sm text-muted-foreground">Track payments with flexible frequency and optional remaining balance auto-calc</p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-8 mt-2">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column */}
             <div className="space-y-6">
+              {/* Recurring toggle moved to top-left */}
+              <div className="space-y-4">
+                <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-accent/10 to-purple-accent/10 rounded-xl border border-blue-accent/20">
+                  <input
+                    type="checkbox"
+                    id="isRecurring"
+                    checked={formData.isRecurring}
+                    onChange={(e) => setFormData(prev => ({ ...prev, isRecurring: e.target.checked }))}
+                    className="h-5 w-5 rounded border-border/40 text-blue-accent focus:ring-blue-accent/20"
+                  />
+                  <Label htmlFor="isRecurring" className="text-sm font-semibold text-foreground">Recurring</Label>
+                </div>
+              </div>
               <div className="space-y-3">
                 <Label htmlFor="name" className="text-sm font-semibold text-foreground">Expense Name *</Label>
                 <Input
@@ -167,6 +202,24 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                 </div>
               </div>
 
+              {/* Frequency selector */}
+              <div className="space-y-3">
+                <Label className="text-sm font-semibold text-foreground">Expense Frequency</Label>
+                <Select value={formData.frequency} onValueChange={(value: any) => setFormData(prev => ({ ...prev, frequency: value }))}>
+                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
+                    <SelectValue placeholder="Monthly" />
+                  </SelectTrigger>
+                  <SelectContent className="premium-card border-border/40">
+                    <SelectItem value="weekly">Weekly</SelectItem>
+                    <SelectItem value="monthly">Monthly</SelectItem>
+                    <SelectItem value="quarterly">Quarterly</SelectItem>
+                    <SelectItem value="half-yearly">Half-yearly</SelectItem>
+                    <SelectItem value="yearly">Yearly</SelectItem>
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">We’ll normalize this to a monthly amount for dashboards.</p>
+              </div>
+
               {/* Expense Type removed per request (defaults to EMI under the hood) */}
             </div>
 
@@ -186,18 +239,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                 />
               </div>
 
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-accent/10 to-purple-accent/10 rounded-xl border border-blue-accent/20">
-                  <input
-                    type="checkbox"
-                    id="isRecurring"
-                    checked={formData.isRecurring}
-                    onChange={(e) => setFormData(prev => ({ ...prev, isRecurring: e.target.checked }))}
-                    className="h-5 w-5 rounded border-border/40 text-blue-accent focus:ring-blue-accent/20"
-                  />
-                  <Label htmlFor="isRecurring" className="text-sm font-semibold text-foreground">Recurring</Label>
-                </div>
-              </div>
+              {/* (Recurring toggle moved to left column) */}
 
               {!formData.isRecurring && (
                 <>
