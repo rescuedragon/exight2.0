@@ -928,7 +928,7 @@ const Login = () => {
           }}
           className="group relative h-9 px-7 rounded-full text-sm font-semibold text-muted-foreground/80 bg-white/30 dark:bg-background/20 border border-white/40 dark:border-border/30 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
         >
-          <span className="shine-overlay pointer-events-none" />
+          <span className="shine-overlay pointer-events-none rounded-full overflow-hidden" />
           <span className="relative z-10 inline-flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-blue-accent shadow-[0_0_18px_rgba(59,130,246,.6)]" />
             <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">Try me</span>
@@ -1008,7 +1008,7 @@ const Login = () => {
                                 value={retryPassword}
                                 onChange={(e) => setRetryPassword(e.target.value)}
                                 placeholder="Retry password"
-                                className="h-10 rounded-2xl"
+                                className="h-10 rounded-3xl"
                               />
                               <Button type="button" className="h-10 rounded-full px-5 bg-gradient-to-r from-blue-accent to-purple-accent text-white shadow-ambient hover:scale-105 transition-transform" onClick={handleRetryLogin}>
                                 Retry
@@ -1194,8 +1194,8 @@ const Login = () => {
                   <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
                     <CardContent className="p-6 h-full flex items-center">
                       <div className="flex items-center gap-5">
-                        <div className="relative h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/40 dark:border-white/15 shadow-ambient">
-                          <div className="absolute inset-0 rounded-2xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -6px 18px rgba(0,0,0,.12)'}} />
+                        <div className="relative h-12 w-12 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
+                          <div className="absolute inset-0 rounded-3xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -8px 22px rgba(0,0,0,.14)'}} />
                           <div className="relative text-blue-accent/90">{feature.icon}</div>
                         </div>
                         <div className="flex-1 min-w-0">
