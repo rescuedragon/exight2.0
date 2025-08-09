@@ -1034,8 +1034,8 @@ const Index = () => {
       localStorage.removeItem('loans');
       localStorage.removeItem('action-logs');
       
-      // Use navigate instead of window.location.href
-      navigate('/login');
+      // Force full page reload so App re-checks auth and route guards
+      window.location.href = '/login';
     }
   };
 
