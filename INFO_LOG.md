@@ -919,3 +919,8 @@ No functional logic changed (auth, API, data). Purely presentational, a11y, and 
 - Right column container now `min-h-[520px] max-h-[520px] overflow-hidden` to mirror left card height.
 - Make promo wrapper fill column (`h-full flex flex-col`) and features grid consume remaining space (`flex-1`).
 - Further trimmed card size (`min-h-[110px]`, `p-4`).
+
+2025-08-09 — Exact height sync using ResizeObserver (client UI)
+
+- Added `ResizeObserver` to measure the left sign-in card and set the right promo column height dynamically.
+- Refs: `signInCardRef` on the left card, `promoColumnRef` on the right column; effect recalculates on resize and `isLogin` changes.

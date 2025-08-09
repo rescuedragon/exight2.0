@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +27,32 @@ const Login = () => {
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Keep promo (right) column exactly the same height as the sign-in card
+  const signInCardRef = useRef<HTMLDivElement | null>(null);
+  const promoColumnRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const syncHeights = () => {
+      const leftHeight = signInCardRef.current?.offsetHeight ?? 0;
+      if (promoColumnRef.current && leftHeight > 0) {
+        promoColumnRef.current.style.height = `${leftHeight}px`;
+      }
+    };
+
+    // Initial sync
+    syncHeights();
+
+    // Track size changes of the sign-in card and window resizes
+    const resizeObserver = new ResizeObserver(() => syncHeights());
+    if (signInCardRef.current) resizeObserver.observe(signInCardRef.current);
+    window.addEventListener("resize", syncHeights);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", syncHeights);
+    };
+  }, [isLogin]);
 
   // Optimized animation variants
   const containerVariants = {
@@ -956,7 +982,7 @@ const Login = () => {
               transition={{ duration: 0.25, delay: 0.15 }}
               className="flex justify-start"
             >
-              <div className="w-[450px] min-h-[480px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl flex flex-col">
+              <div ref={signInCardRef} className="w-[450px] min-h-[480px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl flex flex-col">
                 <CardContent className="p-10 flex-1 flex flex-col">
                   {/* Tab Navigation */}
                   <div className="flex h-14 mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm gap-2">
@@ -1140,7 +1166,7 @@ const Login = () => {
         </div>
 
         {/* Promotional Content - Right Side */}
-        <div className="w-3/5 flex flex-col min-h-[520px] max-h-[520px] p-16 overflow-hidden max-lg:hidden">
+        <div ref={promoColumnRef} className="w-3/5 flex flex-col min-h-[520px] max-h-[520px] p-16 overflow-hidden max-lg:hidden">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
