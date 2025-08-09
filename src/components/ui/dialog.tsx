@@ -71,7 +71,7 @@ const DialogContent = React.forwardRef<
       ref={ref}
       className={cn(
         // Larger, higher-contrast content container consistent with app cards
-        "fixed left-1/2 top-1/2 z-[10000] grid w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 gap-4 border border-border/40 bg-card p-6 shadow-2xl duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 sm:rounded-2xl",
+        "fixed left-1/2 top-1/2 z-[10000] grid w-full max-w-2xl -translate-x-1/2 -translate-y-1/2 gap-4 border border-border/40 bg-card p-6 shadow-2xl duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 rounded-[28px]",
         className
       )}
       {...props}

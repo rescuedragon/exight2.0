@@ -118,7 +118,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           Add Expense
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
+      <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto rounded-[28px] shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-3xl font-extrabold gradient-text animate-gradient-x">Add New Expense</DialogTitle>
           <p className="text-sm text-muted-foreground">Track monthly payments with optional remaining balance auto-calc</p>
