@@ -897,9 +897,14 @@ const Login = () => {
             // Force page reload to trigger authentication check
             window.location.href = "/";
           }}
-          className="group px-4 py-2 text-sm font-medium text-muted-foreground/60 hover:text-transparent bg-white/20 hover:bg-white/40 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/30 dark:border-border/30 rounded-3xl transition-all duration-300 hover:scale-105 hover:shadow-lg relative overflow-hidden"
+          className="group px-5 py-2.5 text-sm font-semibold text-muted-foreground/80 hover:text-transparent bg-white/30 hover:bg-white/50 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/40 dark:border-border/30 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
         >
-          <span className="relative z-10 group-hover:bg-gradient-to-r group-hover:from-blue-accent group-hover:via-purple-accent group-hover:to-emerald-accent group-hover:bg-clip-text group-hover:text-transparent group-hover:animate-gradient-x group-hover:bg-[length:200%_200%] transition-all duration-300">
+          {/* Shimmer gradient underline */}
+          <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-blue-accent/20 via-purple-accent/20 to-emerald-accent/20" />
+          {/* Beating pulse ring */}
+          <span className="pointer-events-none absolute -inset-2 rounded-full border border-blue-accent/30 animate-pulse" />
+          <span className="relative z-10 inline-flex items-center gap-1 bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-[shine_2.5s_linear_infinite]">
+            <svg className="h-3 w-3 text-blue-accent animate-bounce" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
             Try me
           </span>
         </button>
