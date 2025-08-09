@@ -57,11 +57,13 @@ export const FeedbackModal = () => {
           <span>Feedback</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg w-[92vw] rounded-[28px] border border-border/40 bg-card shadow-2xl">
+      <DialogContent className="max-w-lg w-[92vw] rounded-[28px] border border-white/30 dark:border-white/10 bg-white/90 dark:bg-transparent dark:dark-surface shadow-ambient backdrop-blur-xl">
         <DialogHeader>
           <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">We'd love your feedback</DialogTitle>
-          <p className="text-sm text-muted-foreground">
-            Prefer email? Write to <span className="font-semibold">feedback@exight.in</span>. If you're too lazy to open your mailbox, use this box.
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Prefer email? Write to <a href="mailto:feedback@exight.in" className="text-blue-accent hover:underline font-semibold">feedback@exight.in</a>.
+            <br/>
+            If you're too lazy to open your mailbox, use this box.
           </p>
         </DialogHeader>
 
@@ -72,8 +74,8 @@ export const FeedbackModal = () => {
               <Input
                 value={form.name || ""}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder="Jane Doe"
-                className="mt-1"
+                placeholder=""
+                className="mt-1 rounded-3xl"
               />
             </div>
             <div>
@@ -82,8 +84,8 @@ export const FeedbackModal = () => {
                 type="email"
                 value={form.email || ""}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                placeholder="you@example.com"
-                className="mt-1"
+                placeholder=""
+                className="mt-1 rounded-3xl"
               />
             </div>
           </div>
@@ -94,16 +96,16 @@ export const FeedbackModal = () => {
               value={form.message}
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               placeholder="Tell us what's great, what's annoying, or what you'd love to see next."
-              className="mt-1 min-h-[120px]"
+              className="mt-1 min-h-[120px] rounded-3xl"
               required
             />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-full">
               Cancel
             </Button>
-            <Button type="submit" disabled={submitting} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+            <Button type="submit" disabled={submitting} className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-ambient">
               {submitting ? "Sending…" : "Submit"}
             </Button>
           </div>
