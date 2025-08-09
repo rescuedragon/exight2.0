@@ -1,3 +1,11 @@
+\n## 2025-08-09 – UI updates
+- Kept `InfoBar` cards at their current compact size.
+- Converted the following popups to true full-screen overlays (fixed inset-0, no rounded corners/shadows; background scroll locked):
+  - `MonthlyExpensesModal`
+  - `YearlyProjectionModal`
+  - `ActiveExpensesModal`
+  - `LoansDetailModal` (used by Total Loaned / Amount Received / People)
+- Greeting now uses the first name from the authenticated user; falls back to stored `userName`.
 # Exight App - Development Info Log
 
 ## Project Overview

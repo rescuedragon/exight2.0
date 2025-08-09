@@ -768,6 +768,28 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Load user's first name for greeting
+  useEffect(() => {
+    const loadUserName = async () => {
+      // Prefer server user first; fallback to local demoName
+      try {
+        const currentUser = await apiService.getCurrentUser?.();
+        if (currentUser && (currentUser.firstName || currentUser.email)) {
+          const first = currentUser.firstName || (currentUser.email?.split('@')[0] ?? 'User');
+          setUserName(first);
+          return;
+        }
+      } catch {}
+      const stored = localStorage.getItem('userName');
+      if (stored) {
+        // If a full name is stored, use just the first token
+        const first = stored.trim().split(/\s+/)[0];
+        setUserName(first || 'User');
+      }
+    };
+    loadUserName();
+  }, []);
+
   // Load data from server (if token present)
   useEffect(() => {
     const loadFromServer = async () => {

@@ -314,6 +314,24 @@ class ApiService {
     }
   }
 
+  // Fetch the currently authenticated user's profile (normalized)
+  async getCurrentUser(): Promise<{
+    id?: string | number;
+    firstName?: string;
+    lastName?: string;
+    email?: string;
+  } | null> {
+    try {
+      const res = await this.request<any>('/auth/me');
+      // Support various backend response shapes
+      if (res && res.user) return res.user;
+      if (res && res.data) return res.data;
+      return res ?? null;
+    } catch (error) {
+      return null;
+    }
+  }
+
   // Health check
   async healthCheck(): Promise<boolean> {
     try {

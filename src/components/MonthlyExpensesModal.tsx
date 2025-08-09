@@ -162,8 +162,8 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
   const projectedRemaining = monthlyData.slice(effectiveCurrentMonth + 1).reduce((sum, d) => sum + d.amount, 0);
 
   return (
-    <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
-      <Card className="w-full h-full overflow-hidden premium-card border-0 shadow-premium animate-scale-in flex flex-col rounded-none">
+    <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up">
+      <Card className="w-full h-full rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-accent/5 to-purple-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-2xl">
@@ -184,7 +184,7 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
           </Button>
         </CardHeader>
         
-        <CardContent className="flex-1 overflow-y-auto p-8 max-h-[calc(100vh-120px)]">
+        <CardContent className="flex-1 overflow-y-auto p-8">
           <div className="space-y-8">
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

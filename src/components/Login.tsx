@@ -72,7 +72,13 @@ const Login = () => {
       if (isLogin) {
         // Login flow
         const response = await apiService.login({ email, password });
-        
+        // Persist friendly greeting data for dashboard fallback
+        try {
+          const first = response?.user?.firstName || email.split('@')[0] || 'User';
+          if (first) localStorage.setItem('userName', first);
+          if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
+          localStorage.setItem('lastLoginDate', new Date().toDateString());
+        } catch {}
         // Force full reload so App re-checks auth from token
         window.location.href = "/";
       } else {
@@ -83,7 +89,13 @@ const Login = () => {
           email, 
           password 
         });
-        
+        // Persist greeting info
+        try {
+          const first = response?.user?.firstName || firstName || email.split('@')[0] || 'User';
+          if (first) localStorage.setItem('userName', first);
+          if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
+          localStorage.setItem('lastLoginDate', new Date().toDateString());
+        } catch {}
         // Force full reload so App re-checks auth from token
         window.location.href = "/";
       }
