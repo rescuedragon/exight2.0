@@ -525,7 +525,6 @@ const TryMe = () => {
             Exight
           </span>
         </h1>
-        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full"></div>
         </div>
       )}
 
@@ -1829,7 +1828,6 @@ const Index = () => {
             Exight
           </span>
         </h1>
-        <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full"></div>
         </div>
       )}
 

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   X, 
   Wallet, 
@@ -196,12 +197,12 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                     <Edit3 className="h-4 w-4" />
                   </Button>
                   {editingExpense?.id === expense.id && (
-                    <div className="fixed inset-0 bg-background z-[10000] flex items-center justify-center p-4 animate-fade-in-up">
-                      <Card className="w-full max-w-lg overflow-hidden premium-card">
-                        <CardHeader>
-                          <CardTitle>Edit Expense</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-4 mt-4">
+                    <Dialog open={!!editingExpense} onOpenChange={(o) => { if (!o) setEditingExpense(null); }}>
+                      <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto premium-card">
+                        <DialogHeader>
+                          <DialogTitle className="text-2xl font-bold">Edit Expense</DialogTitle>
+                        </DialogHeader>
+                        <div className="space-y-4 mt-2">
                         <div className="space-y-2">
                           <Label htmlFor="name">Expense Name</Label>
                           <Input
@@ -290,9 +291,9 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                             Save Changes
                           </Button>
                         </div>
-                        </CardContent>
-                      </Card>
-                    </div>
+                        </div>
+                      </DialogContent>
+                    </Dialog>
                   )}
                   
                   <Button 
