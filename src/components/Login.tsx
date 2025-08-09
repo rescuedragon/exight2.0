@@ -1220,7 +1220,7 @@ const Login = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
-              className="grid grid-cols-2 gap-4 flex-1"
+              className="grid grid-cols-2 grid-rows-2 auto-rows-fr gap-4 flex-1 min-h-0"
             >
               {features.map((feature, index) => (
                 <motion.div
@@ -1229,9 +1229,9 @@ const Login = () => {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   transition={{ duration: 0.2, delay: 0.4 + index * 0.05 }}
                   whileHover={{ scale: 1.02, y: -2 }}
-                  className="group"
+                  className="group h-full"
                 >
-                  <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface min-h-[110px]">
+                  <Card className="h-full rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
                     <CardContent className="p-4 h-full flex items-center">
                       <div className="flex items-center gap-4">
                         <div className="relative h-10 w-10 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
