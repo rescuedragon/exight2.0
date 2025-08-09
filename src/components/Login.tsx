@@ -926,15 +926,13 @@ const Login = () => {
             // Force page reload to trigger authentication check
             window.location.href = "/";
           }}
-          className="group px-5 py-2.5 text-sm font-semibold text-muted-foreground/80 hover:text-transparent bg-white/30 hover:bg-white/50 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/40 dark:border-border/30 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
+          className="group relative h-9 px-6 rounded-full text-sm font-semibold text-muted-foreground/80 bg-white/30 dark:bg-background/20 border border-white/40 dark:border-border/30 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
         >
-          {/* Shimmer gradient underline */}
-          <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-blue-accent/20 via-purple-accent/20 to-emerald-accent/20" />
-          {/* Beating pulse ring */}
-          <span className="pointer-events-none absolute -inset-2 rounded-full border border-blue-accent/30 animate-pulse" />
-          <span className="relative z-10 inline-flex items-center gap-1 bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-[shine_2.5s_linear_infinite]">
-            <svg className="h-3 w-3 text-blue-accent animate-bounce" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
-            Try me
+          {/* left glow inside button */}
+          <span className="pointer-events-none absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-gradient-to-tr from-blue-accent/50 to-purple-accent/40 blur-[6px] opacity-70 group-hover:opacity-100 transition" />
+          <span className="relative z-10 grid grid-cols-[auto_auto] items-center gap-2">
+            <svg className="h-3 w-3 text-blue-accent" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
+            <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">Try me</span>
           </span>
         </button>
         <ThemeToggle />
@@ -996,7 +994,11 @@ const Login = () => {
                                 type="button"
                                 variant="outline"
                                 className="h-8 px-3 rounded-full dark:border-white/15 dark:hover:bg-white/10"
-                                onClick={() => setIsLogin(false)}
+                                onClick={() => {
+                                  setIsLogin(false);
+                                  setError("");
+                                  setBadCreds(false);
+                                }}
                               >
                                 Yes, register
                               </Button>
@@ -1009,7 +1011,7 @@ const Login = () => {
                                 placeholder="Retry password"
                                 className="h-10 rounded-2xl"
                               />
-                              <Button type="button" className="h-10 rounded-2xl btn-gradient text-white" onClick={handleRetryLogin}>
+                              <Button type="button" className="h-10 rounded-full px-5 bg-gradient-to-r from-blue-accent to-purple-accent text-white shadow-ambient hover:scale-105 transition-transform" onClick={handleRetryLogin}>
                                 Retry
                               </Button>
                             </div>
