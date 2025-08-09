@@ -286,9 +286,15 @@ class ApiService {
   }
 
   async register(userData: RegisterRequest): Promise<AuthResponse> {
+    // Backend expects { email, password, name }
+    const payload = {
+      email: userData.email,
+      password: userData.password,
+      name: `${userData.firstName ?? ''} ${userData.lastName ?? ''}`.trim() || userData.email.split('@')[0],
+    };
     const res = await this.request<any>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify(userData),
+      body: JSON.stringify(payload),
     });
 
     if (res && res.token) {
