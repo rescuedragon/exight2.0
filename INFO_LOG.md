@@ -841,3 +841,48 @@ tail -n 80 server.log
   - POST /api/loans → create { personName, amount, currency, dateGiven, description?, status?, totalReceived?, remainingAmount }
 - Next (UI wiring)
   - Replace local state calls with API calls on load/create; preserve in-memory lists but source from API. 
+
+---
+
+2025-08-09 — Product UX/Feature/Animation Recommendations (client app)
+
+- Design System
+  - Unify tokens in Tailwind: define spacing, radii, elevation, and semantic color scales; ensure all components in `src/components/ui/` consume tokens (no ad-hoc class strings on pages like `src/pages/Index.tsx`).
+  - Create a Figma-backed component inventory mapping 1:1 to `ui/*` to enforce consistency and speed.
+
+- Auth & Data (Server-first)
+  - Remove all `localStorage` persistence for auth and data in `App.tsx`, `Index.tsx`, and `Login.tsx`; store auth with HttpOnly Secure SameSite=Lax cookies and fetch user/session via `/auth/me` on app load.
+  - Use React Query for all server state (expenses, loans). Keep only ephemeral UI state locally. Add query keys and cache times.
+
+- Information Architecture
+  - Split `src/pages/Index.tsx` into routed sub-pages: `Dashboard`, `Expenses`, `Loans`, `Analytics`. Code-split with React.lazy. Keep `TryMe` as a separate route with server-fed demo data.
+  - Add empty states and skeletons for each section; remove page-level flicker with suspense fallbacks.
+
+- Features
+  - Expenses: categories/tags, budgets with monthly caps, alerts for upcoming deductions (calendar integration), CSV import/export.
+  - Loans: interest rate, amortization schedule, partial payments with receipt, write-off workflow and audit trail.
+  - Insights: monthly vs YTD trends, anomaly detection, savings goals, projections; downloadable reports (PDF/CSV).
+  - Collaboration: optional shared view per userId with RBAC (read-only vs editor).
+
+- Animations & Micro-interactions
+  - Standardize with Framer Motion primitives: page transitions, list item add/remove, modal enter/exit. Respect `prefers-reduced-motion`.
+  - Replace custom CSS transition blocks in `Index.tsx` with motion variants; keep durations <= 200–250ms; use elevation + subtle scale for emphasis.
+
+- Accessibility
+  - Ensure keyboard traversal, focus traps in dialogs, ARIA roles/labels on interactive elements, and visible focus rings (already partly present in `index.css`).
+
+- Performance
+  - Virtualize long lists; memoize heavy charts; defer non-critical JS; image/asset preloading; analyze with Lighthouse + React Profiler.
+
+- Security
+  - Set CSP, Referrer-Policy, and strict cookie flags; handle 401 globally with an interceptor; rotate/refresh tokens via silent refresh endpoint.
+
+- Observability
+  - Add client error reporting (e.g., Sentry) and structured logging for API failures; surface non-blocking toasts and retry.
+
+- Immediate next steps
+  1) Replace `localStorage` auth with cookie-based session and wire `/auth/me` in `App.tsx`.
+  2) Move expenses/loans reads/writes to React Query; remove `localStorage` mirrors in `Index.tsx`.
+  3) Extract `Dashboard` and enable route-level code-splitting; add skeletons.
+
+Notes: Aligns app with server-only data flow and better UX while keeping the subtle aesthetic.
