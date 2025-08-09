@@ -963,10 +963,10 @@ const Login = () => {
         <ThemeToggle />
       </div>
 
-      {/* Main Container */}
+              {/* Main Container */}
       <div className="relative z-40 flex min-h-screen items-stretch overflow-hidden pt-32 md:pt-36">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 min-h-[520px] flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
+        <div className="w-2/5 flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1166,7 +1166,7 @@ const Login = () => {
         </div>
 
         {/* Promotional Content - Right Side */}
-        <div ref={promoColumnRef} className="w-3/5 flex flex-col min-h-[520px] max-h-[520px] p-16 overflow-hidden max-lg:hidden">
+        <div ref={promoColumnRef} className="w-3/5 flex flex-col p-16 overflow-hidden max-lg:hidden">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
