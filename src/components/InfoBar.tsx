@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { IndianRupee } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { MonthlyExpensesModal } from "@/components/MonthlyExpensesModal";
@@ -12,27 +12,22 @@ interface InfoBarProps {
   isPrivacyMode?: boolean;
 }
 
-export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false }: InfoBarProps) => {
+const InfoBarComponent = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyMode = false }: InfoBarProps) => {
   const [showMonthlyModal, setShowMonthlyModal] = useState(false);
   const [showYearlyModal, setShowYearlyModal] = useState(false);
   const [showActiveModal, setShowActiveModal] = useState(false);
 
   // Filter to show only active expenses
-  console.log('InfoBar - All expenses:', expenses);
-  
-  const activeExpenses = expenses.filter(expense => {
-    if (expense.isRecurring) return true;
-    
-    // For non-recurring expenses, be more permissive
-    const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
-    const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
-    const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
-    const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
-    
-    return hasRemainingMonths || hasRemainingAmount || isNewExpense;
-  });
-  
-  console.log('InfoBar - Active expenses:', activeExpenses);
+  const activeExpenses = useMemo(() => (
+    expenses.filter(expense => {
+      if (expense.isRecurring) return true;
+      const hasRemainingMonths = !!(expense.remainingMonths && expense.remainingMonths > 0);
+      const hasRemainingAmount = !!(expense.remainingAmount && expense.remainingAmount > 0);
+      const hasTotalMonths = !!(expense.totalMonths && expense.totalMonths > 0);
+      const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
+      return hasRemainingMonths || hasRemainingAmount || isNewExpense;
+    })
+  ), [expenses]);
 
   const totalMonthly = activeExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 
@@ -181,3 +176,5 @@ export const InfoBar = ({ expenses, onUpdateExpense, onDeleteExpense, isPrivacyM
     </>
   );
 };
+
+export const InfoBar = memo(InfoBarComponent);
