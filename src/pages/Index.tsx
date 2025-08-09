@@ -432,15 +432,18 @@ const TryMe = () => {
 
   const handleLogout = async () => {
     try {
-      // Call logout API
+      // Call logout API (best effort)
       await apiService.logout();
     } catch (error) {
       console.error('Logout API call failed:', error);
     } finally {
-      // Clear auth token
+      // Clear only auth data
       localStorage.removeItem('authToken');
-      
-      // Force navigation to login page
+      localStorage.removeItem('lastLoginDate');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('demoMode');
+      // Force full page reload so App re-checks auth and route guards
       window.location.href = '/login';
     }
   };
