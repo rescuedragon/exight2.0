@@ -13,8 +13,8 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("demo@exight.com");
-  const [password, setPassword] = useState("demo123");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -1340,7 +1340,7 @@ const Login = () => {
                           placeholder="Confirm new password"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-3xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                           required
                         />
                       </div>
