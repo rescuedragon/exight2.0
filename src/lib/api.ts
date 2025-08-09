@@ -338,6 +338,21 @@ class ApiService {
     return (res && res.success !== undefined) ? res.data : res;
   }
 
+  async updateExpense(id: string | number, payload: any): Promise<any> {
+    const res = await this.request<any>(`/expenses/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    });
+    return (res && res.success !== undefined) ? res.data : res;
+  }
+
+  async deleteExpense(id: string | number): Promise<any> {
+    const res = await this.request<any>(`/expenses/${id}`, {
+      method: 'DELETE',
+    });
+    return (res && res.success !== undefined) ? res.data : res;
+  }
+
   // Loans API (server-backed)
   async listLoans(): Promise<any[]> {
     const res = await this.request<any[]>('/loans');

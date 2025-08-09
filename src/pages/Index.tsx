@@ -514,8 +514,8 @@ const TryMe = () => {
           <span 
             className="animate-gradient-x"
             style={{
-              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #10B981, #3B82F6)',
-              backgroundSize: '300% 300%',
+              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+              backgroundSize: '400% 400%',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
@@ -927,37 +927,63 @@ const Index = () => {
   };
 
   const handleDeleteExpense = async (expenseId: string) => {
-    setExpenses(prev => prev.filter(expense => expense.id !== expenseId));
-    await addActionLog(
-      'Deleted Expense',
-      'Expense removed from tracking',
-      'delete'
-    );
+    try {
+      await apiService.deleteExpense(expenseId);
+      const serverExpenses = await apiService.listExpenses();
+      const exps = (serverExpenses || []).map((e: any) => ({
+        id: String(e.id ?? e.id),
+        name: e.name,
+        amount: Number(e.amount),
+        currency: e.currency || 'INR',
+        type: e.type,
+        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
+        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
+        totalMonths: e.total_months ?? e.totalMonths ?? null,
+        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
+        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
+        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
+        partialPayments: [],
+      }));
+      setExpenses(exps);
+      await addActionLog('Deleted Expense', 'Expense removed from tracking', 'delete');
+    } catch (err) {
+      console.error('Failed to delete expense:', err);
+    }
   };
 
   const handleUpdateExpense = async (updatedExpense: Expense) => {
-    const originalExpense = expenses.find(e => e.id === updatedExpense.id);
-    
-    setExpenses(prev => prev.map(expense => 
-      expense.id === updatedExpense.id ? updatedExpense : expense
-    ));
-    
-    if (originalExpense) {
-      // Check if it's a partial payment
-      if (updatedExpense.partialPayments.length > originalExpense.partialPayments.length) {
-        const latestPayment = updatedExpense.partialPayments[updatedExpense.partialPayments.length - 1];
-        await addActionLog(
-          'Partial Payment Made',
-          `Paid ₹${latestPayment.amount} towards ${updatedExpense.name}`,
-          'payment'
-        );
-      } else {
-        await addActionLog(
-          'Updated Expense',
-          `Modified ${updatedExpense.name}`,
-          'update'
-        );
-      }
+    try {
+      const payload = {
+        name: updatedExpense.name,
+        amount: updatedExpense.amount,
+        currency: updatedExpense.currency || 'INR',
+        type: updatedExpense.type,
+        deductionDay: updatedExpense.deductionDay,
+        isRecurring: updatedExpense.isRecurring,
+        totalMonths: updatedExpense.totalMonths ?? null,
+        remainingMonths: updatedExpense.remainingMonths ?? null,
+        remainingAmount: updatedExpense.remainingAmount ?? null,
+      };
+      await apiService.updateExpense(updatedExpense.id, payload);
+      const serverExpenses = await apiService.listExpenses();
+      const exps = (serverExpenses || []).map((e: any) => ({
+        id: String(e.id ?? e.id),
+        name: e.name,
+        amount: Number(e.amount),
+        currency: e.currency || 'INR',
+        type: e.type,
+        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
+        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
+        totalMonths: e.total_months ?? e.totalMonths ?? null,
+        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
+        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
+        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
+        partialPayments: [],
+      }));
+      setExpenses(exps);
+      await addActionLog('Updated Expense', `Modified ${updatedExpense.name}`, 'update');
+    } catch (err) {
+      console.error('Failed to update expense:', err);
     }
   };
 
@@ -1741,8 +1767,8 @@ const Index = () => {
           <span 
             className="animate-gradient-x"
             style={{
-              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #10B981, #3B82F6)',
-              backgroundSize: '300% 300%',
+              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+              backgroundSize: '400% 400%',
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               color: 'transparent',
