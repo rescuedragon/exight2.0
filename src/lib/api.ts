@@ -1,5 +1,8 @@
 // Mock authentication system - no backend required
-const API_BASE_URL = 'http://13.60.70.116/api'; // Fallback URL (not used in mock mode)
+// Prefer same-origin API to avoid CORS/mixed-content in production
+const API_BASE_URL = (typeof window !== 'undefined'
+  ? `${window.location.origin.replace(/\/$/, '')}/api`
+  : 'http://13.60.70.116/api');
 
 export interface LoginRequest {
   email: string;
