@@ -926,12 +926,11 @@ const Login = () => {
             // Force page reload to trigger authentication check
             window.location.href = "/";
           }}
-          className="group relative h-9 px-6 rounded-full text-sm font-semibold text-muted-foreground/80 bg-white/30 dark:bg-background/20 border border-white/40 dark:border-border/30 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
+          className="group relative h-9 px-7 rounded-full text-sm font-semibold text-muted-foreground/80 bg-white/30 dark:bg-background/20 border border-white/40 dark:border-border/30 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
         >
-          {/* left glow inside button */}
-          <span className="pointer-events-none absolute left-1 top-1/2 -translate-y-1/2 h-6 w-6 rounded-full bg-gradient-to-tr from-blue-accent/50 to-purple-accent/40 blur-[6px] opacity-70 group-hover:opacity-100 transition" />
-          <span className="relative z-10 grid grid-cols-[auto_auto] items-center gap-2">
-            <svg className="h-3 w-3 text-blue-accent" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
+          <span className="shine-overlay pointer-events-none" />
+          <span className="relative z-10 inline-flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-blue-accent shadow-[0_0_18px_rgba(59,130,246,.6)]" />
             <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">Try me</span>
           </span>
         </button>
@@ -939,9 +938,9 @@ const Login = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-40 flex min-h-screen">
+      <div className="relative z-40 flex min-h-screen items-center">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex flex-col justify-start items-center pt-48 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-36">
+        <div className="w-2/5 flex flex-col justify-center items-center py-24 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-32">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1192,17 +1191,15 @@ const Login = () => {
                   whileHover={{ scale: 1.02, y: -2 }}
                   className="group h-32"
                 >
-                  <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl overflow-hidden h-full">
-                    <CardContent className="p-6 h-full flex flex-col justify-center">
-                      <div className="flex items-center gap-4">
-                        <motion.div
-                          className="p-3 rounded-2xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-105 transition-transform duration-200 flex-shrink-0"
-                          whileHover={{ rotate: 2 }}
-                        >
-                          {feature.icon}
-                        </motion.div>
+                  <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
+                    <CardContent className="p-6 h-full flex items-center">
+                      <div className="flex items-center gap-5">
+                        <div className="relative h-12 w-12 rounded-2xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/40 dark:border-white/15 shadow-ambient">
+                          <div className="absolute inset-0 rounded-2xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -6px 18px rgba(0,0,0,.12)'}} />
+                          <div className="relative text-blue-accent/90">{feature.icon}</div>
+                        </div>
                         <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-foreground text-base mb-1">{feature.title}</h3>
+                          <h3 className="font-bold text-foreground text-base mb-1 tracking-tight">{feature.title}</h3>
                           <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                         </div>
                       </div>

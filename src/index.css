@@ -190,6 +190,28 @@ body[data-modal-open="true"] *::-webkit-scrollbar {
   }
 }
 
+/* Shimmer sweep for subtle button highlight */
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.shine-overlay {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.shine-overlay::after {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+  transform: translateX(-100%);
+  animation: shine 2.2s linear infinite;
+  filter: blur(6px);
+}
+
 /* Scroll-based fade transitions - Optimized */
 .scroll-fade {
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;
