@@ -133,7 +133,12 @@ export const DetailedView = ({ expenses, onClose }: DetailedViewProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up">
+    <div
+      className="fixed inset-0 bg-background z-[9999] flex items-center justify-center p-4 animate-fade-in-up"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Detailed monthly expense view"
+    >
         <Card className="w-full h-full overflow-hidden premium-card border-0 shadow-premium rounded-none animate-scale-in flex flex-col">
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-blue-accent/5 to-purple-accent/5 border-b border-border/20">
           <div className="flex items-center gap-3">

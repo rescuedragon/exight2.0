@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
+import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-import { InfoBar } from "@/components/InfoBar";
-import { ExpenseDashboard } from "@/components/ExpenseDashboard";
-import { LoansDashboard } from "@/components/LoansDashboard";
-import { DetailedView } from "@/components/DetailedView";
+const InfoBar = React.lazy(() => import("@/components/InfoBar").then(m => ({ default: m.InfoBar })));
+const ExpenseDashboard = React.lazy(() => import("@/components/ExpenseDashboard").then(m => ({ default: m.ExpenseDashboard })));
+const LoansDashboard = React.lazy(() => import("@/components/LoansDashboard").then(m => ({ default: m.LoansDashboard })));
+const DetailedView = React.lazy(() => import("@/components/DetailedView").then(m => ({ default: m.DetailedView })));
 import { MonthlyExpensesModal } from "@/components/MonthlyExpensesModal";
 import { ActiveExpensesModal } from "@/components/ActiveExpensesModal";
 import { ExpenseHistory } from "@/components/ExpenseHistory";
-import { LoanDetailedView } from "@/components/LoanDetailedView";
-import { AddExpenseModal } from "@/components/AddExpenseModal";
-import { AddLoanModal } from "@/components/AddLoanModal";
+const LoanDetailedView = React.lazy(() => import("@/components/LoanDetailedView").then(m => ({ default: m.LoanDetailedView })));
+const AddExpenseModal = React.lazy(() => import("@/components/AddExpenseModal").then(m => ({ default: m.AddExpenseModal })));
+const AddLoanModal = React.lazy(() => import("@/components/AddLoanModal").then(m => ({ default: m.AddLoanModal })));
 import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useModal } from "@/contexts/ModalContext";
@@ -39,7 +40,7 @@ import {
 } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { Loan } from "@/types/loan";
-import { LoansInfoBar } from "@/components/LoansInfoBar";
+const LoansInfoBar = React.lazy(() => import("@/components/LoansInfoBar").then(m => ({ default: m.LoansInfoBar })));
 
 // Try Me Component with hardcoded demo data
 const TryMe = () => {
@@ -395,6 +396,12 @@ const TryMe = () => {
   const [userName, setUserName] = useState<string>('Demo User');
   const [shimmerKey, setShimmerKey] = useState(0);
 
+  // Motion variants for tab panels (visual only)
+  const tabVariants = {
+    active: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.2, ease: 'easeOut' } },
+    inactive: { opacity: 0, x: 16, scale: 0.995, transition: { duration: 0.2, ease: 'easeOut' } },
+  } as const;
+
   // Handle tab switching with shimmer animation
   const handleTabSwitch = (tab: string) => {
     setActiveTab(tab);
@@ -511,19 +518,7 @@ const TryMe = () => {
           style={{ opacity: scrollOpacity }}
         >
         <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-          <span 
-            className="animate-gradient-x"
-            style={{
-              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
-              backgroundSize: '400% 400%',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              WebkitTextFillColor: 'transparent'
-            }}
-          >
-            Exight
-          </span>
+          <span className="gradient-text animate-gradient-x">Exight</span>
         </h1>
         </div>
       )}
@@ -562,7 +557,7 @@ const TryMe = () => {
           </div>
 
           {/* Center - Tab Buttons */}
-          <div className="flex justify-center flex-1">
+          <div className="flex justify-center flex-1" role="tablist" aria-label="Primary sections">
             <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
                 onClick={() => setActiveTab('expenses')}
@@ -571,6 +566,10 @@ const TryMe = () => {
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
+                role="tab"
+                aria-selected={activeTab === 'expenses'}
+                aria-controls="panel-expenses"
+                id="tab-expenses"
               >
                 <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
                 Expenses
@@ -582,6 +581,10 @@ const TryMe = () => {
                     ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
+                role="tab"
+                aria-selected={activeTab === 'loans'}
+                aria-controls="panel-loans"
+                id="tab-loans"
               >
                 <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
                 Loans
@@ -590,14 +593,16 @@ const TryMe = () => {
           </div>
 
           {/* Right side - Action Buttons */}
-          <div className="flex items-center gap-4 flex-1 justify-end">
+            <div className="flex items-center gap-4 flex-1 justify-end" aria-label="Quick actions">
             {/* Privacy Toggle - Just Eye Icon */}
             <Button
               variant="ghost"
               size="icon"
               onClick={() => setIsPrivacyMode(!isPrivacyMode)}
               className="h-10 w-10 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
-              title={isPrivacyMode ? "Show Data" : "Hide Data"}
+                title={isPrivacyMode ? "Show Data" : "Hide Data"}
+                aria-pressed={isPrivacyMode}
+                aria-label={isPrivacyMode ? "Enable data visibility" : "Enable privacy mode"}
             >
               {isPrivacyMode ? (
                 <EyeOff className="h-5 w-5" />
@@ -612,6 +617,8 @@ const TryMe = () => {
               size="lg" 
               className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
               onClick={() => setShowDetailedView(true)}
+              aria-haspopup="dialog"
+              aria-controls={activeTab === 'expenses' ? 'panel-expenses' : 'panel-loans'}
             >
               <BarChart3 className="h-5 w-5" />
               Analytics
@@ -619,11 +626,13 @@ const TryMe = () => {
 
             {/* Add Entry Button */}
             <div>
-              {activeTab === 'expenses' ? (
-                <AddExpenseModal onAddExpense={handleAddExpense} />
-              ) : (
-                <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
-              )}
+              <Suspense fallback={<div className="h-10 w-28 rounded-full bg-muted animate-pulse" />}>
+                {activeTab === 'expenses' ? (
+                  <AddExpenseModal onAddExpense={handleAddExpense} />
+                ) : (
+                  <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
+                )}
+              </Suspense>
             </div>
             
 
@@ -636,53 +645,80 @@ const TryMe = () => {
 
             {/* Tab Content */}
             <div className="relative">
-                <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                <motion.div
+                  key="expenses-tab"
+                  id="panel-expenses"
+                  role="tabpanel"
+                  aria-labelledby="tab-expenses"
+                  className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}
+                  variants={tabVariants}
+                  animate={activeTab === 'expenses' ? 'active' : 'inactive'}
+                  data-allow-motion
+                >
                 <div className="space-y-6">
                   {/* Info Bar */}
-                  <InfoBar 
-                    expenses={expenses} 
-                    onUpdateExpense={handleUpdateExpense} 
-                    onDeleteExpense={handleDeleteExpense} 
-                    isPrivacyMode={isPrivacyMode} 
-                  />
+                  <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
+                    <InfoBar 
+                      expenses={expenses} 
+                      onUpdateExpense={handleUpdateExpense} 
+                      onDeleteExpense={handleDeleteExpense} 
+                      isPrivacyMode={isPrivacyMode} 
+                    />
+                  </Suspense>
 
                   {/* Dashboard */}
                   <div>
-                    <ExpenseDashboard 
-                      expenses={expenses} 
-                      onUpdateExpense={handleUpdateExpense}
-                      isPrivacyMode={isPrivacyMode}
-                    />
+                    <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
+                      <ExpenseDashboard 
+                        expenses={expenses} 
+                        onUpdateExpense={handleUpdateExpense}
+                        isPrivacyMode={isPrivacyMode}
+                      />
+                    </Suspense>
                   </div>
                 </div>
-              </div>
+                </motion.div>
+              
 
-                              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <motion.div
+                key="loans-tab"
+                id="panel-loans"
+                role="tabpanel"
+                aria-labelledby="tab-loans"
+                className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}
+                variants={tabVariants}
+                animate={activeTab === 'loans' ? 'active' : 'inactive'}
+                data-allow-motion
+              >
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
-                  <LoansInfoBar 
-                    loans={loans} 
-                    onUpdateLoan={handleUpdateLoan} 
-                    isPrivacyMode={isPrivacyMode} 
-                  />
+                  <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
+                    <LoansInfoBar 
+                      loans={loans} 
+                      onUpdateLoan={handleUpdateLoan} 
+                      isPrivacyMode={isPrivacyMode} 
+                    />
+                  </Suspense>
 
                   {/* Loans Dashboard */}
                   <div>
-                    <LoansDashboard 
-                      loans={loans} 
-                      onUpdateLoan={handleUpdateLoan}
-                      isPrivacyMode={isPrivacyMode}
-                    />
+                    <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
+                      <LoansDashboard 
+                        loans={loans} 
+                        onUpdateLoan={handleUpdateLoan}
+                        isPrivacyMode={isPrivacyMode}
+                      />
+                    </Suspense>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </div>
         </div>
 
         {/* Detailed View Modal */}
         {showDetailedView && (
-          <>
+          <Suspense fallback={<div className="fixed inset-0 z-[9998] grid place-items-center"><div className="h-24 w-24 rounded-full bg-muted animate-pulse" /></div>}>
             {activeTab === 'expenses' ? (
               <DetailedView 
                 expenses={expenses} 
@@ -695,7 +731,7 @@ const TryMe = () => {
                 onUpdateLoan={handleUpdateLoan}
               />
             )}
-          </>
+          </Suspense>
         )}
       </div>
     </div>

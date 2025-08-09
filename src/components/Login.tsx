@@ -518,7 +518,7 @@ const Login = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative" role="main" aria-label="Authentication">
       {/* Brand - Top Left */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
@@ -527,32 +527,10 @@ const Login = () => {
         className="fixed top-6 left-6 z-30 space-y-2"
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
-          <span 
-            className="animate-gradient-x"
-            style={{
-              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
-              backgroundSize: '400% 400%',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              WebkitTextFillColor: 'transparent'
-            }}
-          >
-            Exight
-          </span>
+          <span className="gradient-text animate-gradient-x">Exight</span>
         </h1>
         <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
-        <p 
-          className="text-xl md:text-2xl font-bold animate-fade-in-up stagger-3 tracking-wide animate-gradient-x"
-          style={{
-            background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
-            backgroundSize: '400% 400%',
-            backgroundClip: 'text',
-            WebkitBackgroundClip: 'text',
-            color: 'transparent',
-            WebkitTextFillColor: 'transparent'
-          }}
-        >
+        <p className="text-xl md:text-2xl font-bold animate-fade-in-up stagger-3 tracking-wide gradient-text animate-gradient-x">
           Insights for your expenses.
         </p>
       </motion.div>

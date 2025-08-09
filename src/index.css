@@ -209,6 +209,16 @@ body {
   overflow-x: hidden;
 }
 
+/* Respect reduced motion preferences globally (no functional change) */
+@media (prefers-reduced-motion: reduce) {
+  *:not([data-allow-motion]) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 /* Enhanced focus states */
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-blue-accent/20 focus:ring-offset-2 dark:focus:ring-offset-gray-900;

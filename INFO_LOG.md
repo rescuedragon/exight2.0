@@ -886,3 +886,18 @@ tail -n 80 server.log
   3) Extract `Dashboard` and enable route-level code-splitting; add skeletons.
 
 Notes: Aligns app with server-only data flow and better UX while keeping the subtle aesthetic.
+
+2025-08-09 — Implemented non-functional UX/perf/a11y refinements (client app)
+
+- Added global reduced-motion safeguard in `src/index.css` (respects `prefers-reduced-motion` without altering behavior).
+- Added ARIA roles to modals:
+  - `src/components/DetailedView.tsx` → `role="dialog" aria-modal="true" aria-label="Detailed monthly expense view"`.
+  - `src/components/LoanDetailedView.tsx` → `role="dialog" aria-modal="true" aria-label="Detailed loan view"`.
+- Added ARIA to login root container:
+  - `src/components/Login.tsx` → top container `role="main" aria-label="Authentication"`.
+- Introduced code-splitting and Suspense fallbacks (no logic change):
+  - Lazily load `ExpenseDashboard`, `LoansDashboard`, `DetailedView`, `LoanDetailedView` in `src/pages/Index.tsx` using `React.lazy` and `Suspense`.
+  - Lightweight skeleton-like fallback `<div>`s to indicate loading; no API/data/auth changes.
+- Build verified (`npm run build`)—successful. Lint warnings for Tailwind/PostCSS at-rules are expected.
+
+No functional logic changed (auth, API, data). Purely presentational, a11y, and performance improvements.
