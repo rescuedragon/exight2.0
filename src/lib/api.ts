@@ -222,7 +222,7 @@ class ApiService {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  ): Promise<any> {
     const url = `${API_BASE_URL}${endpoint}`;
     const token = this.getToken();
 
@@ -246,7 +246,7 @@ class ApiService {
       }
 
       console.log(`API call successful:`, data);
-      return data;
+      return data; // may be {token,user} or {success,data}
     } catch (error) {
       console.error('API request failed:', error);
       throw error;
@@ -255,31 +255,40 @@ class ApiService {
 
   // Authentication methods
   async login(credentials: LoginRequest): Promise<AuthResponse> {
-    const response = await this.request<AuthResponse>('/auth/login', {
+    const res = await this.request<any>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
 
-    if (response.success && response.data) {
-      this.setToken(response.data.token);
-      return response.data;
+    // Normalize backend response shape
+    if (res && res.token) {
+      this.setToken(res.token);
+      return res as AuthResponse;
+    }
+    if (res && res.success && res.data) {
+      this.setToken(res.data.token);
+      return res.data as AuthResponse;
     }
 
-    throw new Error(response.message || 'Login failed');
+    throw new Error((res && (res.message || res.error)) || 'Login failed');
   }
 
   async register(userData: RegisterRequest): Promise<AuthResponse> {
-    const response = await this.request<AuthResponse>('/auth/register', {
+    const res = await this.request<any>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(userData),
     });
 
-    if (response.success && response.data) {
-      this.setToken(response.data.token);
-      return response.data;
+    if (res && res.token) {
+      this.setToken(res.token);
+      return res as AuthResponse;
+    }
+    if (res && res.success && res.data) {
+      this.setToken(res.data.token);
+      return res.data as AuthResponse;
     }
 
-    throw new Error(response.message || 'Registration failed');
+    throw new Error((res && (res.message || res.error)) || 'Registration failed');
   }
 
   async logout(): Promise<void> {
@@ -297,9 +306,11 @@ class ApiService {
   async checkAuth(): Promise<boolean> {
     try {
       const response = await this.request('/auth/me');
-      return response.success;
+      if (response && response.success !== undefined) return !!response.success;
+      // If backend has no /auth/me, fall back to token
+      return !!this.getToken();
     } catch (error) {
-      return false;
+      return !!this.getToken();
     }
   }
 
