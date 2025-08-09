@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
-const InfoBar = React.lazy(() => import("@/components/InfoBar").then(m => ({ default: m.InfoBar })));
-const ExpenseDashboard = React.lazy(() => import("@/components/ExpenseDashboard").then(m => ({ default: m.ExpenseDashboard })));
-const LoansDashboard = React.lazy(() => import("@/components/LoansDashboard").then(m => ({ default: m.LoansDashboard })));
-const DetailedView = React.lazy(() => import("@/components/DetailedView").then(m => ({ default: m.DetailedView })));
+import { InfoBar } from "@/components/InfoBar";
+import { ExpenseDashboard } from "@/components/ExpenseDashboard";
+import { LoansDashboard } from "@/components/LoansDashboard";
+import { DetailedView } from "@/components/DetailedView";
 import { MonthlyExpensesModal } from "@/components/MonthlyExpensesModal";
 import { ActiveExpensesModal } from "@/components/ActiveExpensesModal";
 import { ExpenseHistory } from "@/components/ExpenseHistory";
-const LoanDetailedView = React.lazy(() => import("@/components/LoanDetailedView").then(m => ({ default: m.LoanDetailedView })));
-const AddExpenseModal = React.lazy(() => import("@/components/AddExpenseModal").then(m => ({ default: m.AddExpenseModal })));
-const AddLoanModal = React.lazy(() => import("@/components/AddLoanModal").then(m => ({ default: m.AddLoanModal })));
+import { LoanDetailedView } from "@/components/LoanDetailedView";
+import { AddExpenseModal } from "@/components/AddExpenseModal";
+import { AddLoanModal } from "@/components/AddLoanModal";
 import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { useModal } from "@/contexts/ModalContext";
@@ -40,7 +40,7 @@ import {
 } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { Loan } from "@/types/loan";
-const LoansInfoBar = React.lazy(() => import("@/components/LoansInfoBar").then(m => ({ default: m.LoansInfoBar })));
+import { LoansInfoBar } from "@/components/LoansInfoBar";
 
 // Try Me Component with hardcoded demo data
 const TryMe = () => {
@@ -396,10 +396,10 @@ const TryMe = () => {
   const [userName, setUserName] = useState<string>('Demo User');
   const [shimmerKey, setShimmerKey] = useState(0);
 
-  // Motion variants for tab panels (visual only)
+  // Keep minimal motion to avoid interfering with panel mounting
   const tabVariants = {
-    active: { opacity: 1, x: 0, scale: 1, transition: { duration: 0.2, ease: 'easeOut' } },
-    inactive: { opacity: 0, x: 16, scale: 0.995, transition: { duration: 0.2, ease: 'easeOut' } },
+    active: { opacity: 1, x: 0 },
+    inactive: { opacity: 1, x: 0 },
   } as const;
 
   // Handle tab switching with shimmer animation
