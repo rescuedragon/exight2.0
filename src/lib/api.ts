@@ -323,6 +323,34 @@ class ApiService {
       return false;
     }
   }
+
+  // Expenses API (server-backed)
+  async listExpenses(): Promise<any[]> {
+    const res = await this.request<any[]>('/expenses');
+    return (res && res.success !== undefined) ? (res.data as any[]) : (res as any[]);
+  }
+
+  async createExpense(payload: any): Promise<any> {
+    const res = await this.request<any>('/expenses', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return (res && res.success !== undefined) ? res.data : res;
+  }
+
+  // Loans API (server-backed)
+  async listLoans(): Promise<any[]> {
+    const res = await this.request<any[]>('/loans');
+    return (res && res.success !== undefined) ? (res.data as any[]) : (res as any[]);
+  }
+
+  async createLoan(payload: any): Promise<any> {
+    const res = await this.request<any>('/loans', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    return (res && res.success !== undefined) ? res.data : res;
+  }
 }
 
 export const apiService = new ApiService(); 

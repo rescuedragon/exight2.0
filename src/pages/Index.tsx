@@ -511,7 +511,17 @@ const TryMe = () => {
           style={{ opacity: scrollOpacity }}
         >
         <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
+          <span 
+            className="animate-gradient-x"
+            style={{
+              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #10B981, #3B82F6)',
+              backgroundSize: '300% 300%',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             Exight
           </span>
         </h1>
@@ -758,79 +768,53 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Load data from localStorage on component mount
+  // Load data from server (if token present)
   useEffect(() => {
-    console.log("Loading data from localStorage...");
-    
-    // Check if user is in demo mode
-    const isDemoMode = localStorage.getItem('demoMode') === 'true';
-    const hasAuthToken = localStorage.getItem('authToken');
-    
-    console.log("Demo mode:", isDemoMode);
-    console.log("Has auth token:", !!hasAuthToken);
-    
-    // Load expenses from localStorage
-    const savedExpenses = localStorage.getItem('expenses');
-    console.log("Saved expenses:", savedExpenses);
-    
-    if (savedExpenses) {
-      const parsed = JSON.parse(savedExpenses);
-      console.log("Parsed expenses:", parsed.length, "entries");
-      const expensesWithDates = parsed.map((expense: any) => ({
-        ...expense,
-        createdAt: new Date(expense.createdAt),
-        partialPayments: expense.partialPayments?.map((payment: any) => ({
-          ...payment,
-          date: new Date(payment.date)
-        })) || []
-      }));
-      setExpenses(expensesWithDates);
-      console.log("Expenses loaded:", expensesWithDates.length);
-    } else {
-      // Only load demo data if in demo mode
-      if (isDemoMode) {
-        console.log("No expenses found in localStorage, loading demo data for demo mode...");
-        testLoadDemoData();
-      } else {
-        console.log("No expenses found in localStorage, starting with empty dashboard for new user");
-        setExpenses([]);
+    const loadFromServer = async () => {
+      try {
+        const token = localStorage.getItem('authToken');
+        if (!token) return;
+        const [serverExpenses, serverLoans] = await Promise.all([
+          apiService.listExpenses(),
+          apiService.listLoans(),
+        ]);
+        // Basic normalization of dates
+        const exps = (serverExpenses || []).map((e: any) => ({
+          id: String(e.id ?? e.id),
+          name: e.name,
+          amount: Number(e.amount),
+          currency: e.currency || 'INR',
+          type: e.type,
+          deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
+          isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
+          totalMonths: e.total_months ?? e.totalMonths ?? null,
+          remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
+          remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
+          createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
+          partialPayments: [],
+        }));
+        setExpenses(exps);
+        const lns = (serverLoans || []).map((l: any) => ({
+          id: String(l.id ?? l.id),
+          personName: l.person_name ?? l.personName,
+          amount: Number(l.amount),
+          currency: l.currency || 'INR',
+          dateGiven: new Date(l.date_given ?? l.dateGiven ?? Date.now()),
+          description: l.description ?? undefined,
+          status: l.status ?? 'active',
+          totalReceived: Number(l.total_received ?? 0),
+          remainingAmount: Number(l.remaining_amount ?? 0),
+          writeOffDate: l.write_off_date ? new Date(l.write_off_date) : undefined,
+          createdAt: new Date(l.created_at ?? l.createdAt ?? Date.now()),
+          payments: [],
+        }));
+        setLoans(lns);
+        setHasData((exps.length + lns.length) > 0);
+      } catch (err) {
+        console.error('Failed to load server data:', err);
       }
-    }
-
-    // Load loans from localStorage
-    const savedLoans = localStorage.getItem('loans');
-    console.log("Saved loans:", savedLoans);
-    
-    if (savedLoans) {
-      const parsed = JSON.parse(savedLoans);
-      console.log("Parsed loans:", parsed.length, "entries");
-      const loansWithDates = parsed.map((loan: any) => ({
-        ...loan,
-        dateGiven: new Date(loan.dateGiven),
-        createdAt: new Date(loan.createdAt),
-        payments: loan.payments?.map((payment: any) => ({
-          ...payment,
-          date: new Date(payment.date)
-        })) || []
-      }));
-      setLoans(loansWithDates);
-      console.log("Loans loaded:", loansWithDates.length);
-    } else {
-      // Only load demo data if in demo mode AND we haven't already loaded it
-      if (isDemoMode && !savedExpenses) {
-        console.log("No loans found in localStorage, demo data will be loaded by testLoadDemoData");
-        // testLoadDemoData() already called above for expenses, so don't call it again
-      } else if (!isDemoMode) {
-        console.log("No loans found in localStorage, starting with empty loans for new user");
-        setLoans([]);
-      }
-    }
-
-    // Load user name
-    const savedUserName = localStorage.getItem('userName');
-    if (savedUserName) {
-      setUserName(savedUserName);
-    }
+    };
+    loadFromServer();
   }, []);
 
   // Load action logs from localStorage
@@ -874,46 +858,72 @@ const Index = () => {
   };
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
-    const newExpense: Expense = {
-      id: Date.now().toString(),
+    const payload = {
       name: newExpenseData.name,
       amount: newExpenseData.amount,
       currency: newExpenseData.currency || 'INR',
       type: newExpenseData.type,
       deductionDay: newExpenseData.deductionDay,
       isRecurring: newExpenseData.isRecurring,
-      totalMonths: newExpenseData.totalMonths || null,
-      remainingMonths: newExpenseData.remainingMonths || newExpenseData.totalMonths || null,
-      remainingAmount: newExpenseData.remainingAmount || (newExpenseData.totalMonths ? newExpenseData.amount * newExpenseData.totalMonths : null),
-      createdAt: new Date(),
-      partialPayments: []
+      totalMonths: newExpenseData.totalMonths ?? null,
+      remainingMonths: newExpenseData.remainingMonths ?? null,
+      remainingAmount: newExpenseData.remainingAmount ?? null,
     };
-    
-    setExpenses(prev => [...prev, newExpense]);
-    await addActionLog(
-      'Added New Expense',
-      `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`,
-      'add'
-    );
+    try {
+      const created = await apiService.createExpense(payload);
+      // Reload minimal list from server (or append normalized)
+      const serverExpenses = await apiService.listExpenses();
+      const exps = (serverExpenses || []).map((e: any) => ({
+        id: String(e.id ?? e.id),
+        name: e.name,
+        amount: Number(e.amount),
+        currency: e.currency || 'INR',
+        type: e.type,
+        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
+        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
+        totalMonths: e.total_months ?? e.totalMonths ?? null,
+        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
+        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
+        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
+        partialPayments: [],
+      }));
+      setExpenses(exps);
+      await addActionLog('Added New Expense', `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`, 'add');
+    } catch (err) {
+      console.error('Failed to create expense:', err);
+    }
   };
 
   const handleAddLoan = async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
-    const newLoan: Loan = {
-      id: Date.now().toString(),
-      ...newLoanData,
-      status: 'active',
-      totalReceived: 0,
-      remainingAmount: newLoanData.amount,
-      createdAt: new Date(),
-      payments: []
-    };
-    
-    setLoans(prev => [...prev, newLoan]);
-    await addActionLog(
-      'Added New Loan',
-      `Lent ₹${newLoanData.amount} to ${newLoanData.personName}`,
-      'add'
-    );
+    try {
+      const payload = {
+        personName: newLoanData.personName,
+        amount: newLoanData.amount,
+        currency: newLoanData.currency || 'INR',
+        dateGiven: newLoanData.dateGiven,
+        remainingAmount: newLoanData.amount,
+      };
+      const created = await apiService.createLoan(payload);
+      const serverLoans = await apiService.listLoans();
+      const lns = (serverLoans || []).map((l: any) => ({
+        id: String(l.id ?? l.id),
+        personName: l.person_name ?? l.personName,
+        amount: Number(l.amount),
+        currency: l.currency || 'INR',
+        dateGiven: new Date(l.date_given ?? l.dateGiven ?? Date.now()),
+        description: l.description ?? undefined,
+        status: l.status ?? 'active',
+        totalReceived: Number(l.total_received ?? 0),
+        remainingAmount: Number(l.remaining_amount ?? 0),
+        writeOffDate: l.write_off_date ? new Date(l.write_off_date) : undefined,
+        createdAt: new Date(l.created_at ?? l.createdAt ?? Date.now()),
+        payments: [],
+      }));
+      setLoans(lns);
+      await addActionLog('Added New Loan', `Created loan to ${newLoanData.personName} - ₹${newLoanData.amount}`, 'add');
+    } catch (err) {
+      console.error('Failed to create loan:', err);
+    }
   };
 
   const handleDeleteExpense = async (expenseId: string) => {
@@ -1728,7 +1738,17 @@ const Index = () => {
           style={{ opacity: scrollOpacity }}
         >
         <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">
+          <span 
+            className="animate-gradient-x"
+            style={{
+              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #10B981, #3B82F6)',
+              backgroundSize: '300% 300%',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             Exight
           </span>
         </h1>
