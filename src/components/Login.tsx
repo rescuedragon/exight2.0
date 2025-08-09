@@ -28,31 +28,44 @@ const Login = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Keep promo (right) column exactly the same height as the sign-in card
+  // Keep promo (right) column exactly the same height as the left column (including padding)
   const signInCardRef = useRef<HTMLDivElement | null>(null);
+  const leftColumnRef = useRef<HTMLDivElement | null>(null);
   const promoColumnRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    const syncHeights = () => {
-      const leftHeight = signInCardRef.current?.offsetHeight ?? 0;
-      if (promoColumnRef.current && leftHeight > 0) {
-        promoColumnRef.current.style.height = `${leftHeight}px`;
-      }
+    let animationFrameId = 0;
+
+    const measureAndApply = () => {
+      animationFrameId = window.requestAnimationFrame(() => {
+        const leftColumnHeight = leftColumnRef.current?.offsetHeight ?? 0;
+        if (promoColumnRef.current && leftColumnHeight > 0) {
+          // Lock the right column to the exact visual height of the left column
+          promoColumnRef.current.style.height = `${leftColumnHeight}px`;
+          promoColumnRef.current.style.minHeight = `${leftColumnHeight}px`;
+        }
+      });
     };
 
-    // Initial sync
-    syncHeights();
+    // Initial run after paint
+    measureAndApply();
+    // Run once more after a micro delay to account for font loading/animations
+    const timeoutId = window.setTimeout(measureAndApply, 50);
 
-    // Track size changes of the sign-in card and window resizes
-    const resizeObserver = new ResizeObserver(() => syncHeights());
-    if (signInCardRef.current) resizeObserver.observe(signInCardRef.current);
-    window.addEventListener("resize", syncHeights);
+    // Observe changes to the left column size and window resizes
+    const resizeObserver = new ResizeObserver(measureAndApply);
+    if (leftColumnRef.current) resizeObserver.observe(leftColumnRef.current);
+    window.addEventListener("resize", measureAndApply);
+    window.addEventListener("load", measureAndApply);
 
     return () => {
+      if (animationFrameId) window.cancelAnimationFrame(animationFrameId);
+      window.clearTimeout(timeoutId);
       resizeObserver.disconnect();
-      window.removeEventListener("resize", syncHeights);
+      window.removeEventListener("resize", measureAndApply);
+      window.removeEventListener("load", measureAndApply);
     };
-  }, [isLogin]);
+  }, []);
 
   // Optimized animation variants
   const containerVariants = {
@@ -966,7 +979,7 @@ const Login = () => {
               {/* Main Container */}
       <div className="relative z-40 flex min-h-screen items-stretch overflow-hidden pt-32 md:pt-36">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
+        <div ref={leftColumnRef} className="w-2/5 flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
