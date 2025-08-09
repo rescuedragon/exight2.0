@@ -423,6 +423,24 @@ class ApiService {
     });
     return (res && res.success !== undefined) ? res.data : res;
   }
+
+  // Feedback (server-backed; falls back to mailto if endpoint is missing)
+  async sendFeedback(payload: { name?: string; email?: string; message: string }): Promise<any> {
+    try {
+      const res = await this.request<any>('/feedback', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
+      return (res && res.success !== undefined) ? res.data : res;
+    } catch (e) {
+      const subject = encodeURIComponent('Exight Feedback');
+      const body = encodeURIComponent(`Name: ${payload.name || ''}\nEmail: ${payload.email || ''}\n\n${payload.message}`);
+      if (typeof window !== 'undefined') {
+        window.location.href = `mailto:feedback@exight.in?subject=${subject}&body=${body}`;
+      }
+      return { success: true } as any;
+    }
+  }
 }
 
 export const apiService = new ApiService(); 

@@ -11,6 +11,7 @@ import TestSpace from "./pages/TestSpace";
 import Login from "./components/Login";
 import { ModalProvider } from "@/contexts/ModalContext";
 import { apiService } from "@/lib/api";
+import { FeedbackModal } from "@/components/FeedbackModal";
 
 const queryClient = new QueryClient();
 
@@ -74,15 +75,7 @@ const App = () => {
         <ModalProvider>
           <Toaster />
           <Sonner />
-          {/* Feedback Email – fixed bottom-right */}
-          <a
-            href="mailto:feedback@exight.in?subject=Exight%20Feedback"
-            className="fixed bottom-6 right-6 z-50 inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold shadow-2xl border border-border/40 bg-gradient-to-r from-blue-500 to-purple-600 text-white hover:from-blue-600 hover:to-purple-700 transition-colors"
-            aria-label="Send feedback"
-          >
-            <Mail className="h-4 w-4" />
-            <span>Feedback</span>
-          </a>
+          <FeedbackModal />
           <Routes>
             <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
             <Route path="/" element={
