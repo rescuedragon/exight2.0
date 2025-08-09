@@ -238,11 +238,20 @@ class ApiService {
     try {
       console.log(`Making API call to: ${url}`);
       const response = await fetch(url, config);
-      const data = await response.json();
+
+      // Gracefully handle empty/204 responses
+      if (response.status === 204) {
+        return { success: true } as any;
+      }
+
+      // Some servers return empty body with 200/202
+      const rawText = await response.text();
+      const data = rawText ? JSON.parse(rawText) : { success: response.ok };
 
       if (!response.ok) {
-        console.error(`API Error: ${response.status} - ${data.message || 'Unknown error'}`);
-        throw new Error(data.message || `HTTP error! status: ${response.status}`);
+        const message = (data && (data.message || data.error)) || `HTTP error! status: ${response.status}`;
+        console.error(`API Error: ${response.status} - ${message}`);
+        throw new Error(message);
       }
 
       console.log(`API call successful:`, data);
