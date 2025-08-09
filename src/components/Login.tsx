@@ -73,8 +73,8 @@ const Login = () => {
         // Login flow
         const response = await apiService.login({ email, password });
         
-        // Navigate to dashboard
-        navigate("/");
+        // Force full reload so App re-checks auth from token
+        window.location.href = "/";
       } else {
         // Register flow
         const response = await apiService.register({ 
@@ -84,8 +84,8 @@ const Login = () => {
           password 
         });
         
-        // Navigate to dashboard
-        navigate("/");
+        // Force full reload so App re-checks auth from token
+        window.location.href = "/";
       }
     } catch (error: any) {
       console.error("Auth error:", error);
