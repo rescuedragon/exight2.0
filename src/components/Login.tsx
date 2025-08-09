@@ -515,12 +515,32 @@ const Login = () => {
         className="fixed top-6 left-6 z-30 space-y-2"
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
-          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x">
+          <span 
+            className="animate-gradient-x"
+            style={{
+              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+              backgroundSize: '400% 400%',
+              backgroundClip: 'text',
+              WebkitBackgroundClip: 'text',
+              color: 'transparent',
+              WebkitTextFillColor: 'transparent'
+            }}
+          >
             Exight
           </span>
         </h1>
         <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
-        <p className="text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-fade-in-up stagger-3 tracking-wide">
+        <p 
+          className="text-xl md:text-2xl font-bold animate-fade-in-up stagger-3 tracking-wide animate-gradient-x"
+          style={{
+            background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+            backgroundSize: '400% 400%',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            color: 'transparent',
+            WebkitTextFillColor: 'transparent'
+          }}
+        >
           Insights for your expenses.
         </p>
       </motion.div>
@@ -1080,7 +1100,17 @@ const Login = () => {
             >
               <h2 className="text-5xl font-bold text-foreground leading-tight">
                 Track your{" "}
-                <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%] font-extrabold">
+                <span 
+                  className="animate-gradient-x font-extrabold"
+                  style={{
+                    background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+                    backgroundSize: '400% 400%',
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    color: 'transparent',
+                    WebkitTextFillColor: 'transparent'
+                  }}
+                >
                   expenses & loans
                 </span>
               </h2>
@@ -1140,7 +1170,17 @@ const Login = () => {
           <div className="text-center space-y-4">
             <h2 className="text-3xl font-bold text-foreground leading-tight">
               Track your{" "}
-              <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">
+              <span 
+                className="animate-gradient-x"
+                style={{
+                  background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+                  backgroundSize: '400% 400%',
+                  backgroundClip: 'text',
+                  WebkitBackgroundClip: 'text',
+                  color: 'transparent',
+                  WebkitTextFillColor: 'transparent'
+                }}
+              >
                 expenses & loans
               </span>
             </h2>

@@ -678,3 +678,158 @@ Goal
   - Tail logs: `tail -n 120 server.log`
   - Quick DB test: `node -e "require('dotenv').config(); const {Pool}=require('pg'); const p=new Pool({connectionString:process.env.DATABASE_URL, ssl:{rejectUnauthorized:false}}); p.query('SELECT 1', (e,r)=>{console.log('DB_TEST:', e||r.rows); p.end();});"`
 - Test user (web): demo@exight.com / demo123 → should navigate to dashboard. 
+
+### [$(date)] - Server-side persistence for Expenses/Loans (EC2)
+- Goal: Persist all data in RDS; no browser/local storage used.
+- EC2 API path: `/var/www/html/exight-backend`
+- Actions to apply on EC2 (copy-paste blocks):
+```
+# 1) Auth middleware for JWT (middleware/auth.js)
+mkdir -p middleware
+cat > middleware/auth.js <<'EOF'
+const jwt = require('jsonwebtoken');
+module.exports = function auth(req, res, next) {
+  try {
+    const hdr = req.headers.authorization || '';
+    const token = hdr.startsWith('Bearer ') ? hdr.slice(7) : null;
+    if (!token) return res.status(401).json({ error: 'No token' });
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.userId = decoded.id;
+    next();
+  } catch (e) {
+    return res.status(401).json({ error: 'Invalid token' });
+  }
+};
+EOF
+
+# 2) Expenses routes (routes/expenses.js)
+cat > routes/expenses.js <<'EOF'
+const express = require('express');
+const pool = require('../config/database');
+const auth = require('../middleware/auth');
+const router = express.Router();
+
+// Get all expenses for current user
+router.get('/', auth, async (req, res) => {
+  try {
+    const r = await pool.query(
+      'SELECT * FROM expenses WHERE user_id = $1 ORDER BY created_at DESC',
+      [req.userId]
+    );
+    return res.json(r.rows);
+  } catch (e) { return res.status(500).json({ error: 'Server error' }); }
+});
+
+// Create expense
+router.post('/', auth, async (req, res) => {
+  try {
+    const {
+      name, amount, currency, type, deductionDay,
+      isRecurring, totalMonths, remainingMonths, remainingAmount
+    } = req.body;
+    const r = await pool.query(
+      `INSERT INTO expenses (
+        user_id, name, amount, currency, type, deduction_day, is_recurring,
+        total_months, remaining_months, remaining_amount
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+      RETURNING *`,
+      [req.userId, name, amount, currency, type, deductionDay, isRecurring,
+       totalMonths ?? null, remainingMonths ?? null, remainingAmount ?? null]
+    );
+    return res.status(201).json(r.rows[0]);
+  } catch (e) { return res.status(500).json({ error: 'Server error' }); }
+});
+
+module.exports = router;
+EOF
+
+# 3) Loans routes (routes/loans.js)
+cat > routes/loans.js <<'EOF'
+const express = require('express');
+const pool = require('../config/database');
+const auth = require('../middleware/auth');
+const router = express.Router();
+
+router.get('/', auth, async (req, res) => {
+  try {
+    const r = await pool.query(
+      'SELECT * FROM loans WHERE user_id = $1 ORDER BY created_at DESC',
+      [req.userId]
+    );
+    return res.json(r.rows);
+  } catch (e) { return res.status(500).json({ error: 'Server error' }); }
+});
+
+router.post('/', auth, async (req, res) => {
+  try {
+    const {
+      personName, amount, currency, dateGiven, description,
+      status = 'active', totalReceived = 0, remainingAmount
+    } = req.body;
+    const r = await pool.query(
+      `INSERT INTO loans (
+        user_id, person_name, amount, currency, date_given, status,
+        total_received, remaining_amount, description
+      ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+      RETURNING *`,
+      [req.userId, personName, amount, currency, dateGiven, status,
+       totalReceived, remainingAmount, description ?? null]
+    );
+    return res.status(201).json(r.rows[0]);
+  } catch (e) { return res.status(500).json({ error: 'Server error' }); }
+});
+
+module.exports = router;
+EOF
+
+# 4) Mount routes in server.js (idempotent)
+sed -i "/app.use('\/api\/auth'/a app.use('/api/expenses', require('./routes/expenses'));" server.js
+sed -i "/app.use('\/api\/expenses'/a app.use('/api/loans', require('./routes/loans'));" server.js
+
+# 5) Ensure tables exist (only if not already created)
+psql "host=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com port=5432 user=postgres dbname=postgres sslmode=require" <<SQL
+CREATE TABLE IF NOT EXISTS expenses (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(3) DEFAULT 'INR',
+  type VARCHAR(50) NOT NULL,
+  deduction_day INTEGER NOT NULL,
+  is_recurring BOOLEAN NOT NULL,
+  total_months INTEGER,
+  remaining_months INTEGER,
+  remaining_amount DECIMAL(10,2),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_expenses_user ON expenses(user_id);
+
+CREATE TABLE IF NOT EXISTS loans (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL,
+  person_name VARCHAR(255) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  currency VARCHAR(3) DEFAULT 'INR',
+  date_given TIMESTAMP NOT NULL,
+  status VARCHAR(20) DEFAULT 'active',
+  total_received DECIMAL(10,2) DEFAULT 0,
+  remaining_amount DECIMAL(10,2) NOT NULL,
+  description TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_loans_user ON loans(user_id);
+SQL
+
+# 6) Restart API
+PID=$(pgrep -f 'node.*server.js'); [ -n "$PID" ] && sudo kill -9 "$PID"
+nohup env NODE_TLS_REJECT_UNAUTHORIZED=0 node server.js > server.log 2>&1 & echo "NEW_PID=$!"
+sleep 2
+tail -n 80 server.log
+```
+- Endpoints (requires Authorization: Bearer <token>)
+  - GET /api/expenses → list
+  - POST /api/expenses → create { name, amount, currency, type, deductionDay, isRecurring, totalMonths?, remainingMonths?, remainingAmount? }
+  - GET /api/loans → list
+  - POST /api/loans → create { personName, amount, currency, dateGiven, description?, status?, totalReceived?, remainingAmount }
+- Next (UI wiring)
+  - Replace local state calls with API calls on load/create; preserve in-memory lists but source from API. 
