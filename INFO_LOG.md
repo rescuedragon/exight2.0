@@ -913,3 +913,9 @@ No functional logic changed (auth, API, data). Purely presentational, a11y, and 
 - Tightened spacing: hero wrapper `space-y-8` → `space-y-6`, grid gap `gap-6` → `gap-4`.
 - Shrunk cards: `min-h-[180px]` → `min-h-[120px]`, padding `p-6` → `p-5`, icon `h-12 w-12` → `h-10 w-10`.
 - Result: Right-side stack height aligns with the sign-in container without excessive whitespace.
+
+2025-08-09 — Hard-limit promo column height to match sign-in card
+
+- Right column container now `min-h-[520px] max-h-[520px] overflow-hidden` to mirror left card height.
+- Make promo wrapper fill column (`h-full flex flex-col`) and features grid consume remaining space (`flex-1`).
+- Further trimmed card size (`min-h-[110px]`, `p-4`).
