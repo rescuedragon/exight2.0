@@ -374,10 +374,20 @@ class ApiService {
   }
 
   async deleteExpense(id: string | number): Promise<any> {
-    const res = await this.request<any>(`/expenses/${id}`, {
-      method: 'DELETE',
-    });
-    return (res && res.success !== undefined) ? res.data : res;
+    // Try several common delete shapes to maximize compatibility
+    const numericId = typeof id === 'string' && /^\d+$/.test(id) ? Number(id) : id;
+    try {
+      const res = await this.request<any>(`/expenses/${numericId}`, { method: 'DELETE' });
+      return (res && res.success !== undefined) ? res.data : res;
+    } catch (e1) {
+      try {
+        const res2 = await this.request<any>(`/expenses?id=${numericId}`, { method: 'DELETE' });
+        return (res2 && res2.success !== undefined) ? res2.data : res2;
+      } catch (e2) {
+        const res3 = await this.request<any>(`/expenses/${numericId}/delete`, { method: 'POST' });
+        return (res3 && res3.success !== undefined) ? res3.data : res3;
+      }
+    }
   }
 
   // Loans API (server-backed)

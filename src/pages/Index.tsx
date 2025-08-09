@@ -922,9 +922,11 @@ const Index = () => {
     try {
       const created = await apiService.createExpense(payload);
       // Reload minimal list from server (or append normalized)
-      const serverExpenses = await apiService.listExpenses();
-      const exps = (serverExpenses || []).map((e: any) => ({
-        id: String(e.id ?? e.id),
+      let serverExpensesList = await apiService.listExpenses();
+      // Filter out any item matching the deleted id across possible id fields
+      serverExpensesList = (serverExpensesList || []).filter((e: any) => String(e.id ?? e.expense_id ?? e.expenseId) !== String(expenseId));
+      const exps = (serverExpensesList || []).map((e: any) => ({
+        id: String(e.id ?? e.expense_id ?? e.id),
         name: e.name,
         amount: Number(e.amount),
         currency: e.currency || 'INR',
