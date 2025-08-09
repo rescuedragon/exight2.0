@@ -57,7 +57,7 @@ export const FeedbackModal = () => {
           <span>Feedback</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg w-[92vw] rounded-[28px] border border-white/30 dark:border-white/10 bg-white/90 dark:bg-transparent dark:dark-surface shadow-ambient backdrop-blur-xl">
+      <DialogContent className="max-w-xl w-[96vw] rounded-[28px] border border-white/30 dark:border-white/10 bg-white/90 dark:bg-transparent dark:dark-surface shadow-ambient backdrop-blur-xl p-6">
         <DialogHeader>
           <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">We'd love your feedback</DialogTitle>
           <p className="text-sm text-muted-foreground leading-relaxed">

@@ -940,7 +940,7 @@ const Login = () => {
       {/* Main Container */}
       <div className="relative z-40 flex min-h-screen items-center">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex flex-col justify-center items-center py-24 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-32">
+        <div className="w-2/5 flex flex-col justify-center items-center p-16 max-lg:w-full max-lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1020,6 +1020,7 @@ const Login = () => {
                     </div>
                   )}
 
+                  {/* Fixed header area above; below content can expand without shifting tabs */}
                   <form onSubmit={handleSubmit} className="space-y-6 min-h-[280px]">
                     <AnimatePresence mode="wait">
                       {!isLogin && (
