@@ -961,7 +961,7 @@ const Login = () => {
                   {/* Tab Navigation */}
                   <div className="flex h-14 mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm">
                     <button
-                      onClick={() => setIsLogin(true)}
+                      onClick={() => { setIsLogin(true); setError(""); setBadCreds(false); }}
                       className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${isLogin
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
@@ -970,7 +970,7 @@ const Login = () => {
                       Sign In
                     </button>
                     <button
-                      onClick={() => setIsLogin(false)}
+                      onClick={() => { setIsLogin(false); setError(""); setBadCreds(false); }}
                       className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${!isLogin
                         ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"

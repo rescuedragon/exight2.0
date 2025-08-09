@@ -110,6 +110,9 @@ export const FeedbackModal = () => {
             </Button>
           </div>
         </form>
+
+        {/* Minimal success toast style inline (only text) */}
+        {/* We keep functionality unchanged; toast still shows from useToast. This is a visual backup if needed. */}
       </DialogContent>
     </Dialog>
   );
