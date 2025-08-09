@@ -901,3 +901,16 @@ Notes: Aligns app with server-only data flow and better UX while keeping the sub
 - Build verified (`npm run build`)—successful. Lint warnings for Tailwind/PostCSS at-rules are expected.
 
 No functional logic changed (auth, API, data). Purely presentational, a11y, and performance improvements.
+
+2025-08-09 — Server fix: Apache vhosts and Feedback API health (prod)
+
+- Replaced malformed Apache vhost configs on EC2:
+  - `/etc/httpd/conf.d/exight-le-ssl.conf` now uses `VirtualHost *:443`, serves SPA with rewrite to `/index.html`, proxies `/api` to `http://127.0.0.1:3000/api`, and sets HSTS.
+  - `/etc/httpd/conf.d/exight.conf` now uses `VirtualHost *:80` and 301-redirects all traffic to HTTPS.
+- Validated config: `apachectl -t` → Syntax OK; reloaded `httpd`.
+- Verified:
+  - `curl -I http://exight.in | head -n1` → HTTP/1.1 301 Moved Permanently
+  - `curl -s https://exight.in/api/health` → `{"ok": true}`
+- PM2 shows `feedback-api` healthy on `http://127.0.0.1:3000`. Email sending via Hostinger SMTP remains configured.
+
+Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable via reverse proxy; Feedback modal can POST to `/api/feedback` over HTTPS.
