@@ -19,6 +19,8 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [badCreds, setBadCreds] = useState(false);
+  const [retryPassword, setRetryPassword] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordStep, setForgotPasswordStep] = useState(1); // 1: Email & OTP, 2: New Password, 3: Success
   const [forgotEmail, setForgotEmail] = useState("");
@@ -67,6 +69,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setBadCreds(false);
 
     try {
       if (isLogin) {
@@ -101,7 +104,33 @@ const Login = () => {
       }
     } catch (error: any) {
       console.error("Auth error:", error);
-      setError(error.message || "An error occurred");
+      const msg = (error?.message || "An error occurred") as string;
+      if (isLogin && msg.toLowerCase().includes("invalid")) {
+        setBadCreds(true);
+        setError("Looks like your credentials are incorrect.");
+      } else {
+        setError(msg);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetryLogin = async () => {
+    if (!email || !retryPassword) return;
+    try {
+      setIsLoading(true);
+      const response = await apiService.login({ email, password: retryPassword });
+      try {
+        const first = response?.user?.firstName || email.split('@')[0] || 'User';
+        if (first) localStorage.setItem('userName', first);
+        if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
+        localStorage.setItem('lastLoginDate', new Date().toDateString());
+      } catch {}
+      window.location.href = "/";
+    } catch (err: any) {
+      setError("That password still doesn’t look right. You can try again or register instead.");
+      setBadCreds(true);
     } finally {
       setIsLoading(false);
     }
@@ -955,8 +984,38 @@ const Login = () => {
                   </div>
 
                   {error && (
-                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-2xl border border-red-200 dark:border-red-800/50 backdrop-blur-sm mb-4">
-                      <p className="text-sm text-red-600">{error}</p>
+                    <div className="p-4 text-sm bg-red-50/90 dark:bg-red-900/30 rounded-3xl border border-red-200 dark:border-red-800/40 backdrop-blur-sm mb-4">
+                      <p className="font-semibold text-red-700 dark:text-red-300">{error}</p>
+                      {badCreds && isLogin && (
+                        <div className="mt-3 grid grid-cols-1 gap-3">
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm text-muted-foreground">Do you want to register?</span>
+                            <Button
+                              type="button"
+                              variant="outline"
+                              className="h-8 px-3 rounded-full"
+                              onClick={() => {
+                                setIsLogin(false);
+                                // Keep email/password typed to help user
+                              }}
+                            >
+                              Yes, register
+                            </Button>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
+                            <Input
+                              type="password"
+                              value={retryPassword}
+                              onChange={(e) => setRetryPassword(e.target.value)}
+                              placeholder="Retry password"
+                              className="h-10 rounded-2xl"
+                            />
+                            <Button type="button" className="h-10 rounded-2xl" onClick={handleRetryLogin}>
+                              Retry
+                            </Button>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   )}
 
