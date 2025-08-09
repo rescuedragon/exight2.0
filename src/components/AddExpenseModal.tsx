@@ -118,12 +118,12 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           Add Expense
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto bg-background/98 backdrop-blur-md rounded-2xl shadow-2xl border border-border/40">
-        <DialogHeader className="pb-6">
-          <DialogTitle className="text-2xl font-bold text-foreground">Add New Expense</DialogTitle>
-          <p className="text-muted-foreground">Create an expense to track monthly payments</p>
+      <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
+        <DialogHeader className="pb-2">
+          <DialogTitle className="text-3xl font-extrabold gradient-text animate-gradient-x">Add New Expense</DialogTitle>
+          <p className="text-sm text-muted-foreground">Track monthly payments with optional remaining balance auto-calc</p>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-8 mt-6">
+        <form onSubmit={handleSubmit} className="space-y-8 mt-2">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Left Column */}
             <div className="space-y-6">
@@ -153,8 +153,8 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                 <div className="space-y-3">
                   <Label htmlFor="currency" className="text-sm font-semibold text-foreground">Currency</Label>
                   <Select value={formData.currency} onValueChange={(value: Currency) => setFormData(prev => ({ ...prev, currency: value }))}>
-                    <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
-                      <SelectValue />
+                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
+                      <SelectValue placeholder="Choose currency" />
                     </SelectTrigger>
                     <SelectContent className="premium-card border-border/40">
                       <SelectItem value="INR">INR (₹)</SelectItem>
