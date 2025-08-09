@@ -57,10 +57,10 @@ export const FeedbackModal = () => {
           <span>Feedback</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-xl w-[96vw] rounded-[28px] border border-white/30 dark:border-white/10 bg-white/90 dark:bg-transparent dark:dark-surface shadow-ambient backdrop-blur-xl p-6">
+      <DialogContent className="max-w-xl w-[96vw] rounded-[28px] border border-white/25 dark:border-white/10 bg-gradient-to-br from-white/95 to-white/85 dark:from-slate-900/70 dark:to-slate-900/60 shadow-ambient backdrop-blur-2xl p-7">
         <DialogHeader>
           <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">We'd love your feedback</DialogTitle>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground/90 leading-relaxed">
             Prefer email? Write to <a href="mailto:feedback@exight.in" className="text-blue-accent hover:underline font-semibold">feedback@exight.in</a>.
             <br/>
             If you're too lazy to open your mailbox, use this box.
@@ -96,7 +96,7 @@ export const FeedbackModal = () => {
               value={form.message}
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               placeholder="Tell us what's great, what's annoying, or what you'd love to see next."
-              className="mt-1 min-h-[120px] rounded-3xl"
+              className="mt-1 min-h-[140px] rounded-3xl bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60"
               required
             />
           </div>

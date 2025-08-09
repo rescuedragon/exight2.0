@@ -938,9 +938,9 @@ const Login = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-40 flex min-h-screen items-center">
+      <div className="relative z-40 flex min-h-[720px] items-start">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex flex-col justify-center items-center p-16 max-lg:w-full max-lg:p-8">
+        <div className="w-2/5 min-h-[720px] flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -956,10 +956,10 @@ const Login = () => {
               transition={{ duration: 0.25, delay: 0.15 }}
               className="flex justify-start"
             >
-              <div className="w-[450px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl">
-                <CardContent className="p-10">
+              <div className="w-[450px] min-h-[560px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl flex flex-col">
+                <CardContent className="p-10 flex-1 flex flex-col">
                   {/* Tab Navigation */}
-                  <div className="flex mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm">
+                  <div className="flex h-14 mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm">
                     <button
                       onClick={() => setIsLogin(true)}
                       className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${isLogin
