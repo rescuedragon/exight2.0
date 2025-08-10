@@ -28,43 +28,43 @@ const Login = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // Keep promo (right) column exactly the same height as the left column (including padding)
+  // Keep promo (right) column references
   const signInCardRef = useRef<HTMLDivElement | null>(null);
   const leftColumnRef = useRef<HTMLDivElement | null>(null);
   const promoColumnRef = useRef<HTMLDivElement | null>(null);
 
+  // Keep the right promo column visually equal in height to the left column
   useEffect(() => {
-    let animationFrameId = 0;
+    let rafId = 0;
+    let timeoutId = 0;
 
-    const measureAndApply = () => {
-      animationFrameId = window.requestAnimationFrame(() => {
-        const leftColumnHeight = leftColumnRef.current?.offsetHeight ?? 0;
-        if (promoColumnRef.current && leftColumnHeight > 0) {
-          // Lock the right column to the exact visual height of the left column
-          promoColumnRef.current.style.height = `${leftColumnHeight}px`;
-          promoColumnRef.current.style.minHeight = `${leftColumnHeight}px`;
+    const syncHeights = () => {
+      rafId = window.requestAnimationFrame(() => {
+        const leftHeight = leftColumnRef.current?.offsetHeight ?? 0;
+        const rightEl = promoColumnRef.current;
+        if (rightEl && leftHeight > 0) {
+          rightEl.style.height = `${leftHeight}px`;
+          rightEl.style.minHeight = `${leftHeight}px`;
         }
       });
     };
 
-    // Initial run after paint
-    measureAndApply();
-    // Run once more after a micro delay to account for font loading/animations
-    const timeoutId = window.setTimeout(measureAndApply, 50);
+    // Initial and a micro follow-up (fonts/animations)
+    syncHeights();
+    timeoutId = window.setTimeout(syncHeights, 50);
 
-    // Observe changes to the left column size and window resizes
-    const resizeObserver = new ResizeObserver(measureAndApply);
+    // React to left column size/viewport changes
+    const resizeObserver = new ResizeObserver(syncHeights);
     if (leftColumnRef.current) resizeObserver.observe(leftColumnRef.current);
-    // Resize is throttled via rAF inside measureAndApply
-    window.addEventListener("resize", measureAndApply, { passive: true } as any);
-    window.addEventListener("load", measureAndApply);
+    window.addEventListener('resize', syncHeights, { passive: true } as any);
+    window.addEventListener('load', syncHeights);
 
     return () => {
-      if (animationFrameId) window.cancelAnimationFrame(animationFrameId);
-      window.clearTimeout(timeoutId);
+      if (rafId) window.cancelAnimationFrame(rafId);
+      if (timeoutId) window.clearTimeout(timeoutId);
       resizeObserver.disconnect();
-      window.removeEventListener("resize", measureAndApply as any);
-      window.removeEventListener("load", measureAndApply);
+      window.removeEventListener('resize', syncHeights as any);
+      window.removeEventListener('load', syncHeights);
     };
   }, []);
 
@@ -1159,7 +1159,7 @@ const Login = () => {
         </div>
 
         {/* Promotional Content - Right Side */}
-        <div ref={promoColumnRef} className="w-3/5 flex flex-col p-16 overflow-hidden max-lg:hidden">
+        <div ref={promoColumnRef} className="w-3/5 flex flex-col p-8 overflow-hidden max-lg:hidden [&>*]:flex-1">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -1195,7 +1195,56 @@ const Login = () => {
               </p>
             </motion.div>
 
-            {/* Features removed */}
+            {/* Features - compact cards with reduced vertical padding */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">EMI & Expense Tracking</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Plan EMIs confidently with clear monthly views and gentle reminders</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                    <HandCoins className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">Loan Management</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Track money lent to friends with timelines, status, and payment history</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <BarChart3 className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">Smart Insights & Analytics</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Smart insights that highlight patterns and help you make better decisions</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-slate-500/10 text-slate-700 dark:text-slate-300 flex items-center justify-center">
+                    <Shield className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">Secure & Private</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Your financial data is private and protected—always</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -1231,7 +1280,56 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Features removed */}
+          {/* Features - mobile, stacked */}
+          <div className="grid grid-cols-1 gap-3">
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">EMI & Expense Tracking</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Plan EMIs confidently with clear monthly views and gentle reminders</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                  <HandCoins className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">Loan Management</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Track money lent to friends with timelines, status, and payment history</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <BarChart3 className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">Smart Insights & Analytics</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Smart insights that highlight patterns and help you make better decisions</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-slate-500/10 text-slate-700 dark:text-slate-300 flex items-center justify-center">
+                  <Shield className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">Secure & Private</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Your financial data is private and protected—always</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
 
