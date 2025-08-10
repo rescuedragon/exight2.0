@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,7 +30,7 @@ interface ExpenseDashboardProps {
   isPrivacyMode?: boolean;
 }
 
-export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
+const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [partialPayment, setPartialPayment] = useState('');
   const [isRecurringExpanded, setIsRecurringExpanded] = useState(true);
@@ -136,48 +136,20 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
   }
 
   // Filter to show only active expenses (not completed)
-  console.log('ExpenseDashboard - All expenses:', expenses);
-  console.log('ExpenseDashboard - Expenses length:', expenses.length);
-  
-  if (expenses.length === 0) {
-    console.log('ExpenseDashboard - No expenses found, showing empty state');
-  }
-  
-  const activeExpenses = expenses.filter(expense => {
-    console.log('ExpenseDashboard - Processing expense:', expense);
-    
-    // Show recurring expenses always
-    if (expense.isRecurring) {
-      console.log(`ExpenseDashboard - Expense ${expense.name}: isRecurring=true, showing`);
-      return true;
-    }
-
-    // For non-recurring expenses, be more permissive - show if:
-    // 1. Has remaining months > 0, OR
-    // 2. Has remaining amount > 0, OR  
-    // 3. Has total months (new expense), OR
-    // 4. No remaining data but has total months (newly created)
-    const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
-    const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
-    const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
-    const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
-    
-    const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
-
-    console.log(`ExpenseDashboard - Expense ${expense.name}: remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, totalMonths=${expense.totalMonths}, isActive=${isActive}`);
-    return isActive;
-  });
-  
-  console.log('ExpenseDashboard - Active expenses:', activeExpenses);
-  console.log('ExpenseDashboard - Active expenses length:', activeExpenses.length);
+  const activeExpenses = useMemo(() => (
+    expenses.filter(expense => {
+      if (expense.isRecurring) return true;
+      const hasRemainingMonths = !!(expense.remainingMonths && expense.remainingMonths > 0);
+      const hasRemainingAmount = !!(expense.remainingAmount && expense.remainingAmount > 0);
+      const hasTotalMonths = !!(expense.totalMonths && expense.totalMonths > 0);
+      const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
+      return hasRemainingMonths || hasRemainingAmount || isNewExpense;
+    })
+  ), [expenses]);
 
   // Separate recurring and fixed-time expenses
-  const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);
-  const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
-  
-  console.log('Active expenses:', activeExpenses);
-  console.log('Recurring expenses:', recurringExpenses);
-  console.log('Fixed time expenses:', fixedTimeExpenses);
+  const recurringExpenses = useMemo(() => activeExpenses.filter(expense => expense.isRecurring), [activeExpenses]);
+  const fixedTimeExpenses = useMemo(() => activeExpenses.filter(expense => !expense.isRecurring), [activeExpenses]);
 
   const renderExpenseCard = (expense: Expense, index: number) => {
     const progressPercentage = expense.isRecurring ? 0 : Math.round((((expense.totalMonths || 0) - (expense.remainingMonths || 0)) / (expense.totalMonths || 1)) * 100);
@@ -469,6 +441,8 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
     </div>
   );
 };
+
+export const ExpenseDashboard = memo(ExpenseDashboardComponent);
 
 function getOrdinalSuffix(day: number): string {
   const remainder = day % 10;

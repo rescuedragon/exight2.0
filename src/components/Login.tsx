@@ -55,14 +55,15 @@ const Login = () => {
     // Observe changes to the left column size and window resizes
     const resizeObserver = new ResizeObserver(measureAndApply);
     if (leftColumnRef.current) resizeObserver.observe(leftColumnRef.current);
-    window.addEventListener("resize", measureAndApply);
+    // Resize is throttled via rAF inside measureAndApply
+    window.addEventListener("resize", measureAndApply, { passive: true } as any);
     window.addEventListener("load", measureAndApply);
 
     return () => {
       if (animationFrameId) window.cancelAnimationFrame(animationFrameId);
       window.clearTimeout(timeoutId);
       resizeObserver.disconnect();
-      window.removeEventListener("resize", measureAndApply);
+      window.removeEventListener("resize", measureAndApply as any);
       window.removeEventListener("load", measureAndApply);
     };
   }, []);

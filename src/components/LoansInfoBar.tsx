@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { IndianRupee, HandCoins, TrendingDown, Users, Send } from "lucide-react";
 import { Loan } from "@/types/loan";
 import { LoansDetailModal } from "@/components/LoansDetailModal";
@@ -9,13 +9,13 @@ interface LoansInfoBarProps {
   isPrivacyMode?: boolean;
 }
 
-export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: LoansInfoBarProps) => {
+const LoansInfoBarComponent = ({ loans, onUpdateLoan, isPrivacyMode = false }: LoansInfoBarProps) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
 
-  const activeLoans = loans.filter(loan => loan.status === 'active');
-  const totalLoaned = loans.reduce((sum, loan) => sum + loan.amount, 0);
-  const totalReceived = loans.reduce((sum, loan) => sum + loan.totalReceived, 0);
-  const uniquePersons = new Set(loans.map(loan => loan.personName)).size;
+  const activeLoans = useMemo(() => loans.filter(loan => loan.status === 'active'), [loans]);
+  const totalLoaned = useMemo(() => loans.reduce((sum, loan) => sum + loan.amount, 0), [loans]);
+  const totalReceived = useMemo(() => loans.reduce((sum, loan) => sum + loan.totalReceived, 0), [loans]);
+  const uniquePersons = useMemo(() => new Set(loans.map(loan => loan.personName)).size, [loans]);
 
   const formatCurrency = (amount: number) => {
     if (isPrivacyMode) {
@@ -97,3 +97,5 @@ export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: Loa
     </>
   );
 };
+
+export const LoansInfoBar = memo(LoansInfoBarComponent);
