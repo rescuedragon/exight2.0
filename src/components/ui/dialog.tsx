@@ -29,7 +29,8 @@ const DialogOverlay = React.forwardRef<
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.type === 'attributes' && mutation.attributeName === 'data-state') {
-          const state = mutation.target.getAttribute('data-state');
+          const target = mutation.target as Element;
+          const state = target.getAttribute('data-state');
           handleStateChange(state || 'closed');
         }
       });
