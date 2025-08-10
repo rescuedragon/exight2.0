@@ -1216,77 +1216,7 @@ const Login = () => {
               </p>
             </motion.div>
 
-            {/* Features Grid (recreated, compact, no stretch) */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
-              className="grid grid-cols-2 gap-4 min-h-0 content-start"
-            >
-              {/* EMI & Expense Tracking */}
-              <div className="group">
-                <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
-                  <CardContent className="px-4 py-4 flex items-start gap-4">
-                    <div className="relative h-10 w-10 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
-                      <div className="absolute inset-0 rounded-3xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -8px 22px rgba(0,0,0,.14)'}} />
-                      <div className="relative text-blue-accent/90"><TrendingUp className="h-6 w-6"/></div>
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-foreground text-base mb-1 tracking-tight">EMI & Expense Tracking</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">Plan EMIs confidently with clear monthly views and gentle reminders</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Loan Management */}
-              <div className="group">
-                <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
-                  <CardContent className="px-4 py-4 flex items-start gap-4">
-                    <div className="relative h-10 w-10 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
-                      <div className="absolute inset-0 rounded-3xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -8px 22px rgba(0,0,0,.14)'}} />
-                      <div className="relative text-blue-accent/90"><HandCoins className="h-6 w-6"/></div>
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-foreground text-base mb-1 tracking-tight">Loan Management</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">Track money lent to friends with timelines, status, and payment history</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Smart Insights & Analytics */}
-              <div className="group">
-                <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
-                  <CardContent className="px-4 py-4 flex items-start gap-4">
-                    <div className="relative h-10 w-10 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
-                      <div className="absolute inset-0 rounded-3xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -8px 22px rgba(0,0,0,.14)'}} />
-                      <div className="relative text-blue-accent/90"><CreditCard className="h-6 w-6"/></div>
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-foreground text-base mb-1 tracking-tight">Smart Insights & Analytics</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">Smart insights that highlight patterns and help you make better decisions</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-
-              {/* Secure & Private */}
-              <div className="group">
-                <Card className="rounded-3xl overflow-hidden shadow-ambient border border-white/30 bg-white/80 dark:bg-transparent dark:dark-surface">
-                  <CardContent className="px-4 py-4 flex items-start gap-4">
-                    <div className="relative h-10 w-10 rounded-3xl bg-gradient-to-br from-blue-accent/18 via-purple-accent/14 to-emerald-accent/16 flex items-center justify-center border border-white/30 dark:border-white/10 shadow-ambient overflow-hidden">
-                      <div className="absolute inset-0 rounded-3xl" style={{boxShadow:'inset 0 1px 0 rgba(255,255,255,.35), inset 0 -8px 22px rgba(0,0,0,.14)'}} />
-                      <div className="relative text-blue-accent/90"><Shield className="h-6 w-6"/></div>
-                    </div>
-                    <div className="min-w-0">
-                      <h3 className="font-bold text-foreground text-base mb-1 tracking-tight">Secure & Private</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">Your financial data is private and protected—always</p>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            </motion.div>
+            {/* Features temporarily removed per request */}
           </motion.div>
         </div>
       </div>
