@@ -490,9 +490,33 @@ const TryMe = () => {
     setLoans(prev => [newLoan, ...prev]);
   };
 
-  // Local-only delete for TryMe/demo block above the main component
+  // Server-backed delete (optimistic UI, then re-sync from API)
   const handleDeleteExpense = async (expenseId: string) => {
+    // Optimistic removal for snappy UX
     setExpenses(prev => prev.filter(e => String(e.id) !== String(expenseId)));
+    try {
+      await apiService.deleteExpense(expenseId);
+      // Re-sync from server (source of truth)
+      const serverExpenses = await apiService.listExpenses();
+      const exps = (serverExpenses || []).map((e: any) => ({
+        id: String(e.id ?? e.id),
+        name: e.name,
+        amount: Number(e.amount),
+        currency: e.currency || 'INR',
+        type: e.type,
+        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
+        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
+        totalMonths: e.total_months ?? e.totalMonths ?? null,
+        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
+        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
+        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
+        partialPayments: [],
+      }));
+      setExpenses(exps);
+    } catch (err) {
+      console.error('Failed to delete expense:', err);
+      // Keep optimistic state; user can refresh to re-sync if needed
+    }
   };
 
   const handleUpdateExpense = async (updatedExpense: Expense) => {

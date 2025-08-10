@@ -247,9 +247,17 @@ class ApiService {
         return { success: true } as any;
       }
 
-      // Some servers return empty body with 200/202
+      // Some servers return HTML or empty body. Parse defensively.
       const rawText = await response.text();
-      const data = rawText ? JSON.parse(rawText) : { success: response.ok };
+      let data: any = { success: response.ok };
+      if (rawText && rawText.trim().length > 0) {
+        try {
+          data = JSON.parse(rawText);
+        } catch {
+          // Non‑JSON (e.g., HTML error page). Keep fallback shape.
+          data = { success: response.ok, message: rawText.slice(0, 200) };
+        }
+      }
 
       if (!response.ok) {
         const message = (data && (data.message || data.error)) || `HTTP error! status: ${response.status}`;
