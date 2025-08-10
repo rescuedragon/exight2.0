@@ -563,28 +563,7 @@ const Login = () => {
   };
 
 
-  const features = [
-    {
-      icon: <TrendingUp className="h-6 w-6" />,
-      title: "EMI & Expense Tracking",
-      description: "Plan EMIs confidently with clear monthly views and gentle reminders"
-    },
-    {
-      icon: <HandCoins className="h-6 w-6" />,
-      title: "Loan Management",
-      description: "Track money lent to friends with timelines, status, and payment history"
-    },
-    {
-      icon: <CreditCard className="h-6 w-6" />,
-      title: "Smart Insights & Analytics",
-      description: "Smart insights that highlight patterns and help you make better decisions"
-    },
-    {
-      icon: <Shield className="h-6 w-6" />,
-      title: "Secure & Private",
-      description: "Your financial data is private and protected—always"
-    }
-  ];
+  // Features section intentionally removed per request
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative" role="main" aria-label="Authentication">
@@ -1216,26 +1195,7 @@ const Login = () => {
               </p>
             </motion.div>
 
-            {/* Compact Features Grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.2, delay: 0.25 }}
-              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
-            >
-              {features.map((f, idx) => (
-                <div
-                  key={idx}
-                  className="rounded-2xl border border-white/30 dark:border-border/40 bg-white/60 dark:bg-background/60 p-3 flex items-start gap-3 min-h-[72px]"
-                >
-                  <div className="shrink-0 mt-0.5 text-blue-accent">{f.icon}</div>
-                  <div className="space-y-1 leading-tight">
-                    <div className="text-sm font-semibold text-foreground">{f.title}</div>
-                    <div className="text-xs text-muted-foreground">{f.description}</div>
-                  </div>
-                </div>
-              ))}
-            </motion.div>
+            {/* Features removed */}
           </motion.div>
         </div>
       </div>
@@ -1271,21 +1231,7 @@ const Login = () => {
             </p>
           </div>
 
-          {/* Compact Features Grid (Mobile) */}
-          <div className="grid grid-cols-1 gap-3">
-            {features.map((f, idx) => (
-              <div
-                key={idx}
-                className="rounded-2xl border border-white/30 dark:border-border/40 bg-white/70 dark:bg-background/60 p-3 flex items-start gap-3 min-h-[64px]"
-              >
-                <div className="shrink-0 mt-0.5 text-blue-accent">{f.icon}</div>
-                <div className="space-y-1 leading-tight">
-                  <div className="text-sm font-semibold text-foreground">{f.title}</div>
-                  <div className="text-xs text-muted-foreground">{f.description}</div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Features removed */}
         </motion.div>
       </div>
 
