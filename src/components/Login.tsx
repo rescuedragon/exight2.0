@@ -1253,33 +1253,7 @@ const Login = () => {
           </div>
 
           <div className="grid grid-cols-1 gap-4">
-            {features.slice(0, 2).map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.2, delay: 0.3 + index * 0.05 }}
-                whileHover={{ scale: 1.01 }}
-                className="group h-24"
-              >
-                <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl h-full">
-                  <CardContent className="p-4 h-full flex flex-col justify-center">
-                    <div className="flex items-center gap-3">
-                      <motion.div
-                        className="p-2 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent flex-shrink-0"
-                        whileHover={{ rotate: 2 }}
-                      >
-                        {feature.icon}
-                      </motion.div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-foreground dark:text-foreground/90">{feature.title}</h3>
-                        <p className="text-xs text-muted-foreground/90 dark:text-muted-foreground/80 mt-1">{feature.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            {/* features removed per request */}
           </div>
         </motion.div>
       </div>
