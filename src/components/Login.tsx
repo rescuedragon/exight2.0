@@ -1216,7 +1216,26 @@ const Login = () => {
               </p>
             </motion.div>
 
-            {/* Features temporarily removed per request */}
+            {/* Compact Features Grid */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.2, delay: 0.25 }}
+              className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+            >
+              {features.map((f, idx) => (
+                <div
+                  key={idx}
+                  className="rounded-2xl border border-white/30 dark:border-border/40 bg-white/60 dark:bg-background/60 p-3 flex items-start gap-3 min-h-[72px]"
+                >
+                  <div className="shrink-0 mt-0.5 text-blue-accent">{f.icon}</div>
+                  <div className="space-y-1 leading-tight">
+                    <div className="text-sm font-semibold text-foreground">{f.title}</div>
+                    <div className="text-xs text-muted-foreground">{f.description}</div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -1252,8 +1271,20 @@ const Login = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            {/* features removed per request */}
+          {/* Compact Features Grid (Mobile) */}
+          <div className="grid grid-cols-1 gap-3">
+            {features.map((f, idx) => (
+              <div
+                key={idx}
+                className="rounded-2xl border border-white/30 dark:border-border/40 bg-white/70 dark:bg-background/60 p-3 flex items-start gap-3 min-h-[64px]"
+              >
+                <div className="shrink-0 mt-0.5 text-blue-accent">{f.icon}</div>
+                <div className="space-y-1 leading-tight">
+                  <div className="text-sm font-semibold text-foreground">{f.title}</div>
+                  <div className="text-xs text-muted-foreground">{f.description}</div>
+                </div>
+              </div>
+            ))}
           </div>
         </motion.div>
       </div>
