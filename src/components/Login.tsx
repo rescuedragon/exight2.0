@@ -1221,7 +1221,7 @@ const Login = () => {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.3 }}
-              className="grid grid-cols-2 gap-4 min-h-0"
+              className="grid grid-cols-2 gap-4 min-h-0 content-start"
             >
               {features.map((feature, index) => (
                 <motion.div
