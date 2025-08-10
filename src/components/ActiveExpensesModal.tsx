@@ -167,13 +167,8 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
 
   const handleDeleteExpense = (expenseId: string) => {
     if (!onDeleteExpense) return;
-    setPendingDeleteId(expenseId);
-  };
-
-  const confirmDelete = () => {
-    if (!onDeleteExpense || !pendingDeleteId) return;
-    onDeleteExpense(pendingDeleteId);
-    setPendingDeleteId(null);
+    // Delete immediately for a snappier UX
+    onDeleteExpense(expenseId);
     toast({ title: "Success", description: "Expense deleted successfully!" });
   };
 
@@ -466,23 +461,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
         document.body
       )}
 
-      {createPortal(
-        <AlertDialog open={!!pendingDeleteId} onOpenChange={(o) => { if (!o) setPendingDeleteId(null); }}>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Delete expense?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. The expense will be permanently removed.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>,
-        document.body
-      )}
+      {/* Delete confirm dialog removed since delete is instant now */}
     </>
   );
 };
