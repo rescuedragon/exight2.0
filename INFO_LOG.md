@@ -902,6 +902,7 @@ Notes: Aligns app with server-only data flow and better UX while keeping the sub
 
 No functional logic changed (auth, API, data). Purely presentational, a11y, and performance improvements.
 
+<<<<<<< HEAD
 2025-08-09 — Server fix: Apache vhosts and Feedback API health (prod)
 
 - Replaced malformed Apache vhost configs on EC2:
@@ -914,3 +915,27 @@ No functional logic changed (auth, API, data). Purely presentational, a11y, and 
 - PM2 shows `feedback-api` healthy on `http://127.0.0.1:3000`. Email sending via Hostinger SMTP remains configured.
 
 Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable via reverse proxy; Feedback modal can POST to `/api/feedback` over HTTPS.
+=======
+2025-08-09 — Login hero height matched to sign-in card (client UI)
+
+- Adjusted the main container to use `items-stretch` so both columns align in height.
+- Removed the fixed height from the right promotional column and let it fill available height with `h-full`.
+- Files: `src/components/Login.tsx` (container class edits only). No behavior changes.
+
+2025-08-09 — Reduced promo feature card heights (client UI)
+
+- Tightened spacing: hero wrapper `space-y-8` → `space-y-6`, grid gap `gap-6` → `gap-4`.
+- Shrunk cards: `min-h-[180px]` → `min-h-[120px]`, padding `p-6` → `p-5`, icon `h-12 w-12` → `h-10 w-10`.
+- Result: Right-side stack height aligns with the sign-in container without excessive whitespace.
+
+2025-08-09 — Hard-limit promo column height to match sign-in card
+
+- Right column container now `min-h-[520px] max-h-[520px] overflow-hidden` to mirror left card height.
+- Make promo wrapper fill column (`h-full flex flex-col`) and features grid consume remaining space (`flex-1`).
+- Further trimmed card size (`min-h-[110px]`, `p-4`).
+
+2025-08-09 — Exact height sync using ResizeObserver (client UI)
+
+- Added `ResizeObserver` to measure the left sign-in card and set the right promo column height dynamically.
+- Refs: `signInCardRef` on the left card, `promoColumnRef` on the right column; effect recalculates on resize and `isLogin` changes.
+>>>>>>> dev

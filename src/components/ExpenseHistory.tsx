@@ -146,7 +146,8 @@ export const ExpenseHistory = ({ expenses, actionLogs, onClose }: ExpenseHistory
             </Table>
           )}
         </CardContent>
-      </Card>
-    </div>
+        </Card>
+      </DialogContent>
+    </Dialog>
   );
 };

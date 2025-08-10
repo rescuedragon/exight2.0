@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -29,7 +29,7 @@ interface LoansDashboardProps {
   isPrivacyMode?: boolean;
 }
 
-export const LoansDashboard = ({ loans, onUpdateLoan, isPrivacyMode = false }: LoansDashboardProps) => {
+const LoansDashboardComponent = ({ loans, onUpdateLoan, isPrivacyMode = false }: LoansDashboardProps) => {
   const [selectedLoan, setSelectedLoan] = useState<Loan | null>(null);
   const [paymentAmount, setPaymentAmount] = useState('');
   const [paymentDescription, setPaymentDescription] = useState('');
@@ -126,9 +126,9 @@ export const LoansDashboard = ({ loans, onUpdateLoan, isPrivacyMode = false }: L
     });
   };
 
-  const activeLoans = loans.filter(loan => loan.status === 'active');
-  const completedLoans = loans.filter(loan => loan.status === 'completed');
-  const writtenOffLoans = loans.filter(loan => loan.status === 'written-off');
+  const activeLoans = useMemo(() => loans.filter(loan => loan.status === 'active'), [loans]);
+  const completedLoans = useMemo(() => loans.filter(loan => loan.status === 'completed'), [loans]);
+  const writtenOffLoans = useMemo(() => loans.filter(loan => loan.status === 'written-off'), [loans]);
 
   const renderLoanCard = (loan: Loan, index: number) => {
     const progressPercentage = Math.round((loan.totalReceived / loan.amount) * 100);
@@ -414,3 +414,5 @@ export const LoansDashboard = ({ loans, onUpdateLoan, isPrivacyMode = false }: L
     </div>
   );
 };
+
+export const LoansDashboard = memo(LoansDashboardComponent);

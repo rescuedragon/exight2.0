@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,12 +19,54 @@ const Login = () => {
   const [lastName, setLastName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [badCreds, setBadCreds] = useState(false);
+  const [retryPassword, setRetryPassword] = useState("");
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotPasswordStep, setForgotPasswordStep] = useState(1); // 1: Email & OTP, 2: New Password, 3: Success
   const [forgotEmail, setForgotEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+
+  // Keep promo (right) column references
+  const signInCardRef = useRef<HTMLDivElement | null>(null);
+  const leftColumnRef = useRef<HTMLDivElement | null>(null);
+  const promoColumnRef = useRef<HTMLDivElement | null>(null);
+
+  // Keep the right promo column visually equal in height to the left column
+  useEffect(() => {
+    let rafId = 0;
+    let timeoutId = 0;
+
+    const syncHeights = () => {
+      rafId = window.requestAnimationFrame(() => {
+        const leftHeight = leftColumnRef.current?.offsetHeight ?? 0;
+        const rightEl = promoColumnRef.current;
+        if (rightEl && leftHeight > 0) {
+          rightEl.style.height = `${leftHeight}px`;
+          rightEl.style.minHeight = `${leftHeight}px`;
+        }
+      });
+    };
+
+    // Initial and a micro follow-up (fonts/animations)
+    syncHeights();
+    timeoutId = window.setTimeout(syncHeights, 50);
+
+    // React to left column size/viewport changes
+    const resizeObserver = new ResizeObserver(syncHeights);
+    if (leftColumnRef.current) resizeObserver.observe(leftColumnRef.current);
+    window.addEventListener('resize', syncHeights, { passive: true } as any);
+    window.addEventListener('load', syncHeights);
+
+    return () => {
+      if (rafId) window.cancelAnimationFrame(rafId);
+      if (timeoutId) window.clearTimeout(timeoutId);
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', syncHeights as any);
+      window.removeEventListener('load', syncHeights);
+    };
+  }, []);
 
   // Optimized animation variants
   const containerVariants = {
@@ -67,6 +109,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+    setBadCreds(false);
 
     try {
       if (isLogin) {
@@ -101,7 +144,33 @@ const Login = () => {
       }
     } catch (error: any) {
       console.error("Auth error:", error);
-      setError(error.message || "An error occurred");
+      const msg = (error?.message || "An error occurred") as string;
+      if (isLogin && msg.toLowerCase().includes("invalid")) {
+        setBadCreds(true);
+        setError("Looks like your credentials are incorrect.");
+      } else {
+        setError(msg);
+      }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRetryLogin = async () => {
+    if (!email || !retryPassword) return;
+    try {
+      setIsLoading(true);
+      const response = await apiService.login({ email, password: retryPassword });
+      try {
+        const first = response?.user?.firstName || email.split('@')[0] || 'User';
+        if (first) localStorage.setItem('userName', first);
+        if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
+        localStorage.setItem('lastLoginDate', new Date().toDateString());
+      } catch {}
+      window.location.href = "/";
+    } catch (err: any) {
+      setError("That password still doesn’t look right. You can try again or register instead.");
+      setBadCreds(true);
     } finally {
       setIsLoading(false);
     }
@@ -494,28 +563,7 @@ const Login = () => {
   };
 
 
-  const features = [
-    {
-      icon: <TrendingUp className="h-6 w-6" />,
-      title: "EMI & Expense Tracking",
-      description: "Track annual EMIs and visualize monthly spending patterns with smart reminders"
-    },
-    {
-      icon: <HandCoins className="h-6 w-6" />,
-      title: "Loan Management",
-      description: "Manage loans given to friends with person-wise history and payment tracking"
-    },
-    {
-      icon: <CreditCard className="h-6 w-6" />,
-      title: "Smart Insights & Analytics",
-      description: "AI-powered analysis of spending habits with detailed payment receipts"
-    },
-    {
-      icon: <Shield className="h-6 w-6" />,
-      title: "Secure & Private",
-      description: "Your financial data stays completely secure on your device"
-    }
-  ];
+  // Features section intentionally removed per request
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative" role="main" aria-label="Authentication">
@@ -897,24 +945,21 @@ const Login = () => {
             // Force page reload to trigger authentication check
             window.location.href = "/";
           }}
-          className="group px-5 py-2.5 text-sm font-semibold text-muted-foreground/80 hover:text-transparent bg-white/30 hover:bg-white/50 dark:bg-background/20 dark:hover:bg-background/40 backdrop-blur-sm border border-white/40 dark:border-border/30 rounded-full transition-all duration-300 hover:scale-110 hover:shadow-2xl relative overflow-hidden focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
+          className="group relative h-9 px-7 rounded-full text-sm font-semibold text-muted-foreground/80 bg-white/30 dark:bg-background/20 border border-white/40 dark:border-border/30 backdrop-blur-sm transition-all duration-300 hover:scale-110 hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-blue-accent/40"
         >
-          {/* Shimmer gradient underline */}
-          <span className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-gradient-to-r from-blue-accent/20 via-purple-accent/20 to-emerald-accent/20" />
-          {/* Beating pulse ring */}
-          <span className="pointer-events-none absolute -inset-2 rounded-full border border-blue-accent/30 animate-pulse" />
-          <span className="relative z-10 inline-flex items-center gap-1 bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-[shine_2.5s_linear_infinite]">
-            <svg className="h-3 w-3 text-blue-accent animate-bounce" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="3"/></svg>
-            Try me
+          <span className="shine-overlay pointer-events-none rounded-full overflow-hidden" />
+          <span className="relative z-10 inline-flex items-center gap-2">
+            <span className="h-2 w-2 rounded-full bg-blue-accent shadow-[0_0_18px_rgba(59,130,246,.6)]" />
+            <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent">Try me</span>
           </span>
         </button>
         <ThemeToggle />
       </div>
 
-      {/* Main Container */}
-      <div className="relative z-40 flex min-h-screen">
+              {/* Main Container */}
+      <div className="relative z-40 flex min-h-screen items-stretch overflow-hidden pt-32 md:pt-36">
         {/* Login Form - Left Side */}
-        <div className="w-2/5 flex flex-col justify-start items-center pt-48 p-16 max-lg:w-full max-lg:p-8 max-lg:pt-36">
+        <div ref={leftColumnRef} className="w-2/5 flex flex-col items-start p-16 max-lg:w-full max-lg:p-8">
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -930,23 +975,23 @@ const Login = () => {
               transition={{ duration: 0.25, delay: 0.15 }}
               className="flex justify-start"
             >
-              <div className="w-[450px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl">
-                <CardContent className="p-10">
+              <div ref={signInCardRef} className="w-[450px] min-h-[480px] rounded-3xl bg-white/80 dark:bg-background/60 backdrop-blur-xl border border-white/30 dark:border-border/40 shadow-2xl flex flex-col">
+                <CardContent className="p-10 flex-1 flex flex-col">
                   {/* Tab Navigation */}
-                  <div className="flex mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm">
+                  <div className="flex h-14 mb-8 bg-gradient-to-r from-muted/40 to-muted/20 dark:from-muted/20 dark:to-muted/10 rounded-3xl p-2 backdrop-blur-sm gap-2">
                     <button
-                      onClick={() => setIsLogin(true)}
-                      className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${isLogin
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
+                      onClick={() => { setIsLogin(true); setError(""); setBadCreds(false); }}
+                      className={`flex-1 h-12 flex items-center justify-center rounded-3xl text-base font-bold leading-none transition-all duration-300 ${isLogin
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
                         }`}
                     >
                       Sign In
                     </button>
                     <button
-                      onClick={() => setIsLogin(false)}
-                      className={`flex-1 py-3 px-8 rounded-3xl text-base font-bold transition-all duration-300 ${!isLogin
-                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl transform scale-105"
+                      onClick={() => { setIsLogin(false); setError(""); setBadCreds(false); }}
+                      className={`flex-1 h-12 flex items-center justify-center rounded-3xl text-base font-bold leading-none transition-all duration-300 ${!isLogin
+                        ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl"
                         : "text-muted-foreground hover:text-foreground hover:bg-white/30 dark:hover:bg-accent/40 hover:scale-102"
                         }`}
                     >
@@ -955,11 +1000,46 @@ const Login = () => {
                   </div>
 
                   {error && (
-                    <div className="p-3 text-sm text-red-600 dark:text-red-300 bg-red-50/80 dark:bg-red-900/30 rounded-2xl border border-red-200 dark:border-red-800/50 backdrop-blur-sm mb-4">
-                      <p className="text-sm text-red-600">{error}</p>
+                    <div className="relative overflow-hidden rounded-3xl border bg-white/90 dark:bg-transparent dark:dark-surface shadow-ambient p-4 mb-5">
+                      <div className="absolute inset-0 pointer-events-none opacity-70" style={{background:"radial-gradient(600px 120px at 10% -10%, rgba(99,102,241,.15), transparent 60%)"}}></div>
+                      <div className="relative">
+                        <p className="font-semibold text-red-700 dark:text-red-300 mb-2">{error}</p>
+                        {badCreds && isLogin && (
+                          <div className="mt-2 grid grid-cols-1 gap-3">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span className="text-sm text-muted-foreground">Do you want to register?</span>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="h-8 px-3 rounded-full dark:border-white/15 dark:hover:bg-white/10"
+                                onClick={() => {
+                                  setIsLogin(false);
+                                  setError("");
+                                  setBadCreds(false);
+                                }}
+                              >
+                                Yes, register
+                              </Button>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-2 items-center">
+                              <Input
+                                type="password"
+                                value={retryPassword}
+                                onChange={(e) => setRetryPassword(e.target.value)}
+                                placeholder="Retry password"
+                                className="h-10 rounded-3xl"
+                              />
+                              <Button type="button" className="h-10 rounded-full px-5 bg-gradient-to-r from-blue-accent to-purple-accent text-white shadow-ambient hover:scale-105 transition-transform" onClick={handleRetryLogin}>
+                                Retry
+                              </Button>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   )}
 
+                  {/* Fixed header area above; below content can expand without shifting tabs */}
                   <form onSubmit={handleSubmit} className="space-y-6 min-h-[280px]">
                     <AnimatePresence mode="wait">
                       {!isLogin && (
@@ -969,7 +1049,7 @@ const Login = () => {
                           animate={{ opacity: 1, height: "auto", marginBottom: 24 }}
                           exit={{ opacity: 0, height: 0, marginBottom: 0 }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
-                          style={{ overflow: "hidden" }}
+                          style={{}}
                         >
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
@@ -1079,12 +1159,12 @@ const Login = () => {
         </div>
 
         {/* Promotional Content - Right Side */}
-        <div className="w-3/5 flex items-center justify-center p-12 max-lg:hidden">
+        <div ref={promoColumnRef} className="w-3/5 flex flex-col p-8 overflow-hidden max-lg:hidden [&>*]:flex-1">
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.3, delay: 0.1 }}
-            className="max-w-2xl space-y-8"
+            className="max-w-2xl flex flex-col space-y-6"
           >
             {/* Hero Section */}
             <motion.div
@@ -1111,45 +1191,60 @@ const Login = () => {
               </h2>
 
               <p className="text-xl text-muted-foreground/90 dark:text-muted-foreground/80 max-w-lg mx-auto leading-relaxed">
-                Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.
+                Understand your spending, plan EMIs with clarity, and manage loans with ease—all in one calm, private place.
               </p>
             </motion.div>
 
-            {/* Features Grid */}
-            <motion.div
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.3 }}
-              className="grid grid-cols-2 gap-6"
-            >
-              {features.map((feature, index) => (
-                <motion.div
-                  key={feature.title}
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  transition={{ duration: 0.2, delay: 0.4 + index * 0.05 }}
-                  whileHover={{ scale: 1.02, y: -2 }}
-                  className="group h-32"
-                >
-                  <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl overflow-hidden h-full">
-                    <CardContent className="p-6 h-full flex flex-col justify-center">
-                      <div className="flex items-center gap-4">
-                        <motion.div
-                          className="p-3 rounded-2xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent group-hover:scale-105 transition-transform duration-200 flex-shrink-0"
-                          whileHover={{ rotate: 2 }}
-                        >
-                          {feature.icon}
-                        </motion.div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-bold text-foreground text-base mb-1">{feature.title}</h3>
-                          <p className="text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
-              ))}
-            </motion.div>
+            {/* Features - compact cards with reduced vertical padding */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                    <TrendingUp className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">EMI & Expense Tracking</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Plan EMIs confidently with clear monthly views and gentle reminders</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                    <HandCoins className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">Loan Management</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Track money lent to friends with timelines, status, and payment history</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                    <BarChart3 className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">Smart Insights & Analytics</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Smart insights that highlight patterns and help you make better decisions</p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/70 dark:bg-background/60 p-4">
+                <div className="flex items-start gap-3">
+                  <div className="h-9 w-9 rounded-xl bg-slate-500/10 text-slate-700 dark:text-slate-300 flex items-center justify-center">
+                    <Shield className="h-5 w-5" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-base font-semibold leading-tight">Secure & Private</h3>
+                    <p className="text-sm text-muted-foreground leading-snug">Your financial data is private and protected—always</p>
+                  </div>
+                </div>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
@@ -1185,34 +1280,55 @@ const Login = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            {features.slice(0, 2).map((feature, index) => (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ duration: 0.2, delay: 0.3 + index * 0.05 }}
-                whileHover={{ scale: 1.01 }}
-                className="group h-24"
-              >
-                <Card className="backdrop-blur-2xl bg-white/10 border-white/20 shadow-xl hover:shadow-2xl transition-all duration-300 rounded-3xl h-full">
-                  <CardContent className="p-4 h-full flex flex-col justify-center">
-                    <div className="flex items-center gap-3">
-                      <motion.div
-                        className="p-2 rounded-xl bg-gradient-to-br from-blue-accent/20 to-purple-accent/20 text-blue-accent flex-shrink-0"
-                        whileHover={{ rotate: 2 }}
-                      >
-                        {feature.icon}
-                      </motion.div>
-                      <div className="flex-1">
-                        <h3 className="font-semibold text-foreground dark:text-foreground/90">{feature.title}</h3>
-                        <p className="text-xs text-muted-foreground/90 dark:text-muted-foreground/80 mt-1">{feature.description}</p>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+          {/* Features - mobile, stacked */}
+          <div className="grid grid-cols-1 gap-3">
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-blue-500/10 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                  <TrendingUp className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">EMI & Expense Tracking</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Plan EMIs confidently with clear monthly views and gentle reminders</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                  <HandCoins className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">Loan Management</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Track money lent to friends with timelines, status, and payment history</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                  <BarChart3 className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">Smart Insights & Analytics</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Smart insights that highlight patterns and help you make better decisions</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border/40 dark:border-white/10 bg-white/80 dark:bg-background/70 p-4">
+              <div className="flex items-start gap-3">
+                <div className="h-8 w-8 rounded-lg bg-slate-500/10 text-slate-700 dark:text-slate-300 flex items-center justify-center">
+                  <Shield className="h-4 w-4" />
+                </div>
+                <div className="space-y-1">
+                  <h3 className="text-base font-semibold leading-tight">Secure & Private</h3>
+                  <p className="text-sm text-muted-foreground leading-snug">Your financial data is private and protected—always</p>
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>
@@ -1345,7 +1461,7 @@ const Login = () => {
                           placeholder="Confirm new password"
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
-                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-3xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
+                          className="py-4 px-4 text-base bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60 focus-visible:ring-4 focus-visible:ring-blue-accent/20 focus-visible:ring-offset-0 rounded-2xl focus:border-blue-accent/70 transition-all duration-300 font-medium"
                           required
                         />
                       </div>

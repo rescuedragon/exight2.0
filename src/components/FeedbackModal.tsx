@@ -32,7 +32,14 @@ export const FeedbackModal = () => {
         email: form.email?.trim() || undefined,
         message: form.message.trim(),
       });
-      toast({ title: "Thanks for the feedback!", description: "We received your message at feedback@exight.in" });
+      toast({
+        title: "Thanks for the feedback.",
+        description: (
+          <span className="inline-flex items-center gap-2">
+            <svg className="h-4 w-4 text-emerald-500 animate-pulse" viewBox="0 0 24 24" fill="currentColor"><path d="M2 12l6 6 14-14-2-2L8 14 4 10z"/></svg>
+          </span>
+        ) as unknown as string,
+      });
       setForm({ message: "" });
       setOpen(false);
     } catch (err: any) {
@@ -57,11 +64,13 @@ export const FeedbackModal = () => {
           <span>Feedback</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg w-[92vw] rounded-[28px] border border-border/40 bg-card shadow-2xl">
+      <DialogContent className="max-w-xl w-[96vw] rounded-[28px] border border-white/25 dark:border-white/10 bg-gradient-to-br from-white/95 to-white/85 dark:from-slate-900/70 dark:to-slate-900/60 shadow-ambient backdrop-blur-2xl p-7">
         <DialogHeader>
           <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">We'd love your feedback</DialogTitle>
-          <p className="text-sm text-muted-foreground">
-            Prefer email? Write to <span className="font-semibold">feedback@exight.in</span>. If you're too lazy to open your mailbox, use this box.
+          <p className="text-sm text-muted-foreground/90 leading-relaxed">
+            Prefer email? Write to <a href="mailto:feedback@exight.in" className="text-blue-accent hover:underline font-semibold">feedback@exight.in</a>.
+            <br/>
+            If you're too lazy to open your mailbox, use this box.
           </p>
         </DialogHeader>
 
@@ -72,8 +81,8 @@ export const FeedbackModal = () => {
               <Input
                 value={form.name || ""}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder="Jane Doe"
-                className="mt-1"
+                placeholder=""
+                className="mt-1 rounded-3xl"
               />
             </div>
             <div>
@@ -82,8 +91,8 @@ export const FeedbackModal = () => {
                 type="email"
                 value={form.email || ""}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                placeholder="you@example.com"
-                className="mt-1"
+                placeholder=""
+                className="mt-1 rounded-3xl"
               />
             </div>
           </div>
@@ -94,20 +103,23 @@ export const FeedbackModal = () => {
               value={form.message}
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               placeholder="Tell us what's great, what's annoying, or what you'd love to see next."
-              className="mt-1 min-h-[120px]"
+              className="mt-1 min-h-[140px] rounded-3xl bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60"
               required
             />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-full">
               Cancel
             </Button>
-            <Button type="submit" disabled={submitting} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
+            <Button type="submit" disabled={submitting} className="rounded-full bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-ambient">
               {submitting ? "Sending…" : "Submit"}
             </Button>
           </div>
         </form>
+
+        {/* Minimal success toast style inline (only text) */}
+        {/* We keep functionality unchanged; toast still shows from useToast. This is a visual backup if needed. */}
       </DialogContent>
     </Dialog>
   );

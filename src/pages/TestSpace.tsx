@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, cubicBezier } from "framer-motion";
 import { 
   Users, 
   Plus, 
@@ -159,7 +159,7 @@ const TestSpace = () => {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
+        ease: cubicBezier(0.2, 0.8, 0.2, 1)
       }
     }
   };

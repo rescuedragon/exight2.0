@@ -167,13 +167,8 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
 
   const handleDeleteExpense = (expenseId: string) => {
     if (!onDeleteExpense) return;
-    setPendingDeleteId(expenseId);
-  };
-
-  const confirmDelete = () => {
-    if (!onDeleteExpense || !pendingDeleteId) return;
-    onDeleteExpense(pendingDeleteId);
-    setPendingDeleteId(null);
+    // Delete immediately for a snappier UX
+    onDeleteExpense(expenseId);
     toast({ title: "Success", description: "Expense deleted successfully!" });
   };
 
@@ -385,98 +380,88 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     );
   };
 
-  return createPortal(
-    <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
-      <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
-        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
-          <div className="flex items-center gap-4">
-            <div className="p-3 bg-gradient-to-br from-purple-accent/20 to-purple-accent/10 rounded-2xl">
-              <Wallet className="h-6 w-6 text-purple-accent" />
-            </div>
-            <div>
-              <CardTitle className="text-3xl font-bold text-foreground">Expense Management</CardTitle>
-              <p className="text-muted-foreground font-medium">Manage your active and completed expenses</p>
-            </div>
-          </div>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="h-12 w-12 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors"
-          >
-            <X className="h-5 w-5" />
-          </Button>
-        </CardHeader>
-        
-        <CardContent className="flex-1 overflow-y-auto p-8">
-          <div className="space-y-8">
-            {/* Active Expenses */}
-            <div>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="p-2 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-xl">
-                  <AlertCircle className="h-5 w-5 text-blue-accent" />
+  return (
+    <>
+      {createPortal(
+        <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
+          <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
+            <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
+              <div className="flex items-center gap-4">
+                <div className="p-3 bg-gradient-to-br from-purple-accent/20 to-purple-accent/10 rounded-2xl">
+                  <Wallet className="h-6 w-6 text-purple-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-bold text-foreground">Active Expenses</h2>
-                  <p className="text-muted-foreground">{activeExpenses.length} active expense{activeExpenses.length !== 1 ? 's' : ''}</p>
+                  <CardTitle className="text-3xl font-bold text-foreground">Expense Management</CardTitle>
+                  <p className="text-muted-foreground font-medium">Manage your active and completed expenses</p>
                 </div>
               </div>
-              
-              {activeExpenses.length > 0 ? (
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                  {activeExpenses.map(expense => renderExpenseCard(expense, false))}
-                </div>
-              ) : (
-                <Card className="premium-card">
-                  <CardContent className="p-12 text-center">
-                    <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 inline-block">
-                      <Wallet className="h-12 w-12 text-blue-accent" />
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={onClose}
+                className="h-12 w-12 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </Button>
+            </CardHeader>
+            
+            <CardContent className="flex-1 overflow-y-auto p-8">
+              <div className="space-y-8">
+                {/* Active Expenses */}
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <div className="p-2 bg-gradient-to-br from-blue-accent/20 to-blue-accent/10 rounded-xl">
+                      <AlertCircle className="h-5 w-5 text-blue-accent" />
                     </div>
-                    <h3 className="text-xl font-bold text-foreground mb-2">No Active Expenses</h3>
-                    <p className="text-muted-foreground">All your expenses have been completed!</p>
-                  </CardContent>
-                </Card>
-              )}
-            </div>
-
-            {/* Completed Expenses */}
-            {completedExpenses.length > 0 && (
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="p-2 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-xl">
-                    <CheckCircle className="h-5 w-5 text-emerald-accent" />
+                    <div>
+                      <h2 className="text-2xl font-bold text-foreground">Active Expenses</h2>
+                      <p className="text-muted-foreground">{activeExpenses.length} active expense{activeExpenses.length !== 1 ? 's' : ''}</p>
+                    </div>
                   </div>
+                  
+                  {activeExpenses.length > 0 ? (
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                      {activeExpenses.map(expense => renderExpenseCard(expense, false))}
+                    </div>
+                  ) : (
+                    <Card className="premium-card">
+                      <CardContent className="p-12 text-center">
+                        <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 inline-block">
+                          <Wallet className="h-12 w-12 text-blue-accent" />
+                        </div>
+                        <h3 className="text-xl font-bold text-foreground mb-2">No Active Expenses</h3>
+                        <p className="text-muted-foreground">All your expenses have been completed!</p>
+                      </CardContent>
+                    </Card>
+                  )}
+                </div>
+
+                {/* Completed Expenses */}
+                {completedExpenses.length > 0 && (
                   <div>
-                    <h2 className="text-2xl font-bold text-foreground">Completed Expenses</h2>
-                    <p className="text-muted-foreground">{completedExpenses.length} completed expense{completedExpenses.length !== 1 ? 's' : ''}</p>
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="p-2 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-xl">
+                        <CheckCircle className="h-5 w-5 text-emerald-accent" />
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold text-foreground">Completed Expenses</h2>
+                        <p className="text-muted-foreground">{completedExpenses.length} completed expense{completedExpenses.length !== 1 ? 's' : ''}</p>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+                      {completedExpenses.map(expense => renderExpenseCard(expense, true))}
+                    </div>
                   </div>
-                </div>
-                
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                  {completedExpenses.map(expense => renderExpenseCard(expense, true))}
-                </div>
+                )}
               </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
+            </CardContent>
+          </Card>
+        </div>,
+        document.body
+      )}
 
-      {/* Delete confirmation dialog */}
-      <AlertDialog open={!!pendingDeleteId} onOpenChange={(o) => { if (!o) setPendingDeleteId(null); }}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Delete expense?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. The expense will be permanently removed.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={confirmDelete}>Delete</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
-    </div>,
-    document.body
+      {/* Delete confirm dialog removed since delete is instant now */}
+    </>
   );
 };
