@@ -81,14 +81,17 @@ We take the security of Exight 2.0 seriously. If you believe you have found a se
 ## Security Contacts
 
 ### Primary Security Contact
+
 - **Email**: [INSERT SECURITY EMAIL]
 - **Response Time**: 24-48 hours
 
 ### Backup Security Contact
+
 - **Email**: [INSERT BACKUP EMAIL]
 - **Response Time**: 48-72 hours
 
 ### Emergency Contact
+
 - **Email**: [INSERT EMERGENCY EMAIL]
 - **Response Time**: 4-8 hours (for critical issues)
 

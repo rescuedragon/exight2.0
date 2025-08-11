@@ -1,17 +1,34 @@
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Plus } from "lucide-react";
-import { Loan, Currency } from "@/types/loan";
-import { useToast } from "@/hooks/use-toast";
-import { useModal } from "@/contexts/ModalContext";
+import { useState, useEffect } from 'react';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Plus } from 'lucide-react';
+import { Loan, Currency } from '@/types/loan';
+import { useToast } from '@/hooks/use-toast';
+import { useModal } from '@/contexts/ModalContext';
 
 interface AddLoanModalProps {
-  onAddLoan: (loan: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => void;
+  onAddLoan: (
+    loan: Omit<
+      Loan,
+      'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'
+    >,
+  ) => void;
   existingPersons: string[];
 }
 
@@ -23,7 +40,7 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
     amount: '',
     currency: 'INR' as Currency,
     dateGiven: new Date().toISOString().split('T')[0],
-    description: ''
+    description: '',
   });
   const { toast } = useToast();
 
@@ -38,12 +55,12 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.personName || !formData.amount) {
       toast({
-        title: "Error",
-        description: "Please fill in all required fields",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Please fill in all required fields',
+        variant: 'destructive',
       });
       return;
     }
@@ -51,9 +68,9 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
     const amount = parseFloat(formData.amount);
     if (amount <= 0) {
       toast({
-        title: "Error",
-        description: "Amount must be greater than 0",
-        variant: "destructive"
+        title: 'Error',
+        description: 'Amount must be greater than 0',
+        variant: 'destructive',
       });
       return;
     }
@@ -63,7 +80,7 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
       amount,
       currency: formData.currency,
       dateGiven: new Date(formData.dateGiven),
-      description: formData.description.trim() || undefined
+      description: formData.description.trim() || undefined,
     };
 
     onAddLoan(loanData);
@@ -73,21 +90,21 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
       amount: '',
       currency: 'INR',
       dateGiven: new Date().toISOString().split('T')[0],
-      description: ''
+      description: '',
     });
-    
+
     setOpen(false);
     toast({
-      title: "Success",
-      description: "Loan entry added successfully!"
+      title: 'Success',
+      description: 'Loan entry added successfully!',
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button 
-          size="lg" 
+        <Button
+          size="lg"
           className="gap-3 rounded-full px-8 w-40 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102 backdrop-blur-sm"
           onClick={() => setOpen(true)}
         >
@@ -105,13 +122,17 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
             {/* Left Column */}
             <div className="space-y-6">
               <div className="space-y-3">
-                <Label htmlFor="personName" className="text-sm font-semibold text-foreground">Person Name *</Label>
+                <Label htmlFor="personName" className="text-sm font-semibold text-foreground">
+                  Person Name *
+                </Label>
                 <div className="relative">
                   <Input
                     id="personName"
                     list="existing-persons"
                     value={formData.personName}
-                    onChange={(e) => setFormData(prev => ({ ...prev, personName: e.target.value }))}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, personName: e.target.value }))
+                    }
                     placeholder="e.g., John Doe"
                     className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-emerald-accent/20"
                   />
@@ -125,20 +146,29 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
 
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-3">
-                  <Label htmlFor="amount" className="text-sm font-semibold text-foreground">Amount *</Label>
+                  <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
+                    Amount *
+                  </Label>
                   <Input
                     id="amount"
                     type="number"
                     step="0.01"
                     value={formData.amount}
-                    onChange={(e) => setFormData(prev => ({ ...prev, amount: e.target.value }))}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, amount: e.target.value }))}
                     placeholder="10000"
                     className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-emerald-accent/20"
                   />
                 </div>
                 <div className="space-y-3">
-                  <Label htmlFor="currency" className="text-sm font-semibold text-foreground">Currency</Label>
-                  <Select value={formData.currency} onValueChange={(value: Currency) => setFormData(prev => ({ ...prev, currency: value }))}>
+                  <Label htmlFor="currency" className="text-sm font-semibold text-foreground">
+                    Currency
+                  </Label>
+                  <Select
+                    value={formData.currency}
+                    onValueChange={(value: Currency) =>
+                      setFormData((prev) => ({ ...prev, currency: value }))
+                    }
+                  >
                     <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
                       <SelectValue />
                     </SelectTrigger>
@@ -157,22 +187,28 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
             {/* Right Column */}
             <div className="space-y-6">
               <div className="space-y-3">
-                <Label htmlFor="dateGiven" className="text-sm font-semibold text-foreground">Date Given</Label>
+                <Label htmlFor="dateGiven" className="text-sm font-semibold text-foreground">
+                  Date Given
+                </Label>
                 <Input
                   id="dateGiven"
                   type="date"
                   value={formData.dateGiven}
-                  onChange={(e) => setFormData(prev => ({ ...prev, dateGiven: e.target.value }))}
+                  onChange={(e) => setFormData((prev) => ({ ...prev, dateGiven: e.target.value }))}
                   className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-emerald-accent/20"
                 />
               </div>
 
               <div className="space-y-3">
-                <Label htmlFor="description" className="text-sm font-semibold text-foreground">Description (Optional)</Label>
+                <Label htmlFor="description" className="text-sm font-semibold text-foreground">
+                  Description (Optional)
+                </Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, description: e.target.value }))
+                  }
                   placeholder="Purpose of the loan, additional notes..."
                   className="bg-background border-border/40 rounded-xl focus:ring-2 focus:ring-emerald-accent/20"
                   rows={4}
@@ -182,10 +218,18 @@ export const AddLoanModal = ({ onAddLoan, existingPersons }: AddLoanModalProps) 
           </div>
 
           <div className="flex justify-end space-x-4 pt-6 border-t border-border/20">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)} className="rounded-full px-8 h-12">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              className="rounded-full px-8 h-12"
+            >
               Cancel
             </Button>
-            <Button type="submit" className="rounded-full px-8 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300">
+            <Button
+              type="submit"
+              className="rounded-full px-8 h-12 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            >
               Add Loan Entry
             </Button>
           </div>

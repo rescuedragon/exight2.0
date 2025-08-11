@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Users, 
-  Plus, 
-  Receipt, 
-  TrendingUp, 
-  Settings, 
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Users,
+  Plus,
+  Receipt,
+  TrendingUp,
+  Settings,
   History,
   Search,
   Upload,
@@ -31,18 +31,30 @@ import {
   ChevronRight,
   UserPlus,
   CreditCard,
-  Wallet
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Switch } from "@/components/ui/switch";
-import { Textarea } from "@/components/ui/textarea";
+  Wallet,
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 
 // Types
 interface User {
@@ -102,26 +114,33 @@ const mockGroups: Group[] = [
     name: 'Roommates',
     description: 'Shared apartment expenses',
     members: [mockUsers[0], mockUsers[1], mockUsers[2]],
-    totalExpenses: 2450.50,
+    totalExpenses: 2450.5,
     currency: 'USD',
     defaultSplitType: 'equal',
-    createdAt: new Date('2024-01-15')
+    createdAt: new Date('2024-01-15'),
   },
   {
     id: '2',
     name: 'Goa Trip 2024',
     description: 'Beach vacation with friends',
     members: [mockUsers[0], mockUsers[1], mockUsers[2], mockUsers[3]],
-    totalExpenses: 8750.00,
+    totalExpenses: 8750.0,
     currency: 'INR',
     defaultSplitType: 'equal',
-    createdAt: new Date('2024-02-01')
-  }
+    createdAt: new Date('2024-02-01'),
+  },
 ];
 
 const categories = [
-  'Food & Dining', 'Transportation', 'Entertainment', 'Utilities', 
-  'Groceries', 'Travel', 'Shopping', 'Healthcare', 'Other'
+  'Food & Dining',
+  'Transportation',
+  'Entertainment',
+  'Utilities',
+  'Groceries',
+  'Travel',
+  'Shopping',
+  'Healthcare',
+  'Other',
 ];
 
 const currencies = ['USD', 'INR', 'EUR', 'GBP', 'JPY', 'CAD', 'AUD'];
@@ -147,9 +166,9 @@ const TestSpace = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
@@ -159,16 +178,16 @@ const TestSpace = () => {
       y: 0,
       transition: {
         duration: 0.5,
-        ease: "easeOut"
-      }
-    }
+        ease: 'easeOut',
+      },
+    },
   };
 
   const formatCurrency = (amount: number, currency: string = 'USD') => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
       currency,
-      minimumFractionDigits: 2
+      minimumFractionDigits: 2,
     }).format(amount);
   };
 
@@ -183,7 +202,7 @@ const TestSpace = () => {
       splitType: 'equal' as const,
       notes: '',
       isRecurring: false,
-      recurringFrequency: 'monthly' as const
+      recurringFrequency: 'monthly' as const,
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -202,10 +221,10 @@ const TestSpace = () => {
         splits: [], // Would be calculated based on split type
         notes: expenseData.notes,
         isRecurring: expenseData.isRecurring,
-        recurringFrequency: expenseData.recurringFrequency
+        recurringFrequency: expenseData.recurringFrequency,
       };
-      
-      setExpenses(prev => [...prev, newExpense]);
+
+      setExpenses((prev) => [...prev, newExpense]);
       setShowAddExpense(false);
       setExpenseData({
         description: '',
@@ -217,7 +236,7 @@ const TestSpace = () => {
         splitType: 'equal',
         notes: '',
         isRecurring: false,
-        recurringFrequency: 'monthly'
+        recurringFrequency: 'monthly',
       });
     };
 
@@ -234,23 +253,32 @@ const TestSpace = () => {
                 <Input
                   id="description"
                   value={expenseData.description}
-                  onChange={(e) => setExpenseData(prev => ({ ...prev, description: e.target.value }))}
+                  onChange={(e) =>
+                    setExpenseData((prev) => ({ ...prev, description: e.target.value }))
+                  }
                   placeholder="What was this expense for?"
                   className="rounded-xl"
                   required
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="amount">Amount *</Label>
                 <div className="flex gap-2">
-                  <Select value={expenseData.currency} onValueChange={(value) => setExpenseData(prev => ({ ...prev, currency: value }))}>
+                  <Select
+                    value={expenseData.currency}
+                    onValueChange={(value) =>
+                      setExpenseData((prev) => ({ ...prev, currency: value }))
+                    }
+                  >
                     <SelectTrigger className="w-24 rounded-xl">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {currencies.map(curr => (
-                        <SelectItem key={curr} value={curr}>{curr}</SelectItem>
+                      {currencies.map((curr) => (
+                        <SelectItem key={curr} value={curr}>
+                          {curr}
+                        </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -258,7 +286,9 @@ const TestSpace = () => {
                     type="number"
                     step="0.01"
                     value={expenseData.amount}
-                    onChange={(e) => setExpenseData(prev => ({ ...prev, amount: e.target.value }))}
+                    onChange={(e) =>
+                      setExpenseData((prev) => ({ ...prev, amount: e.target.value }))
+                    }
                     placeholder="0.00"
                     className="rounded-xl"
                     required
@@ -268,13 +298,18 @@ const TestSpace = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="paidBy">Paid by</Label>
-                <Select value={expenseData.paidBy} onValueChange={(value) => setExpenseData(prev => ({ ...prev, paidBy: value }))}>
+                <Select
+                  value={expenseData.paidBy}
+                  onValueChange={(value) => setExpenseData((prev) => ({ ...prev, paidBy: value }))}
+                >
                   <SelectTrigger className="rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {users.map(user => (
-                      <SelectItem key={user.id} value={user.id}>{user.name}</SelectItem>
+                    {users.map((user) => (
+                      <SelectItem key={user.id} value={user.id}>
+                        {user.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -282,14 +317,19 @@ const TestSpace = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="group">Group (Optional)</Label>
-                <Select value={expenseData.groupId} onValueChange={(value) => setExpenseData(prev => ({ ...prev, groupId: value }))}>
+                <Select
+                  value={expenseData.groupId}
+                  onValueChange={(value) => setExpenseData((prev) => ({ ...prev, groupId: value }))}
+                >
                   <SelectTrigger className="rounded-xl">
                     <SelectValue placeholder="Select a group" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="">No Group (1-on-1)</SelectItem>
-                    {groups.map(group => (
-                      <SelectItem key={group.id} value={group.id}>{group.name}</SelectItem>
+                    {groups.map((group) => (
+                      <SelectItem key={group.id} value={group.id}>
+                        {group.name}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -297,13 +337,20 @@ const TestSpace = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
-                <Select value={expenseData.category} onValueChange={(value) => setExpenseData(prev => ({ ...prev, category: value }))}>
+                <Select
+                  value={expenseData.category}
+                  onValueChange={(value) =>
+                    setExpenseData((prev) => ({ ...prev, category: value }))
+                  }
+                >
                   <SelectTrigger className="rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {categories.map(cat => (
-                      <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                    {categories.map((cat) => (
+                      <SelectItem key={cat} value={cat}>
+                        {cat}
+                      </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -311,7 +358,12 @@ const TestSpace = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="splitType">Split Type</Label>
-                <Select value={expenseData.splitType} onValueChange={(value: 'equal' | 'exact' | 'percentage' | 'shares' | 'itemized') => setExpenseData(prev => ({ ...prev, splitType: value }))}>
+                <Select
+                  value={expenseData.splitType}
+                  onValueChange={(
+                    value: 'equal' | 'exact' | 'percentage' | 'shares' | 'itemized',
+                  ) => setExpenseData((prev) => ({ ...prev, splitType: value }))}
+                >
                   <SelectTrigger className="rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
@@ -331,7 +383,7 @@ const TestSpace = () => {
               <Textarea
                 id="notes"
                 value={expenseData.notes}
-                onChange={(e) => setExpenseData(prev => ({ ...prev, notes: e.target.value }))}
+                onChange={(e) => setExpenseData((prev) => ({ ...prev, notes: e.target.value }))}
                 placeholder="Add any additional notes..."
                 className="rounded-xl"
                 rows={3}
@@ -343,10 +395,16 @@ const TestSpace = () => {
                 <Switch
                   id="recurring"
                   checked={expenseData.isRecurring}
-                  onCheckedChange={(checked) => setExpenseData(prev => ({ ...prev, isRecurring: checked }))}
+                  onCheckedChange={(checked) =>
+                    setExpenseData((prev) => ({ ...prev, isRecurring: checked }))
+                  }
                 />
-                <Label htmlFor="recurring" className="font-medium">Make this a recurring expense</Label>
-                <Badge variant="secondary" className="ml-2">Pro</Badge>
+                <Label htmlFor="recurring" className="font-medium">
+                  Make this a recurring expense
+                </Label>
+                <Badge variant="secondary" className="ml-2">
+                  Pro
+                </Badge>
               </div>
             )}
 
@@ -354,7 +412,10 @@ const TestSpace = () => {
               <Button type="button" variant="outline" onClick={() => setShowAddExpense(false)}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700">
+              <Button
+                type="submit"
+                className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700"
+              >
                 Add Expense
               </Button>
             </div>
@@ -370,7 +431,7 @@ const TestSpace = () => {
       description: '',
       currency: 'USD',
       defaultSplitType: 'equal' as const,
-      selectedMembers: ['1'] // Always include current user
+      selectedMembers: ['1'], // Always include current user
     });
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -379,21 +440,21 @@ const TestSpace = () => {
         id: Date.now().toString(),
         name: groupData.name,
         description: groupData.description,
-        members: users.filter(user => groupData.selectedMembers.includes(user.id)),
+        members: users.filter((user) => groupData.selectedMembers.includes(user.id)),
         totalExpenses: 0,
         currency: groupData.currency,
         defaultSplitType: groupData.defaultSplitType,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
-      
-      setGroups(prev => [...prev, newGroup]);
+
+      setGroups((prev) => [...prev, newGroup]);
       setShowAddGroup(false);
       setGroupData({
         name: '',
         description: '',
         currency: 'USD',
         defaultSplitType: 'equal',
-        selectedMembers: ['1']
+        selectedMembers: ['1'],
       });
     };
 
@@ -409,7 +470,7 @@ const TestSpace = () => {
               <Input
                 id="groupName"
                 value={groupData.name}
-                onChange={(e) => setGroupData(prev => ({ ...prev, name: e.target.value }))}
+                onChange={(e) => setGroupData((prev) => ({ ...prev, name: e.target.value }))}
                 placeholder="e.g., Roommates, Trip to Paris"
                 className="rounded-xl"
                 required
@@ -421,7 +482,7 @@ const TestSpace = () => {
               <Textarea
                 id="groupDescription"
                 value={groupData.description}
-                onChange={(e) => setGroupData(prev => ({ ...prev, description: e.target.value }))}
+                onChange={(e) => setGroupData((prev) => ({ ...prev, description: e.target.value }))}
                 placeholder="What's this group for?"
                 className="rounded-xl"
                 rows={3}
@@ -431,7 +492,7 @@ const TestSpace = () => {
             <div className="space-y-2">
               <Label>Select Members</Label>
               <div className="space-y-2 max-h-40 overflow-y-auto">
-                {users.map(user => (
+                {users.map((user) => (
                   <div key={user.id} className="flex items-center space-x-2">
                     <input
                       type="checkbox"
@@ -439,14 +500,15 @@ const TestSpace = () => {
                       checked={groupData.selectedMembers.includes(user.id)}
                       onChange={(e) => {
                         if (e.target.checked) {
-                          setGroupData(prev => ({
+                          setGroupData((prev) => ({
                             ...prev,
-                            selectedMembers: [...prev.selectedMembers, user.id]
+                            selectedMembers: [...prev.selectedMembers, user.id],
                           }));
-                        } else if (user.id !== '1') { // Can't uncheck current user
-                          setGroupData(prev => ({
+                        } else if (user.id !== '1') {
+                          // Can't uncheck current user
+                          setGroupData((prev) => ({
                             ...prev,
-                            selectedMembers: prev.selectedMembers.filter(id => id !== user.id)
+                            selectedMembers: prev.selectedMembers.filter((id) => id !== user.id),
                           }));
                         }
                       }}
@@ -454,12 +516,16 @@ const TestSpace = () => {
                       className="rounded"
                     />
                     <Label htmlFor={`member-${user.id}`} className="flex items-center space-x-2">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
+                      <div
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: user.color }}
                       />
                       <span>{user.name}</span>
-                      {user.id === '1' && <Badge variant="secondary" className="text-xs">You</Badge>}
+                      {user.id === '1' && (
+                        <Badge variant="secondary" className="text-xs">
+                          You
+                        </Badge>
+                      )}
                     </Label>
                   </div>
                 ))}
@@ -470,7 +536,10 @@ const TestSpace = () => {
               <Button type="button" variant="outline" onClick={() => setShowAddGroup(false)}>
                 Cancel
               </Button>
-              <Button type="submit" className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600">
+              <Button
+                type="submit"
+                className="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600"
+              >
                 Create Group
               </Button>
             </div>
@@ -501,12 +570,12 @@ const TestSpace = () => {
               total: 45.67,
               items: [
                 { name: 'Pizza Margherita', price: 18.99 },
-                { name: 'Caesar Salad', price: 12.50 },
-                { name: 'Coca Cola (2x)', price: 6.00 },
-                { name: 'Tiramisu', price: 8.18 }
+                { name: 'Caesar Salad', price: 12.5 },
+                { name: 'Coca Cola (2x)', price: 6.0 },
+                { name: 'Tiramisu', price: 8.18 },
               ],
               tax: 3.65,
-              tip: 0.00
+              tip: 0.0,
             });
           }, 2000);
         };
@@ -521,10 +590,12 @@ const TestSpace = () => {
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <Camera className="h-6 w-6" />
               Upload Receipt
-              <Badge variant="secondary" className="ml-2">Pro Feature</Badge>
+              <Badge variant="secondary" className="ml-2">
+                Pro Feature
+              </Badge>
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-6 mt-6">
             {!uploadedReceipt ? (
               <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
@@ -549,13 +620,13 @@ const TestSpace = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
                     <h3 className="font-semibold mb-2">Uploaded Receipt</h3>
-                    <img 
-                      src={uploadedReceipt} 
-                      alt="Receipt" 
+                    <img
+                      src={uploadedReceipt}
+                      alt="Receipt"
                       className="w-full h-64 object-cover rounded-xl border"
                     />
                   </div>
-                  
+
                   <div>
                     <h3 className="font-semibold mb-2">
                       {ocrResult ? 'Scanned Results' : 'Processing...'}
@@ -576,12 +647,17 @@ const TestSpace = () => {
                         </div>
                         <div className="space-y-2">
                           <p className="font-medium">Items:</p>
-                          {ocrResult.items.map((item: { name: string; price: number }, index: number) => (
-                            <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
-                              <span>{item.name}</span>
-                              <span className="font-medium">{formatCurrency(item.price)}</span>
-                            </div>
-                          ))}
+                          {ocrResult.items.map(
+                            (item: { name: string; price: number }, index: number) => (
+                              <div
+                                key={index}
+                                className="flex justify-between items-center p-2 bg-gray-50 rounded"
+                              >
+                                <span>{item.name}</span>
+                                <span className="font-medium">{formatCurrency(item.price)}</span>
+                              </div>
+                            ),
+                          )}
                         </div>
                         <div className="pt-2 border-t">
                           <div className="flex justify-between text-sm">
@@ -593,13 +669,13 @@ const TestSpace = () => {
                     )}
                   </div>
                 </div>
-                
+
                 {ocrResult && (
                   <div className="flex justify-end space-x-3 pt-6 border-t">
                     <Button variant="outline" onClick={() => setShowReceiptUpload(false)}>
                       Cancel
                     </Button>
-                    <Button 
+                    <Button
                       className="bg-gradient-to-r from-green-500 to-blue-500"
                       onClick={() => {
                         setShowReceiptUpload(false);
@@ -625,7 +701,7 @@ const TestSpace = () => {
         { name: 'Transportation', value: 450, color: '#10B981' },
         { name: 'Entertainment', value: 320, color: '#F59E0B' },
         { name: 'Utilities', value: 280, color: '#EF4444' },
-        { name: 'Other', value: 180, color: '#8B5CF6' }
+        { name: 'Other', value: 180, color: '#8B5CF6' },
       ],
       monthlyTrend: [
         { month: 'Jan', amount: 1200 },
@@ -633,8 +709,8 @@ const TestSpace = () => {
         { month: 'Mar', amount: 1100 },
         { month: 'Apr', amount: 1650 },
         { month: 'May', amount: 1380 },
-        { month: 'Jun', amount: 1520 }
-      ]
+        { month: 'Jun', amount: 1520 },
+      ],
     };
 
     return (
@@ -644,10 +720,12 @@ const TestSpace = () => {
             <DialogTitle className="text-2xl font-bold flex items-center gap-2">
               <BarChart3 className="h-6 w-6" />
               Analytics & Insights
-              <Badge variant="secondary" className="ml-2">Pro Feature</Badge>
+              <Badge variant="secondary" className="ml-2">
+                Pro Feature
+              </Badge>
             </DialogTitle>
           </DialogHeader>
-          
+
           <div className="space-y-6 mt-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Spending by Category */}
@@ -663,8 +741,8 @@ const TestSpace = () => {
                     {mockChartData.categories.map((category, index) => (
                       <div key={index} className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <div 
-                            className="w-3 h-3 rounded-full" 
+                          <div
+                            className="w-3 h-3 rounded-full"
                             style={{ backgroundColor: category.color }}
                           />
                           <span className="text-sm">{category.name}</span>
@@ -690,11 +768,13 @@ const TestSpace = () => {
                       <div key={index} className="flex items-center justify-between">
                         <span className="text-sm">{month.month}</span>
                         <div className="flex items-center gap-2">
-                          <div 
+                          <div
                             className="h-2 bg-blue-500 rounded"
                             style={{ width: `${(month.amount / 2000) * 100}px` }}
                           />
-                          <span className="font-medium text-sm">{formatCurrency(month.amount)}</span>
+                          <span className="font-medium text-sm">
+                            {formatCurrency(month.amount)}
+                          </span>
                         </div>
                       </div>
                     ))}
@@ -749,13 +829,10 @@ const TestSpace = () => {
                 Complete expense sharing system with all pro features enabled
               </p>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <div className="flex items-center gap-2">
-                <Switch
-                  checked={proFeaturesEnabled}
-                  onCheckedChange={setProFeaturesEnabled}
-                />
+                <Switch checked={proFeaturesEnabled} onCheckedChange={setProFeaturesEnabled} />
                 <Label className="text-sm font-medium">Pro Features</Label>
                 <Badge variant="secondary" className="bg-gradient-to-r from-purple-100 to-blue-100">
                   <Star className="h-3 w-3 mr-1" />
@@ -776,7 +853,7 @@ const TestSpace = () => {
               <Plus className="h-4 w-4 mr-2" />
               Add Expense
             </Button>
-            
+
             <Button
               onClick={() => setShowAddGroup(true)}
               variant="outline"
@@ -785,7 +862,7 @@ const TestSpace = () => {
               <Users className="h-4 w-4 mr-2" />
               New Group
             </Button>
-            
+
             {proFeaturesEnabled && (
               <>
                 <Button
@@ -795,9 +872,11 @@ const TestSpace = () => {
                 >
                   <Receipt className="h-4 w-4 mr-2" />
                   Upload Receipt
-                  <Badge variant="secondary" className="ml-2 text-xs">Pro</Badge>
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    Pro
+                  </Badge>
                 </Button>
-                
+
                 <Button
                   onClick={() => setShowAnalytics(true)}
                   variant="outline"
@@ -805,7 +884,9 @@ const TestSpace = () => {
                 >
                   <BarChart3 className="h-4 w-4 mr-2" />
                   Analytics
-                  <Badge variant="secondary" className="ml-2 text-xs">Pro</Badge>
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    Pro
+                  </Badge>
                 </Button>
               </>
             )}
@@ -879,7 +960,7 @@ const TestSpace = () => {
                               {formatCurrency(group.totalExpenses, group.currency)}
                             </span>
                           </div>
-                          
+
                           <div className="flex items-center gap-1">
                             <span className="text-sm text-gray-600">Members:</span>
                             <div className="flex -space-x-1">
@@ -905,7 +986,7 @@ const TestSpace = () => {
                     </Card>
                   </motion.div>
                 ))}
-                
+
                 {/* Add Group Card */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -913,13 +994,15 @@ const TestSpace = () => {
                   transition={{ delay: groups.length * 0.1 }}
                   whileHover={{ scale: 1.02, y: -5 }}
                 >
-                  <Card 
+                  <Card
                     className="h-full bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20 border-dashed border-2 border-blue-300 hover:border-blue-400 transition-all duration-300 cursor-pointer"
                     onClick={() => setShowAddGroup(true)}
                   >
                     <CardContent className="flex flex-col items-center justify-center h-full p-8 text-center">
                       <Plus className="h-12 w-12 text-blue-500 mb-4" />
-                      <h3 className="font-semibold text-blue-700 dark:text-blue-300">Create New Group</h3>
+                      <h3 className="font-semibold text-blue-700 dark:text-blue-300">
+                        Create New Group
+                      </h3>
                       <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
                         Start tracking shared expenses
                       </p>
@@ -1005,7 +1088,7 @@ const TestSpace = () => {
                                 {formatCurrency(expense.amount, expense.currency)}
                               </div>
                               <div className="text-sm text-gray-500">
-                                Paid by {users.find(u => u.id === expense.paidBy)?.name}
+                                Paid by {users.find((u) => u.id === expense.paidBy)?.name}
                               </div>
                             </div>
                           </div>
@@ -1041,7 +1124,7 @@ const TestSpace = () => {
                         <div className="text-sm text-blue-700">Net balance</div>
                       </div>
                     </div>
-                    
+
                     <div className="text-center py-8">
                       <Wallet className="h-12 w-12 mx-auto text-gray-400 mb-4" />
                       <p className="text-gray-500">All settled up! 🎉</p>

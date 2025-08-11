@@ -9,6 +9,7 @@
 ## 🏗️ Build Process
 
 ### 1. Local Build
+
 ```bash
 # Install dependencies
 npm install
@@ -21,7 +22,9 @@ ls -la dist/
 ```
 
 ### 2. Build Verification
+
 Ensure the `dist/` folder contains:
+
 - `index.html`
 - `assets/` folder with JS and CSS files
 - All static assets
@@ -36,12 +39,14 @@ Ensure the `dist/` folder contains:
    - Click "Connect" → "EC2 Instance Connect"
 
 2. **Navigate to Web Directory**:
+
    ```bash
    cd /var/www/html
    ls -la
    ```
 
 3. **Backup Current Version**:
+
    ```bash
    sudo cp -r . ../html_backup_$(date +%Y%m%d_%H%M%S)
    ```
@@ -70,7 +75,9 @@ npm run build
 ## 🔧 Server Configuration
 
 ### Apache Configuration
+
 Ensure `/etc/apache2/sites-available/000-default.conf` includes:
+
 ```apache
 <Directory /var/www/html>
     Options Indexes FollowSymLinks
@@ -80,7 +87,9 @@ Ensure `/etc/apache2/sites-available/000-default.conf` includes:
 ```
 
 ### Environment Variables
+
 Create/update `.env` file on server:
+
 ```bash
 # Database
 DB_HOST=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com
@@ -97,22 +106,26 @@ API_BASE_URL=http://13.60.70.116/api
 ## 🧪 Post-Deployment Testing
 
 ### 1. Basic Functionality
+
 - [ ] Homepage loads correctly
 - [ ] Navigation works
 - [ ] Responsive design on mobile/desktop
 
 ### 2. Core Features
+
 - [ ] Add Expense functionality
 - [ ] Add Loan functionality
 - [ ] Dashboard displays correctly
 - [ ] Charts render properly
 
 ### 3. API Integration
+
 - [ ] Backend API responds
 - [ ] Database connections work
 - [ ] Feedback API functional
 
 ### 4. Performance
+
 - [ ] Page load times acceptable
 - [ ] No console errors
 - [ ] Lighthouse score > 80
@@ -137,6 +150,7 @@ API_BASE_URL=http://13.60.70.116/api
    - Check for TypeScript errors
 
 ### Logs to Check
+
 ```bash
 # Apache logs
 sudo tail -f /var/log/apache2/error.log
@@ -149,6 +163,7 @@ tail -f /var/log/exight/app.log
 ## 🔄 Rollback Procedure
 
 If deployment fails:
+
 ```bash
 # Restore backup
 sudo rm -rf /var/www/html/*
@@ -161,11 +176,13 @@ sudo systemctl restart apache2
 ## 📊 Monitoring
 
 ### Health Checks
+
 - Monitor server response times
 - Check error rates
 - Monitor database performance
 
 ### Performance Metrics
+
 - Core Web Vitals
 - API response times
 - Database query performance
@@ -181,4 +198,4 @@ sudo systemctl restart apache2
 
 **Last Updated**: $(date)
 **Version**: 2.0.0
-**Deployed By**: [Your Name] 
+**Deployed By**: [Your Name]

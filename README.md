@@ -30,11 +30,13 @@ npm run dev
 ```
 
 ### Prerequisites
+
 - Node.js (v18+)
 - npm or yarn
 - PostgreSQL (for backend)
 
 ### Full Setup
+
 See [Installation Guide](docs/installation.md) for detailed setup instructions including backend configuration.
 
 ## 🏗️ Architecture
@@ -42,6 +44,7 @@ See [Installation Guide](docs/installation.md) for detailed setup instructions i
 ![Exight 2.0 Architecture](public/architecture-diagram.svg)
 
 The application follows a modern client-server architecture with:
+
 - **Frontend**: React + TypeScript with Vite build tool
 - **Backend**: Node.js + Express API server
 - **Database**: PostgreSQL for persistent data storage
@@ -64,22 +67,26 @@ The application follows a modern client-server architecture with:
 ## 📱 Usage
 
 ### Adding Expenses
+
 1. Click the "Add Expense" button
 2. Fill in the expense details (name, type, amount, etc.)
 3. Set whether it's recurring or has a fixed term
 4. Save to start tracking
 
 ### Making Payments
+
 - For fixed-term expenses, use the "Partial Payment" button
 - Track your progress with visual progress bars
 - All payments are logged in the action history
 
 ### Viewing Analytics
+
 - Click "Analytics" to see detailed charts
 - View spending patterns and projections
 - Export data for external analysis
 
 ### Action History
+
 - Click the history icon (top-right) to view all actions
 - See timestamps for every action taken
 - Track your financial management activities
@@ -87,6 +94,7 @@ The application follows a modern client-server architecture with:
 ## 🎨 Customization
 
 The app uses Tailwind CSS for styling. You can customize:
+
 - Colors in `tailwind.config.ts`
 - Components in `src/components/`
 - Themes in the theme provider
@@ -142,6 +150,7 @@ npm run preview
 ```
 
 **Note**: This project uses npm as the package manager. If you prefer yarn or bun, you can use their equivalent commands:
+
 - **yarn**: `yarn dev`, `yarn build`, `yarn lint`
 - **bun**: `bun run dev`, `bun run build`, `bun run lint`
 

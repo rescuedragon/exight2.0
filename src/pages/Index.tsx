@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useRef, Suspense, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from "@/components/ui/button";
-import { InfoBar } from "@/components/InfoBar";
-import { ExpenseDashboard } from "@/components/ExpenseDashboard";
-import { LoansDashboard } from "@/components/LoansDashboard";
-import { DetailedView } from "@/components/DetailedView";
-import { MonthlyExpensesModal } from "@/components/MonthlyExpensesModal";
-import { ActiveExpensesModal } from "@/components/ActiveExpensesModal";
-import { ExpenseHistory } from "@/components/ExpenseHistory";
-import { LoanDetailedView } from "@/components/LoanDetailedView";
-import { AddExpenseModal } from "@/components/AddExpenseModal";
-import { AddLoanModal } from "@/components/AddLoanModal";
-import { YearlyProjectionModal } from "@/components/YearlyProjectionModal";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { useModal } from "@/contexts/ModalContext";
-import { useNavigate } from "react-router-dom";
-import { apiService } from "@/lib/api";
-import { 
-  Wallet, 
-  HandCoins, 
-  BarChart3, 
-  Eye, 
-  EyeOff, 
+import { Button } from '@/components/ui/button';
+import { InfoBar } from '@/components/InfoBar';
+import { ExpenseDashboard } from '@/components/ExpenseDashboard';
+import { LoansDashboard } from '@/components/LoansDashboard';
+import { DetailedView } from '@/components/DetailedView';
+import { MonthlyExpensesModal } from '@/components/MonthlyExpensesModal';
+import { ActiveExpensesModal } from '@/components/ActiveExpensesModal';
+import { ExpenseHistory } from '@/components/ExpenseHistory';
+import { LoanDetailedView } from '@/components/LoanDetailedView';
+import { AddExpenseModal } from '@/components/AddExpenseModal';
+import { AddLoanModal } from '@/components/AddLoanModal';
+import { YearlyProjectionModal } from '@/components/YearlyProjectionModal';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import { useModal } from '@/contexts/ModalContext';
+import { useNavigate } from 'react-router-dom';
+import { apiService } from '@/lib/api';
+import {
+  Wallet,
+  HandCoins,
+  BarChart3,
+  Eye,
+  EyeOff,
   LogOut,
   Calendar,
   TrendingUp,
@@ -36,22 +36,22 @@ import {
   X,
   CheckCircle,
   AlertTriangle,
-  Clock
-} from "lucide-react";
-import { Expense } from "@/types/expense";
-import { Loan } from "@/types/loan";
-import { LoansInfoBar } from "@/components/LoansInfoBar";
+  Clock,
+} from 'lucide-react';
+import { Expense } from '@/types/expense';
+import { Loan } from '@/types/loan';
+import { LoansInfoBar } from '@/components/LoansInfoBar';
 
 // Try Me Component with hardcoded demo data
 const TryMe = memo(() => {
   const navigate = useNavigate();
   const { isAnyModalOpen, openModal, closeModal } = useModal();
-  
+
   // State variables
   const [activeTab, setActiveTab] = useState('expenses');
   const [isPrivacyMode, setIsPrivacyMode] = useState(false);
   const [showDetailedView, setShowDetailedView] = useState(false);
-  
+
   // Hardcoded demo data
   const demoExpenses: Expense[] = [
     // 4 Recurring expenses
@@ -67,7 +67,7 @@ const TryMe = memo(() => {
       remainingMonths: null,
       remainingAmount: null,
       createdAt: new Date(2024, 0, 1),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_2',
@@ -81,7 +81,7 @@ const TryMe = memo(() => {
       remainingMonths: null,
       remainingAmount: null,
       createdAt: new Date(2024, 0, 15),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_3',
@@ -95,7 +95,7 @@ const TryMe = memo(() => {
       remainingMonths: null,
       remainingAmount: null,
       createdAt: new Date(2024, 0, 10),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_4',
@@ -109,7 +109,7 @@ const TryMe = memo(() => {
       remainingMonths: null,
       remainingAmount: null,
       createdAt: new Date(2024, 0, 5),
-      partialPayments: []
+      partialPayments: [],
     },
     // 4 Fixed term expenses
     {
@@ -124,7 +124,7 @@ const TryMe = memo(() => {
       remainingMonths: 180, // 15 years remaining
       remainingAmount: 45000 * 180,
       createdAt: new Date(2019, 5, 1),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_6',
@@ -138,7 +138,7 @@ const TryMe = memo(() => {
       remainingMonths: 32, // 2.7 years remaining
       remainingAmount: 18500 * 32,
       createdAt: new Date(2022, 2, 1),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_7',
@@ -152,7 +152,7 @@ const TryMe = memo(() => {
       remainingMonths: 45, // 3.75 years remaining
       remainingAmount: 12000 * 45,
       createdAt: new Date(2021, 8, 1),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_8',
@@ -166,7 +166,7 @@ const TryMe = memo(() => {
       remainingMonths: 8, // 8 months remaining
       remainingAmount: 8500 * 8,
       createdAt: new Date(2023, 3, 1),
-      partialPayments: []
+      partialPayments: [],
     },
     // Additional seasonal expenses to create dynamic graph
     {
@@ -181,7 +181,7 @@ const TryMe = memo(() => {
       remainingMonths: 8, // 8 months remaining (started in Jan)
       remainingAmount: 29500 * 8,
       createdAt: new Date(2024, 0, 15),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_10',
@@ -195,7 +195,7 @@ const TryMe = memo(() => {
       remainingMonths: 3, // 3 months remaining (started in Jun)
       remainingAmount: 35000 * 3,
       createdAt: new Date(2024, 5, 1),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_11',
@@ -209,7 +209,7 @@ const TryMe = memo(() => {
       remainingMonths: 2, // 2 months remaining (started in Sep)
       remainingAmount: 25000 * 2,
       createdAt: new Date(2024, 8, 10),
-      partialPayments: []
+      partialPayments: [],
     },
     {
       id: 'exp_12',
@@ -223,8 +223,8 @@ const TryMe = memo(() => {
       remainingMonths: 1, // 1 month remaining (started in Oct)
       remainingAmount: 15000 * 1,
       createdAt: new Date(2024, 9, 31),
-      partialPayments: []
-    }
+      partialPayments: [],
+    },
   ];
 
   const demoLoans: Loan[] = [
@@ -245,16 +245,16 @@ const TryMe = memo(() => {
           amount: 15000,
           date: new Date(2024, 4, 10),
           type: 'payment' as const,
-          description: 'First installment'
+          description: 'First installment',
         },
         {
           id: 'payment_1_2',
           amount: 5000,
           date: new Date(2024, 6, 5),
           type: 'payment' as const,
-          description: 'Partial payment'
-        }
-      ]
+          description: 'Partial payment',
+        },
+      ],
     },
     {
       id: 'loan_2',
@@ -272,16 +272,16 @@ const TryMe = memo(() => {
           amount: 25000,
           date: new Date(2024, 3, 15),
           type: 'payment' as const,
-          description: 'First payment'
+          description: 'First payment',
         },
         {
           id: 'payment_2_2',
           amount: 10000,
           date: new Date(2024, 5, 20),
           type: 'payment' as const,
-          description: 'Second payment'
-        }
-      ]
+          description: 'Second payment',
+        },
+      ],
     },
     {
       id: 'loan_3',
@@ -293,7 +293,7 @@ const TryMe = memo(() => {
       totalReceived: 0,
       remainingAmount: 25000,
       createdAt: new Date(2024, 4, 10),
-      payments: []
+      payments: [],
     },
     {
       id: 'loan_4',
@@ -305,7 +305,7 @@ const TryMe = memo(() => {
       totalReceived: 0,
       remainingAmount: 40000,
       createdAt: new Date(2024, 3, 5),
-      payments: []
+      payments: [],
     },
     // 4 Completed loans (2 written off)
     {
@@ -324,9 +324,9 @@ const TryMe = memo(() => {
           amount: 30000,
           date: new Date(2024, 1, 10),
           type: 'payment' as const,
-          description: 'Full payment'
-        }
-      ]
+          description: 'Full payment',
+        },
+      ],
     },
     {
       id: 'loan_6',
@@ -344,16 +344,16 @@ const TryMe = memo(() => {
           amount: 10000,
           date: new Date(2024, 0, 15),
           type: 'payment' as const,
-          description: 'First installment'
+          description: 'First installment',
         },
         {
           id: 'payment_6_2',
           amount: 10000,
           date: new Date(2024, 2, 20),
           type: 'payment' as const,
-          description: 'Final payment'
-        }
-      ]
+          description: 'Final payment',
+        },
+      ],
     },
     {
       id: 'loan_7',
@@ -372,9 +372,9 @@ const TryMe = memo(() => {
           amount: 10000,
           date: new Date(2023, 9, 5),
           type: 'payment' as const,
-          description: 'Partial payment before write-off'
-        }
-      ]
+          description: 'Partial payment before write-off',
+        },
+      ],
     },
     {
       id: 'loan_8',
@@ -387,43 +387,56 @@ const TryMe = memo(() => {
       remainingAmount: 15000,
       writeOffDate: new Date(2024, 4, 30),
       createdAt: new Date(2023, 5, 25),
-      payments: []
-    }
+      payments: [],
+    },
   ];
 
   // Memoized data filtering
-  const { activeExpenses, recurringExpenses, fixedTimeExpenses } = useMemo(() => {
-    const activeExpenses = demoExpenses.filter(expense => {
-      // Show recurring expenses always
-      if (expense.isRecurring) {
-        return true;
-      }
+  const { activeExpenses, recurringExpenses, fixedTimeExpenses } = useMemo(
+    () => {
+      const activeExpenses = demoExpenses.filter((expense) => {
+        // Show recurring expenses always
+        if (expense.isRecurring) {
+          return true;
+        }
 
-      // For non-recurring expenses, be more permissive - show if:
-      // 1. Has remaining months > 0, OR
-      // 2. Has remaining amount > 0, OR  
-      // 3. Has total months (new expense), OR
-      // 4. No remaining data but has total months (newly created)
-      const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
-      const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
-      const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
-      const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
-      
-      const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
-      return isActive;
-    });
+        // For non-recurring expenses, be more permissive - show if:
+        // 1. Has remaining months > 0, OR
+        // 2. Has remaining amount > 0, OR
+        // 3. Has total months (new expense), OR
+        // 4. No remaining data but has total months (newly created)
+        const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
+        const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
+        const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+        const isNewExpense =
+          hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
 
-    const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);
-    const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
+        const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
+        return isActive;
+      });
 
-    return { activeExpenses, recurringExpenses, fixedTimeExpenses };
-  }, [/* depends only on demoExpenses values; static within component */]);
+      const recurringExpenses = activeExpenses.filter((expense) => expense.isRecurring);
+      const fixedTimeExpenses = activeExpenses.filter((expense) => !expense.isRecurring);
 
-  const { activeLoans, completedLoans } = useMemo(() => {
-    const activeLoans = demoLoans.filter(loan => loan.status === 'active');
-    const completedLoans = demoLoans.filter(loan => loan.status === 'completed' || loan.status === 'written-off');
-    return { activeLoans, completedLoans };
-  }, [/* static demoLoans */]);
+      return { activeExpenses, recurringExpenses, fixedTimeExpenses };
+    },
+    [
+      /* depends only on demoExpenses values; static within component */
+    ],
+  );
+
+  const { activeLoans, completedLoans } = useMemo(
+    () => {
+      const activeLoans = demoLoans.filter((loan) => loan.status === 'active');
+      const completedLoans = demoLoans.filter(
+        (loan) => loan.status === 'completed' || loan.status === 'written-off',
+      );
+      return { activeLoans, completedLoans };
+    },
+    [
+      /* static demoLoans */
+    ],
+  );
 
   const handleTabSwitch = useCallback((tab: string) => {
     setActiveTab(tab);
@@ -455,13 +468,24 @@ const TryMe = memo(() => {
     }
   }, []);
 
-  const handleAddExpense = useCallback(async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
-    // Add expense logic here
-  }, []);
+  const handleAddExpense = useCallback(
+    async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
+      // Add expense logic here
+    },
+    [],
+  );
 
-  const handleAddLoan = useCallback(async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
-    // Add loan logic here
-  }, []);
+  const handleAddLoan = useCallback(
+    async (
+      newLoanData: Omit<
+        Loan,
+        'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'
+      >,
+    ) => {
+      // Add loan logic here
+    },
+    [],
+  );
 
   const handleDeleteExpense = useCallback(async (expenseId: string) => {
     // Delete expense logic here
@@ -483,15 +507,16 @@ const TryMe = memo(() => {
       {!isAnyModalOpen && (
         <div id="tryme-controls" className="fixed top-16 left-6 z-30 space-y-2">
           <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-            <span 
+            <span
               className="animate-gradient-x"
               style={{
-                background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+                background:
+                  'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
                 backgroundSize: '400% 400%',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 color: 'transparent',
-                WebkitTextFillColor: 'transparent'
+                WebkitTextFillColor: 'transparent',
               }}
             >
               Exight
@@ -524,9 +549,7 @@ const TryMe = memo(() => {
         <div className="flex items-center mb-6">
           {/* Left side - Greeting */}
           <div className="flex items-center gap-6 flex-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi Demo User!
-            </p>
+            <p className="text-lg font-semibold text-foreground">Hi Demo User!</p>
           </div>
 
           {/* Center - Tab Buttons */}
@@ -540,7 +563,9 @@ const TryMe = memo(() => {
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
+                <Wallet
+                  className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`}
+                />
                 Expenses
               </button>
               <button
@@ -551,7 +576,9 @@ const TryMe = memo(() => {
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
+                <HandCoins
+                  className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`}
+                />
                 Loans
               </button>
             </div>
@@ -565,19 +592,15 @@ const TryMe = memo(() => {
               size="icon"
               onClick={() => setIsPrivacyMode(!isPrivacyMode)}
               className="h-10 w-10 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
-              title={isPrivacyMode ? "Show Data" : "Hide Data"}
+              title={isPrivacyMode ? 'Show Data' : 'Hide Data'}
             >
-              {isPrivacyMode ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
+              {isPrivacyMode ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </Button>
-            
+
             {/* Analytics Button */}
-            <Button 
-              variant="outline" 
-              size="lg" 
+            <Button
+              variant="outline"
+              size="lg"
               className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
               onClick={() => setShowDetailedView(true)}
             >
@@ -601,20 +624,23 @@ const TryMe = memo(() => {
           <div className="w-full">
             {/* Tab Content */}
             <div className="relative">
-              <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <div
+                key="expenses-tab"
+                className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}
+              >
                 <div className="space-y-6">
                   {/* Info Bar */}
-                  <InfoBar 
-                    expenses={activeExpenses} 
-                    onUpdateExpense={handleUpdateExpense} 
-                    onDeleteExpense={handleDeleteExpense} 
-                    isPrivacyMode={isPrivacyMode} 
+                  <InfoBar
+                    expenses={activeExpenses}
+                    onUpdateExpense={handleUpdateExpense}
+                    onDeleteExpense={handleDeleteExpense}
+                    isPrivacyMode={isPrivacyMode}
                   />
 
                   {/* Dashboard */}
                   <div>
-                    <ExpenseDashboard 
-                      expenses={activeExpenses} 
+                    <ExpenseDashboard
+                      expenses={activeExpenses}
                       onUpdateExpense={handleUpdateExpense}
                       isPrivacyMode={isPrivacyMode}
                     />
@@ -622,19 +648,22 @@ const TryMe = memo(() => {
                 </div>
               </div>
 
-              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <div
+                key="loans-tab"
+                className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}
+              >
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
-                  <LoansInfoBar 
-                    loans={activeLoans} 
-                    onUpdateLoan={handleUpdateLoan} 
-                    isPrivacyMode={isPrivacyMode} 
+                  <LoansInfoBar
+                    loans={activeLoans}
+                    onUpdateLoan={handleUpdateLoan}
+                    isPrivacyMode={isPrivacyMode}
                   />
 
                   {/* Loans Dashboard */}
                   <div>
-                    <LoansDashboard 
-                      loans={activeLoans} 
+                    <LoansDashboard
+                      loans={activeLoans}
                       onUpdateLoan={handleUpdateLoan}
                       isPrivacyMode={isPrivacyMode}
                     />
@@ -649,13 +678,10 @@ const TryMe = memo(() => {
         {showDetailedView && (
           <>
             {activeTab === 'expenses' ? (
-              <DetailedView 
-                expenses={activeExpenses} 
-                onClose={() => setShowDetailedView(false)} 
-              />
+              <DetailedView expenses={activeExpenses} onClose={() => setShowDetailedView(false)} />
             ) : (
-              <LoanDetailedView 
-                loans={activeLoans} 
+              <LoanDetailedView
+                loans={activeLoans}
                 onClose={() => setShowDetailedView(false)}
                 onUpdateLoan={handleUpdateLoan}
               />
@@ -708,22 +734,31 @@ const Index = () => {
       }
     }
     void load();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
-  const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
+  const handleAddExpense = async (
+    newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>,
+  ) => {
     try {
       const created = await apiService.createExpense(newExpenseData);
-      setExpenses(prev => [created, ...prev]);
+      setExpenses((prev) => [created, ...prev]);
     } catch (e) {
       console.error('Create expense failed', e);
     }
   };
 
-  const handleAddLoan = async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
+  const handleAddLoan = async (
+    newLoanData: Omit<
+      Loan,
+      'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'
+    >,
+  ) => {
     try {
       const created = await apiService.createLoan(newLoanData);
-      setLoans(prev => [created, ...prev]);
+      setLoans((prev) => [created, ...prev]);
     } catch (e) {
       console.error('Create loan failed', e);
     }
@@ -732,7 +767,7 @@ const Index = () => {
   const handleDeleteExpense = async (expenseId: string) => {
     try {
       await apiService.deleteExpense(expenseId);
-      setExpenses(prev => prev.filter(expense => String(expense.id) !== String(expenseId)));
+      setExpenses((prev) => prev.filter((expense) => String(expense.id) !== String(expenseId)));
     } catch (e) {
       console.error('Delete expense failed', e);
     }
@@ -741,18 +776,16 @@ const Index = () => {
   const handleUpdateExpense = async (updatedExpense: Expense) => {
     try {
       const saved = await apiService.updateExpense(String(updatedExpense.id), updatedExpense);
-      setExpenses(prev => prev.map(expense => 
-        String(expense.id) === String(saved.id) ? saved : expense
-      ));
+      setExpenses((prev) =>
+        prev.map((expense) => (String(expense.id) === String(saved.id) ? saved : expense)),
+      );
     } catch (e) {
       console.error('Update expense failed', e);
     }
   };
 
   const handleUpdateLoan = async (updatedLoan: Loan) => {
-    setLoans(prev => prev.map(loan => 
-      loan.id === updatedLoan.id ? updatedLoan : loan
-    ));
+    setLoans((prev) => prev.map((loan) => (loan.id === updatedLoan.id ? updatedLoan : loan)));
   };
 
   const handleLogout = async () => {
@@ -789,23 +822,27 @@ const Index = () => {
   }, []);
 
   // Get existing person names for autocomplete
-  const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
+  const existingPersons = Array.from(new Set(loans.map((loan) => loan.personName)));
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
       {!isAnyModalOpen && (
-        <div id="sticky-controls" className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200">
+        <div
+          id="sticky-controls"
+          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200"
+        >
           <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-            <span 
+            <span
               className="animate-gradient-x"
               style={{
-                background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+                background:
+                  'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
                 backgroundSize: '400% 400%',
                 backgroundClip: 'text',
                 WebkitBackgroundClip: 'text',
                 color: 'transparent',
-                WebkitTextFillColor: 'transparent'
+                WebkitTextFillColor: 'transparent',
               }}
             >
               Exight
@@ -816,7 +853,10 @@ const Index = () => {
 
       {/* Top Right Controls */}
       {!isAnyModalOpen && (
-        <div className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200" id="sticky-controls">
+        <div
+          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200"
+          id="sticky-controls"
+        >
           <ThemeToggle />
           <Button
             variant="ghost"
@@ -838,9 +878,7 @@ const Index = () => {
         <div className="flex items-center mb-6">
           {/* Left side - Greeting */}
           <div className="flex items-center gap-6 flex-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi {userName}!
-            </p>
+            <p className="text-lg font-semibold text-foreground">Hi {userName}!</p>
           </div>
 
           {/* Center - Tab Buttons */}
@@ -854,7 +892,9 @@ const Index = () => {
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
+                <Wallet
+                  className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`}
+                />
                 Expenses
               </button>
               <button
@@ -865,7 +905,9 @@ const Index = () => {
                     : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
                 }`}
               >
-                <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
+                <HandCoins
+                  className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`}
+                />
                 Loans
               </button>
             </div>
@@ -879,19 +921,15 @@ const Index = () => {
               size="icon"
               onClick={() => setIsPrivacyMode(!isPrivacyMode)}
               className="h-10 w-10 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
-              title={isPrivacyMode ? "Show Data" : "Hide Data"}
+              title={isPrivacyMode ? 'Show Data' : 'Hide Data'}
             >
-              {isPrivacyMode ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
+              {isPrivacyMode ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
             </Button>
-            
+
             {/* Analytics Button */}
-            <Button 
-              variant="outline" 
-              size="lg" 
+            <Button
+              variant="outline"
+              size="lg"
               className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
               onClick={() => setShowDetailedView(true)}
             >
@@ -915,20 +953,23 @@ const Index = () => {
           <div className="w-full">
             {/* Tab Content */}
             <div className="relative">
-              <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <div
+                key="expenses-tab"
+                className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}
+              >
                 <div className="space-y-6">
                   {/* Info Bar */}
-                  <InfoBar 
-                    expenses={expenses} 
-                    onUpdateExpense={handleUpdateExpense} 
-                    onDeleteExpense={handleDeleteExpense} 
-                    isPrivacyMode={isPrivacyMode} 
+                  <InfoBar
+                    expenses={expenses}
+                    onUpdateExpense={handleUpdateExpense}
+                    onDeleteExpense={handleDeleteExpense}
+                    isPrivacyMode={isPrivacyMode}
                   />
 
                   {/* Dashboard */}
                   <div>
-                    <ExpenseDashboard 
-                      expenses={expenses} 
+                    <ExpenseDashboard
+                      expenses={expenses}
                       onUpdateExpense={handleUpdateExpense}
                       isPrivacyMode={isPrivacyMode}
                     />
@@ -936,19 +977,22 @@ const Index = () => {
                 </div>
               </div>
 
-              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <div
+                key="loans-tab"
+                className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}
+              >
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
-                  <LoansInfoBar 
-                    loans={loans} 
-                    onUpdateLoan={handleUpdateLoan} 
-                    isPrivacyMode={isPrivacyMode} 
+                  <LoansInfoBar
+                    loans={loans}
+                    onUpdateLoan={handleUpdateLoan}
+                    isPrivacyMode={isPrivacyMode}
                   />
 
                   {/* Loans Dashboard */}
                   <div>
-                    <LoansDashboard 
-                      loans={loans} 
+                    <LoansDashboard
+                      loans={loans}
                       onUpdateLoan={handleUpdateLoan}
                       isPrivacyMode={isPrivacyMode}
                     />
@@ -963,13 +1007,10 @@ const Index = () => {
         {showDetailedView && (
           <>
             {activeTab === 'expenses' ? (
-              <DetailedView 
-                expenses={expenses} 
-                onClose={() => setShowDetailedView(false)} 
-              />
+              <DetailedView expenses={expenses} onClose={() => setShowDetailedView(false)} />
             ) : (
-              <LoanDetailedView 
-                loans={loans} 
+              <LoanDetailedView
+                loans={loans}
                 onClose={() => setShowDetailedView(false)}
                 onUpdateLoan={handleUpdateLoan}
               />

@@ -1,18 +1,16 @@
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
-import { useState, useEffect } from "react";
-import Index, { TryMe } from "./pages/Index";
-import { Mail } from "lucide-react";
-import NotFound from "./pages/NotFound";
-import TestSpace from "./pages/TestSpace";
-import Login from "./components/Login";
-import { ModalProvider } from "@/contexts/ModalContext";
+import { Toaster } from '@/components/ui/toaster';
+import { Toaster as Sonner } from '@/components/ui/sonner';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import Index, { TryMe } from './pages/Index';
+import { Mail } from 'lucide-react';
+import NotFound from './pages/NotFound';
+import TestSpace from './pages/TestSpace';
+import Login from './components/Login';
+import { ModalProvider } from '@/contexts/ModalContext';
 
-import { FeedbackModal } from "@/components/FeedbackModal";
-
-
+import { FeedbackModal } from '@/components/FeedbackModal';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -74,21 +72,22 @@ const App = () => {
         <FeedbackModal />
         <Routes>
           <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-          <Route path="/" element={
-            isAuthenticated ? (
-              isDemoMode ? <TryMe /> : <Index />
-            ) : (
-              <Navigate to="/login" />
-            )
-          } />
-          <Route path="/dashboard" element={
-            isAuthenticated ? (
-              isDemoMode ? <TryMe /> : <Index />
-            ) : (
-              <Navigate to="/login" />
-            )
-          } />
-          <Route path="/testspace" element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />} />
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? isDemoMode ? <TryMe /> : <Index /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              isAuthenticated ? isDemoMode ? <TryMe /> : <Index /> : <Navigate to="/login" />
+            }
+          />
+          <Route
+            path="/testspace"
+            element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />}
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

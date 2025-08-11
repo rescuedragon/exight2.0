@@ -1,32 +1,38 @@
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { DeleteLogobox } from "@/components/DeleteLogobox";
-import { 
-  X, 
-  Wallet, 
-  Edit3, 
-  Trash2, 
-  IndianRupee, 
-  Calendar, 
-  Clock, 
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { DeleteLogobox } from '@/components/DeleteLogobox';
+import {
+  X,
+  Wallet,
+  Edit3,
+  Trash2,
+  IndianRupee,
+  Calendar,
+  Clock,
   TrendingDown,
   CreditCard,
   Banknote,
   Users,
   CheckCircle,
-  AlertCircle
-} from "lucide-react";
-import { Expense, ExpenseType } from "@/types/expense";
-import { useToast } from "@/hooks/use-toast";
-import { useModal } from "@/contexts/ModalContext";
+  AlertCircle,
+} from 'lucide-react';
+import { Expense, ExpenseType } from '@/types/expense';
+import { useToast } from '@/hooks/use-toast';
+import { useModal } from '@/contexts/ModalContext';
 
 interface ActiveExpensesModalProps {
   expenses: Expense[];
@@ -35,7 +41,12 @@ interface ActiveExpensesModalProps {
   onDeleteExpense?: (expenseId: string) => void;
 }
 
-export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDeleteExpense }: ActiveExpensesModalProps) => {
+export const ActiveExpensesModal = ({
+  expenses,
+  onClose,
+  onUpdateExpense,
+  onDeleteExpense,
+}: ActiveExpensesModalProps) => {
   const { openModal, closeModal } = useModal();
   const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
@@ -46,7 +57,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     deductionDay: '',
     isRecurring: false,
     totalMonths: '',
-    remainingMonths: ''
+    remainingMonths: '',
   });
   const { toast } = useToast();
 
@@ -67,12 +78,18 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     };
   }, []);
 
-  const activeExpenses = expenses.filter(expense => 
-    expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0))
+  const activeExpenses = expenses.filter(
+    (expense) =>
+      expense.isRecurring ||
+      (expense.remainingMonths > 0 &&
+        (expense.remainingAmount === undefined || expense.remainingAmount > 0)),
   );
 
-  const completedExpenses = expenses.filter(expense => 
-    !expense.isRecurring && (expense.remainingMonths === 0 || (expense.remainingAmount !== undefined && expense.remainingAmount <= 0))
+  const completedExpenses = expenses.filter(
+    (expense) =>
+      !expense.isRecurring &&
+      (expense.remainingMonths === 0 ||
+        (expense.remainingAmount !== undefined && expense.remainingAmount <= 0)),
   );
 
   const formatCurrency = (amount: number, currency: string = 'INR') => {
@@ -81,8 +98,10 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
       currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-      currencyDisplay: 'symbol'
-    }).format(amount).replace(/^₹/, '₹');
+      currencyDisplay: 'symbol',
+    })
+      .format(amount)
+      .replace(/^₹/, '₹');
   };
 
   const getExpenseIcon = (type: ExpenseType) => {
@@ -116,7 +135,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
       deductionDay: expense.deductionDay.toString(),
       isRecurring: expense.isRecurring,
       totalMonths: expense.totalMonths?.toString() || '',
-      remainingMonths: expense.remainingMonths?.toString() || ''
+      remainingMonths: expense.remainingMonths?.toString() || '',
     });
   };
 
@@ -131,7 +150,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
       monthlyPayment,
       remainingMonths,
       calculatedRemainingAmount,
-      editForm
+      editForm,
     });
 
     const updatedExpense: Expense = {
@@ -143,7 +162,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
       isRecurring: editForm.isRecurring,
       totalMonths: editForm.isRecurring ? undefined : parseInt(editForm.totalMonths),
       remainingMonths: editForm.isRecurring ? undefined : remainingMonths,
-      remainingAmount: editForm.isRecurring ? undefined : calculatedRemainingAmount
+      remainingAmount: editForm.isRecurring ? undefined : calculatedRemainingAmount,
     };
 
     console.log('Updated Expense:', updatedExpense);
@@ -151,8 +170,8 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     onUpdateExpense(updatedExpense);
     setEditingExpense(null);
     toast({
-      title: "Success",
-      description: "Expense updated successfully!"
+      title: 'Success',
+      description: 'Expense updated successfully!',
     });
   };
 
@@ -165,14 +184,23 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
     if (!onDeleteExpense || !pendingDeleteId) return;
     onDeleteExpense(pendingDeleteId);
     setPendingDeleteId(null);
-    toast({ title: "Success", description: "Expense deleted successfully!" });
+    toast({ title: 'Success', description: 'Expense deleted successfully!' });
   };
 
   const renderExpenseCard = (expense: Expense, isCompleted = false) => {
-    const progressPercentage = expense.isRecurring ? 0 : Math.round((((expense.totalMonths || 0) - (expense.remainingMonths || 0)) / (expense.totalMonths || 1)) * 100);
-    
+    const progressPercentage = expense.isRecurring
+      ? 0
+      : Math.round(
+          (((expense.totalMonths || 0) - (expense.remainingMonths || 0)) /
+            (expense.totalMonths || 1)) *
+            100,
+        );
+
     return (
-      <Card key={expense.id} className={`premium-card transition-all duration-200 hover:shadow-lg ${isCompleted ? 'opacity-75' : ''}`}>
+      <Card
+        key={expense.id}
+        className={`premium-card transition-all duration-200 hover:shadow-lg ${isCompleted ? 'opacity-75' : ''}`}
+      >
         <CardContent className="p-6">
           <div className="space-y-4">
             {/* Header */}
@@ -186,11 +214,11 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                   </Badge>
                 </div>
               </div>
-              
+
               {!isCompleted && (
                 <div className="flex items-center gap-2">
-                  <Button 
-                    variant="outline" 
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="rounded-full hover:bg-blue-accent/10"
                     onClick={() => handleEditExpense(expense)}
@@ -198,107 +226,127 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                     <Edit3 className="h-4 w-4" />
                   </Button>
                   {editingExpense?.id === expense.id && (
-                    <Dialog open={!!editingExpense} onOpenChange={(o) => { if (!o) setEditingExpense(null); }}>
+                    <Dialog
+                      open={!!editingExpense}
+                      onOpenChange={(o) => {
+                        if (!o) setEditingExpense(null);
+                      }}
+                    >
                       <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] overflow-y-auto premium-card">
                         <DialogHeader>
                           <DialogTitle className="text-2xl font-bold">Edit Expense</DialogTitle>
                         </DialogHeader>
                         <div className="space-y-4 mt-2">
-                        <div className="space-y-2">
-                          <Label htmlFor="name">Expense Name</Label>
-                          <Input
-                            id="name"
-                            value={editForm.name}
-                            onChange={(e) => setEditForm({...editForm, name: e.target.value})}
-                            className="rounded-xl"
-                          />
-                        </div>
-                        
-                        <div className="grid grid-cols-2 gap-4">
                           <div className="space-y-2">
-                            <Label htmlFor="amount">Amount</Label>
+                            <Label htmlFor="name">Expense Name</Label>
                             <Input
-                              id="amount"
-                              type="number"
-                              value={editForm.amount}
-                              onChange={(e) => setEditForm({...editForm, amount: e.target.value})}
+                              id="name"
+                              value={editForm.name}
+                              onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
                               className="rounded-xl"
                             />
                           </div>
-                          
-                          <div className="space-y-2">
-                            <Label htmlFor="deductionDay">Due Day</Label>
-                            <Input
-                              id="deductionDay"
-                              type="number"
-                              min="1"
-                              max="31"
-                              value={editForm.deductionDay}
-                              onChange={(e) => setEditForm({...editForm, deductionDay: e.target.value})}
-                              className="rounded-xl"
-                            />
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-2">
-                          <Label htmlFor="type">Type</Label>
-                          <Select value={editForm.type} onValueChange={(value: ExpenseType) => setEditForm({...editForm, type: value})}>
-                            <SelectTrigger className="rounded-xl">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="EMI">EMI</SelectItem>
-                              <SelectItem value="Personal Loan">Personal Loan</SelectItem>
-                              <SelectItem value="Borrowed from Someone">Borrowed from Someone</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        
-                        {!editForm.isRecurring && (
+
                           <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                              <Label htmlFor="totalMonths">Total Months</Label>
+                              <Label htmlFor="amount">Amount</Label>
                               <Input
-                                id="totalMonths"
+                                id="amount"
                                 type="number"
-                                value={editForm.totalMonths}
-                                onChange={(e) => setEditForm({...editForm, totalMonths: e.target.value})}
+                                value={editForm.amount}
+                                onChange={(e) =>
+                                  setEditForm({ ...editForm, amount: e.target.value })
+                                }
                                 className="rounded-xl"
                               />
                             </div>
-                            
+
                             <div className="space-y-2">
-                              <Label htmlFor="remainingMonths">Remaining Months</Label>
+                              <Label htmlFor="deductionDay">Due Day</Label>
                               <Input
-                                id="remainingMonths"
+                                id="deductionDay"
                                 type="number"
-                                value={editForm.remainingMonths}
-                                onChange={(e) => setEditForm({...editForm, remainingMonths: e.target.value})}
+                                min="1"
+                                max="31"
+                                value={editForm.deductionDay}
+                                onChange={(e) =>
+                                  setEditForm({ ...editForm, deductionDay: e.target.value })
+                                }
                                 className="rounded-xl"
                               />
                             </div>
                           </div>
-                        )}
-                        
-                        <div className="flex justify-end space-x-3 pt-6 border-t border-border/20 mt-6">
-                          <Button variant="outline" onClick={() => setEditingExpense(null)}>
-                            Cancel
-                          </Button>
-                          <Button 
-                            variant="gradient" 
-                            onClick={handleSaveEdit}
-                            className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102"
-                          >
-                            Save Changes
-                          </Button>
-                        </div>
+
+                          <div className="space-y-2">
+                            <Label htmlFor="type">Type</Label>
+                            <Select
+                              value={editForm.type}
+                              onValueChange={(value: ExpenseType) =>
+                                setEditForm({ ...editForm, type: value })
+                              }
+                            >
+                              <SelectTrigger className="rounded-xl">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="EMI">EMI</SelectItem>
+                                <SelectItem value="Personal Loan">Personal Loan</SelectItem>
+                                <SelectItem value="Borrowed from Someone">
+                                  Borrowed from Someone
+                                </SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+
+                          {!editForm.isRecurring && (
+                            <div className="grid grid-cols-2 gap-4">
+                              <div className="space-y-2">
+                                <Label htmlFor="totalMonths">Total Months</Label>
+                                <Input
+                                  id="totalMonths"
+                                  type="number"
+                                  value={editForm.totalMonths}
+                                  onChange={(e) =>
+                                    setEditForm({ ...editForm, totalMonths: e.target.value })
+                                  }
+                                  className="rounded-xl"
+                                />
+                              </div>
+
+                              <div className="space-y-2">
+                                <Label htmlFor="remainingMonths">Remaining Months</Label>
+                                <Input
+                                  id="remainingMonths"
+                                  type="number"
+                                  value={editForm.remainingMonths}
+                                  onChange={(e) =>
+                                    setEditForm({ ...editForm, remainingMonths: e.target.value })
+                                  }
+                                  className="rounded-xl"
+                                />
+                              </div>
+                            </div>
+                          )}
+
+                          <div className="flex justify-end space-x-3 pt-6 border-t border-border/20 mt-6">
+                            <Button variant="outline" onClick={() => setEditingExpense(null)}>
+                              Cancel
+                            </Button>
+                            <Button
+                              variant="gradient"
+                              onClick={handleSaveEdit}
+                              className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-102"
+                            >
+                              Save Changes
+                            </Button>
+                          </div>
                         </div>
                       </DialogContent>
                     </Dialog>
                   )}
-                  
-                  <Button 
-                    variant="outline" 
+
+                  <Button
+                    variant="outline"
                     size="sm"
                     className="rounded-full hover:bg-destructive/10 hover:text-destructive"
                     onClick={() => handleDeleteExpense(expense.id)}
@@ -307,7 +355,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                   </Button>
                 </div>
               )}
-              
+
               {isCompleted && (
                 <div className="flex items-center gap-2 text-emerald-accent">
                   <CheckCircle className="h-5 w-5" />
@@ -322,10 +370,12 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                 <IndianRupee className="h-4 w-4 text-blue-accent" />
                 <div>
                   <p className="text-xs text-muted-foreground">Amount</p>
-                  <p className="font-bold text-sm">{formatCurrency(expense.amount, expense.currency)}</p>
+                  <p className="font-bold text-sm">
+                    {formatCurrency(expense.amount, expense.currency)}
+                  </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4 text-emerald-accent" />
                 <div>
@@ -333,7 +383,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                   <p className="font-bold text-sm">{expense.deductionDay}</p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4 text-purple-accent" />
                 <div>
@@ -343,13 +393,15 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                   </p>
                 </div>
               </div>
-              
+
               <div className="flex items-center gap-2">
                 <TrendingDown className="h-4 w-4 text-orange-accent" />
                 <div>
                   <p className="text-xs text-muted-foreground">Balance</p>
                   <p className="font-bold text-sm">
-                    {expense.isRecurring ? 'N/A' : formatCurrency(expense.remainingAmount || 0, expense.currency)}
+                    {expense.isRecurring
+                      ? 'N/A'
+                      : formatCurrency(expense.remainingAmount || 0, expense.currency)}
                   </p>
                 </div>
               </div>
@@ -363,7 +415,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                   <span className="text-xs font-bold text-foreground">{progressPercentage}%</span>
                 </div>
                 <div className="w-full bg-muted/20 rounded-full h-2">
-                  <div 
+                  <div
                     className="h-full bg-gradient-to-r from-blue-accent to-emerald-accent rounded-full transition-all duration-300"
                     style={{ width: `${progressPercentage}%` }}
                   />
@@ -385,8 +437,12 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
               <Wallet className="h-6 w-6 text-purple-accent" />
             </div>
             <div>
-              <CardTitle className="text-3xl font-bold text-foreground">Expense Management</CardTitle>
-              <p className="text-muted-foreground font-medium">Manage your active and completed expenses</p>
+              <CardTitle className="text-3xl font-bold text-foreground">
+                Expense Management
+              </CardTitle>
+              <p className="text-muted-foreground font-medium">
+                Manage your active and completed expenses
+              </p>
             </div>
           </div>
           <Button
@@ -398,7 +454,7 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
-        
+
         <CardContent className="flex-1 overflow-y-auto p-8">
           <div className="space-y-8">
             {/* Active Expenses */}
@@ -409,13 +465,15 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-foreground">Active Expenses</h2>
-                  <p className="text-muted-foreground">{activeExpenses.length} active expense{activeExpenses.length !== 1 ? 's' : ''}</p>
+                  <p className="text-muted-foreground">
+                    {activeExpenses.length} active expense{activeExpenses.length !== 1 ? 's' : ''}
+                  </p>
                 </div>
               </div>
-              
+
               {activeExpenses.length > 0 ? (
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                  {activeExpenses.map(expense => renderExpenseCard(expense, false))}
+                  {activeExpenses.map((expense) => renderExpenseCard(expense, false))}
                 </div>
               ) : (
                 <Card className="premium-card">
@@ -439,12 +497,15 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
                   </div>
                   <div>
                     <h2 className="text-2xl font-bold text-foreground">Completed Expenses</h2>
-                    <p className="text-muted-foreground">{completedExpenses.length} completed expense{completedExpenses.length !== 1 ? 's' : ''}</p>
+                    <p className="text-muted-foreground">
+                      {completedExpenses.length} completed expense
+                      {completedExpenses.length !== 1 ? 's' : ''}
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                  {completedExpenses.map(expense => renderExpenseCard(expense, true))}
+                  {completedExpenses.map((expense) => renderExpenseCard(expense, true))}
                 </div>
               </div>
             )}
@@ -459,11 +520,13 @@ export const ActiveExpensesModal = ({ expenses, onClose, onUpdateExpense, onDele
         onConfirm={confirmDelete}
         title="Delete expense?"
         message="This action cannot be undone. The expense will be permanently removed."
-        itemName={pendingDeleteId ? expenses.find(e => e.id === pendingDeleteId)?.name : undefined}
+        itemName={
+          pendingDeleteId ? expenses.find((e) => e.id === pendingDeleteId)?.name : undefined
+        }
         variant="dangerous"
         size="md"
       />
     </div>,
-    document.body
+    document.body,
   );
 };

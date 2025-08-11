@@ -5,18 +5,21 @@ This guide outlines the deployment process for different environments in Exight 
 ## 🌍 Deployment Stages
 
 ### 1. Development (dev)
+
 - **Branch**: `dev`
 - **URL**: `http://dev.exight.in` (or your dev server)
 - **Purpose**: Testing new features and bug fixes
 - **Deployment**: Automatic on push to `dev` branch
 
 ### 2. Staging (staging)
+
 - **Branch**: `staging` (or `dev` for now)
 - **URL**: `http://staging.exight.in` (or your staging server)
 - **Purpose**: Pre-production testing and QA
 - **Deployment**: Manual or automatic on push to `staging` branch
 
 ### 3. Production (main)
+
 - **Branch**: `main`
 - **URL**: `http://exight.in` (or your production server)
 - **Purpose**: Live production environment
@@ -25,6 +28,7 @@ This guide outlines the deployment process for different environments in Exight 
 ## 🔄 Deployment Workflow
 
 ### Development Deployment
+
 ```bash
 # 1. Ensure you're on dev branch
 git checkout dev
@@ -46,6 +50,7 @@ git push origin dev
 ```
 
 ### Staging Deployment
+
 ```bash
 # 1. Ensure dev is stable
 git checkout dev
@@ -64,6 +69,7 @@ git push origin staging
 ```
 
 ### Production Deployment
+
 ```bash
 # 1. Ensure staging is tested and stable
 git checkout staging
@@ -89,11 +95,13 @@ git push origin v1.0.0
 ## 🛠️ Manual Deployment Steps
 
 ### Prerequisites
+
 1. **Environment Variables**: Create `.env` file with deployment credentials
 2. **SSH Access**: Ensure SSH key has access to target server
 3. **Build**: Ensure the application builds successfully
 
 ### Step-by-Step Manual Deployment
+
 ```bash
 # 1. Set environment variables
 export DEPLOY_HOST="your-server-ip"
@@ -110,12 +118,14 @@ curl -I http://your-server-ip/
 ## 🔐 Security Considerations
 
 ### Environment Variables
+
 - **Never commit** `.env` files to version control
 - Use `.env.example` as a template
 - Rotate SSH keys regularly
 - Use least-privilege access for deployment users
 
 ### Server Security
+
 - Keep servers updated
 - Use firewall rules to restrict access
 - Monitor access logs
@@ -124,11 +134,13 @@ curl -I http://your-server-ip/
 ## 📊 Monitoring & Rollback
 
 ### Health Checks
+
 - Monitor application health endpoints
 - Set up uptime monitoring
 - Configure error alerting
 
 ### Rollback Procedure
+
 ```bash
 # 1. SSH to server
 ssh user@server
@@ -149,6 +161,7 @@ curl -I http://your-server-ip/
 ### Common Issues
 
 #### Build Failures
+
 ```bash
 # Check Node.js version
 node --version
@@ -162,6 +175,7 @@ npm install
 ```
 
 #### Deployment Failures
+
 ```bash
 # Check SSH connectivity
 ssh -i /path/to/key.pem user@server "echo 'Connection successful'"
@@ -177,6 +191,7 @@ echo "Key: $DEPLOY_KEY_PATH"
 ```
 
 #### Server Issues
+
 ```bash
 # Check disk space
 df -h
@@ -193,6 +208,7 @@ sudo journalctl -u exight-backend.service -f
 ## 📋 Deployment Checklist
 
 ### Before Deployment
+
 - [ ] All tests pass
 - [ ] Linting passes
 - [ ] Build succeeds
@@ -201,12 +217,14 @@ sudo journalctl -u exight-backend.service -f
 - [ ] Backup strategy in place
 
 ### During Deployment
+
 - [ ] Monitor build process
 - [ ] Verify file uploads
 - [ ] Check service restarts
 - [ ] Validate application response
 
 ### After Deployment
+
 - [ ] Verify all endpoints work
 - [ ] Check error logs
 - [ ] Monitor performance metrics

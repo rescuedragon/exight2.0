@@ -24,11 +24,11 @@ export const ModalProvider: React.FC<ModalProviderProps> = ({ children }) => {
   const [modalCount, setModalCount] = useState(0);
 
   const openModal = () => {
-    setModalCount(prev => prev + 1);
+    setModalCount((prev) => prev + 1);
   };
 
   const closeModal = () => {
-    setModalCount(prev => Math.max(0, prev - 1));
+    setModalCount((prev) => Math.max(0, prev - 1));
   };
 
   const isAnyModalOpen = modalCount > 0;

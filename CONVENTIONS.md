@@ -6,16 +6,16 @@ This document outlines the development conventions and standards for Exight 2.0.
 
 ### Branch Types
 
-| Type | Format | Example | Description |
-|------|--------|---------|-------------|
-| **Feature** | `feature/description` | `feature/user-authentication` | New functionality |
-| **Bug Fix** | `fix/description` | `fix/login-validation-error` | Bug fixes |
-| **Hotfix** | `hotfix/description` | `hotfix/critical-security-patch` | Critical production fixes |
-| **Documentation** | `docs/description` | `docs/api-documentation` | Documentation updates |
-| **Chore** | `chore/description` | `chore/update-dependencies` | Maintenance tasks |
-| **Refactor** | `refactor/description` | `refactor/expense-calculator` | Code refactoring |
-| **Test** | `test/description` | `test/add-unit-tests` | Testing related |
-| **Style** | `style/description` | `style/format-code` | Code style changes |
+| Type              | Format                 | Example                          | Description               |
+| ----------------- | ---------------------- | -------------------------------- | ------------------------- |
+| **Feature**       | `feature/description`  | `feature/user-authentication`    | New functionality         |
+| **Bug Fix**       | `fix/description`      | `fix/login-validation-error`     | Bug fixes                 |
+| **Hotfix**        | `hotfix/description`   | `hotfix/critical-security-patch` | Critical production fixes |
+| **Documentation** | `docs/description`     | `docs/api-documentation`         | Documentation updates     |
+| **Chore**         | `chore/description`    | `chore/update-dependencies`      | Maintenance tasks         |
+| **Refactor**      | `refactor/description` | `refactor/expense-calculator`    | Code refactoring          |
+| **Test**          | `test/description`     | `test/add-unit-tests`            | Testing related           |
+| **Style**         | `style/description`    | `style/format-code`              | Code style changes        |
 
 ### Branch Naming Rules
 
@@ -48,6 +48,7 @@ chore/upgrade
 We follow the [Conventional Commits](https://www.conventionalcommits.org/) specification for commit messages.
 
 #### Format
+
 ```
 type(scope): description
 
@@ -58,18 +59,18 @@ type(scope): description
 
 #### Commit Types
 
-| Type | Description | Example |
-|------|-------------|---------|
-| `feat` | New feature | `feat(auth): add OAuth2 authentication` |
-| `fix` | Bug fix | `fix(ui): resolve button alignment issue` |
-| `docs` | Documentation | `docs(readme): add deployment instructions` |
-| `style` | Code style changes | `style(components): format with prettier` |
-| `refactor` | Code refactoring | `refactor(api): restructure endpoint logic` |
-| `test` | Testing | `test(utils): add unit tests for calculator` |
-| `chore` | Maintenance tasks | `chore(deps): update dependencies` |
-| `perf` | Performance improvements | `perf(charts): optimize rendering performance` |
-| `ci` | CI/CD changes | `ci(github): add automated testing workflow` |
-| `build` | Build system changes | `build(vite): update build configuration` |
+| Type       | Description              | Example                                        |
+| ---------- | ------------------------ | ---------------------------------------------- |
+| `feat`     | New feature              | `feat(auth): add OAuth2 authentication`        |
+| `fix`      | Bug fix                  | `fix(ui): resolve button alignment issue`      |
+| `docs`     | Documentation            | `docs(readme): add deployment instructions`    |
+| `style`    | Code style changes       | `style(components): format with prettier`      |
+| `refactor` | Code refactoring         | `refactor(api): restructure endpoint logic`    |
+| `test`     | Testing                  | `test(utils): add unit tests for calculator`   |
+| `chore`    | Maintenance tasks        | `chore(deps): update dependencies`             |
+| `perf`     | Performance improvements | `perf(charts): optimize rendering performance` |
+| `ci`       | CI/CD changes            | `ci(github): add automated testing workflow`   |
+| `build`    | Build system changes     | `build(vite): update build configuration`      |
 
 #### Scope
 
@@ -121,36 +122,45 @@ BREAKING CHANGE: API now returns data in camelCase instead of snake_case
 
 ```markdown
 ## 🐛 Bug Description
+
 Brief description of the issue
 
 ## 🔍 Steps to Reproduce
+
 1. Go to '...'
 2. Click on '...'
 3. Scroll down to '...'
 4. See error
 
 ## ✅ Expected Behavior
+
 What should happen
 
 ## ❌ Actual Behavior
+
 What actually happens
 
 ## 📱 Environment
+
 - **OS**: [e.g., macOS, Windows, Linux]
 - **Browser**: [e.g., Chrome, Firefox, Safari]
 - **Version**: [e.g., 1.0.0]
 - **Device**: [e.g., Desktop, Mobile, Tablet]
 
 ## 📸 Screenshots
+
 If applicable, add screenshots to help explain the problem
 
 ## 📋 Additional Context
+
 Add any other context about the problem here
 
 ## 🔧 Possible Solution
+
 If you have suggestions on a fix for the bug
 
 ## 📝 Labels
+
 - [ ] Bug
 - [ ] UI/UX
 - [ ] Performance
@@ -161,24 +171,30 @@ If you have suggestions on a fix for the bug
 
 ```markdown
 ## 🚀 Feature Description
+
 Clear description of the requested feature
 
 ## 💡 Use Case
+
 Why this feature is needed and how it would be used
 
 ## 🎯 Proposed Solution
+
 How you think this feature should work
 
 ## 🔄 Alternatives Considered
+
 Other approaches you've thought about
 
 ## 📱 Platform
+
 - [ ] Web
 - [ ] Mobile
 - [ ] Desktop
 - [ ] All platforms
 
 ## 🏷️ Labels
+
 - [ ] Enhancement
 - [ ] UI/UX
 - [ ] Performance
@@ -189,21 +205,27 @@ Other approaches you've thought about
 
 ```markdown
 ## 📚 Documentation Need
+
 What documentation is missing or needs improvement
 
 ## 🎯 Target Audience
+
 Who needs this documentation (developers, users, contributors)
 
 ## 📖 Current State
+
 What documentation currently exists (if any)
 
 ## ✨ Desired Outcome
+
 What the improved documentation should look like
 
 ## 🔗 Related Links
+
 Links to related issues, PRs, or documentation
 
 ## 🏷️ Labels
+
 - [ ] Documentation
 - [ ] Help wanted
 - [ ] Good first issue
@@ -295,11 +317,7 @@ interface ExpenseCardProps {
   onDelete: (id: string) => void;
 }
 
-export const ExpenseCard: React.FC<ExpenseCardProps> = ({
-  expense,
-  onEdit,
-  onDelete
-}) => {
+export const ExpenseCard: React.FC<ExpenseCardProps> = ({ expense, onEdit, onDelete }) => {
   // Component logic
 };
 

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { X, TrendingUp, IndianRupee, Target, Calendar } from "lucide-react";
-import { ConnectedLineChart } from "@/components/ConnectedLineChart";
-import { Expense } from "@/types/expense";
-import { useModal } from "@/contexts/ModalContext";
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { X, TrendingUp, IndianRupee, Target, Calendar } from 'lucide-react';
+import { ConnectedLineChart } from '@/components/ConnectedLineChart';
+import { Expense } from '@/types/expense';
+import { useModal } from '@/contexts/ModalContext';
 
 interface YearlyProjectionModalProps {
   expenses: Expense[];
@@ -35,8 +35,18 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
   }, []);
 
   const months = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
   ];
 
   const formatCurrency = (amount: number) => {
@@ -45,8 +55,10 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
       currency: 'INR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-      currencyDisplay: 'symbol'
-    }).format(amount).replace(/^₹/, '₹');
+      currencyDisplay: 'symbol',
+    })
+      .format(amount)
+      .replace(/^₹/, '₹');
   };
 
   const getMonthlyExpense = (monthIndex: number) => {
@@ -57,41 +69,41 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
         // Recurring expenses are always active
         return total + expense.amount;
       }
-      
+
       // For EMIs, calculate the actual timeline
       if (expense.remainingMonths && expense.remainingMonths > 0 && expense.totalMonths) {
         const currentDate = new Date();
         const currentMonthIndex = currentDate.getMonth();
         const currentYear = currentDate.getFullYear();
-        
+
         // Calculate completed months
         const completedMonths = expense.totalMonths - expense.remainingMonths;
-        
+
         // EMI started 'completedMonths' months ago from current month
         const startMonthIndex = currentMonthIndex - completedMonths;
         const startYear = currentYear + Math.floor(startMonthIndex / 12);
         const normalizedStartMonth = ((startMonthIndex % 12) + 12) % 12;
-        
+
         // EMI will end 'remainingMonths' months from current month
         const endMonthIndex = currentMonthIndex + expense.remainingMonths;
         const endYear = currentYear + Math.floor(endMonthIndex / 12);
         const normalizedEndMonth = endMonthIndex % 12;
-        
+
         // Check if the given month falls within the EMI period
         const targetYear = selectedYear;
         const targetMonth = monthIndex;
-        
+
         // Convert dates to comparable format (year * 12 + month)
         const startPeriod = startYear * 12 + normalizedStartMonth;
         const endPeriod = endYear * 12 + normalizedEndMonth;
         const targetPeriod = targetYear * 12 + targetMonth;
-        
+
         // Include the expense if target month is within the EMI period
         if (targetPeriod >= startPeriod && targetPeriod < endPeriod) {
           return total + expense.amount;
         }
       }
-      
+
       return total;
     }, 0);
   };
@@ -99,35 +111,40 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
   // Calculate cumulative spending
   const monthlyData = months.map((month, index) => {
     const monthlyAmount = getMonthlyExpense(index);
-    const cumulativeAmount = months.slice(0, index + 1).reduce((sum, _, i) => sum + getMonthlyExpense(i), 0);
-    
+    const cumulativeAmount = months
+      .slice(0, index + 1)
+      .reduce((sum, _, i) => sum + getMonthlyExpense(i), 0);
+
     return {
       month,
       monthlyAmount,
       cumulativeAmount,
       isPast: index < currentMonth,
       isCurrent: index === currentMonth,
-      isFuture: index > currentMonth
+      isFuture: index > currentMonth,
     };
   });
 
   const totalSpentSoFar = monthlyData[currentMonth]?.cumulativeAmount || 0;
   const projectedYearEnd = monthlyData[11]?.cumulativeAmount || 0;
   const remainingToSpend = projectedYearEnd - totalSpentSoFar;
-  const maxCumulative = Math.max(...monthlyData.map(d => d.cumulativeAmount));
+  const maxCumulative = Math.max(...monthlyData.map((d) => d.cumulativeAmount));
 
   return createPortal(
     <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
       <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
-
         <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-emerald-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-emerald-accent/20 to-emerald-accent/10 rounded-2xl">
               <TrendingUp className="h-6 w-6 text-emerald-accent" />
             </div>
             <div>
-              <CardTitle className="text-3xl font-bold text-foreground">Yearly Projection</CardTitle>
-              <p className="text-muted-foreground font-medium">{selectedYear} - Cumulative Spending Analysis</p>
+              <CardTitle className="text-3xl font-bold text-foreground">
+                Yearly Projection
+              </CardTitle>
+              <p className="text-muted-foreground font-medium">
+                {selectedYear} - Cumulative Spending Analysis
+              </p>
             </div>
           </div>
           <Button
@@ -139,7 +156,7 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
-        
+
         <CardContent className="flex-1 overflow-y-auto p-8">
           <div className="space-y-8">
             {/* Summary Cards */}
@@ -152,13 +169,17 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                     </div>
                     <div>
                       <p className="text-sm font-medium text-muted-foreground">Spent Till Now</p>
-                      <p className="text-2xl font-bold text-foreground">{formatCurrency(totalSpentSoFar)}</p>
-                      <p className="text-xs text-muted-foreground">Through {months[currentMonth]}</p>
+                      <p className="text-2xl font-bold text-foreground">
+                        {formatCurrency(totalSpentSoFar)}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Through {months[currentMonth]}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="premium-card border-blue-accent/20">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3">
@@ -166,14 +187,18 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                       <Target className="h-5 w-5 text-blue-accent" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Remaining to Spend</p>
-                      <p className="text-2xl font-bold text-foreground">{formatCurrency(remainingToSpend)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Remaining to Spend
+                      </p>
+                      <p className="text-2xl font-bold text-foreground">
+                        {formatCurrency(remainingToSpend)}
+                      </p>
                       <p className="text-xs text-muted-foreground">Till year end</p>
                     </div>
                   </div>
                 </CardContent>
               </Card>
-              
+
               <Card className="premium-card border-purple-accent/20">
                 <CardContent className="p-6">
                   <div className="flex items-center gap-3">
@@ -181,8 +206,12 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
                       <Calendar className="h-5 w-5 text-purple-accent" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-muted-foreground">Year-End Projection</p>
-                      <p className="text-2xl font-bold text-foreground">{formatCurrency(projectedYearEnd)}</p>
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Year-End Projection
+                      </p>
+                      <p className="text-2xl font-bold text-foreground">
+                        {formatCurrency(projectedYearEnd)}
+                      </p>
                       <p className="text-xs text-muted-foreground">Total by Dec</p>
                     </div>
                   </div>
@@ -193,13 +222,13 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
             {/* Cumulative Chart */}
             <Card className="premium-card">
               <CardContent className="p-6">
-                <ConnectedLineChart 
+                <ConnectedLineChart
                   data={monthlyData.map((data, index) => ({
                     label: data.month,
                     value: data.cumulativeAmount,
                     isPast: data.isPast,
                     isCurrent: data.isCurrent,
-                    isFuture: data.isFuture
+                    isFuture: data.isFuture,
                   }))}
                   formatValue={(value) => `₹${(value / 100000).toFixed(1)}L`}
                   title="Cumulative Spending Curve"
@@ -212,6 +241,6 @@ export const YearlyProjectionModal = ({ expenses, onClose }: YearlyProjectionMod
         </CardContent>
       </Card>
     </div>,
-    document.body
+    document.body,
   );
 };

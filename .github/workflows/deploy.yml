@@ -2,102 +2,102 @@ name: Deploy to EC2
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v3
-    
-    - name: Setup Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-        cache: 'npm'
-    
-    - name: Install dependencies
-      run: npm ci
-    
-    - name: Predeploy checks
-      run: |
-        echo "🔍 Running predeploy checks..."
-        
-        # Run linting
-        echo "📝 Running ESLint..."
-        npm run lint
-        
-        # Run tests if they exist
-        if npm run | grep -q "test"; then
-          echo "🧪 Running tests..."
-          npm test
-        else
-          echo "⚠️  No test script found, skipping tests"
-        fi
-        
-        echo "✅ Predeploy checks completed"
-    
-    - name: Build app
-      run: npm run build
-    
-    - name: List build output
-      run: ls -la dist/
-    
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        script: |
-          # Backup current files
-          sudo cp -r /var/www/html /var/www/html.backup.$(date +%Y%m%d_%H%M%S)
-          
-          # Remove old frontend files (preserve backend)
-          sudo rm -rf /var/www/html/assets
-          sudo rm -f /var/www/html/index.html
-          sudo rm -f /var/www/html/placeholder.svg
-          sudo rm -f /var/www/html/robots.txt
-          sudo rm -f /var/www/html/.htaccess
-          sudo rm -rf /var/www/html/dist
-          
-          # Set proper permissions for upload
-          sudo chown -R ec2-user:ec2-user /var/www/html/
-          sudo chmod -R 755 /var/www/html/
-    
-    - name: Upload files
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        source: "dist/*"
-        target: "/var/www/html/"
-        strip_components: 0
-    
-    - name: Clean up and set permissions
-      uses: appleboy/ssh-action@v0.1.5
-      with:
-        host: ${{ secrets.HOST }}
-        username: ${{ secrets.USERNAME }}
-        key: ${{ secrets.KEY }}
-        script: |
-          # Remove any nested dist folder if created
-          if [ -d "/var/www/html/dist" ]; then
-            sudo mv /var/www/html/dist/* /var/www/html/ 2>/dev/null || true
-            sudo rm -rf /var/www/html/dist
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Predeploy checks
+        run: |
+          echo "🔍 Running predeploy checks..."
+
+          # Run linting
+          echo "📝 Running ESLint..."
+          npm run lint
+
+          # Run tests if they exist
+          if npm run | grep -q "test"; then
+            echo "🧪 Running tests..."
+            npm test
+          else
+            echo "⚠️  No test script found, skipping tests"
           fi
-          
-          # Set final permissions
-          sudo chown -R ec2-user:apache /var/www/html/
-          sudo chmod -R 750 /var/www/html/
-          sudo chmod -R g+rx /var/www/html/
-          
-          # Restart backend if needed
-          sudo systemctl restart exight-backend.service
-          
-          # Verify files are in correct location
-          echo "Files in /var/www/html/:"
-          ls -la /var/www/html/ 
+
+          echo "✅ Predeploy checks completed"
+
+      - name: Build app
+        run: npm run build
+
+      - name: List build output
+        run: ls -la dist/
+
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            # Backup current files
+            sudo cp -r /var/www/html /var/www/html.backup.$(date +%Y%m%d_%H%M%S)
+
+            # Remove old frontend files (preserve backend)
+            sudo rm -rf /var/www/html/assets
+            sudo rm -f /var/www/html/index.html
+            sudo rm -f /var/www/html/placeholder.svg
+            sudo rm -f /var/www/html/robots.txt
+            sudo rm -f /var/www/html/.htaccess
+            sudo rm -rf /var/www/html/dist
+
+            # Set proper permissions for upload
+            sudo chown -R ec2-user:ec2-user /var/www/html/
+            sudo chmod -R 755 /var/www/html/
+
+      - name: Upload files
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          source: 'dist/*'
+          target: '/var/www/html/'
+          strip_components: 0
+
+      - name: Clean up and set permissions
+        uses: appleboy/ssh-action@v0.1.5
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.KEY }}
+          script: |
+            # Remove any nested dist folder if created
+            if [ -d "/var/www/html/dist" ]; then
+              sudo mv /var/www/html/dist/* /var/www/html/ 2>/dev/null || true
+              sudo rm -rf /var/www/html/dist
+            fi
+
+            # Set final permissions
+            sudo chown -R ec2-user:apache /var/www/html/
+            sudo chmod -R 750 /var/www/html/
+            sudo chmod -R g+rx /var/www/html/
+
+            # Restart backend if needed
+            sudo systemctl restart exight-backend.service
+
+            # Verify files are in correct location
+            echo "Files in /var/www/html/:"
+            ls -la /var/www/html/

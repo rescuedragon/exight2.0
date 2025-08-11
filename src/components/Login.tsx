@@ -1,29 +1,43 @@
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { Eye, EyeOff, Mail, Lock, ArrowRight, TrendingUp, BarChart3, CreditCard, Shield, HandCoins, Users, Calculator, Receipt } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { apiService } from "@/lib/api";
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { ThemeToggle } from '@/components/ThemeToggle';
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  ArrowRight,
+  TrendingUp,
+  BarChart3,
+  CreditCard,
+  Shield,
+  HandCoins,
+  Users,
+  Calculator,
+  Receipt,
+} from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { apiService } from '@/lib/api';
 
 const Login = () => {
   const navigate = useNavigate();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setError("");
+    setError('');
 
     try {
       if (isLogin) {
@@ -41,14 +55,14 @@ const Login = () => {
           console.warn('Failed to save user data to localStorage:', localStorageError);
         }
         // Navigate faster without full reload
-        navigate("/", { replace: true });
+        navigate('/', { replace: true });
       } else {
         // Register flow
-        const response = await apiService.register({ 
-          firstName, 
-          lastName, 
-          email, 
-          password 
+        const response = await apiService.register({
+          firstName,
+          lastName,
+          email,
+          password,
         });
         // Persist greeting info
         try {
@@ -62,11 +76,12 @@ const Login = () => {
           console.warn('Failed to save user data to localStorage:', localStorageError);
         }
         // Navigate faster without full reload
-        navigate("/", { replace: true });
+        navigate('/', { replace: true });
       }
     } catch (error: unknown) {
       console.error('Auth error:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Authentication failed. Please try again.';
+      const errorMessage =
+        error instanceof Error ? error.message : 'Authentication failed. Please try again.';
       setError(errorMessage);
     } finally {
       setIsLoading(false);
@@ -84,7 +99,7 @@ const Login = () => {
       localStorage.setItem('demoMode', 'true');
       localStorage.setItem('userName', 'Demo User');
       localStorage.setItem('lastLoginDate', new Date().toDateString());
-      
+
       // Add demo data
       const demoExpenses = [
         {
@@ -99,7 +114,7 @@ const Login = () => {
           remainingMonths: null,
           remainingAmount: null,
           createdAt: new Date(2024, 0, 1),
-          partialPayments: []
+          partialPayments: [],
         },
         {
           id: 'exp_2',
@@ -113,8 +128,8 @@ const Login = () => {
           remainingMonths: null,
           remainingAmount: null,
           createdAt: new Date(2024, 0, 5),
-          partialPayments: []
-        }
+          partialPayments: [],
+        },
       ];
 
       const demoLoans = [
@@ -128,15 +143,15 @@ const Login = () => {
           totalReceived: 20000,
           remainingAmount: 30000,
           createdAt: new Date(2024, 2, 15),
-          payments: []
-        }
+          payments: [],
+        },
       ];
 
       localStorage.setItem('expenses', JSON.stringify(demoExpenses));
       localStorage.setItem('loans', JSON.stringify(demoLoans));
-      
+
       // Navigate to main app
-      window.location.href = "/";
+      window.location.href = '/';
     } catch (error) {
       console.error('Demo mode setup failed:', error);
       setError('Failed to setup demo mode. Please try again.');
@@ -144,12 +159,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative" role="main" aria-label="Authentication">
+    <div
+      className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900 overflow-hidden relative"
+      role="main"
+      aria-label="Authentication"
+    >
       {/* Brand - Top Left */}
       <motion.div
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
         className="fixed top-6 left-6 z-30 space-y-2"
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
@@ -180,7 +199,7 @@ const Login = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: "easeOut" }}
+          transition={{ duration: 0.5, ease: 'easeOut' }}
           className="w-full max-w-6xl grid md:grid-cols-2 gap-8 md:gap-10 items-center"
         >
           {/* Demo Mode removed for dev environment to mirror real app */}
@@ -190,10 +209,10 @@ const Login = () => {
             <CardContent className="p-6 sm:p-8 h-full flex flex-col">
               <div className="text-center mb-4">
                 <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
-                  {isLogin ? "Welcome Back" : "Create Account"}
+                  {isLogin ? 'Welcome Back' : 'Create Account'}
                 </h2>
                 <p className="text-muted-foreground">
-                  {isLogin ? "Sign in to your account" : "Start managing your expenses"}
+                  {isLogin ? 'Sign in to your account' : 'Start managing your expenses'}
                 </p>
               </div>
 
@@ -205,12 +224,17 @@ const Login = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col justify-center">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4 flex-1 flex flex-col justify-center"
+              >
                 {!isLogin && (
                   <>
                     <div className="grid grid-cols-2 gap-3">
                       <div>
-                        <Label htmlFor="firstName" className="text-sm font-medium text-foreground">First Name</Label>
+                        <Label htmlFor="firstName" className="text-sm font-medium text-foreground">
+                          First Name
+                        </Label>
                         <Input
                           id="firstName"
                           type="text"
@@ -222,7 +246,9 @@ const Login = () => {
                         />
                       </div>
                       <div>
-                        <Label htmlFor="lastName" className="text-sm font-medium text-foreground">Last Name</Label>
+                        <Label htmlFor="lastName" className="text-sm font-medium text-foreground">
+                          Last Name
+                        </Label>
                         <Input
                           id="lastName"
                           type="text"
@@ -238,7 +264,9 @@ const Login = () => {
                 )}
 
                 <div>
-                  <Label htmlFor="email" className="text-sm font-medium text-foreground">Email</Label>
+                  <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                    Email
+                  </Label>
                   <Input
                     id="email"
                     type="email"
@@ -251,11 +279,13 @@ const Login = () => {
                 </div>
 
                 <div>
-                  <Label htmlFor="password" className="text-sm font-medium text-foreground">Password</Label>
+                  <Label htmlFor="password" className="text-sm font-medium text-foreground">
+                    Password
+                  </Label>
                   <div className="relative mt-1">
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -280,11 +310,11 @@ const Login = () => {
                   {isLoading ? (
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                      {isLogin ? "Signing In..." : "Creating Account..."}
+                      {isLogin ? 'Signing In...' : 'Creating Account...'}
                     </div>
                   ) : (
                     <div className="flex items-center justify-center">
-                      {isLogin ? "Sign In" : "Create Account"}
+                      {isLogin ? 'Sign In' : 'Create Account'}
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </div>
                   )}
@@ -296,7 +326,7 @@ const Login = () => {
                   onClick={() => setIsLogin(!isLogin)}
                   className="text-blue-600 hover:text-blue-500 text-sm font-medium transition-colors"
                 >
-                  {isLogin ? "Don't have an account? Sign up" : "Already have an account? Sign in"}
+                  {isLogin ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
                 </button>
               </div>
             </CardContent>
@@ -307,7 +337,8 @@ const Login = () => {
               Track your <span className="gradient-text animate-gradient-x">expenses & loans</span>
             </h2>
             <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-xl">
-              Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.
+              Monitor EMIs, track loans given to friends, and get smart insights to take control of
+              your finances.
             </p>
             <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
               <div className="rounded-2xl p-5 bg-white/70 dark:bg-gray-900/60 border border-white/30 dark:border-gray-800/60 shadow-sm">
@@ -315,7 +346,9 @@ const Login = () => {
                   <BarChart3 className="h-5 w-5 text-purple-500" />
                   <div>
                     <div className="font-semibold">EMI & Expense Tracking</div>
-                    <div className="text-sm text-muted-foreground">Track annual EMIs and visualize monthly patterns with reminders.</div>
+                    <div className="text-sm text-muted-foreground">
+                      Track annual EMIs and visualize monthly patterns with reminders.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -324,7 +357,9 @@ const Login = () => {
                   <HandCoins className="h-5 w-5 text-emerald-500" />
                   <div>
                     <div className="font-semibold">Loan Management</div>
-                    <div className="text-sm text-muted-foreground">Manage loans with person-wise history and payment tracking.</div>
+                    <div className="text-sm text-muted-foreground">
+                      Manage loans with person-wise history and payment tracking.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -333,7 +368,9 @@ const Login = () => {
                   <TrendingUp className="h-5 w-5 text-blue-500" />
                   <div>
                     <div className="font-semibold">Smart Insights & Analytics</div>
-                    <div className="text-sm text-muted-foreground">Actionable charts and projections to plan better.</div>
+                    <div className="text-sm text-muted-foreground">
+                      Actionable charts and projections to plan better.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -342,7 +379,9 @@ const Login = () => {
                   <Shield className="h-5 w-5 text-indigo-500" />
                   <div>
                     <div className="font-semibold">Secure & Private</div>
-                    <div className="text-sm text-muted-foreground">Your financial data stays safe with secure authentication.</div>
+                    <div className="text-sm text-muted-foreground">
+                      Your financial data stays safe with secure authentication.
+                    </div>
                   </div>
                 </div>
               </div>
@@ -354,4 +393,4 @@ const Login = () => {
   );
 };
 
-export default Login; 
+export default Login;

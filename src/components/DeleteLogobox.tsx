@@ -21,14 +21,14 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
   isOpen,
   onClose,
   onConfirm,
-  title = "Delete item?",
-  message = "This action cannot be undone. The item will be permanently removed.",
+  title = 'Delete item?',
+  message = 'This action cannot be undone. The item will be permanently removed.',
   itemName,
-  confirmText = "Delete",
-  cancelText = "Cancel",
-  variant = "dangerous",
-  size = "md",
-  className
+  confirmText = 'Delete',
+  cancelText = 'Cancel',
+  variant = 'dangerous',
+  size = 'md',
+  className,
 }) => {
   if (!isOpen) return null;
 
@@ -49,19 +49,19 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
         return {
           icon: 'text-red-500',
           confirmButton: 'bg-red-600 hover:bg-red-700 text-white border-red-600',
-          title: 'text-red-900 dark:text-red-100'
+          title: 'text-red-900 dark:text-red-100',
         };
       case 'warning':
         return {
           icon: 'text-amber-500',
           confirmButton: 'bg-amber-600 hover:bg-amber-700 text-white border-amber-600',
-          title: 'text-amber-900 dark:text-amber-100'
+          title: 'text-amber-900 dark:text-amber-100',
         };
       default:
         return {
           icon: 'text-gray-500',
           confirmButton: 'bg-gray-600 hover:bg-gray-700 text-white border-gray-600',
-          title: 'text-gray-900 dark:text-gray-100'
+          title: 'text-gray-900 dark:text-gray-100',
         };
     }
   };
@@ -74,7 +74,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
           padding: 'p-4',
           icon: 'w-8 h-8',
           title: 'text-lg',
-          message: 'text-sm'
+          message: 'text-sm',
         };
       case 'lg':
         return {
@@ -82,7 +82,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
           padding: 'p-8',
           icon: 'w-16 h-16',
           title: 'text-2xl',
-          message: 'text-base'
+          message: 'text-base',
         };
       default: // md
         return {
@@ -90,7 +90,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
           padding: 'p-6',
           icon: 'w-12 h-12',
           title: 'text-xl',
-          message: 'text-sm'
+          message: 'text-sm',
         };
     }
   };
@@ -105,45 +105,39 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
     >
       {/* Backdrop */}
       <div className="fixed inset-0 bg-black/30 backdrop-blur-[2px] animate-in fade-in-0 duration-100" />
-      
+
       {/* Modal */}
-      <div
-        className={cn(
-          "relative z-[10000] w-full mx-4",
-          sizeStyles.container,
-          className
-        )}
-      >
+      <div className={cn('relative z-[10000] w-full mx-4', sizeStyles.container, className)}>
         <div
           className={cn(
-            "bg-card border border-border/40 rounded-[28px] shadow-2xl overflow-hidden",
-            "animate-in zoom-in-95 fade-in-0 duration-100",
-            sizeStyles.padding
+            'bg-card border border-border/40 rounded-[28px] shadow-2xl overflow-hidden',
+            'animate-in zoom-in-95 fade-in-0 duration-100',
+            sizeStyles.padding,
           )}
         >
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className={cn(
-                "flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800",
-                variantStyles.icon,
-                sizeStyles.icon
-              )}>
+              <div
+                className={cn(
+                  'flex items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800',
+                  variantStyles.icon,
+                  sizeStyles.icon,
+                )}
+              >
                 <AlertTriangle className="w-1/2 h-1/2" />
               </div>
               <div>
-                <h3 className={cn(
-                  "font-semibold leading-tight",
-                  variantStyles.title,
-                  sizeStyles.title
-                )}>
+                <h3
+                  className={cn(
+                    'font-semibold leading-tight',
+                    variantStyles.title,
+                    sizeStyles.title,
+                  )}
+                >
                   {title}
                 </h3>
-                {itemName && (
-                  <p className="text-sm text-muted-foreground mt-1">
-                    "{itemName}"
-                  </p>
-                )}
+                {itemName && <p className="text-sm text-muted-foreground mt-1">"{itemName}"</p>}
               </div>
             </div>
             <Button
@@ -158,10 +152,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
 
           {/* Message */}
           <div className="mb-6">
-            <p className={cn(
-              "text-muted-foreground leading-relaxed",
-              sizeStyles.message
-            )}>
+            <p className={cn('text-muted-foreground leading-relaxed', sizeStyles.message)}>
               {message}
             </p>
           </div>
@@ -178,8 +169,8 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
             <Button
               onClick={handleConfirm}
               className={cn(
-                "flex-1 sm:flex-none transition-all duration-100",
-                variantStyles.confirmButton
+                'flex-1 sm:flex-none transition-all duration-100',
+                variantStyles.confirmButton,
               )}
             >
               <Trash2 className="w-4 h-4" />

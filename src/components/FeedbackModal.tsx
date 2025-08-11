@@ -1,11 +1,17 @@
-import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Mail } from "lucide-react";
-import { apiService } from "@/lib/api";
-import { useToast } from "@/hooks/use-toast";
+import { useState } from 'react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Mail } from 'lucide-react';
+import { apiService } from '@/lib/api';
+import { useToast } from '@/hooks/use-toast';
 
 interface FeedbackPayload {
   name?: string;
@@ -16,13 +22,16 @@ interface FeedbackPayload {
 export const FeedbackModal = () => {
   const [open, setOpen] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState<FeedbackPayload>({ message: "" });
+  const [form, setForm] = useState<FeedbackPayload>({ message: '' });
   const { toast } = useToast();
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.message || form.message.trim().length < 5) {
-      toast({ title: "Please add a bit more detail", description: "Message should be at least 5 characters." });
+      toast({
+        title: 'Please add a bit more detail',
+        description: 'Message should be at least 5 characters.',
+      });
       return;
     }
     setSubmitting(true);
@@ -32,15 +41,19 @@ export const FeedbackModal = () => {
         email: form.email?.trim() || undefined,
         message: form.message.trim(),
       });
-      toast({ title: "Thanks for the feedback!", description: "We received your message at feedback@exight.in" });
-      setForm({ message: "" });
+      toast({
+        title: 'Thanks for the feedback!',
+        description: 'We received your message at feedback@exight.in',
+      });
+      setForm({ message: '' });
       setOpen(false);
     } catch (err: unknown) {
-      const errorMessage = err instanceof Error ? err.message : "Please use feedback@exight.in to email us directly.";
+      const errorMessage =
+        err instanceof Error ? err.message : 'Please use feedback@exight.in to email us directly.';
       toast({
         title: "Couldn't send feedback",
         description: errorMessage,
-        variant: "destructive",
+        variant: 'destructive',
       });
     } finally {
       setSubmitting(false);
@@ -60,9 +73,12 @@ export const FeedbackModal = () => {
       </DialogTrigger>
       <DialogContent className="max-w-lg w-[92vw] rounded-[28px] border border-border/40 bg-card shadow-2xl">
         <DialogHeader>
-          <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">We'd love your feedback</DialogTitle>
+          <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">
+            We'd love your feedback
+          </DialogTitle>
           <p className="text-sm text-muted-foreground">
-            Prefer email? Write to <span className="font-semibold">feedback@exight.in</span>. If you're too lazy to open your mailbox, use this box.
+            Prefer email? Write to <span className="font-semibold">feedback@exight.in</span>. If
+            you're too lazy to open your mailbox, use this box.
           </p>
         </DialogHeader>
 
@@ -71,7 +87,7 @@ export const FeedbackModal = () => {
             <div>
               <label className="text-sm font-medium">Your name (optional)</label>
               <Input
-                value={form.name || ""}
+                value={form.name || ''}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
                 placeholder="Jane Doe"
                 className="mt-1"
@@ -81,7 +97,7 @@ export const FeedbackModal = () => {
               <label className="text-sm font-medium">Your email (optional)</label>
               <Input
                 type="email"
-                value={form.email || ""}
+                value={form.email || ''}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
                 placeholder="you@example.com"
                 className="mt-1"
@@ -104,8 +120,12 @@ export const FeedbackModal = () => {
             <Button type="button" variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" disabled={submitting} className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
-              {submitting ? "Sending…" : "Submit"}
+            <Button
+              type="submit"
+              disabled={submitting}
+              className="bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+            >
+              {submitting ? 'Sending…' : 'Submit'}
             </Button>
           </div>
         </form>
@@ -113,4 +133,3 @@ export const FeedbackModal = () => {
     </Dialog>
   );
 };
-

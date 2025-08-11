@@ -127,18 +127,18 @@ class ApiService {
         id: '1',
         firstName: 'Demo',
         lastName: 'User',
-        email: 'demo@exight.com'
-      }
+        email: 'demo@exight.com',
+      },
     });
-    
+
     this.mockUsers.set('admin@exight.com', {
       password: 'admin123',
       user: {
         id: '2',
         firstName: 'Admin',
         lastName: 'User',
-        email: 'admin@exight.com'
-      }
+        email: 'admin@exight.com',
+      },
     });
 
     // Load any additional users from localStorage
@@ -197,15 +197,15 @@ class ApiService {
 
   private async mockRequest<T>(
     endpoint: string,
-    options: RequestInit = {}
+    options: RequestInit = {},
   ): Promise<ApiResponse<T>> {
-    log("Mock request called for endpoint:", endpoint);
+    log('Mock request called for endpoint:', endpoint);
     // Simulate network delay
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
+    await new Promise((resolve) => setTimeout(resolve, 500));
+
     const body = options.body ? JSON.parse(options.body as string) : {};
-    log("Mock request body:", body);
-    
+    log('Mock request body:', body);
+
     switch (endpoint) {
       case '/auth/login':
         return this.handleMockLogin(body) as ApiResponse<T>;
@@ -221,28 +221,28 @@ class ApiService {
   }
 
   private handleMockLogin(credentials: LoginRequest): ApiResponse<AuthResponse> {
-    log("Mock login called with:", credentials);
+    log('Mock login called with:', credentials);
     const userData = this.mockUsers.get(credentials.email);
-    log("Found user data:", userData);
-    
+    log('Found user data:', userData);
+
     if (!userData || userData.password !== credentials.password) {
-      warn("Login failed - invalid credentials");
+      warn('Login failed - invalid credentials');
       return {
         success: false,
-        message: 'Invalid email or password'
+        message: 'Invalid email or password',
       };
     }
 
     const token = this.generateMockToken();
     this.setToken(token);
-    log("Mock login successful, token generated:", token);
+    log('Mock login successful, token generated:', token);
 
     return {
       success: true,
       data: {
         token,
-        user: userData.user
-      }
+        user: userData.user,
+      },
     };
   }
 
@@ -251,7 +251,7 @@ class ApiService {
     if (this.mockUsers.has(userData.email)) {
       return {
         success: false,
-        message: 'User with this email already exists'
+        message: 'User with this email already exists',
       };
     }
 
@@ -260,12 +260,12 @@ class ApiService {
       id: Date.now().toString(),
       firstName: userData.firstName,
       lastName: userData.lastName,
-      email: userData.email
+      email: userData.email,
     };
 
     this.mockUsers.set(userData.email, {
       password: userData.password,
-      user: newUser
+      user: newUser,
     });
 
     // Save to localStorage
@@ -278,15 +278,15 @@ class ApiService {
       success: true,
       data: {
         token,
-        user: newUser
-      }
+        user: newUser,
+      },
     };
   }
 
   private handleMockLogout(): ApiResponse<void> {
     this.clearToken();
     return {
-      success: true
+      success: true,
     };
   }
 
@@ -300,7 +300,7 @@ class ApiService {
     if (!token) {
       return {
         success: false,
-        message: 'No valid token found'
+        message: 'No valid token found',
       };
     }
 
@@ -310,15 +310,12 @@ class ApiService {
         id: '1',
         firstName: 'Demo',
         lastName: 'User',
-        email: 'demo@exight.com'
-      }
+        email: 'demo@exight.com',
+      },
     };
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<T> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
     const token = this.getToken();
 
@@ -345,7 +342,8 @@ class ApiService {
       const data = rawText ? JSON.parse(rawText) : { success: response.ok };
 
       if (!response.ok) {
-        const message = (data && (data.message || data.error)) || `HTTP error! status: ${response.status}`;
+        const message =
+          (data && (data.message || data.error)) || `HTTP error! status: ${response.status}`;
         logError(`API Error: ${response.status} - ${message}`);
         throw new Error(message);
       }
@@ -368,7 +366,8 @@ class ApiService {
             id: String(pp.id ?? ''),
             amount: Number(pp.amount ?? 0),
             date: pp && pp.date ? new Date(pp.date as string) : new Date(),
-            description: typeof pp.description === 'string' ? (pp.description as string) : undefined,
+            description:
+              typeof pp.description === 'string' ? (pp.description as string) : undefined,
           };
         })
       : [];
@@ -382,8 +381,10 @@ class ApiService {
       deductionDay: Number(rec?.deductionDay ?? 1),
       isRecurring: Boolean(rec?.isRecurring),
       totalMonths: rec?.totalMonths == null ? undefined : Number(rec.totalMonths as number),
-      remainingMonths: rec?.remainingMonths == null ? undefined : Number(rec.remainingMonths as number),
-      remainingAmount: rec?.remainingAmount == null ? undefined : Number(rec.remainingAmount as number),
+      remainingMonths:
+        rec?.remainingMonths == null ? undefined : Number(rec.remainingMonths as number),
+      remainingAmount:
+        rec?.remainingAmount == null ? undefined : Number(rec.remainingAmount as number),
       createdAt: rec?.createdAt ? new Date(rec.createdAt as string) : new Date(),
       partialPayments,
     };
@@ -411,7 +412,9 @@ class ApiService {
       currency: String(rec?.currency ?? 'INR'),
       dateGiven: rec?.dateGiven ? new Date(rec.dateGiven as string) : new Date(),
       description: rec?.description as string | undefined,
-      status: ((rec?.status === 'completed' || rec?.status === 'written-off') ? (rec.status as Loan['status']) : 'active') as Loan['status'],
+      status: (rec?.status === 'completed' || rec?.status === 'written-off'
+        ? (rec.status as Loan['status'])
+        : 'active') as Loan['status'],
       totalReceived: Number(rec?.totalReceived ?? 0),
       remainingAmount: Number(rec?.remainingAmount ?? 0),
       writeOffDate: rec?.writeOffDate ? new Date(rec.writeOffDate as string) : undefined,
@@ -441,7 +444,9 @@ class ApiService {
       // If backend responded but without expected fields, fall back to mock
       const mock = this.handleMockLogin(credentials);
       if (mock.success && mock.data) return mock.data;
-      const fallbackMessage = isObject(res) ? ((res as { message?: string; error?: string }).message || (res as { error?: string }).error) : undefined;
+      const fallbackMessage = isObject(res)
+        ? (res as { message?: string; error?: string }).message || (res as { error?: string }).error
+        : undefined;
       throw new Error(fallbackMessage || 'Login failed');
     } catch (err) {
       // Network/server error: allow mock login for known demo/admin users
@@ -456,7 +461,9 @@ class ApiService {
     const payload = {
       email: userData.email,
       password: userData.password,
-      name: `${userData.firstName ?? ''} ${userData.lastName ?? ''}`.trim() || userData.email.split('@')[0],
+      name:
+        `${userData.firstName ?? ''} ${userData.lastName ?? ''}`.trim() ||
+        userData.email.split('@')[0],
     };
     try {
       const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/register', {
@@ -476,7 +483,9 @@ class ApiService {
       // If backend response unexpected, generate a mock user
       const mock = this.handleMockRegister(userData);
       if (mock.success && mock.data) return mock.data;
-      const fallbackMessage = isObject(res) ? ((res as { message?: string; error?: string }).message || (res as { error?: string }).error) : undefined;
+      const fallbackMessage = isObject(res)
+        ? (res as { message?: string; error?: string }).message || (res as { error?: string }).error
+        : undefined;
       throw new Error(fallbackMessage || 'Registration failed');
     } catch (err) {
       const mock = this.handleMockRegister(userData);
@@ -544,11 +553,14 @@ class ApiService {
     const res = await this.request<Expense[] | ExpenseResponseWrapper>('/expenses');
     let list: unknown[] = [];
     if (Array.isArray(res)) list = res as unknown[];
-    else if (isSuccessWrapper<Expense[]>(res) && Array.isArray(res.data)) list = res.data as unknown[];
-    return list.map(e => this.normalizeExpense(e));
+    else if (isSuccessWrapper<Expense[]>(res) && Array.isArray(res.data))
+      list = res.data as unknown[];
+    return list.map((e) => this.normalizeExpense(e));
   }
 
-  async createExpense(payload: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>): Promise<Expense> {
+  async createExpense(
+    payload: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>,
+  ): Promise<Expense> {
     const res = await this.request<Expense | SingleExpenseResponseWrapper>('/expenses', {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -560,25 +572,34 @@ class ApiService {
   async updateExpense(id: string | number, payload: Partial<Expense>): Promise<Expense> {
     const numericId = typeof id === 'string' && /^\d+$/.test(id) ? Number(id) : id;
     try {
-      const res = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses/${numericId}`, {
-        method: 'PUT',
-        body: JSON.stringify(payload),
-      });
+      const res = await this.request<Expense | SingleExpenseResponseWrapper>(
+        `/expenses/${numericId}`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(payload),
+        },
+      );
       const item: unknown = isSuccessWrapper<Expense>(res) ? res.data : (res as unknown);
       return this.normalizeExpense(item);
     } catch (e1) {
       try {
-        const res2 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses?id=${numericId}`, {
-          method: 'PUT',
-          body: JSON.stringify(payload),
-        });
+        const res2 = await this.request<Expense | SingleExpenseResponseWrapper>(
+          `/expenses?id=${numericId}`,
+          {
+            method: 'PUT',
+            body: JSON.stringify(payload),
+          },
+        );
         const item2: unknown = isSuccessWrapper<Expense>(res2) ? res2.data : (res2 as unknown);
         return this.normalizeExpense(item2);
       } catch (e2) {
-        const res3 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses/${numericId}/update`, {
-          method: 'POST',
-          body: JSON.stringify(payload),
-        });
+        const res3 = await this.request<Expense | SingleExpenseResponseWrapper>(
+          `/expenses/${numericId}/update`,
+          {
+            method: 'POST',
+            body: JSON.stringify(payload),
+          },
+        );
         const item3: unknown = isSuccessWrapper<Expense>(res3) ? res3.data : (res3 as unknown);
         return this.normalizeExpense(item3);
       }
@@ -589,14 +610,20 @@ class ApiService {
     // Try several common delete shapes to maximize compatibility
     const numericId = typeof id === 'string' && /^\d+$/.test(id) ? Number(id) : id;
     try {
-      const res = await this.request<{ success: boolean }>(`/expenses/${numericId}`, { method: 'DELETE' });
+      const res = await this.request<{ success: boolean }>(`/expenses/${numericId}`, {
+        method: 'DELETE',
+      });
       return res;
     } catch (e1) {
       try {
-        const res2 = await this.request<{ success: boolean }>(`/expenses?id=${numericId}`, { method: 'DELETE' });
+        const res2 = await this.request<{ success: boolean }>(`/expenses?id=${numericId}`, {
+          method: 'DELETE',
+        });
         return res2;
       } catch (e2) {
-        const res3 = await this.request<{ success: boolean }>(`/expenses/${numericId}/delete`, { method: 'POST' });
+        const res3 = await this.request<{ success: boolean }>(`/expenses/${numericId}/delete`, {
+          method: 'POST',
+        });
         return res3;
       }
     }
@@ -608,10 +635,15 @@ class ApiService {
     let list: unknown[] = [];
     if (Array.isArray(res)) list = res as unknown[];
     else if (isSuccessWrapper<Loan[]>(res) && Array.isArray(res.data)) list = res.data as unknown[];
-    return list.map(l => this.normalizeLoan(l));
+    return list.map((l) => this.normalizeLoan(l));
   }
 
-  async createLoan(payload: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>): Promise<Loan> {
+  async createLoan(
+    payload: Omit<
+      Loan,
+      'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'
+    >,
+  ): Promise<Loan> {
     const res = await this.request<Loan | SingleLoanResponseWrapper>('/loans', {
       method: 'POST',
       body: JSON.stringify(payload),
@@ -630,7 +662,9 @@ class ApiService {
       return res;
     } catch (e) {
       const subject = encodeURIComponent('Exight Feedback');
-      const body = encodeURIComponent(`Name: ${payload.name || ''}\nEmail: ${payload.email || ''}\n\n${payload.message}`);
+      const body = encodeURIComponent(
+        `Name: ${payload.name || ''}\nEmail: ${payload.email || ''}\n\n${payload.message}`,
+      );
       if (typeof window !== 'undefined') {
         window.location.href = `mailto:feedback@exight.in?subject=${subject}&body=${body}`;
       }
@@ -639,4 +673,4 @@ class ApiService {
   }
 }
 
-export const apiService = new ApiService(); 
+export const apiService = new ApiService();

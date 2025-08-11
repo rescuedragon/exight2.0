@@ -1,17 +1,20 @@
 # Exight AWS Deployment Plan
 
 ## Overview
+
 This is your complete roadmap to deploy Exight expense tracker to AWS. We'll go from your current localhost app to a fully deployed web application with user authentication and database storage.
 
 ## Phase 1: AWS Account & Infrastructure Setup (Day 1-2)
 
 ### Step 1.1: AWS Account Creation
+
 - [ ] Sign up for AWS Free Tier account
 - [ ] Verify email and phone number
 - [ ] Set up billing alerts (important for cost control)
 - [ ] Enable MFA (Multi-Factor Authentication) for security
 
 ### Step 1.2: Create EC2 Instance (Your Server)
+
 - [ ] Launch t2.micro EC2 instance (Ubuntu 22.04 LTS)
 - [ ] Create and download key pair (.pem file) - KEEP THIS SAFE!
 - [ ] Configure security group (ports 22, 80, 443, 3000, 5000)
@@ -19,6 +22,7 @@ This is your complete roadmap to deploy Exight expense tracker to AWS. We'll go 
 - [ ] Connect to server via SSH
 
 ### Step 1.3: Set Up RDS Database
+
 - [ ] Create PostgreSQL RDS instance (db.t3.micro)
 - [ ] Configure database security group
 - [ ] Create database user and password
@@ -27,6 +31,7 @@ This is your complete roadmap to deploy Exight expense tracker to AWS. We'll go 
 ## Phase 2: Server Environment Setup (Day 2-3)
 
 ### Step 2.1: Install Required Software
+
 ```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
@@ -49,6 +54,7 @@ sudo apt install git -y
 ```
 
 ### Step 2.2: Configure Nginx
+
 - [ ] Set up Nginx as reverse proxy
 - [ ] Configure SSL certificate (Let's Encrypt)
 - [ ] Set up domain routing
@@ -56,6 +62,7 @@ sudo apt install git -y
 ## Phase 3: Backend API Development (Day 3-5)
 
 ### Step 3.1: Database Schema Creation
+
 ```sql
 -- Users table
 CREATE TABLE users (
@@ -124,6 +131,7 @@ CREATE TABLE loan_payments (
 ```
 
 ### Step 3.2: Backend API Structure
+
 ```
 backend/
 ├── server.js              # Main server file
@@ -146,6 +154,7 @@ backend/
 ```
 
 ### Step 3.3: API Endpoints to Create
+
 ```
 Authentication:
 POST /api/auth/register    # User registration
@@ -177,12 +186,14 @@ PUT    /api/user/profile   # Update user profile
 ## Phase 4: Frontend Integration (Day 5-6)
 
 ### Step 4.1: Add API Integration
+
 - [ ] Create API service layer (`src/services/api.js`)
 - [ ] Replace localStorage with API calls
 - [ ] Add authentication context
 - [ ] Update all components to use API
 
 ### Step 4.2: Add Authentication UI
+
 - [ ] Create proper login/register forms
 - [ ] Add loading states and error handling
 - [ ] Implement token management
@@ -191,6 +202,7 @@ PUT    /api/user/profile   # Update user profile
 ## Phase 5: Deployment & Configuration (Day 6-7)
 
 ### Step 5.1: Deploy Backend
+
 ```bash
 # Clone your repository
 git clone <your-repo-url>
@@ -213,6 +225,7 @@ pm2 save
 ```
 
 ### Step 5.2: Deploy Frontend
+
 ```bash
 # Build React app
 cd ../frontend
@@ -224,6 +237,7 @@ sudo cp -r build/* /var/www/html/
 ```
 
 ### Step 5.3: Configure Domain (Optional)
+
 - [ ] Purchase domain from Route 53 or external provider
 - [ ] Configure DNS records
 - [ ] Set up SSL certificate
@@ -232,12 +246,14 @@ sudo cp -r build/* /var/www/html/
 ## Phase 6: Testing & Monitoring (Day 7)
 
 ### Step 6.1: Testing
+
 - [ ] Test all API endpoints
 - [ ] Test user registration/login flow
 - [ ] Test expense and loan CRUD operations
 - [ ] Test on different devices/browsers
 
 ### Step 6.2: Monitoring Setup
+
 - [ ] Set up CloudWatch for basic monitoring
 - [ ] Configure log rotation
 - [ ] Set up automated backups
@@ -246,6 +262,7 @@ sudo cp -r build/* /var/www/html/
 ## Cost Estimation (Free Tier)
 
 ### What's Free for 12 Months:
+
 - **EC2 t2.micro**: 750 hours/month (24/7 for 1 instance)
 - **RDS db.t3.micro**: 750 hours/month + 20GB storage
 - **Elastic IP**: Free when attached to running instance
@@ -253,17 +270,20 @@ sudo cp -r build/* /var/www/html/
 - **Route 53**: $0.50/month for hosted zone (only if using custom domain)
 
 ### Potential Costs After Free Tier:
+
 - EC2 t2.micro: ~$8.50/month
 - RDS db.t3.micro: ~$13/month
 - Total: ~$22/month (very reasonable for a production app)
 
 ## Timeline Summary:
+
 - **Days 1-2**: AWS setup and server configuration
 - **Days 3-5**: Backend API development
 - **Days 5-6**: Frontend integration
 - **Days 6-7**: Deployment and testing
 
 ## What You'll Need From Me:
+
 1. **AWS Account Setup**: I'll guide you through each step
 2. **Code Development**: I'll write all the backend API code
 3. **Frontend Updates**: I'll modify your React app to use APIs
@@ -271,6 +291,7 @@ sudo cp -r build/* /var/www/html/
 5. **Troubleshooting**: I'll help debug any issues
 
 ## Next Steps:
+
 1. **Confirm this plan looks good to you**
 2. **Start with AWS account creation**
 3. **I'll guide you through each phase step-by-step**

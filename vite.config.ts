@@ -1,31 +1,32 @@
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react-swc";
-import path from "path";
-import { visualizer } from "rollup-plugin-visualizer";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react-swc';
+import path from 'path';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const isProduction = command === 'build' && mode === 'production';
   const isAnalyze = mode === 'analyze';
-  
+
   return {
     server: {
-      host: "::",
+      host: '::',
       port: 3000,
     },
     plugins: [
       react(),
       // Add bundle analyzer in production builds or analyze mode
-      (isProduction || isAnalyze) && visualizer({
-        filename: 'dist/stats.html',
-        open: false,
-        gzipSize: true,
-        brotliSize: true,
-      }),
+      (isProduction || isAnalyze) &&
+        visualizer({
+          filename: 'dist/stats.html',
+          open: false,
+          gzipSize: true,
+          brotliSize: true,
+        }),
     ].filter(Boolean),
     resolve: {
       alias: {
-        "@": path.resolve(__dirname, "./src"),
+        '@': path.resolve(__dirname, './src'),
       },
     },
     build: {
@@ -47,11 +48,20 @@ export default defineConfig(({ command, mode }) => {
               return 'radix';
             }
             // Forms and validation
-            if (id.includes('node_modules/react-hook-form') || id.includes('node_modules/@hookform/resolvers') || id.includes('node_modules/zod')) {
+            if (
+              id.includes('node_modules/react-hook-form') ||
+              id.includes('node_modules/@hookform/resolvers') ||
+              id.includes('node_modules/zod')
+            ) {
               return 'forms';
             }
             // Utilities
-            if (id.includes('node_modules/date-fns') || id.includes('node_modules/clsx') || id.includes('node_modules/tailwind-merge') || id.includes('node_modules/class-variance-authority')) {
+            if (
+              id.includes('node_modules/date-fns') ||
+              id.includes('node_modules/clsx') ||
+              id.includes('node_modules/tailwind-merge') ||
+              id.includes('node_modules/class-variance-authority')
+            ) {
               return 'utils';
             }
             // Router
@@ -73,7 +83,9 @@ export default defineConfig(({ command, mode }) => {
           },
           // Optimize chunk naming for better caching
           chunkFileNames: (chunkInfo) => {
-            const facadeModuleId = chunkInfo.facadeModuleId ? chunkInfo.facadeModuleId.split('/').pop() : 'chunk';
+            const facadeModuleId = chunkInfo.facadeModuleId
+              ? chunkInfo.facadeModuleId.split('/').pop()
+              : 'chunk';
             return `js/[name]-[hash].js`;
           },
           entryFileNames: 'js/[name]-[hash].js',

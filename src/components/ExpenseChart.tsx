@@ -1,7 +1,7 @@
-import { useMemo, useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { PieChart, BarChart3 } from "lucide-react";
-import { Expense } from "@/types/expense";
+import { useMemo, useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { PieChart, BarChart3 } from 'lucide-react';
+import { Expense } from '@/types/expense';
 
 interface ExpenseChartProps {
   expenses: Expense[];
@@ -33,19 +33,24 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
       currency: 'INR',
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-      currencyDisplay: 'symbol'
-    }).format(amount).replace(/^₹/, '₹');
+      currencyDisplay: 'symbol',
+    })
+      .format(amount)
+      .replace(/^₹/, '₹');
   };
 
   const chartData = useMemo(() => {
-    const activeExpenses = expenses.filter(expense => 
-      expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0))
+    const activeExpenses = expenses.filter(
+      (expense) =>
+        expense.isRecurring ||
+        (expense.remainingMonths > 0 &&
+          (expense.remainingAmount === undefined || expense.remainingAmount > 0)),
     );
 
     if (activeExpenses.length === 0) return [];
 
     const totalAmount = activeExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-    
+
     const colors = [
       '#10B981', // Emerald
       '#EF4444', // Red
@@ -63,7 +68,7 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
         amount: expense.amount,
         percentage: Math.round((expense.amount / totalAmount) * 100),
         color: colors[index % colors.length],
-        type: expense.type
+        type: expense.type,
       }))
       .sort((a, b) => b.amount - a.amount);
   }, [expenses]);
@@ -78,12 +83,12 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   const itemCount = chartData.length;
   const baseSize = 384; // 96 * 4 (w-96 h-96 in pixels)
   const baseMinHeight = 384; // min-h-96 in pixels
-  
+
   // Scale up proportionally if more than 8 items
-  const scaleFactor = itemCount > 8 ? 1 + ((itemCount - 8) * 0.1) : 1;
+  const scaleFactor = itemCount > 8 ? 1 + (itemCount - 8) * 0.1 : 1;
   const chartSize = Math.round(baseSize * scaleFactor);
   const minHeight = Math.round(baseMinHeight * scaleFactor);
-  
+
   const chartSizeClass = `w-[${chartSize}px] h-[${chartSize}px]`;
   const minHeightClass = `min-h-[${minHeight}px]`;
 
@@ -129,7 +134,7 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
       path,
       startAngle,
       endAngle,
-      isHovered
+      isHovered,
     };
   });
 
@@ -138,9 +143,7 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
       {/* Header */}
       <div className="flex items-center gap-3 mb-4">
         <div className="w-2 h-8 bg-blue-500 rounded-full"></div>
-        <h1 className="text-2xl font-bold text-foreground">
-          Monthly Expense Breakdown
-        </h1>
+        <h1 className="text-2xl font-bold text-foreground">Monthly Expense Breakdown</h1>
       </div>
 
       <Card className="bg-background border border-border shadow-lg">
@@ -148,14 +151,12 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
           <div className="grid lg:grid-cols-2 gap-8 items-center">
             {/* Chart Section */}
             <div className="flex justify-center">
-              <svg 
-                width={chartSize} 
-                height={chartSize} 
+              <svg
+                width={chartSize}
+                height={chartSize}
                 className="drop-shadow-lg"
                 viewBox="0 0 400 400"
               >
-
-
                 {/* Chart segments */}
                 {segments.map((segment, index) => (
                   <path
@@ -189,9 +190,9 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
                   y={centerY - 15}
                   textAnchor="middle"
                   className="fill-foreground font-bold"
-                  style={{ 
+                  style={{
                     fontFamily: 'system-ui',
-                    fontSize: `${Math.max(24, 24 * scaleFactor)}px`
+                    fontSize: `${Math.max(24, 24 * scaleFactor)}px`,
                   }}
                 >
                   {formatCurrency(totalAmount)}
@@ -201,9 +202,9 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
                   y={centerY + 8}
                   textAnchor="middle"
                   className="fill-muted-foreground font-medium"
-                  style={{ 
+                  style={{
                     fontFamily: 'system-ui',
-                    fontSize: `${Math.max(14, 14 * scaleFactor)}px`
+                    fontSize: `${Math.max(14, 14 * scaleFactor)}px`,
                   }}
                 >
                   Total Monthly
@@ -238,21 +239,15 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
                           }}
                         ></div>
                         <div>
-                          <div className="font-semibold text-foreground text-base">
-                            {item.name}
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {item.type}
-                          </div>
+                          <div className="font-semibold text-foreground text-base">{item.name}</div>
+                          <div className="text-sm text-muted-foreground">{item.type}</div>
                         </div>
                       </div>
                       <div className="text-right">
                         <div className="font-bold text-foreground text-base">
                           {formatCurrency(item.amount)}
                         </div>
-                        <div className="text-sm text-muted-foreground">
-                          {item.percentage}%
-                        </div>
+                        <div className="text-sm text-muted-foreground">{item.percentage}%</div>
                       </div>
                     </div>
                   </div>

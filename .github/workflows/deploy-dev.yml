@@ -8,180 +8,180 @@ on:
 jobs:
   deploy-dev:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '18'
-        cache: 'npm'
-        
-    - name: Install dependencies
-      run: npm ci
-      
-    - name: Predeploy checks
-      run: |
-        echo "🔍 Running predeploy checks..."
-        
-        # Run linting
-        echo "📝 Running ESLint..."
-        npm run lint
-        
-        # Run tests if they exist
-        if npm run | grep -q "test"; then
-          echo "🧪 Running tests..."
-          npm test
-        else
-          echo "⚠️  No test script found, skipping tests"
-        fi
-        
-        echo "✅ Predeploy checks completed"
-      
-    - name: Build application
-      run: npm run build
-      
-    - name: Check required secrets
-      run: |
-        echo "🔍 Checking required secrets..."
-        if [ -z "${{ secrets.DEV_HOST }}" ]; then
-          echo "❌ DEV_HOST secret is missing"
-          echo "Please add DEV_HOST secret in repository settings"
-          exit 1
-        fi
-        if [ -z "${{ secrets.DEV_USERNAME }}" ]; then
-          echo "❌ DEV_USERNAME secret is missing"
-          echo "Please add DEV_USERNAME secret in repository settings"
-          exit 1
-        fi
-        if [ -z "${{ secrets.DEV_SSH_KEY }}" ]; then
-          echo "❌ DEV_SSH_KEY secret is missing"
-          echo "Please add DEV_SSH_KEY secret in repository settings"
-          exit 1
-        fi
-        echo "✅ All required secrets are configured"
-        echo "Host: ${{ secrets.DEV_HOST }}"
-        echo "Username: ${{ secrets.DEV_USERNAME }}"
-        echo "SSH Port: ${{ secrets.DEV_SSH_PORT || '22' }}"
-        
-    - name: Validate SSH key
-      run: |
-        echo "🔐 Testing SSH key format..."
-        echo "${{ secrets.DEV_SSH_KEY }}" > /tmp/test_key
-        chmod 600 /tmp/test_key
-        
-        # Check if key starts with -----BEGIN
-        if ! head -1 /tmp/test_key | grep -q "\-\-\-\-\-BEGIN"; then
-          echo "❌ SSH key doesn't start with -----BEGIN"
-          exit 1
-        fi
-        echo "✅ SSH key starts correctly"
-        
-        # Check if key ends with -----END
-        if ! tail -1 /tmp/test_key | grep -q "\-\-\-\-\-END"; then
-          echo "❌ SSH key doesn't end with -----END"
-          exit 1
-        fi
-        echo "✅ SSH key ends correctly"
-        
-        echo "🔌 Testing SSH connection..."
-        ssh -i /tmp/test_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.DEV_USERNAME }}@${{ secrets.DEV_HOST }} "echo 'SSH connection successful'" || {
-          echo "❌ SSH connection failed"
-          echo "🔍 SSH key content (first 3 lines):"
-          head -3 /tmp/test_key
-          echo "🔍 SSH key content (last 3 lines):"
-          tail -3 /tmp/test_key
-          exit 1
-        }
-        
-        echo "✅ SSH connection successful!"
-        rm -f /tmp/test_key
-    
-    - name: Deploy to Dev Environment
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DEV_HOST }}
-        username: ${{ secrets.DEV_USERNAME }}
-        key: ${{ secrets.DEV_SSH_KEY }}
-        port: ${{ secrets.DEV_SSH_PORT || '22' }}
-        script: |
-          echo "🚀 Starting dev deployment..."
-          
-          # Create dev directory if it doesn't exist
-          sudo mkdir -p /var/www/dev.exight.in
-          
-          # Backup current files if they exist
-          if [ -d "/var/www/dev.exight.in" ] && [ "$(ls -A /var/www/dev.exight.in)" ]; then
-            sudo cp -r /var/www/dev.exight.in /var/www/dev.exight.in.backup.$(date +%Y%m%d_%H%M%S)
-            echo "✅ Backup created"
-          fi
-          
-          # Clean dev directory
-          sudo rm -rf /var/www/dev.exight.in/*
-          echo "🧹 Dev directory cleaned"
-          
-          # Set proper permissions for upload
-          sudo chown -R ${{ secrets.DEV_USERNAME }}:${{ secrets.DEV_USERNAME }} /var/www/dev.exight.in/
-          sudo chmod -R 755 /var/www/dev.exight.in/
-          echo "🔐 Permissions set"
-    
-    - name: Upload files to Dev
-      uses: appleboy/scp-action@v0.1.7
-      with:
-        host: ${{ secrets.DEV_HOST }}
-        username: ${{ secrets.DEV_USERNAME }}
-        key: ${{ secrets.DEV_SSH_KEY }}
-        port: ${{ secrets.DEV_SSH_PORT || '22' }}
-        source: "dist/*"
-        target: "/var/www/dev.exight.in/"
-        strip_components: 0
-    
-    - name: Finalize Dev Deployment
-      uses: appleboy/ssh-action@v1.0.3
-      with:
-        host: ${{ secrets.DEV_HOST }}
-        username: ${{ secrets.DEV_USERNAME }}
-        key: ${{ secrets.DEV_SSH_KEY }}
-        port: ${{ secrets.DEV_SSH_PORT || '22' }}
-        script: |
-          echo "🎯 Finalizing dev deployment..."
-          
-          # Remove any nested dist folder if created
-          if [ -d "/var/www/dev.exight.in/dist" ]; then
-            sudo mv /var/www/dev.exight.in/dist/* /var/www/dev.exight.in/ 2>/dev/null || true
-            sudo rm -rf /var/www/dev.exight.in/dist
-            echo "📁 Fixed nested dist folder"
-          fi
-          
-          # Set final permissions
-          sudo chown -R ${{ secrets.DEV_USERNAME }}:apache /var/www/dev.exight.in/
-          sudo chmod -R 750 /var/www/dev.exight.in/
-          sudo chmod -R g+rx /var/www/dev.exight.in/
-          echo "🔐 Final permissions set"
-          
-          # Verify files are in correct location
-          echo "📋 Files in /var/www/dev.exight.in/:"
-          ls -la /var/www/dev.exight.in/
-          
-          # Test if the site is accessible
-          echo "🌐 Testing dev site accessibility..."
-          if curl -s -o /dev/null -w "%{http_code}" http://localhost/ | grep -q "200\|404"; then
-            echo "✅ Dev site is responding"
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Predeploy checks
+        run: |
+          echo "🔍 Running predeploy checks..."
+
+          # Run linting
+          echo "📝 Running ESLint..."
+          npm run lint
+
+          # Run tests if they exist
+          if npm run | grep -q "test"; then
+            echo "🧪 Running tests..."
+            npm test
           else
-            echo "⚠️ Dev site may not be accessible yet"
+            echo "⚠️  No test script found, skipping tests"
           fi
-          
-          echo "🎉 Dev deployment completed!"
-    
-    - name: Health Check
-      run: |
-        echo "🏥 Performing health check..."
-        sleep 10
-        if curl -s -o /dev/null -w "%{http_code}" https://dev.exight.in/ | grep -q "200\|404"; then
-          echo "✅ Dev site is responding to external requests"
-        else
-          echo "❌ Dev site health check failed"
-          exit 1
-        fi
+
+          echo "✅ Predeploy checks completed"
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check required secrets
+        run: |
+          echo "🔍 Checking required secrets..."
+          if [ -z "${{ secrets.DEV_HOST }}" ]; then
+            echo "❌ DEV_HOST secret is missing"
+            echo "Please add DEV_HOST secret in repository settings"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DEV_USERNAME }}" ]; then
+            echo "❌ DEV_USERNAME secret is missing"
+            echo "Please add DEV_USERNAME secret in repository settings"
+            exit 1
+          fi
+          if [ -z "${{ secrets.DEV_SSH_KEY }}" ]; then
+            echo "❌ DEV_SSH_KEY secret is missing"
+            echo "Please add DEV_SSH_KEY secret in repository settings"
+            exit 1
+          fi
+          echo "✅ All required secrets are configured"
+          echo "Host: ${{ secrets.DEV_HOST }}"
+          echo "Username: ${{ secrets.DEV_USERNAME }}"
+          echo "SSH Port: ${{ secrets.DEV_SSH_PORT || '22' }}"
+
+      - name: Validate SSH key
+        run: |
+          echo "🔐 Testing SSH key format..."
+          echo "${{ secrets.DEV_SSH_KEY }}" > /tmp/test_key
+          chmod 600 /tmp/test_key
+
+          # Check if key starts with -----BEGIN
+          if ! head -1 /tmp/test_key | grep -q "\-\-\-\-\-BEGIN"; then
+            echo "❌ SSH key doesn't start with -----BEGIN"
+            exit 1
+          fi
+          echo "✅ SSH key starts correctly"
+
+          # Check if key ends with -----END
+          if ! tail -1 /tmp/test_key | grep -q "\-\-\-\-\-END"; then
+            echo "❌ SSH key doesn't end with -----END"
+            exit 1
+          fi
+          echo "✅ SSH key ends correctly"
+
+          echo "🔌 Testing SSH connection..."
+          ssh -i /tmp/test_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.DEV_USERNAME }}@${{ secrets.DEV_HOST }} "echo 'SSH connection successful'" || {
+            echo "❌ SSH connection failed"
+            echo "🔍 SSH key content (first 3 lines):"
+            head -3 /tmp/test_key
+            echo "🔍 SSH key content (last 3 lines):"
+            tail -3 /tmp/test_key
+            exit 1
+          }
+
+          echo "✅ SSH connection successful!"
+          rm -f /tmp/test_key
+
+      - name: Deploy to Dev Environment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT || '22' }}
+          script: |
+            echo "🚀 Starting dev deployment..."
+
+            # Create dev directory if it doesn't exist
+            sudo mkdir -p /var/www/dev.exight.in
+
+            # Backup current files if they exist
+            if [ -d "/var/www/dev.exight.in" ] && [ "$(ls -A /var/www/dev.exight.in)" ]; then
+              sudo cp -r /var/www/dev.exight.in /var/www/dev.exight.in.backup.$(date +%Y%m%d_%H%M%S)
+              echo "✅ Backup created"
+            fi
+
+            # Clean dev directory
+            sudo rm -rf /var/www/dev.exight.in/*
+            echo "🧹 Dev directory cleaned"
+
+            # Set proper permissions for upload
+            sudo chown -R ${{ secrets.DEV_USERNAME }}:${{ secrets.DEV_USERNAME }} /var/www/dev.exight.in/
+            sudo chmod -R 755 /var/www/dev.exight.in/
+            echo "🔐 Permissions set"
+
+      - name: Upload files to Dev
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT || '22' }}
+          source: 'dist/*'
+          target: '/var/www/dev.exight.in/'
+          strip_components: 0
+
+      - name: Finalize Dev Deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT || '22' }}
+          script: |
+            echo "🎯 Finalizing dev deployment..."
+
+            # Remove any nested dist folder if created
+            if [ -d "/var/www/dev.exight.in/dist" ]; then
+              sudo mv /var/www/dev.exight.in/dist/* /var/www/dev.exight.in/ 2>/dev/null || true
+              sudo rm -rf /var/www/dev.exight.in/dist
+              echo "📁 Fixed nested dist folder"
+            fi
+
+            # Set final permissions
+            sudo chown -R ${{ secrets.DEV_USERNAME }}:apache /var/www/dev.exight.in/
+            sudo chmod -R 750 /var/www/dev.exight.in/
+            sudo chmod -R g+rx /var/www/dev.exight.in/
+            echo "🔐 Final permissions set"
+
+            # Verify files are in correct location
+            echo "📋 Files in /var/www/dev.exight.in/:"
+            ls -la /var/www/dev.exight.in/
+
+            # Test if the site is accessible
+            echo "🌐 Testing dev site accessibility..."
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost/ | grep -q "200\|404"; then
+              echo "✅ Dev site is responding"
+            else
+              echo "⚠️ Dev site may not be accessible yet"
+            fi
+
+            echo "🎉 Dev deployment completed!"
+
+      - name: Health Check
+        run: |
+          echo "🏥 Performing health check..."
+          sleep 10
+          if curl -s -o /dev/null -w "%{http_code}" https://dev.exight.in/ | grep -q "200\|404"; then
+            echo "✅ Dev site is responding to external requests"
+          else
+            echo "❌ Dev site health check failed"
+            exit 1
+          fi

@@ -1,14 +1,33 @@
-import { useState, useEffect } from "react";
-import { createPortal } from "react-dom";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-import { X, HandCoins, Calendar, IndianRupee, Users, CheckCircle, AlertTriangle, Clock, TrendingDown, AlertCircle, Send } from "lucide-react";
-import { Loan } from "@/types/loan";
-import { useModal } from "@/contexts/ModalContext";
+import {
+  X,
+  HandCoins,
+  Calendar,
+  IndianRupee,
+  Users,
+  CheckCircle,
+  AlertTriangle,
+  Clock,
+  TrendingDown,
+  AlertCircle,
+  Send,
+} from 'lucide-react';
+import { Loan } from '@/types/loan';
+import { useModal } from '@/contexts/ModalContext';
 
 interface LoansDetailModalProps {
   loans: Loan[];
@@ -52,21 +71,23 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
       currency,
       minimumFractionDigits: 0,
       maximumFractionDigits: 0,
-      currencyDisplay: 'symbol'
-    }).format(amount).replace(/^₹/, '₹');
+      currencyDisplay: 'symbol',
+    })
+      .format(amount)
+      .replace(/^₹/, '₹');
   };
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('en-IN', {
       year: 'numeric',
       month: 'short',
-      day: 'numeric'
+      day: 'numeric',
     }).format(date);
   };
 
-  const activeLoans = loans.filter(loan => loan.status === 'active');
-  const completedLoans = loans.filter(loan => loan.status === 'completed');
-  const writtenOffLoans = loans.filter(loan => loan.status === 'written-off');
+  const activeLoans = loans.filter((loan) => loan.status === 'active');
+  const completedLoans = loans.filter((loan) => loan.status === 'completed');
+  const writtenOffLoans = loans.filter((loan) => loan.status === 'written-off');
 
   const totalLoaned = loans.reduce((sum, loan) => sum + loan.amount, 0);
   const totalReceived = loans.reduce((sum, loan) => sum + loan.totalReceived, 0);
@@ -74,13 +95,16 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
   const totalWrittenOff = writtenOffLoans.reduce((sum, loan) => sum + loan.remainingAmount, 0);
 
   // Group loans by person
-  const loansByPerson = loans.reduce((acc, loan) => {
-    if (!acc[loan.personName]) {
-      acc[loan.personName] = [];
-    }
-    acc[loan.personName].push(loan);
-    return acc;
-  }, {} as Record<string, Loan[]>);
+  const loansByPerson = loans.reduce(
+    (acc, loan) => {
+      if (!acc[loan.personName]) {
+        acc[loan.personName] = [];
+      }
+      acc[loan.personName].push(loan);
+      return acc;
+    },
+    {} as Record<string, Loan[]>,
+  );
 
   const getStatusColor = (status: Loan['status']) => {
     switch (status) {
@@ -114,7 +138,9 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
             </div>
             <div>
               <CardTitle className="text-3xl font-bold text-foreground">Loans Management</CardTitle>
-              <p className="text-muted-foreground font-medium">Track money you've lent and received</p>
+              <p className="text-muted-foreground font-medium">
+                Track money you've lent and received
+              </p>
             </div>
           </div>
           <Button
@@ -126,7 +152,7 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
-        
+
         <CardContent className="flex-1 overflow-hidden p-0">
           <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col">
             <div className="flex-shrink-0 px-8 pt-6">
@@ -150,12 +176,14 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                         </div>
                         <div>
                           <p className="text-sm font-medium text-muted-foreground">Total Loaned</p>
-                          <p className="text-2xl font-bold text-foreground">{formatCurrency(totalLoaned)}</p>
+                          <p className="text-2xl font-bold text-foreground">
+                            {formatCurrency(totalLoaned)}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="premium-card border-blue-accent/20">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3">
@@ -163,13 +191,17 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                           <IndianRupee className="h-5 w-5 text-blue-accent" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-muted-foreground">Amount Received</p>
-                          <p className="text-2xl font-bold text-foreground">{formatCurrency(totalReceived)}</p>
+                          <p className="text-sm font-medium text-muted-foreground">
+                            Amount Received
+                          </p>
+                          <p className="text-2xl font-bold text-foreground">
+                            {formatCurrency(totalReceived)}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="premium-card border-orange-500/20">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3">
@@ -177,13 +209,17 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                           <TrendingDown className="h-5 w-5 text-orange-500" />
                         </div>
                         <div>
-                          <p className="text-sm font-medium text-muted-foreground">Amount Pending</p>
-                          <p className="text-2xl font-bold text-foreground">{formatCurrency(totalPending)}</p>
+                          <p className="text-sm font-medium text-muted-foreground">
+                            Amount Pending
+                          </p>
+                          <p className="text-2xl font-bold text-foreground">
+                            {formatCurrency(totalPending)}
+                          </p>
                         </div>
                       </div>
                     </CardContent>
                   </Card>
-                  
+
                   <Card className="premium-card border-purple-accent/20">
                     <CardContent className="p-6">
                       <div className="flex items-center gap-3">
@@ -207,18 +243,25 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                   <CardContent>
                     <div className="space-y-4">
                       {loans.slice(0, 5).map((loan) => (
-                        <div key={loan.id} className="flex items-center justify-between p-4 bg-muted/10 rounded-xl">
+                        <div
+                          key={loan.id}
+                          className="flex items-center justify-between p-4 bg-muted/10 rounded-xl"
+                        >
                           <div className="flex items-center gap-3">
                             <div className="p-2 bg-emerald-accent/10 rounded-lg">
                               <HandCoins className="h-4 w-4 text-emerald-accent" />
                             </div>
                             <div>
                               <p className="font-semibold">{loan.personName}</p>
-                              <p className="text-sm text-muted-foreground">{formatDate(loan.dateGiven)}</p>
+                              <p className="text-sm text-muted-foreground">
+                                {formatDate(loan.dateGiven)}
+                              </p>
                             </div>
                           </div>
                           <div className="text-right">
-                            <p className="font-bold">{formatCurrency(loan.amount, loan.currency)}</p>
+                            <p className="font-bold">
+                              {formatCurrency(loan.amount, loan.currency)}
+                            </p>
                             <Badge variant="outline" className={getStatusColor(loan.status)}>
                               {getStatusIcon(loan.status)}
                               {loan.status === 'written-off' ? 'Bad Debt' : loan.status}
@@ -258,13 +301,17 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                             <TableRow key={loan.id}>
                               <TableCell className="font-medium">{loan.personName}</TableCell>
                               <TableCell>{formatCurrency(loan.amount, loan.currency)}</TableCell>
-                              <TableCell className="text-emerald-600">{formatCurrency(loan.totalReceived, loan.currency)}</TableCell>
-                              <TableCell className="text-orange-600">{formatCurrency(loan.remainingAmount, loan.currency)}</TableCell>
+                              <TableCell className="text-emerald-600">
+                                {formatCurrency(loan.totalReceived, loan.currency)}
+                              </TableCell>
+                              <TableCell className="text-orange-600">
+                                {formatCurrency(loan.remainingAmount, loan.currency)}
+                              </TableCell>
                               <TableCell>{formatDate(loan.dateGiven)}</TableCell>
                               <TableCell>
                                 <div className="flex items-center gap-2">
                                   <div className="w-20 bg-muted/20 rounded-full h-2">
-                                    <div 
+                                    <div
                                       className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 rounded-full transition-all duration-300"
                                       style={{ width: `${progress}%` }}
                                     />
@@ -297,7 +344,9 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                   {[...completedLoans, ...writtenOffLoans].length === 0 ? (
                     <div className="text-center py-12">
                       <CheckCircle className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <p className="text-lg font-semibold text-muted-foreground">No completed loans</p>
+                      <p className="text-lg font-semibold text-muted-foreground">
+                        No completed loans
+                      </p>
                     </div>
                   ) : (
                     <Table>
@@ -316,13 +365,19 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                           <TableRow key={loan.id}>
                             <TableCell className="font-medium">{loan.personName}</TableCell>
                             <TableCell>{formatCurrency(loan.amount, loan.currency)}</TableCell>
-                            <TableCell className={loan.status === 'completed' ? 'text-emerald-600' : 'text-red-600'}>
+                            <TableCell
+                              className={
+                                loan.status === 'completed' ? 'text-emerald-600' : 'text-red-600'
+                              }
+                            >
                               {formatCurrency(loan.totalReceived, loan.currency)}
                             </TableCell>
                             <TableCell>{formatDate(loan.dateGiven)}</TableCell>
                             <TableCell>
                               {loan.status === 'written-off' && loan.writeOffDate ? (
-                                <span className="text-red-600 font-medium">{formatDate(loan.writeOffDate)}</span>
+                                <span className="text-red-600 font-medium">
+                                  {formatDate(loan.writeOffDate)}
+                                </span>
                               ) : loan.status === 'completed' ? (
                                 <span className="text-emerald-600 font-medium">—</span>
                               ) : (
@@ -346,10 +401,18 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
               <TabsContent value="by-person" className="p-8">
                 <div className="space-y-6">
                   {Object.entries(loansByPerson).map(([personName, personLoans]) => {
-                    const totalLoanedToPerson = personLoans.reduce((sum, loan) => sum + loan.amount, 0);
-                    const totalReceivedFromPerson = personLoans.reduce((sum, loan) => sum + loan.totalReceived, 0);
-                    const totalPendingFromPerson = personLoans.filter(l => l.status === 'active').reduce((sum, loan) => sum + loan.remainingAmount, 0);
-                    
+                    const totalLoanedToPerson = personLoans.reduce(
+                      (sum, loan) => sum + loan.amount,
+                      0,
+                    );
+                    const totalReceivedFromPerson = personLoans.reduce(
+                      (sum, loan) => sum + loan.totalReceived,
+                      0,
+                    );
+                    const totalPendingFromPerson = personLoans
+                      .filter((l) => l.status === 'active')
+                      .reduce((sum, loan) => sum + loan.remainingAmount, 0);
+
                     return (
                       <Card key={personName} className="premium-card">
                         <CardHeader>
@@ -362,7 +425,9 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                             </CardTitle>
                             <div className="text-right">
                               <p className="text-sm text-muted-foreground">Net Pending</p>
-                              <p className="text-lg font-bold text-foreground">{formatCurrency(totalPendingFromPerson)}</p>
+                              <p className="text-lg font-bold text-foreground">
+                                {formatCurrency(totalPendingFromPerson)}
+                              </p>
                             </div>
                           </div>
                         </CardHeader>
@@ -370,24 +435,37 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
                           <div className="grid grid-cols-3 gap-4 mb-4">
                             <div className="text-center p-3 bg-blue-accent/10 rounded-xl">
                               <p className="text-sm text-muted-foreground">Total Loaned</p>
-                              <p className="font-bold text-blue-accent">{formatCurrency(totalLoanedToPerson)}</p>
+                              <p className="font-bold text-blue-accent">
+                                {formatCurrency(totalLoanedToPerson)}
+                              </p>
                             </div>
                             <div className="text-center p-3 bg-emerald-accent/10 rounded-xl">
                               <p className="text-sm text-muted-foreground">Total Received</p>
-                              <p className="font-bold text-emerald-accent">{formatCurrency(totalReceivedFromPerson)}</p>
+                              <p className="font-bold text-emerald-accent">
+                                {formatCurrency(totalReceivedFromPerson)}
+                              </p>
                             </div>
                             <div className="text-center p-3 bg-orange-500/10 rounded-xl">
                               <p className="text-sm text-muted-foreground">Pending</p>
-                              <p className="font-bold text-orange-600">{formatCurrency(totalPendingFromPerson)}</p>
+                              <p className="font-bold text-orange-600">
+                                {formatCurrency(totalPendingFromPerson)}
+                              </p>
                             </div>
                           </div>
-                          
+
                           <div className="space-y-2">
                             {personLoans.map((loan) => (
-                              <div key={loan.id} className="flex items-center justify-between p-3 bg-muted/10 rounded-lg">
+                              <div
+                                key={loan.id}
+                                className="flex items-center justify-between p-3 bg-muted/10 rounded-lg"
+                              >
                                 <div>
-                                  <p className="font-medium">{formatCurrency(loan.amount, loan.currency)}</p>
-                                  <p className="text-xs text-muted-foreground">{formatDate(loan.dateGiven)}</p>
+                                  <p className="font-medium">
+                                    {formatCurrency(loan.amount, loan.currency)}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground">
+                                    {formatDate(loan.dateGiven)}
+                                  </p>
                                 </div>
                                 <Badge variant="outline" className={getStatusColor(loan.status)}>
                                   {getStatusIcon(loan.status)}
@@ -407,6 +485,6 @@ export const LoansDetailModal = ({ loans, onClose, onUpdateLoan }: LoansDetailMo
         </CardContent>
       </Card>
     </div>,
-    document.body
+    document.body,
   );
 };
