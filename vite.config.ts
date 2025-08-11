@@ -30,8 +30,9 @@ export default defineConfig(({ command, mode }) => {
     },
     build: {
       // Production build optimizations
-      target: 'es2015',
-      minify: 'terser',
+      target: 'es2018',
+      // Use Vite's fast/safe default minifier
+      minify: 'esbuild',
       sourcemap: false,
       rollupOptions: {
         output: {
@@ -88,12 +89,6 @@ export default defineConfig(({ command, mode }) => {
             }
             return `assets/[name]-[hash].[ext]`;
           },
-        },
-        // Tree shaking optimizations
-        treeshake: {
-          moduleSideEffects: false,
-          propertyReadSideEffects: false,
-          unknownGlobalSideEffects: false,
         },
       },
       // CSS optimizations
