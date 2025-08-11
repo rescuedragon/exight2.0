@@ -17,12 +17,12 @@ ALWAYS do these:
 
 #Go through the IMPROVEMENT_IDEA.md and tell me what should you work on next. 
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
-CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW.
+CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 298  
-[COMPLETED] - 24  
+[PENDING] - 297  
+[COMPLETED] - 25  
 
-Total percent complete - 7.45%
+Total percent complete - 7.76%
 
 Rules:
 1. Every item must be marked as [PENDING] or [COMPLETED].
@@ -79,7 +79,7 @@ Rules:
 2.10. Add map of deployment stages (dev/staging/prod) and the exact steps to push to each. [COMPLETED]
 
 3. Code Quality, Linting & Formatting
-3.1. Add/verify ESLint config enforces TypeScript rules and React hooks rules (eslint.config.js). [PENDING]
+3.1. Add/verify ESLint config enforces TypeScript rules and React hooks rules (eslint.config.js). [COMPLETED]
 3.2. Add Prettier integration and pre-commit hook to format before commits. [PENDING]
 3.3. Add Husky pre-commit hooks for lint-staged to run ESLint and tests. [PENDING]
 3.4. Enforce no-explicit-any unless necessary; document exceptions. [PENDING]

@@ -806,6 +806,12 @@
 
 *This log will be updated with each development session to maintain a complete record of all activities and decisions.* 
 
+### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
+- Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
+- Marked `IMPROVEMENT_IDEAS.md` item 3.1 as [COMPLETED].
+- Updated counters in `IMPROVEMENT_IDEAS.md`: [PENDING] 297, [COMPLETED] 25, Total percent complete 7.76%.
+- No functional code changes; documentation-only update. Branch policy respected (no changes to `main`).
+
 ### [$(date)] - Guided Step-by-Step Fix Plan (API ↔ RDS)
 - Goal: Make the API (EC2 at 13.60.70.116) connect to RDS PostgreSQL.
 - What we'll do (micro-steps):
