@@ -32,13 +32,17 @@
   },
   "type": "module",
   "engines": {
-    "node": "18.x"
+    "node": "18.19.0",
+    "npm": ">=9.0.0"
   },
   "scripts": {
     "dev": "vite",
     "build": "npx vite build",
+    "build:analyze": "npx vite build --mode analyze",
     "preview": "vite preview",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lockfile:check": "npm ci --dry-run",
+    "lockfile:update": "npm install"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -105,6 +109,8 @@
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
-    "eslint-plugin-react-refresh": "^0.4.9"
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "rollup-plugin-visualizer": "^6.0.3",
+    "terser": "^5.43.1"
   }
 }

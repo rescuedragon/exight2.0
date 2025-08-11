@@ -1,0 +1,98 @@
+name: CI - Build, Lint & Test
+
+on:
+  pull_request:
+    branches: [main, dev]
+  push:
+    branches: [dev]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Check lockfile integrity
+      run: npm run lockfile:check
+      
+    - name: Run linting
+      run: npm run lint
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Build with analysis (for PRs)
+      if: github.event_name == 'pull_request'
+      run: npm run build:analyze
+      
+    - name: Check build artifacts
+      run: |
+        echo "🔍 Checking build artifacts..."
+        if [ ! -d "dist" ]; then
+          echo "❌ dist directory not found"
+          exit 1
+        fi
+        
+        if [ ! -f "dist/index.html" ]; then
+          echo "❌ index.html not found in dist"
+          exit 1
+        fi
+        
+        if [ ! -d "dist/js" ]; then
+          echo "❌ js directory not found in dist"
+          exit 1
+        fi
+        
+        if [ ! -d "dist/css" ]; then
+          echo "❌ css directory not found in dist"
+          exit 1
+        fi
+        
+        echo "✅ All build artifacts present"
+        
+        # Check bundle sizes
+        echo "📊 Bundle size analysis:"
+        du -h dist/js/*.js | sort -hr
+        du -h dist/css/*.css | sort -hr
+        
+        # Check total bundle size
+        total_js=$(du -cb dist/js/*.js | tail -1 | cut -f1)
+        total_css=$(du -cb dist/css/*.css | tail -1 | cut -f1)
+        total=$((total_js + total_css))
+        
+        echo "📦 Total bundle size: $((total / 1024)) KB"
+        
+        # Fail if bundle is too large (e.g., > 2MB)
+        if [ $total -gt 2097152 ]; then
+          echo "❌ Bundle size too large: $((total / 1024)) KB (max: 2048 KB)"
+          exit 1
+        fi
+        
+        echo "✅ Bundle size within limits"
+        
+    - name: Upload build artifacts (for debugging)
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: build-artifacts
+        path: dist/
+        retention-days: 7
+        
+    - name: Upload bundle analysis (for debugging)
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: bundle-analysis
+        path: dist/stats.html
+        retention-days: 7

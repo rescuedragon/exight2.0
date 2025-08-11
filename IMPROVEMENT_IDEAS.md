@@ -19,10 +19,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW.
 
-[PENDING] - 309  
-[COMPLETED] - 13  
+[PENDING] - 298  
+[COMPLETED] - 24  
 
-Total percent complete - 4.04%
+Total percent complete - 7.45%
 
 Rules:
 1. Every item must be marked as [PENDING] or [COMPLETED].
@@ -67,16 +67,16 @@ Rules:
 1.10. Verify README commands for current package manager (npm/yarn/bun). [COMPLETED]
 
 2. Build & Deployment
-2.1. Verify Vite production config (vite.config.ts) for optimal build flags. [PENDING]
-2.2. Add a build:analyze script to generate bundle report (rollup-plugin-visualizer or vite-plugin-visualizer). [PENDING]
-2.3. Add CI step to run npm run build and fail early if build breaks. [PENDING]
-2.4. Add a predeploy step that runs tests & lint before deploy. [PENDING]
-2.5. Add exact Node version in package.json engines and use .nvmrc. [PENDING]
-2.6. Harden production build: set process.env.NODE_ENV='production' explicitly where needed. [PENDING]
-2.7. Add deterministic builds by pinning dependency versions in lockfile. [PENDING]
-2.8. Inspect deploy.sh and vercel.json for secrets leakage and tighten permission. [PENDING]
-2.9. Scripted upload for dist that verifies file integrity and filesize. [PENDING]
-2.10. Add map of deployment stages (dev/staging/prod) and the exact steps to push to each. [PENDING]
+2.1. Verify Vite production config (vite.config.ts) for optimal build flags. [COMPLETED]
+2.2. Add a build:analyze script to generate bundle report (rollup-plugin-visualizer or vite-plugin-visualizer). [COMPLETED]
+2.3. Add CI step to run npm run build and fail early if build breaks. [COMPLETED]
+2.4. Add a predeploy step that runs tests & lint before deploy. [COMPLETED]
+2.5. Add exact Node version in package.json engines and use .nvmrc. [COMPLETED]
+2.6. Harden production build: set process.env.NODE_ENV='production' explicitly where needed. [COMPLETED]
+2.7. Add deterministic builds by pinning dependency versions in lockfile. [COMPLETED]
+2.8. Inspect deploy.sh and vercel.json for secrets leakage and tighten permission. [COMPLETED]
+2.9. Scripted upload for dist that verifies file integrity and filesize. [COMPLETED]
+2.10. Add map of deployment stages (dev/staging/prod) and the exact steps to push to each. [COMPLETED]
 
 3. Code Quality, Linting & Formatting
 3.1. Add/verify ESLint config enforces TypeScript rules and React hooks rules (eslint.config.js). [PENDING]

@@ -21,6 +21,24 @@ jobs:
     - name: Install dependencies
       run: npm ci
     
+    - name: Predeploy checks
+      run: |
+        echo "🔍 Running predeploy checks..."
+        
+        # Run linting
+        echo "📝 Running ESLint..."
+        npm run lint
+        
+        # Run tests if they exist
+        if npm run | grep -q "test"; then
+          echo "🧪 Running tests..."
+          npm test
+        else
+          echo "⚠️  No test script found, skipping tests"
+        fi
+        
+        echo "✅ Predeploy checks completed"
+    
     - name: Build app
       run: npm run build
     
