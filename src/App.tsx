@@ -9,52 +9,24 @@ import NotFound from "./pages/NotFound";
 import TestSpace from "./pages/TestSpace";
 import Login from "./components/Login";
 import { ModalProvider } from "@/contexts/ModalContext";
-import { apiService } from "@/lib/api";
+
 import { FeedbackModal } from "@/components/FeedbackModal";
 
 
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // Check if user has auth token
-        const token = localStorage.getItem('authToken');
-        const demoMode = localStorage.getItem('demoMode');
-        const lastLoginDate = localStorage.getItem('lastLoginDate');
-        
-        // Set demo mode first
-        setIsDemoMode(demoMode === 'true');
-        
-        if (token) {
-          try {
-            // Try to verify token with API
-            const isAuthValid = await apiService.checkAuth();
-            setIsAuthenticated(isAuthValid);
-          } catch (apiError) {
-            console.error('API auth check failed:', apiError);
-            // Fallback to token check
-            setIsAuthenticated(!!token);
-          }
-        } else {
-          // No token, check for demo mode
-          setIsAuthenticated(demoMode === 'true');
-        }
-      } catch (error) {
-        console.error('Auth check failed:', error);
-        // Final fallback to localStorage check
-        const lastLoginDate = localStorage.getItem('lastLoginDate');
-        setIsAuthenticated(!!lastLoginDate);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    checkAuth();
+    // Simple auth check without API calls
+    const token = localStorage.getItem('authToken');
+    const demoMode = localStorage.getItem('demoMode');
+    const lastLoginDate = localStorage.getItem('lastLoginDate');
+    
+    setIsDemoMode(demoMode === 'true');
+    setIsAuthenticated(!!token || demoMode === 'true' || !!lastLoginDate);
   }, []);
 
   if (isLoading) {
