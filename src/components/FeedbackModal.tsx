@@ -35,10 +35,11 @@ export const FeedbackModal = () => {
       toast({ title: "Thanks for the feedback!", description: "We received your message at feedback@exight.in" });
       setForm({ message: "" });
       setOpen(false);
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : "Please use feedback@exight.in to email us directly.";
       toast({
         title: "Couldn't send feedback",
-        description: err?.message || "Please use feedback@exight.in to email us directly.",
+        description: errorMessage,
         variant: "destructive",
       });
     } finally {

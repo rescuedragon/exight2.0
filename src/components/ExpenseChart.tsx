@@ -19,6 +19,14 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [animationProgress, setAnimationProgress] = useState(0);
 
+  // Animation effect - moved to top to follow React Hook rules
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setAnimationProgress(1);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const formatCurrency = (amount: number) => {
     return new Intl.NumberFormat('en-IN', {
       style: 'currency',
@@ -78,14 +86,6 @@ export const ExpenseChart = ({ expenses }: ExpenseChartProps) => {
   
   const chartSizeClass = `w-[${chartSize}px] h-[${chartSize}px]`;
   const minHeightClass = `min-h-[${minHeight}px]`;
-
-  // Animation effect
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setAnimationProgress(1);
-    }, 100);
-    return () => clearTimeout(timer);
-  }, []);
 
   // Enhanced chart creation for donut chart
   const centerX = 200;

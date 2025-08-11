@@ -85,7 +85,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     const amount = frequencyToMonthly(inputAmount, formData.frequency);
     const deductionDay = formData.deductionDay ? parseInt(formData.deductionDay) : 1; // Default to 1st if not specified
     
-    const expenseData: any = {
+    const expenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'> = {
       name: formData.name,
       amount,
       currency: formData.currency,
@@ -205,7 +205,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
               {/* Frequency selector */}
               <div className="space-y-3">
                 <Label className="text-sm font-semibold text-foreground">Expense Frequency</Label>
-                <Select value={formData.frequency} onValueChange={(value: any) => setFormData(prev => ({ ...prev, frequency: value }))}>
+                <Select value={formData.frequency} onValueChange={(value: Frequency) => setFormData(prev => ({ ...prev, frequency: value }))}>
                   <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
                     <SelectValue placeholder="Monthly" />
                   </SelectTrigger>
@@ -217,7 +217,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     <SelectItem value="yearly">Yearly</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">We’ll normalize this to a monthly amount for dashboards.</p>
+                <p className="text-xs text-muted-foreground">We'll normalize this to a monthly amount for dashboards.</p>
               </div>
 
               {/* Expense Type removed per request (defaults to EMI under the hood) */}

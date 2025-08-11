@@ -3,7 +3,10 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 export interface TextareaProps
-  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
+  extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  // This interface extends HTML textarea attributes without adding new properties
+  // It's intentionally empty to provide type safety for standard textarea props
+}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, ...props }, ref) => {

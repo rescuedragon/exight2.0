@@ -35,7 +35,9 @@ const Login = () => {
           if (first) localStorage.setItem('userName', first);
           if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
           localStorage.setItem('lastLoginDate', new Date().toDateString());
-        } catch {}
+        } catch (localStorageError) {
+          console.warn('Failed to save user data to localStorage:', localStorageError);
+        }
         // Force full reload so App re-checks auth from token
         window.location.href = "/";
       } else {
@@ -52,13 +54,16 @@ const Login = () => {
           if (first) localStorage.setItem('userName', first);
           if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
           localStorage.setItem('lastLoginDate', new Date().toDateString());
-        } catch {}
+        } catch (localStorageError) {
+          console.warn('Failed to save user data to localStorage:', localStorageError);
+        }
         // Force full reload so App re-checks auth from token
         window.location.href = "/";
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Auth error:', error);
-      setError(error?.message || 'Authentication failed. Please try again.');
+      const errorMessage = error instanceof Error ? error.message : 'Authentication failed. Please try again.';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

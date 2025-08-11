@@ -167,7 +167,7 @@ export const ExpenseDashboard = memo(({ expenses, onUpdateExpense, isPrivacyMode
       title: "Success",
       description: `Partial payment of ${formatCurrency(payment)} recorded successfully!`
     });
-  }, [selectedExpense, partialPayment, formatCurrency, onUpdateExpense, toast]);
+  }, [selectedExpense, partialPayment, formatCurrency, onUpdateExpense, toast, setPartialPayment, setSelectedExpense]);
 
   // Memoized expense card renderer
   const renderExpenseCard = useCallback((expense: Expense, index: number) => {

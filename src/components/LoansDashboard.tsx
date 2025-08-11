@@ -139,7 +139,7 @@ export const LoansDashboard = memo(({ loans, onUpdateLoan, isPrivacyMode = false
       title: "Success",
       description: `${type === 'payment' ? 'Payment' : 'Write-off'} of ${formatCurrency(payment)} recorded successfully!`
     });
-  }, [selectedLoan, paymentAmount, paymentDescription, formatCurrency, onUpdateLoan, toast]);
+  }, [selectedLoan, paymentAmount, paymentDescription, formatCurrency, onUpdateLoan, toast, setPaymentAmount, setPaymentDescription, setSelectedLoan]);
 
   // Memoized loan card renderer
   const renderLoanCard = useCallback((loan: Loan, index: number) => {

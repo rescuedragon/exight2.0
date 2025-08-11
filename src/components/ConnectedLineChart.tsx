@@ -186,7 +186,7 @@ export const ConnectedLineChart = ({
                   {/* Tooltip */}
                   {hoveredIndex === index && (() => {
                     // Smart positioning based on dot location
-                    let tooltipStyle: React.CSSProperties = {
+                    const tooltipStyle: React.CSSProperties = {
                       position: 'fixed',
                       zIndex: 9999,
                       backgroundColor: 'white',
