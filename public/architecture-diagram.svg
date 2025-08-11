@@ -1,0 +1,133 @@
+<svg width="800" height="600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .title { font-family: Arial, sans-serif; font-size: 24px; font-weight: bold; fill: #1f2937; }
+      .subtitle { font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; fill: #374151; }
+      .label { font-family: Arial, sans-serif; font-size: 14px; fill: #6b7280; }
+      .component { font-family: Arial, sans-serif; font-size: 12px; fill: #ffffff; }
+      .arrow { stroke: #3b82f6; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .data-flow { stroke: #10b981; stroke-width: 2; fill: none; marker-end: url(#arrowhead); }
+      .frontend-box { fill: #3b82f6; rx: 8; }
+      .backend-box { fill: #10b981; rx: 8; }
+      .database-box { fill: #f59e0b; rx: 8; }
+      .storage-box { fill: #8b5cf6; rx: 8; }
+    </style>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+    </marker>
+  </defs>
+  
+  <!-- Title -->
+  <text x="400" y="30" text-anchor="middle" class="title">Exight 2.0 Architecture</text>
+  
+  <!-- Frontend Layer -->
+  <rect x="50" y="80" width="300" height="200" class="frontend-box"/>
+  <text x="200" y="105" text-anchor="middle" class="subtitle">Frontend (React + TypeScript)</text>
+  
+  <!-- Frontend Components -->
+  <rect x="70" y="120" width="120" height="40" fill="#60a5fa" rx="4"/>
+  <text x="130" y="145" text-anchor="middle" class="component">Expense Dashboard</text>
+  
+  <rect x="210" y="120" width="120" height="40" fill="#60a5fa" rx="4"/>
+  <text x="270" y="145" text-anchor="middle" class="component">Loan Management</text>
+  
+  <rect x="70" y="170" width="120" height="40" fill="#60a5fa" rx="4"/>
+  <text x="130" y="195" text-anchor="middle" class="component">Analytics & Charts</text>
+  
+  <rect x="210" y="170" width="120" height="40" fill="#60a5fa" rx="4"/>
+  <text x="270" y="195" text-anchor="middle" class="component">User Settings</text>
+  
+  <rect x="140" y="220" width="120" height="40" fill="#60a5fa" rx="4"/>
+  <text x="200" y="245" text-anchor="middle" class="component">Action History</text>
+  
+  <!-- Backend Layer -->
+  <rect x="450" y="80" width="300" height="200" class="backend-box"/>
+  <text x="600" y="105" text-anchor="middle" class="subtitle">Backend (Node.js + Express)</text>
+  
+  <!-- Backend Components -->
+  <rect x="470" y="120" width="120" height="40" fill="#34d399" rx="4"/>
+  <text x="530" y="145" text-anchor="middle" class="component">Feedback API</text>
+  
+  <rect x="610" y="120" width="120" height="40" fill="#34d399" rx="4"/>
+  <text x="670" y="145" text-anchor="middle" class="component">User Management</text>
+  
+  <rect x="470" y="170" width="120" height="40" fill="#34d399" rx="4"/>
+  <text x="530" y="195" text-anchor="middle" class="component">Data Processing</text>
+  
+  <rect x="610" y="170" width="120" height="40" fill="#34d399" rx="4"/>
+  <text x="670" y="195" text-anchor="middle" class="component">Validation</text>
+  
+  <rect x="540" y="220" width="120" height="40" fill="#34d399" rx="4"/>
+  <text x="600" y="245" text-anchor="middle" class="component">Rate Limiting</text>
+  
+  <!-- Database Layer -->
+  <rect x="250" y="350" width="300" height="120" class="database-box"/>
+  <text x="400" y="375" text-anchor="middle" class="subtitle">Database (PostgreSQL)</text>
+  
+  <!-- Database Components -->
+  <rect x="270" y="390" width="120" height="40" fill="#fbbf24" rx="4"/>
+  <text x="330" y="415" text-anchor="middle" class="component">Users Table</text>
+  
+  <rect x="410" y="390" width="120" height="40" fill="#fbbf24" rx="4"/>
+  <text x="470" y="415" text-anchor="middle" class="component">Expenses Table</text>
+  
+  <rect x="340" y="440" width="120" height="40" fill="#fbbf24" rx="4"/>
+  <text x="400" y="465" text-anchor="middle" class="component">Payments Table</text>
+  
+  <!-- Local Storage -->
+  <rect x="50" y="350" width="150" height="80" class="storage-box"/>
+  <text x="125" y="375" text-anchor="middle" class="subtitle">Local Storage</text>
+  <text x="125" y="395" text-anchor="middle" class="component">User Preferences</text>
+  <text x="125" y="410" text-anchor="middle" class="component">Offline Data</text>
+  <text x="125" y="425" text-anchor="middle" class="component">Cache</text>
+  
+  <!-- External Services -->
+  <rect x="600" y="350" width="150" height="80" fill="#ef4444" rx="8"/>
+  <text x="675" y="375" text-anchor="middle" class="subtitle">External APIs</text>
+  <text x="675" y="395" text-anchor="middle" class="component">Currency Rates</text>
+  <text x="675" y="410" text-anchor="middle" class="component">Bank Integration</text>
+  <text x="675" y="425" text-anchor="middle" class="component">Analytics</text>
+  
+  <!-- Data Flow Arrows -->
+  <!-- Frontend to Backend -->
+  <path d="M 350 180 L 450 180" class="arrow"/>
+  <text x="400" y="175" text-anchor="middle" class="label">API Calls</text>
+  
+  <!-- Backend to Database -->
+  <path d="M 600 280 L 500 350" class="arrow"/>
+  <text x="550" y="320" text-anchor="middle" class="label">CRUD Operations</text>
+  
+  <!-- Frontend to Local Storage -->
+  <path d="M 200 280 L 200 350" class="arrow"/>
+  <text x="180" y="320" text-anchor="middle" class="label">Local Data</text>
+  
+  <!-- Backend to External -->
+  <path d="M 750 180 L 750 350" class="arrow"/>
+  <text x="770" y="265" text-anchor="middle" class="label">External Services</text>
+  
+  <!-- Data Sync -->
+  <path d="M 200 430 L 400 430" class="data-flow"/>
+  <text x="300" y="425" text-anchor="middle" class="label">Data Synchronization</text>
+  
+  <!-- Legend -->
+  <rect x="50" y="500" width="700" height="80" fill="#f3f4f6" rx="8"/>
+  <text x="400" y="520" text-anchor="middle" class="subtitle">Data Flow Legend</text>
+  
+  <rect x="70" y="530" width="20" height="20" class="frontend-box"/>
+  <text x="100" y="545" class="label">Frontend Components</text>
+  
+  <rect x="250" y="530" width="20" height="20" class="backend-box"/>
+  <text x="280" y="545" class="label">Backend Services</text>
+  
+  <rect x="430" y="530" width="20" height="20" class="database-box"/>
+  <text x="460" y="545" class="label">Database</text>
+  
+  <rect x="610" y="530" width="20" height="20" class="storage-box"/>
+  <text x="640" y="545" class="label">Local Storage</text>
+  
+  <line x1="70" y1="560" x2="90" y2="560" class="arrow"/>
+  <text x="100" y="565" class="label">API Communication</text>
+  
+  <line x1="250" y1="560" x2="270" y2="560" class="data-flow"/>
+  <text x="280" y="565" class="label">Data Flow</text>
+</svg>

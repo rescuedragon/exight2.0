@@ -1,0 +1,119 @@
+# 🧹 Cleanup List for Exight 2.0
+
+## 🗂️ Duplicate/Unused Directories
+
+### exight2.0/ (DUPLICATE - Remove)
+- This appears to be a duplicate of the main project structure
+- Contains duplicate src/, public/, server/, node_modules/ directories
+- **Action**: Remove entire directory after verification
+
+### .kiro/ (UNUSED - Remove)
+- Appears to be an unused tool configuration directory
+- **Action**: Remove if not needed for any current tooling
+
+## 📁 Potentially Unused Files
+
+### requirements.txt (UNUSED - Remove)
+- This is a Python requirements file, but project uses Node.js
+- **Action**: Remove if not needed for any Python tooling
+
+### bun.lockb (UNUSED - Remove)
+- Project uses npm (package-lock.json exists)
+- **Action**: Remove if not using Bun package manager
+
+### apache-config.conf (UNUSED - Remove)
+- Apache configuration should be on server, not in repo
+- **Action**: Remove and document in deployment guide
+
+### DEPLOYMENT_LOG.md (UNUSED - Remove)
+- This appears to be a temporary deployment log
+- **Action**: Remove or move to docs/ if needed for reference
+
+## 🔍 Files to Review
+
+### index.html (ROOT LEVEL)
+- Check if this is needed or if it's a duplicate of src/index.html
+- **Action**: Verify and remove if duplicate
+
+### server/ (ROOT LEVEL)
+- Check if this duplicates exight2.0/server/
+- **Action**: Consolidate server configurations
+
+## ✅ Files to Keep
+
+### Core Project Files
+- package.json
+- package-lock.json
+- vite.config.ts
+- tailwind.config.ts
+- tsconfig*.json
+- postcss.config.js
+- eslint.config.js
+- components.json
+- .gitignore
+
+### Documentation
+- README.md
+- CONTRIBUTING.md
+- CODE_OF_CONDUCT.md
+- SECURITY.md
+- CONVENTIONS.md
+- IMPROVEMENT_IDEAS.md
+- upload-instructions.md
+
+### Source Code
+- src/ (main source directory)
+- public/ (main public assets)
+
+## 🚀 Cleanup Actions
+
+### Phase 1: Safe Removals
+```bash
+# Remove duplicate directory
+rm -rf exight2.0/
+
+# Remove unused files
+rm requirements.txt
+rm bun.lockb
+rm apache-config.conf
+rm DEPLOYMENT_LOG.md
+rm .cleanup  # This file itself
+```
+
+### Phase 2: Verification
+```bash
+# Verify project still builds
+npm run build
+
+# Verify no broken imports
+npm run lint
+
+# Test development server
+npm run dev
+```
+
+### Phase 3: Documentation Update
+- Update README.md if any removed files were referenced
+- Update deployment instructions if needed
+- Commit cleanup changes
+
+## ⚠️ Pre-Cleanup Checklist
+
+- [ ] Verify exight2.0/ is truly a duplicate
+- [ ] Check if any files in exight2.0/ have unique content
+- [ ] Ensure no important configuration is lost
+- [ ] Test build process after each removal
+- [ ] Update .gitignore if needed
+
+## 📝 Notes
+
+- This cleanup will reduce repository size significantly
+- Improves project structure clarity
+- Removes confusion about which files to use
+- Makes deployment process cleaner
+
+---
+
+**Created**: $(date)
+**Status**: Pending Review
+**Next Action**: Verify duplicates before removal

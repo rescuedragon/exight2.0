@@ -3,6 +3,33 @@
   "private": true,
   "version": "1.0.0",
   "description": "Exight - Insights for your expenses. A modern expense tracking application built with React, TypeScript, and Tailwind CSS.",
+  "keywords": [
+    "expense-tracker",
+    "financial-management",
+    "budget-tracking",
+    "loan-management",
+    "emi-calculator",
+    "react",
+    "typescript",
+    "tailwind-css",
+    "personal-finance",
+    "budgeting-app",
+    "expense-analytics",
+    "financial-planning",
+    "money-management",
+    "expense-dashboard",
+    "financial-tracking"
+  ],
+  "author": "Exight Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/exight-expense-tracker.git"
+  },
+  "homepage": "https://exight-expense-tracker.vercel.app",
+  "bugs": {
+    "url": "https://github.com/yourusername/exight-expense-tracker/issues"
+  },
   "type": "module",
   "engines": {
     "node": "18.x"

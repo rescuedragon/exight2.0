@@ -15,43 +15,38 @@ A modern, intuitive expense tracking application built with React, TypeScript, a
 - **🌙 Dark/Light Mode**: Beautiful themes for any preference
 - **💾 Local Storage**: Your data stays private and secure on your device
 
-## 🚀 Getting Started
+## 🚀 Quick Start
 
-### Prerequisites
-
-- Node.js (v18 or higher)
-- npm or yarn
-- PostgreSQL (for backend database)
-
-### Installation
-
-1. Clone the repository:
 ```bash
+# Clone and install
 git clone https://github.com/yourusername/exight-expense-tracker.git
 cd exight-expense-tracker
-```
-
-2. Install dependencies:
-```bash
 npm install
-```
 
-3. Set up the backend server:
-```bash
-cd server
-cp env.example .env
-# Edit .env file with your database credentials
-npm install
+# Start development server
 npm run dev
+
+# Open http://localhost:3000
 ```
 
-4. Start the frontend development server:
-```bash
-# In the root directory
-npm run dev
-```
+### Prerequisites
+- Node.js (v18+)
+- npm or yarn
+- PostgreSQL (for backend)
 
-5. Open your browser and navigate to `http://localhost:3000`
+### Full Setup
+See [Installation Guide](docs/installation.md) for detailed setup instructions including backend configuration.
+
+## 🏗️ Architecture
+
+![Exight 2.0 Architecture](public/architecture-diagram.svg)
+
+The application follows a modern client-server architecture with:
+- **Frontend**: React + TypeScript with Vite build tool
+- **Backend**: Node.js + Express API server
+- **Database**: PostgreSQL for persistent data storage
+- **Local Storage**: Browser storage for offline functionality
+- **External APIs**: Integration with financial services
 
 ## 🛠️ Built With
 
@@ -106,11 +101,49 @@ The built files will be in the `dist/` directory.
 
 ## 🤝 Contributing
 
+We welcome contributions! Please read our [Contributing Guide](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+
+### Where to Contribute
+
+- **🐛 Bug Fixes**: Check the [Issues](https://github.com/yourusername/exight-expense-tracker/issues) page
+- **🚀 New Features**: Open a feature request issue first
+- **📚 Documentation**: Help improve docs, README, or add examples
+- **🎨 UI/UX**: Improve the user interface and experience
+- **🧪 Testing**: Add tests or improve test coverage
+- **🔧 Performance**: Optimize code and improve performance
+
+### Quick Start for Contributors
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Follow our [Development Conventions](CONVENTIONS.md)
+4. Make your changes and test thoroughly
+5. Commit using [Conventional Commits](https://www.conventionalcommits.org/)
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
+
+### Development Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Run linting
+npm run lint
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+**Note**: This project uses npm as the package manager. If you prefer yarn or bun, you can use their equivalent commands:
+- **yarn**: `yarn dev`, `yarn build`, `yarn lint`
+- **bun**: `bun run dev`, `bun run build`, `bun run lint`
 
 ## 📄 License
 
