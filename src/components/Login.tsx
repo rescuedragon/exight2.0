@@ -177,13 +177,13 @@ const Login = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-6xl grid md:grid-cols-2 gap-10 items-center mt-8 md:mt-0"
+          className="w-full max-w-6xl grid md:grid-cols-2 gap-10 items-stretch mt-8 md:mt-0"
         >
           {/* Demo Mode removed for dev environment to mirror real app */}
 
           {/* Login/Register Form */}
-          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-800/50 shadow-xl order-2 md:order-1">
-            <CardContent className="p-8">
+          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-800/50 shadow-xl order-2 md:order-1 min-h-[560px]">
+            <CardContent className="p-8 h-full flex flex-col">
               <div className="text-center mb-4">
                 <h2 className="text-3xl font-bold text-foreground mb-2">
                   {isLogin ? "Welcome Back" : "Create Account"}
@@ -201,7 +201,7 @@ const Login = () => {
                 </div>
               )}
 
-              <form onSubmit={handleSubmit} className="space-y-4">
+              <form onSubmit={handleSubmit} className="space-y-4 flex-1 flex flex-col justify-center">
                 {!isLogin && (
                   <>
                     <div className="grid grid-cols-2 gap-3">
@@ -271,7 +271,7 @@ const Login = () => {
                 <Button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300"
+                  className="w-full py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-bold rounded-full shadow-lg transition-all duration-300"
                 >
                   {isLoading ? (
                     <div className="flex items-center justify-center">
@@ -298,7 +298,7 @@ const Login = () => {
             </CardContent>
           </Card>
           {/* Promo Panel */}
-          <div className="order-1 md:order-2">
+          <div className="order-1 md:order-2 min-h-[560px] flex flex-col justify-center">
             <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4">
               Track your <span className="gradient-text">expenses & loans</span>
             </h2>

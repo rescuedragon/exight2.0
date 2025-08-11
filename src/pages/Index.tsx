@@ -753,9 +753,27 @@ const Index = () => {
       localStorage.removeItem('userName');
       localStorage.removeItem('userId');
       localStorage.removeItem('demoMode');
-      window.location.href = '/login';
+      // Use SPA navigation for speed
+      navigate('/login');
     }
   };
+
+  // Hide header controls on scroll
+  useEffect(() => {
+    function onScroll() {
+      const head = document.getElementById('sticky-controls');
+      if (!head) return;
+      if (window.scrollY > 10) {
+        head.style.opacity = '0';
+        head.style.pointerEvents = 'none';
+      } else {
+        head.style.opacity = '1';
+        head.style.pointerEvents = 'auto';
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Get existing person names for autocomplete
   const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
@@ -764,7 +782,7 @@ const Index = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
       {!isAnyModalOpen && (
-        <div className="fixed top-6 left-6 z-30 space-y-2">
+        <div id="sticky-controls" className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200">
           <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
             <span 
               className="animate-gradient-x"
@@ -785,7 +803,7 @@ const Index = () => {
 
       {/* Top Right Controls */}
       {!isAnyModalOpen && (
-        <div className="fixed top-6 right-6 z-40 flex flex-col gap-2">
+        <div className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200" id="sticky-controls">
           <ThemeToggle />
           <Button
             variant="ghost"
