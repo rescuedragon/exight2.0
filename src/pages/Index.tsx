@@ -682,102 +682,76 @@ const Index = () => {
   const [showDetailedView, setShowDetailedView] = useState(false);
   const [expenses, setExpenses] = useState<Expense[]>([]);
   const [loans, setLoans] = useState<Loan[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
   const [userName, setUserName] = useState('User');
   const [isDemoMode, setIsDemoMode] = useState(false);
 
-  // Load data from localStorage on component mount
+  // Load data from server on mount
   useEffect(() => {
-    const savedExpenses = localStorage.getItem('expenses');
-    const savedLoans = localStorage.getItem('loans');
-    const savedUserName = localStorage.getItem('userName');
-
-    if (savedExpenses) {
+    let cancelled = false;
+    async function load() {
       try {
-        const parsedExpenses = JSON.parse(savedExpenses);
-        setExpenses(parsedExpenses.map((exp: { createdAt: string; partialPayments?: unknown[]; [key: string]: unknown }) => ({
-          ...exp,
-          createdAt: new Date(exp.createdAt),
-          partialPayments: exp.partialPayments || []
-        })));
-      } catch (error) {
-        console.error('Error parsing saved expenses:', error);
+        setIsLoading(true);
+        // Load user for greeting
+        const user = await apiService.getCurrentUser();
+        if (!cancelled) {
+          const fallbackName = localStorage.getItem('userName') || 'User';
+          setUserName(user?.firstName || fallbackName);
+        }
+        // Fetch expenses and loans in parallel
+        const [exp, ln] = await Promise.all([
+          apiService.listExpenses().catch(() => [] as Expense[]),
+          apiService.listLoans().catch(() => [] as Loan[]),
+        ]);
+        if (!cancelled) {
+          setExpenses(exp as Expense[]);
+          setLoans(ln as Loan[]);
+        }
+      } finally {
+        if (!cancelled) setIsLoading(false);
       }
     }
-
-    if (savedLoans) {
-      try {
-        const parsedLoans = JSON.parse(savedLoans);
-        setLoans(parsedLoans.map((loan: { dateGiven: string; createdAt: string; writeOffDate?: string; payments?: unknown[]; [key: string]: unknown }) => ({
-          ...loan,
-          dateGiven: new Date(loan.dateGiven),
-          createdAt: new Date(loan.createdAt),
-          writeOffDate: loan.writeOffDate ? new Date(loan.writeOffDate) : undefined,
-          payments: loan.payments || []
-        })));
-      } catch (error) {
-        console.error('Error parsing saved loans:', error);
-      }
-    }
-
-    if (savedUserName) {
-      setUserName(savedUserName);
-    }
+    void load();
+    return () => { cancelled = true; };
   }, []);
 
-  // Save expenses to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]);
-
-  // Save loans to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('loans', JSON.stringify(loans));
-  }, [loans]);
-
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
-    const newExpense: Expense = {
-      id: Date.now().toString(),
-      name: newExpenseData.name,
-      amount: newExpenseData.amount,
-      currency: newExpenseData.currency || 'INR',
-      type: newExpenseData.type,
-      deductionDay: newExpenseData.deductionDay,
-      isRecurring: newExpenseData.isRecurring,
-      totalMonths: newExpenseData.totalMonths ?? null,
-      remainingMonths: newExpenseData.remainingMonths ?? null,
-      remainingAmount: newExpenseData.remainingAmount ?? null,
-      createdAt: new Date(),
-      partialPayments: []
-    };
-    setExpenses(prev => [newExpense, ...prev]);
+    try {
+      const created = await apiService.createExpense(newExpenseData as any);
+      setExpenses(prev => [created as unknown as Expense, ...prev]);
+    } catch (e) {
+      console.error('Create expense failed', e);
+    }
   };
 
   const handleAddLoan = async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
-    const newLoan: Loan = {
-      id: Date.now().toString(),
-      personName: newLoanData.personName,
-      amount: newLoanData.amount,
-      currency: newLoanData.currency || 'INR',
-      dateGiven: newLoanData.dateGiven,
-      description: newLoanData.description,
-      status: 'active',
-      totalReceived: 0,
-      remainingAmount: newLoanData.amount,
-      createdAt: new Date(),
-      payments: []
-    };
-    setLoans(prev => [newLoan, ...prev]);
+    try {
+      const created = await apiService.createLoan(newLoanData as any);
+      setLoans(prev => [created as unknown as Loan, ...prev]);
+    } catch (e) {
+      console.error('Create loan failed', e);
+    }
   };
 
   const handleDeleteExpense = async (expenseId: string) => {
-    setExpenses(prev => prev.filter(expense => expense.id !== expenseId));
+    try {
+      await apiService.deleteExpense(expenseId);
+      setExpenses(prev => prev.filter(expense => String(expense.id) !== String(expenseId)));
+    } catch (e) {
+      console.error('Delete expense failed', e);
+    }
   };
 
   const handleUpdateExpense = async (updatedExpense: Expense) => {
-    setExpenses(prev => prev.map(expense => 
-      expense.id === updatedExpense.id ? updatedExpense : expense
-    ));
+    try {
+      const saved = await apiService.updateExpense(String(updatedExpense.id), updatedExpense as any);
+      setExpenses(prev => prev.map(expense => 
+        String(expense.id) === String(saved.id) ? (saved as unknown as Expense) : expense
+      ));
+    } catch (e) {
+      console.error('Update expense failed', e);
+    }
   };
 
   const handleUpdateLoan = async (updatedLoan: Loan) => {
