@@ -434,7 +434,12 @@ const TryMe = memo(() => {
   }, []);
 
   const handleLogout = useCallback(async () => {
-    // Logout logic here
+    try {
+      await apiService.logout();
+    } finally {
+      localStorage.removeItem('demoMode');
+      window.location.href = '/login';
+    }
   }, []);
 
   const handleAddExpense = useCallback(async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {

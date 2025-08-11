@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -38,8 +38,8 @@ const Login = () => {
         } catch (localStorageError) {
           console.warn('Failed to save user data to localStorage:', localStorageError);
         }
-        // Force full reload so App re-checks auth from token
-        window.location.href = "/";
+        // Navigate faster without full reload
+        navigate("/", { replace: true });
       } else {
         // Register flow
         const response = await apiService.register({ 
@@ -57,8 +57,8 @@ const Login = () => {
         } catch (localStorageError) {
           console.warn('Failed to save user data to localStorage:', localStorageError);
         }
-        // Force full reload so App re-checks auth from token
-        window.location.href = "/";
+        // Navigate faster without full reload
+        navigate("/", { replace: true });
       }
     } catch (error: unknown) {
       console.error('Auth error:', error);
@@ -68,6 +68,11 @@ const Login = () => {
       setIsLoading(false);
     }
   };
+
+  // Warm the API on mount to reduce first-request latency
+  useEffect(() => {
+    void apiService.healthCheck().catch(() => undefined);
+  }, []);
 
   const handleDemoMode = () => {
     try {
@@ -152,16 +157,16 @@ const Login = () => {
         </p>
       </motion.div>
 
-      {/* Theme Toggle + Try Demo */}
+      {/* Theme Toggle + Try me */}
       <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
         <Button
           onClick={handleDemoMode}
-          variant="outline"
           size="sm"
-          className="rounded-full px-3 h-8 hidden sm:inline-flex"
-          title="Try demo without creating an account"
+          className="hidden sm:inline-flex items-center gap-2 rounded-full px-4 h-9 border border-white/50 bg-gradient-to-r from-indigo-200 via-purple-200 to-emerald-200 text-foreground shadow-sm hover:shadow-md transition-all"
+          title="Preview the app instantly with sample data"
         >
-          🚀 Try Demo
+          <span className="inline-block h-2 w-2 rounded-full bg-blue-600 animate-bounce" />
+          <span className="font-semibold">Try me</span>
         </Button>
         <ThemeToggle />
       </div>
@@ -172,12 +177,12 @@ const Login = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-md"
+          className="w-full max-w-6xl grid md:grid-cols-2 gap-8 items-center"
         >
           {/* Demo Mode removed for dev environment to mirror real app */}
 
           {/* Login/Register Form */}
-          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-2 border-white/20 shadow-2xl">
+          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-2 border-white/20 shadow-2xl order-2 md:order-1">
             <CardContent className="p-8">
               <div className="text-center mb-4">
                 <h2 className="text-3xl font-bold text-foreground mb-2">
@@ -303,6 +308,53 @@ const Login = () => {
               </div>
             </CardContent>
           </Card>
+          {/* Promo Panel */}
+          <div className="order-1 md:order-2">
+            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+              Track your <span className="gradient-text">expenses & loans</span>
+            </h2>
+            <p className="text-lg text-muted-foreground mb-8 max-w-xl">
+              Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.
+            </p>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="rounded-2xl p-5 bg-white/70 dark:bg-gray-900/60 border border-white/30 dark:border-gray-800/60 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <BarChart3 className="h-5 w-5 text-purple-500" />
+                  <div>
+                    <div className="font-semibold">EMI & Expense Tracking</div>
+                    <div className="text-sm text-muted-foreground">Track annual EMIs and visualize monthly patterns with reminders.</div>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl p-5 bg-white/70 dark:bg-gray-900/60 border border-white/30 dark:border-gray-800/60 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <HandCoins className="h-5 w-5 text-emerald-500" />
+                  <div>
+                    <div className="font-semibold">Loan Management</div>
+                    <div className="text-sm text-muted-foreground">Manage loans with person-wise history and payment tracking.</div>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl p-5 bg-white/70 dark:bg-gray-900/60 border border-white/30 dark:border-gray-800/60 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <TrendingUp className="h-5 w-5 text-blue-500" />
+                  <div>
+                    <div className="font-semibold">Smart Insights & Analytics</div>
+                    <div className="text-sm text-muted-foreground">Actionable charts and projections to plan better.</div>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-2xl p-5 bg-white/70 dark:bg-gray-900/60 border border-white/30 dark:border-gray-800/60 shadow-sm">
+                <div className="flex items-start gap-3">
+                  <Shield className="h-5 w-5 text-indigo-500" />
+                  <div>
+                    <div className="font-semibold">Secure & Private</div>
+                    <div className="text-sm text-muted-foreground">Your financial data stays safe with secure authentication.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>
