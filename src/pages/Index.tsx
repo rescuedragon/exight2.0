@@ -417,13 +417,13 @@ const TryMe = memo(() => {
     const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
 
     return { activeExpenses, recurringExpenses, fixedTimeExpenses };
-  }, []);
+  }, [/* depends only on demoExpenses values; static within component */]);
 
   const { activeLoans, completedLoans } = useMemo(() => {
     const activeLoans = demoLoans.filter(loan => loan.status === 'active');
     const completedLoans = demoLoans.filter(loan => loan.status === 'completed' || loan.status === 'written-off');
     return { activeLoans, completedLoans };
-  }, []);
+  }, [/* static demoLoans */]);
 
   const handleTabSwitch = useCallback((tab: string) => {
     setActiveTab(tab);
@@ -723,8 +723,8 @@ const Index = () => {
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
     try {
-      const created = await apiService.createExpense(newExpenseData as any);
-      setExpenses(prev => [created as unknown as Expense, ...prev]);
+      const created = await apiService.createExpense(newExpenseData);
+      setExpenses(prev => [created, ...prev]);
     } catch (e) {
       console.error('Create expense failed', e);
     }
@@ -732,8 +732,8 @@ const Index = () => {
 
   const handleAddLoan = async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
     try {
-      const created = await apiService.createLoan(newLoanData as any);
-      setLoans(prev => [created as unknown as Loan, ...prev]);
+      const created = await apiService.createLoan(newLoanData);
+      setLoans(prev => [created, ...prev]);
     } catch (e) {
       console.error('Create loan failed', e);
     }
@@ -750,9 +750,9 @@ const Index = () => {
 
   const handleUpdateExpense = async (updatedExpense: Expense) => {
     try {
-      const saved = await apiService.updateExpense(String(updatedExpense.id), updatedExpense as any);
+      const saved = await apiService.updateExpense(String(updatedExpense.id), updatedExpense);
       setExpenses(prev => prev.map(expense => 
-        String(expense.id) === String(saved.id) ? (saved as unknown as Expense) : expense
+        String(expense.id) === String(saved.id) ? saved : expense
       ));
     } catch (e) {
       console.error('Update expense failed', e);
