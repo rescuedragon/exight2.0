@@ -914,3 +914,27 @@ No functional logic changed (auth, API, data). Purely presentational, a11y, and 
 - PM2 shows `feedback-api` healthy on `http://127.0.0.1:3000`. Email sending via Hostinger SMTP remains configured.
 
 Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable via reverse proxy; Feedback modal can POST to `/api/feedback` over HTTPS.
+
+2025-08-09 — UI Enhancement: Modular DeleteLogobox Component
+
+- Created new modular delete confirmation dialog component:
+  - **File**: `src/components/DeleteLogobox.tsx`
+  - **Features**: 
+    - 3 variants: default, dangerous (red), warning (amber)
+    - 3 sizes: sm, md, lg
+    - Customizable title, message, item name, button text
+    - Matches app's design system (rounded corners, shadows, animations)
+    - Responsive design with mobile-first approach
+    - Proper TypeScript interfaces and props
+- **Design Improvements**:
+  - Beautiful backdrop blur effect
+  - Smooth animations (fade-in, zoom-in)
+  - Icon integration with Lucide React
+  - Consistent with existing UI components
+  - Dark/light theme support
+- **Reusability**:
+  - Can be used for deleting expenses, loans, or any items
+  - Props allow customization for different contexts
+  - Follows React best practices
+- **Demo Component**: Created `DeleteLogoboxDemo.tsx` for testing different variants
+- **Integration Ready**: Can replace existing delete modals throughout the app
