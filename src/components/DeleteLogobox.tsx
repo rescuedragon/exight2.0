@@ -104,7 +104,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
       onClick={handleBackdropClick}
     >
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black/40 backdrop-blur-[6px] animate-in fade-in-0 duration-200" />
+      <div className="fixed inset-0 bg-black/30 backdrop-blur-[2px] animate-in fade-in-0 duration-100" />
       
       {/* Modal */}
       <div
@@ -117,7 +117,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
         <div
           className={cn(
             "bg-card border border-border/40 rounded-[28px] shadow-2xl overflow-hidden",
-            "animate-in zoom-in-95 fade-in-0 duration-200",
+            "animate-in zoom-in-95 fade-in-0 duration-100",
             sizeStyles.padding
           )}
         >
@@ -150,7 +150,7 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
               variant="ghost"
               size="icon"
               onClick={onClose}
-              className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800"
+              className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-100"
             >
               <X className="h-4 w-4" />
             </Button>
@@ -171,14 +171,14 @@ export const DeleteLogobox: React.FC<DeleteLogoboxProps> = ({
             <Button
               variant="outline"
               onClick={onClose}
-              className="flex-1 sm:flex-none border-border/40 hover:bg-accent/50"
+              className="flex-1 sm:flex-none border-border/40 hover:bg-accent/50 transition-colors duration-100"
             >
               {cancelText}
             </Button>
             <Button
               onClick={handleConfirm}
               className={cn(
-                "flex-1 sm:flex-none transition-all duration-200",
+                "flex-1 sm:flex-none transition-all duration-100",
                 variantStyles.confirmButton
               )}
             >
