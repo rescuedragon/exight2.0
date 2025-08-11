@@ -1,10 +1,35 @@
-import { LoginRequest, RegisterRequest, AuthResponse, ApiResponse } from './types';
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface RegisterRequest {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  message?: string;
+  error?: string;
+}
 
 // Mock authentication system - no backend required
 // Prefer same-origin API to avoid CORS/mixed-content in production
-const API_BASE_URL = (typeof window !== 'undefined'
-  ? `${window.location.origin.replace(/\/$/, '')}/api`
-  : 'http://13.60.70.116/api');
+const API_BASE_URL = 'http://13.60.70.116/api';
 
 interface MockUser {
   password: string;
