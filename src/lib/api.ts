@@ -32,7 +32,7 @@ export interface ApiResponse<T> {
 }
 
 // Prefer env-based configuration with a sensible default to the EC2 server
-const API_BASE_URL = (import.meta as any)?.env?.VITE_API_BASE_URL || 'http://13.60.70.116/api';
+const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || 'http://13.60.70.116/api';
 
 interface MockUser {
   password: string;
@@ -93,6 +93,19 @@ interface SingleLoanResponseWrapper {
   message?: string;
   error?: string;
 }
+
+// Type guards to avoid using 'any' and unsafe casts
+const isObject = (v: unknown): v is Record<string, unknown> => typeof v === 'object' && v !== null;
+
+const isAuthResponse = (v: unknown): v is AuthResponse => {
+  if (!isObject(v)) return false;
+  return typeof v.token === 'string' && isObject(v.user) && typeof v.user.email === 'string';
+};
+
+const isSuccessWrapper = <T>(v: unknown): v is { success: boolean; data: T } => {
+  if (!isObject(v)) return false;
+  return typeof v.success === 'boolean' && 'data' in v;
+};
 
 class ApiService {
   private token: string | null = null;
@@ -338,55 +351,63 @@ class ApiService {
   }
 
   // Normalize server responses to strict frontend types
-  private normalizeExpense(raw: any): Expense {
-    const partialPayments = Array.isArray(raw?.partialPayments)
-      ? raw.partialPayments.map((pp: any) => ({
-          id: String(pp.id ?? ''),
-          amount: Number(pp.amount ?? 0),
-          date: pp.date ? new Date(pp.date) : new Date(),
-          description: pp.description,
-        }))
+  private normalizeExpense(raw: unknown): Expense {
+    const rec = raw as Record<string, unknown>;
+    const partialPayments = Array.isArray(rec?.partialPayments)
+      ? (rec.partialPayments as unknown[]).map((ppRaw: unknown) => {
+          const pp = ppRaw as Record<string, unknown>;
+          return {
+            id: String(pp.id ?? ''),
+            amount: Number(pp.amount ?? 0),
+            date: pp && pp.date ? new Date(pp.date as string) : new Date(),
+            description: typeof pp.description === 'string' ? (pp.description as string) : undefined,
+          };
+        })
       : [];
 
     return {
-      id: String(raw?.id ?? ''),
-      name: String(raw?.name ?? ''),
-      amount: Number(raw?.amount ?? 0),
-      currency: String(raw?.currency ?? 'INR') as Expense['currency'],
-      type: String(raw?.type ?? 'EMI') as Expense['type'],
-      deductionDay: Number(raw?.deductionDay ?? 1),
-      isRecurring: Boolean(raw?.isRecurring),
-      totalMonths: raw?.totalMonths == null ? undefined : Number(raw.totalMonths),
-      remainingMonths: raw?.remainingMonths == null ? undefined : Number(raw.remainingMonths),
-      remainingAmount: raw?.remainingAmount == null ? undefined : Number(raw.remainingAmount),
-      createdAt: raw?.createdAt ? new Date(raw.createdAt) : new Date(),
+      id: String(rec?.id ?? ''),
+      name: String(rec?.name ?? ''),
+      amount: Number(rec?.amount ?? 0),
+      currency: String(rec?.currency ?? 'INR') as Expense['currency'],
+      type: String(rec?.type ?? 'EMI') as Expense['type'],
+      deductionDay: Number(rec?.deductionDay ?? 1),
+      isRecurring: Boolean(rec?.isRecurring),
+      totalMonths: rec?.totalMonths == null ? undefined : Number(rec.totalMonths as number),
+      remainingMonths: rec?.remainingMonths == null ? undefined : Number(rec.remainingMonths as number),
+      remainingAmount: rec?.remainingAmount == null ? undefined : Number(rec.remainingAmount as number),
+      createdAt: rec?.createdAt ? new Date(rec.createdAt as string) : new Date(),
       partialPayments,
     };
   }
 
-  private normalizeLoan(raw: any): Loan {
-    const payments: AppLoanPayment[] = Array.isArray(raw?.payments)
-      ? raw.payments.map((p: any) => ({
-          id: String(p.id ?? ''),
-          amount: Number(p.amount ?? 0),
-          date: p.date ? new Date(p.date) : new Date(),
-          description: p.description,
-          type: (p.type === 'write-off' ? 'write-off' : 'payment') as AppLoanPayment['type'],
-        }))
+  private normalizeLoan(raw: unknown): Loan {
+    const rec = raw as Record<string, unknown>;
+    const payments: AppLoanPayment[] = Array.isArray(rec?.payments)
+      ? (rec.payments as unknown[]).map((pRaw: unknown) => {
+          const p = pRaw as Record<string, unknown>;
+          return {
+            id: String(p.id ?? ''),
+            amount: Number(p.amount ?? 0),
+            date: p && p.date ? new Date(p.date as string) : new Date(),
+            description: typeof p.description === 'string' ? (p.description as string) : undefined,
+            type: (p?.type === 'write-off' ? 'write-off' : 'payment') as AppLoanPayment['type'],
+          };
+        })
       : [];
 
     return {
-      id: String(raw?.id ?? ''),
-      personName: String(raw?.personName ?? ''),
-      amount: Number(raw?.amount ?? 0),
-      currency: String(raw?.currency ?? 'INR'),
-      dateGiven: raw?.dateGiven ? new Date(raw.dateGiven) : new Date(),
-      description: raw?.description,
-      status: (raw?.status === 'completed' || raw?.status === 'written-off') ? raw.status : 'active',
-      totalReceived: Number(raw?.totalReceived ?? 0),
-      remainingAmount: Number(raw?.remainingAmount ?? 0),
-      writeOffDate: raw?.writeOffDate ? new Date(raw.writeOffDate) : undefined,
-      createdAt: raw?.createdAt ? new Date(raw.createdAt) : new Date(),
+      id: String(rec?.id ?? ''),
+      personName: String(rec?.personName ?? ''),
+      amount: Number(rec?.amount ?? 0),
+      currency: String(rec?.currency ?? 'INR'),
+      dateGiven: rec?.dateGiven ? new Date(rec.dateGiven as string) : new Date(),
+      description: rec?.description as string | undefined,
+      status: ((rec?.status === 'completed' || rec?.status === 'written-off') ? (rec.status as Loan['status']) : 'active') as Loan['status'],
+      totalReceived: Number(rec?.totalReceived ?? 0),
+      remainingAmount: Number(rec?.remainingAmount ?? 0),
+      writeOffDate: rec?.writeOffDate ? new Date(rec.writeOffDate as string) : undefined,
+      createdAt: rec?.createdAt ? new Date(rec.createdAt as string) : new Date(),
       payments,
     };
   }
@@ -400,20 +421,20 @@ class ApiService {
       });
 
       // Normalize backend response shape
-      if (res && 'token' in res && (res as any).token) {
-        this.setToken((res as any).token);
-        return res as AuthResponse;
+      if (isAuthResponse(res)) {
+        this.setToken(res.token);
+        return res;
       }
-      if (res && 'success' in (res as any) && (res as any).success && (res as any).data) {
-        const data = (res as any).data as AuthResponse;
-        this.setToken(data.token);
-        return data;
+      if (isSuccessWrapper<AuthResponse>(res)) {
+        this.setToken(res.data.token);
+        return res.data;
       }
 
       // If backend responded but without expected fields, fall back to mock
       const mock = this.handleMockLogin(credentials);
       if (mock.success && mock.data) return mock.data;
-      throw new Error((res as any)?.message || (res as any)?.error || 'Login failed');
+      const fallbackMessage = isObject(res) ? ((res as { message?: string; error?: string }).message || (res as { error?: string }).error) : undefined;
+      throw new Error(fallbackMessage || 'Login failed');
     } catch (err) {
       // Network/server error: allow mock login for known demo/admin users
       const mock = this.handleMockLogin(credentials);
@@ -435,20 +456,20 @@ class ApiService {
         body: JSON.stringify(payload),
       });
 
-      if (res && 'token' in (res as any) && (res as any).token) {
-        this.setToken((res as any).token);
-        return res as AuthResponse;
+      if (isAuthResponse(res)) {
+        this.setToken(res.token);
+        return res;
       }
-      if (res && 'success' in (res as any) && (res as any).success && (res as any).data) {
-        const data = (res as any).data as AuthResponse;
-        this.setToken(data.token);
-        return data;
+      if (isSuccessWrapper<AuthResponse>(res)) {
+        this.setToken(res.data.token);
+        return res.data;
       }
 
       // If backend response unexpected, generate a mock user
       const mock = this.handleMockRegister(userData);
       if (mock.success && mock.data) return mock.data;
-      throw new Error((res as any)?.message || (res as any)?.error || 'Registration failed');
+      const fallbackMessage = isObject(res) ? ((res as { message?: string; error?: string }).message || (res as { error?: string }).error) : undefined;
+      throw new Error(fallbackMessage || 'Registration failed');
     } catch (err) {
       const mock = this.handleMockRegister(userData);
       if (mock.success && mock.data) return mock.data;
@@ -513,8 +534,10 @@ class ApiService {
   // Expenses API (server-backed)
   async listExpenses(): Promise<Expense[]> {
     const res = await this.request<Expense[] | ExpenseResponseWrapper>('/expenses');
-    const list = (res && 'success' in res && res.success !== undefined) ? res.data : (res as any[]);
-    return Array.isArray(list) ? list.map(e => this.normalizeExpense(e)) : [];
+    let list: unknown[] = [];
+    if (Array.isArray(res)) list = res as unknown[];
+    else if (isSuccessWrapper<Expense[]>(res) && Array.isArray(res.data)) list = res.data as unknown[];
+    return list.map(e => this.normalizeExpense(e));
   }
 
   async createExpense(payload: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>): Promise<Expense> {
@@ -522,7 +545,7 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(payload),
     });
-    const item = (res && 'success' in res && res.success !== undefined) ? (res as SingleExpenseResponseWrapper).data : (res as any);
+    const item: unknown = isSuccessWrapper<Expense>(res) ? res.data : (res as unknown);
     return this.normalizeExpense(item);
   }
 
@@ -533,7 +556,7 @@ class ApiService {
         method: 'PUT',
         body: JSON.stringify(payload),
       });
-      const item = (res && 'success' in res && res.success !== undefined) ? (res as SingleExpenseResponseWrapper).data : (res as any);
+      const item: unknown = isSuccessWrapper<Expense>(res) ? res.data : (res as unknown);
       return this.normalizeExpense(item);
     } catch (e1) {
       try {
@@ -541,14 +564,14 @@ class ApiService {
           method: 'PUT',
           body: JSON.stringify(payload),
         });
-        const item2 = (res2 && 'success' in res2 && res2.success !== undefined) ? (res2 as SingleExpenseResponseWrapper).data : (res2 as any);
+        const item2: unknown = isSuccessWrapper<Expense>(res2) ? res2.data : (res2 as unknown);
         return this.normalizeExpense(item2);
       } catch (e2) {
         const res3 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses/${numericId}/update`, {
           method: 'POST',
           body: JSON.stringify(payload),
         });
-        const item3 = (res3 && 'success' in res3 && res3.success !== undefined) ? (res3 as SingleExpenseResponseWrapper).data : (res3 as any);
+        const item3: unknown = isSuccessWrapper<Expense>(res3) ? res3.data : (res3 as unknown);
         return this.normalizeExpense(item3);
       }
     }
@@ -574,8 +597,10 @@ class ApiService {
   // Loans API (server-backed)
   async listLoans(): Promise<Loan[]> {
     const res = await this.request<Loan[] | LoanResponseWrapper>('/loans');
-    const list = (res && 'success' in res && res.success !== undefined) ? res.data : (res as any[]);
-    return Array.isArray(list) ? list.map(l => this.normalizeLoan(l)) : [];
+    let list: unknown[] = [];
+    if (Array.isArray(res)) list = res as unknown[];
+    else if (isSuccessWrapper<Loan[]>(res) && Array.isArray(res.data)) list = res.data as unknown[];
+    return list.map(l => this.normalizeLoan(l));
   }
 
   async createLoan(payload: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>): Promise<Loan> {
@@ -583,7 +608,7 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(payload),
     });
-    const item = (res && 'success' in res && res.success !== undefined) ? (res as SingleLoanResponseWrapper).data : (res as any);
+    const item: unknown = isSuccessWrapper<Loan>(res) ? res.data : (res as unknown);
     return this.normalizeLoan(item);
   }
 
