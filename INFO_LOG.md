@@ -1,5 +1,14 @@
 ### Update (automated assistant log)
 
+### [2025-08-11] Tooling: Prettier + Husky pre-commit added
+
+- Added Prettier config (`.prettierrc`, `.prettierignore`) and scripts: `format`, `format:check`.
+- Installed dev tooling: `prettier`, `lint-staged`, `husky`, `eslint-config-prettier` and wired `prepare` script.
+- Initialized Husky and configured `.husky/pre-commit` to run `npx lint-staged`.
+- Added `lint-staged` to auto-run `eslint --fix` and `prettier --write` on staged files.
+- Updated `IMPROVEMENT_IDEAS.md`: marked 3.2 and 3.3 as [COMPLETED]; counters now `[PENDING] 295`, `[COMPLETED] 27`, total 8.39%.
+- No functional changes; dev DX improved and formatting standardized. Branch policy respected (working on `dev`).
+
 - Date: 2025-08-11
 - Changes:
   - Unified API types with app types in `src/lib/api.ts`; normalized IDs to strings; added normalization helpers for expenses and loans; API base selection now: `VITE_API_BASE_URL` → same-origin `/api` → fallback `http://13.60.70.116/api` to prevent mixed-content and CORS “Failed to fetch” during HTTPS.
@@ -13,6 +22,7 @@
   - Verified lints: clean for touched files.
 
 \n## 2025-08-09 – UI updates
+
 - Kept `InfoBar` cards at their current compact size.
 - Converted the following popups to true full-screen overlays (fixed inset-0, no rounded corners/shadows; background scroll locked):
   - `MonthlyExpensesModal`
@@ -20,9 +30,11 @@
   - `ActiveExpensesModal`
   - `LoansDetailModal` (used by Total Loaned / Amount Received / People)
 - Greeting now uses the first name from the authenticated user; falls back to stored `userName`.
+
 # Exight App - Development Info Log
 
 ## Project Overview
+
 - **Project Name**: Exight (Financial Management App)
 - **Technology Stack**: React + TypeScript + Vite + Tailwind CSS
 - **Current Status**: Active Development
@@ -33,6 +45,7 @@
 ## Session Log
 
 ### Session 6 - ESLint Error Resolution for Deployment
+
 **Date**: 2025-01-27
 **Time**: Current Session
 **Status**: ✅ COMPLETED
@@ -127,12 +140,14 @@
 ## Session Log
 
 ### Session 4 - Performance Optimization & React Memoization
+
 **Date**: 2025-01-27
 **Time**: Current Session
 
 #### Activities Completed:
 
 ##### 🚀 Performance Optimizations Implemented:
+
 1. **ExpenseDashboard Component Optimization** [COMPLETED]
    - Added React.memo wrapper to prevent unnecessary re-renders
    - Implemented useMemo for expensive data filtering operations
@@ -154,6 +169,7 @@
    - Optimized state management and data flow
 
 #### Technical Improvements Made:
+
 - **React Memoization**: Added React.memo to prevent unnecessary re-renders
 - **useMemo Optimization**: Memoized expensive data filtering operations
 - **useCallback Implementation**: Prevented function recreation on every render
@@ -162,12 +178,14 @@
 - **Data Flow Optimization**: Streamlined data filtering and state updates
 
 #### Performance Impact:
+
 - **Render Optimization**: Reduced unnecessary component re-renders by 60-80%
 - **Memory Usage**: Improved memory efficiency through proper memoization
 - **User Experience**: Significantly faster UI responsiveness and smoother interactions
 - **Bundle Size**: No increase in bundle size, only runtime optimizations
 
 #### Next Steps:
+
 - Monitor performance improvements in real-world usage
 - Consider implementing virtual scrolling for large datasets
 - Add performance monitoring tools for ongoing optimization
@@ -175,23 +193,27 @@
 ---
 
 ### Session 3 - Status Reset & Progress Review
+
 **Date**: 2025-01-27
 **Time**: Previous Session
 
 #### Activities Completed:
 
 ##### 🔄 Status Reset:
+
 - Reset all [COMPLETED] items back to [PENDING] status
 - Updated progress counters: [PENDING] - 322, [COMPLETED] - 0
 - Total percent complete reset to 0%
 - All items now properly marked as pending for accurate tracking
 
 #### Reason for Reset:
+
 - User indicated that completed items were not actually complete
 - Need to verify actual implementation status of each item
 - Ensures accurate progress tracking going forward
 
 #### Next Steps:
+
 - Review each item individually to determine actual completion status
 - Mark only truly completed items as [COMPLETED]
 - Update progress counters based on verified completion
@@ -199,12 +221,14 @@
 ---
 
 ### Session 2 - Quick Wins & Critical Foundation Implementation
+
 **Date**: 2025-01-27
 **Time**: Previous Session
 
 #### Activities Completed:
 
 ##### 🚀 Quick Wins Section (29.1-29.5):
+
 1. **29.1: Enhanced Favicon & Meta Tags** [COMPLETED]
    - Added multiple favicon sizes (16x16, 32x32, 48x48, apple-touch-icon)
    - Enhanced meta tags for better SEO and social sharing
@@ -224,6 +248,7 @@
    - Integrated with action logging system
 
 ##### 🏗️ Critical Foundation Items (1.1-1.5):
+
 4. **1.1: CONTRIBUTING.md** [COMPLETED]
    - Comprehensive contributing guidelines
    - Conventional commit format documentation
@@ -246,6 +271,7 @@
    - Shows data flow between React frontend, Node.js backend, and PostgreSQL
 
 #### Technical Improvements Made:
+
 - Enhanced index.html with comprehensive meta tags and favicons
 - Added skeleton loading states for better perceived performance
 - Implemented data export functionality with proper error handling
@@ -253,12 +279,14 @@
 - Added visual architecture representation
 
 #### Progress Update:
+
 - **Total Items**: 322
 - **Completed**: 30 (9.3%)
 - **Quick Wins**: 3/10 completed
 - **Critical Foundation**: 4/5 completed
 
 #### Next Priority Items:
+
 1. **29.6**: Add autosave draft for expense entries
 2. **29.7**: Add form inline validation with helpful hints
 3. **29.8**: Add undo toast after destructive actions
@@ -266,6 +294,7 @@
 5. **2.3**: Add CI step for build verification
 
 #### User Experience Improvements:
+
 - Better perceived performance with skeleton loaders
 - Professional documentation for contributors
 - Enhanced SEO and social sharing capabilities
@@ -274,18 +303,21 @@
 ---
 
 ### Session 1 - Initial Setup and Log Creation
+
 **Date**: $(date)
 **Time**: $(date +%H:%M)
 
 #### Activities Completed:
+
 1. **Created INFO_LOG.md file** - Comprehensive logging system established
    - Purpose: Track all development activities, decisions, and results
    - Format: Structured markdown with timestamps and detailed sections
    - Location: Root directory for easy access
 
 #### Current Project State:
+
 - **File Structure**: React app with TypeScript, Vite, and Tailwind CSS
-- **Key Components**: 
+- **Key Components**:
   - Expense management (ExpenseDashboard, ExpenseHistory, AddExpenseModal)
   - Loan management (LoansDashboard, AddLoanModal, LoanDetailedView)
   - Charts and visualizations (ConnectedLineChart, ExpenseChart, SimpleChart)
@@ -293,6 +325,7 @@
   - Authentication (Login component)
 
 #### Technical Stack Analysis:
+
 - **Frontend**: React 18+ with TypeScript
 - **Styling**: Tailwind CSS with shadcn/ui components
 - **Build Tool**: Vite
@@ -301,12 +334,14 @@
 - **Deployment**: Vercel configuration present
 
 #### Next Steps Identified:
+
 - Review current functionality
 - Identify areas for improvement
 - Plan feature enhancements
 - Document user preferences (subtle animations, clean UI)
 
 #### User Preferences Noted:
+
 - Subtle animations and colors for clean UI design
 - Step-by-step instructions preferred
 - Clean, modern aesthetic
@@ -316,18 +351,21 @@
 ## Session Log
 
 ### Session 1 - Initial Setup and Log Creation
+
 **Date**: $(date)
 **Time**: $(date +%H:%M)
 
 #### Activities Completed:
+
 1. **Created INFO_LOG.md file** - Comprehensive logging system established
    - Purpose: Track all development activities, decisions, and results
    - Format: Structured markdown with timestamps and detailed sections
    - Location: Root directory for easy access
 
 #### Current Project State:
+
 - **File Structure**: React app with TypeScript, Vite, and Tailwind CSS
-- **Key Components**: 
+- **Key Components**:
   - Expense management (ExpenseDashboard, ExpenseHistory, AddExpenseModal)
   - Loan management (LoansDashboard, AddLoanModal, LoanDetailedView)
   - Charts and visualizations (ConnectedLineChart, ExpenseChart, SimpleChart)
@@ -335,6 +373,7 @@
   - Authentication (Login component)
 
 #### Technical Stack Analysis:
+
 - **Frontend**: React 18+ with TypeScript
 - **Styling**: Tailwind CSS with shadcn/ui components
 - **Build Tool**: Vite
@@ -343,12 +382,14 @@
 - **Deployment**: Vercel configuration present
 
 #### Next Steps Identified:
+
 - Review current functionality
 - Identify areas for improvement
 - Plan feature enhancements
 - Document user preferences (subtle animations, clean UI)
 
 #### User Preferences Noted:
+
 - Subtle animations and colors for clean UI design
 - Step-by-step instructions preferred
 - Clean, modern aesthetic
@@ -358,20 +399,23 @@
 ## File Structure Analysis
 
 ### Core Application Files:
+
 - `src/App.tsx` - Main application component
 - `src/main.tsx` - Application entry point
 - `src/index.css` - Global styles
 - `src/App.css` - App-specific styles
 
 ### Component Organization:
+
 - **Expense Management**: 8 components
-- **Loan Management**: 4 components  
+- **Loan Management**: 4 components
 - **Charts & Visualizations**: 3 components
 - **UI Components**: 40+ shadcn/ui components
 - **Pages**: 4 main pages
 - **Contexts**: ModalContext for state management
 
 ### Configuration Files:
+
 - `package.json` - Dependencies and scripts
 - `tailwind.config.ts` - Tailwind configuration
 - `vite.config.ts` - Vite build configuration
@@ -383,18 +427,21 @@
 ## Development Guidelines
 
 ### Code Style:
+
 - TypeScript for type safety
 - Functional components with hooks
 - Tailwind CSS for styling
 - shadcn/ui for consistent UI components
 
 ### User Experience:
+
 - Subtle animations preferred
 - Clean, modern design
 - Step-by-step instructions
 - Mobile-responsive design
 
 ### Logging Standards:
+
 - Timestamp all entries
 - Document decisions and rationale
 - Track file changes and additions
@@ -406,21 +453,24 @@
 ## Change Log
 
 ### [$(date)] - Initial Log Creation
+
 - Created comprehensive INFO_LOG.md
 - Documented current project state
 - Established logging standards
 - Analyzed file structure and components
 
 ### [$(date)] - Login Issue Investigation
+
 - **Issue Identified**: Login failing due to backend API connection
 - **Root Cause**: API endpoint `http://13.60.70.116/api` is not accessible
-- **Current Implementation**: 
-  - Login component calls `apiService.login()` 
+- **Current Implementation**:
+  - Login component calls `apiService.login()`
   - API service tries to connect to external backend
   - No fallback authentication system in place
 - **Solution Needed**: Implement mock authentication or fix backend connection
 
 ### [$(date)] - Mock Authentication Implementation
+
 - **Solution Implemented**: Added mock authentication system to `src/lib/api.ts`
 - **Features Added**:
   - Mock user database with predefined users
@@ -437,12 +487,14 @@
   - Console logging for debugging
 
 ### [$(date)] - Sign In Button Not Responding Issue
+
 - **Issue Reported**: Sign In button click not working
 - **User Action**: Clicked Sign In with demo credentials filled
 - **Expected Behavior**: Should trigger login process and navigate to dashboard
 - **Investigation Needed**: Check form submission, event handlers, and console errors
 
 ### [$(date)] - Debugging Steps Implemented
+
 - **Debugging Added**:
   - Added console.log statements to form submission handler
   - Added debugging to mock authentication system
@@ -455,12 +507,14 @@
 - **Next Steps**: Test login functionality and check browser console for debugging output
 
 ### [$(date)] - Form Submission Working, HTTP 400 Error Detected
+
 - **Progress**: Form submission is now working (error message visible)
 - **Issue Identified**: HTTP 400 error from API call
 - **Root Cause**: The real API is responding with 400 error before falling back to mock
 - **Solution**: Need to ensure mock authentication takes precedence over failing real API
 
 ### [$(date)] - Mock Authentication Fix Implemented
+
 - **Solution Applied**: Modified API service to use mock authentication directly
 - **Changes Made**:
   - `src/lib/api.ts`: Removed real API call, using mock authentication directly
@@ -469,11 +523,13 @@
 - **Status**: Ready for testing with demo credentials
 
 ### [$(date)] - Login Still Not Working - Enhanced Debugging
+
 - **Issue**: Login still not functioning despite mock authentication fix
 - **Action**: Adding comprehensive debugging to identify exact failure point
 - **Debugging Strategy**: Add console logs at every step of the login process
 
 ### [$(date)] - Comprehensive Debugging Added
+
 - **Debugging Implemented**:
   - Button click detection
   - Form submission tracking
@@ -486,6 +542,7 @@
 - **Next Step**: Test login and check browser console for detailed debugging output
 
 ### [$(date)] - Login Issue Summary - All Attempts Failed
+
 - **Problem**: Sign In button not working despite multiple fixes
 - **Attempts Made**:
   1. ✅ **Form Submission Working** - Error messages appear, form submits
@@ -498,8 +555,9 @@
 - **Next Action**: Check if debugging console logs are appearing in browser
 
 ### [$(date)] - Simplified Login Test Implemented
+
 - **New Approach**: Bypass all API calls and authentication logic
-- **Test Strategy**: 
+- **Test Strategy**:
   - Remove all API service calls
   - Set localStorage directly
   - Navigate to dashboard immediately
@@ -508,6 +566,7 @@
 - **Files Modified**: `src/components/Login.tsx` - Simplified handleSubmit function
 
 ### [$(date)] - Database Issue Identified - AWS RDS PostgreSQL
+
 - **Root Cause Found**: HTTP 400 error related to database connectivity
 - **Database Details**:
   - **Type**: PostgreSQL on AWS RDS
@@ -521,25 +580,27 @@
   - **Security Groups**: default (sg-08c3cebc3940f0579)
   - **PostgreSQL Rule**: Port 5432 from sg-04dadac7d7d3683e4
 - **Issue Analysis**: Backend API trying to connect to PostgreSQL database but failing
-- **Next Steps**: 
+- **Next Steps**:
   1. Check if backend server is running and can reach the database
   2. Verify database credentials and connection strings
   3. Test database connectivity from backend server
   4. Consider using mock authentication until database issues resolved
 
 ### [$(date)] - Complete Authentication Fix Implementation
+
 - **Solution**: Implement robust mock authentication system
-- **Strategy**: 
+- **Strategy**:
   - Completely bypass real API and database
   - Create persistent mock user system
   - Maintain localStorage for session management
   - Add proper error handling and user feedback
-- **Files to Modify**: 
+- **Files to Modify**:
   - `src/lib/api.ts`: Enhanced mock authentication
   - `src/components/Login.tsx`: Restore full login functionality with mock backend
 - **Expected Result**: Login will work immediately without database connectivity issues
 
 ### [$(date)] - Authentication Fix Completed
+
 - **Implementation Complete**:
   - ✅ Enhanced mock authentication with persistent user storage
   - ✅ Restored full login/register functionality
@@ -557,6 +618,7 @@
 - **Status**: Ready for testing - should work without database connectivity issues
 
 ### [$(date)] - Git Commit and Deployment
+
 - **Action**: Committing authentication fixes to git for redeployment
 - **Files Changed**:
   - `src/lib/api.ts`: Enhanced mock authentication system
@@ -565,6 +627,7 @@
 - **Deployment**: Changes will be automatically redeployed after push
 
 ### [$(date)] - Deployment Successful
+
 - **Git Push Completed**: ✅ Successfully pushed to main branch
 - **Commit Hash**: 06a14d7
 - **Files Deployed**:
@@ -575,6 +638,7 @@
 - **Expected Result**: Authentication should work on live deployment
 
 ### [$(date)] - HTTP 400 Error Still Occurring
+
 - **Issue**: User still getting "HTTP error! status: 400" after deployment
 - **Possible Causes**:
   1. Deployment not yet completed (takes 1-2 minutes)
@@ -584,6 +648,7 @@
 - **Next Action**: Implement more aggressive bypass and force mock authentication
 
 ### [$(date)] - Aggressive Fix Implemented and Deployed
+
 - **Solution**: Completely bypass all API calls and force immediate login success
 - **Changes Made**:
   - `src/lib/api.ts`: Force mock authentication with no real API calls
@@ -594,17 +659,19 @@
 - **Expected Result**: Login should work immediately without any HTTP errors
 
 ### [$(date)] - HTTP 400 Error Persists - API Investigation Required
+
 - **Issue**: Still getting HTTP 400 error despite aggressive bypass
 - **User Request**: Check if API calls are still being made somewhere
 - **User Preference**: No localStorage dependency - treat as global app
-- **Investigation Needed**: 
+- **Investigation Needed**:
   1. Search for any remaining API calls in the codebase
   2. Check if other components are making API calls
   3. Verify if the error is coming from a different source
 - **Next Action**: Comprehensive codebase search for API endpoints
 
 ### [$(date)] - Root Cause Found and Fixed
-- **Root Cause Identified**: 
+
+- **Root Cause Identified**:
   - `App.tsx` line 34: `apiService.checkAuth()` called during app initialization
   - `Index.tsx` line 435: `apiService.logout()` called during logout
 - **Files Fixed**:
@@ -616,6 +683,7 @@
 - **Expected Result**: No more HTTP 400 errors - all API calls removed
 
 ### [$(date)] - User Requirement Clarified - Server-Based Architecture Required
+
 - **User Preference**: NO localStorage - everything must be server-based
 - **Requirements**:
   - All data stored in PostgreSQL database
@@ -626,6 +694,7 @@
 - **Next Action**: Fix database connectivity and implement proper server-based architecture
 
 ### [$(date)] - API Server Status Confirmed
+
 - **API Server**: ✅ Running at http://13.60.70.116/api
 - **Health Check**: ✅ Responding (HTTP 200)
 - **Login Endpoint**: ✅ Working but returns "Invalid credentials"
@@ -634,12 +703,13 @@
 - **Solution**: Restored proper API calls, database connectivity needs fixing
 
 ### [$(date)] - Database Connectivity Fix Attempt
+
 - **Action**: Fixing PostgreSQL database connectivity issue
 - **Database Details**:
   - Endpoint: database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com:5432
   - Security Groups: Only allows connections from sg-04dadac7d7d3683e4
   - Backend Server: Needs to be in correct security group
-- **Fix Strategy**: 
+- **Fix Strategy**:
   1. Check backend server security group configuration
   2. Verify database connection string in backend
   3. Test database connectivity from backend server
@@ -647,6 +717,7 @@
 ---
 
 ### [$(date)] - Performance Optimization Implementation Completed & IMPROVEMENT_IDEAS.md Updated
+
 - **Major Performance Improvements Implemented**:
   - ✅ Build system optimization (Vite + Tailwind + PostCSS)
   - ✅ Code splitting and lazy loading (charts, components)
@@ -683,23 +754,25 @@
   - `npm run lighthouse` - Generate Lighthouse report
 
 ### [$(date)] - IMPROVEMENT_IDEAS.md Real-Time Update Completed
+
 - **Action**: Updated IMPROVEMENT_IDEAS.md to reflect all completed performance optimizations
 - **Items Marked as [COMPLETED]**: 18 performance and build optimization items
 - **Header Updated**: [COMPLETED] - 18, Total percent complete - 18%
 - **Sections Updated**:
   - Build & Deployment: 2 items completed
-  - Performance & Lighthouse: 15 items completed  
+  - Performance & Lighthouse: 15 items completed
   - Charts & Analytics UI: 1 item completed
 - **Documentation Added**: Comprehensive performance optimization summary with results and tools
 - **Status**: File now accurately reflects current implementation progress
 
 ### [$(date)] - IMPROVEMENT_IDEAS.md Percentage & Count Correction
+
 - **Issue Identified**: Incorrect percentage calculation and pending count
-- **Problem**: 
+- **Problem**:
   - Percentage was calculated as 18% (treating each item as 1%)
   - Pending count showed 0 instead of actual pending items
 - **Root Cause**: My calculation logic was wrong - I treated individual items as percentage points
-- **Correct Calculation**: 
+- **Correct Calculation**:
   - Total items: ~322 (302 pending + 20 completed)
   - Correct percentage: 20/322 = 6.2%
 - **Fixed**:
@@ -709,24 +782,25 @@
 - **Status**: File now shows accurate counts and percentage
 
 ### [$(date)] - Live Deployment Debugging at https://dev.exight.in/
+
 - **Action**: Comprehensive testing of all functions after performance optimization deployment
 - **Results**: ✅ ALL SYSTEMS WORKING PERFECTLY
-- **Frontend**: 
+- **Frontend**:
   - ✅ HTML loading properly with performance optimizations
   - ✅ Chunk splitting working: 4 separate JS bundles + CSS
   - ✅ Bundle analysis accessible at /bundle-analysis.html
-- **Backend API**: 
+- **Backend API**:
   - ✅ Health check: 200 OK - "Exight API is running"
   - ✅ Authentication: Login working with JWT token generation
   - ✅ Expenses API: Returning user data (2 expenses found)
   - ✅ Loans API: Returning user data (1 loan found)
   - ✅ Feedback API: Working with email sending
-- **Performance Optimizations**: 
+- **Performance Optimizations**:
   - ✅ Bundle size: 452.45KB main + 139.86KB vendor + 100.87KB UI + 20.75KB utils
   - ✅ CSS: 125.15KB optimized and minified
   - ✅ Chunk splitting: 6 separate chunks for better caching
   - ✅ All assets loading with 200 OK responses
-- **Security**: 
+- **Security**:
   - ✅ HTTPS working with valid Let's Encrypt certificate
   - ✅ HSTS headers enabled
   - ✅ CORS properly configured
@@ -734,28 +808,30 @@
 - **Status**: Deployment successful - all functions working, performance optimizations active
 
 ### [$(date)] - White Screen Issue Fixed - API Base URL Configuration
+
 - **Issue Identified**: React app showing pure white screen despite assets loading successfully
 - **Root Cause**: Incorrect API base URL configuration in `src/lib/api.ts`
   - App was trying to call `https://dev.exight.in/api` (same-origin)
   - But backend is actually at `https://dev.exight.in/api` (HTTPS endpoint)
   - Previous config used `window.location.origin` which caused confusion
-- **Solution Applied**: 
+- **Solution Applied**:
   - Updated `API_BASE_URL` to use `https://dev.exight.in/api`
   - Removed dynamic origin detection that was causing issues
   - Fixed authentication flow to properly connect to backend
-- **Backend Verification**: 
+- **Backend Verification**:
   - ✅ Health endpoint: `https://dev.exight.in/api/health` → 200 OK
   - ✅ Auth endpoint: `https://dev.exight.in/api/auth/login` → JWT token returned
   - ✅ CORS: `Access-Control-Allow-Origin: *` properly configured
-- **Files Modified**: 
+- **Files Modified**:
   - `src/lib/api.ts`: Fixed API base URL configuration
-- **Deployment**: 
+- **Deployment**:
   - ✅ Built successfully with `npm run build`
   - ✅ Committed and pushed to dev branch
   - ✅ Changes being redeployed automatically
 - **Expected Result**: App should now load properly and show login screen instead of white screen
 
 ### [$(date)] - Deployment Process Investigation - GitHub Actions Workflow
+
 - **Deployment Method Discovered**: Project uses GitHub Actions for automated deployment
 - **Workflow File**: `.github/workflows/deploy-dev.yml` automatically deploys on dev branch push
 - **Deployment Process**:
@@ -764,17 +840,18 @@
   3. ✅ Files uploaded to EC2 server via SCP
   4. ✅ Server files updated in `/var/www/dev.exight.in/`
   5. ✅ Apache serves updated files
-- **Current Status**: 
+- **Current Status**:
   - ✅ Changes committed and pushed to dev branch
   - ✅ GitHub Actions workflow should have triggered automatically
   - ⏳ Deployment may still be in progress
   - 🔍 Need to wait for deployment completion and test site
-- **Next Steps**: 
+- **Next Steps**:
   - Wait for GitHub Actions deployment to complete
   - Test live site to verify white screen issue is resolved
   - Verify API calls are working correctly
 
 ### [$(date)] - White Screen Issue Successfully Resolved! 🎉
+
 - **Status**: ✅ ISSUE FIXED - Site is now loading properly
 - **Deployment Completed**: GitHub Actions workflow successfully deployed updated files
 - **Verification Results**:
@@ -783,7 +860,7 @@
   - ✅ API health: `https://dev.exight.in/api/health` → 200 OK
   - ✅ Authentication: `https://dev.exight.in/api/auth/login` → 200 OK with JWT token
   - ✅ API configuration: JavaScript contains correct `dev.exight.in` API base URL
-- **Root Cause Resolved**: 
+- **Root Cause Resolved**:
   - ❌ **Before**: API base URL was incorrectly configured, causing authentication to fail
   - ✅ **After**: API base URL correctly points to `https://dev.exight.in/api`
 - **What Was Fixed**:
@@ -791,13 +868,14 @@
   2. Removed dynamic origin detection that was causing confusion
   3. GitHub Actions automatically deployed the fix to the server
   4. Server now serves updated JavaScript files with correct configuration
-- **Current Status**: 
+- **Current Status**:
   - 🌐 Site accessible at: https://dev.exight.in/
   - 🔐 Authentication working with demo credentials: `demo@exight.com` / `demo123`
   - 📱 React app should now load properly instead of white screen
   - 🚀 Ready for user testing and next development tasks
 
 ### [$(date)] - Successfully Merged Performance Optimizations to Main Branch
+
 - **Action**: Merged dev branch into main branch with all performance optimizations
 - **Merge Strategy**: Resolved conflicts by taking dev branch version (performance optimizations)
 - **Files Merged**:
@@ -806,11 +884,11 @@
   - Optimized Tailwind and PostCSS configs
   - Bundle analysis scripts and performance monitoring
   - IMPROVEMENT_IDEAS.md with accurate progress tracking
-- **Conflict Resolution**: 
+- **Conflict Resolution**:
   - INFO_LOG.md: Used dev version with debugging results
   - ActiveExpensesModal.tsx: Used dev version with optimizations
   - vite.config.ts: Used dev version with performance config
-- **Git Status**: 
+- **Git Status**:
   - Main branch now contains all performance optimizations
   - Commit hash: b7f2112
   - Successfully pushed to origin/main
@@ -818,37 +896,41 @@
 
 ---
 
-*This log will be updated with each development session to maintain a complete record of all activities and decisions.* 
+_This log will be updated with each development session to maintain a complete record of all activities and decisions._
 
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
+
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
 - Marked `IMPROVEMENT_IDEAS.md` item 3.1 as [COMPLETED].
 - Updated counters in `IMPROVEMENT_IDEAS.md`: [PENDING] 297, [COMPLETED] 25, Total percent complete 7.76%.
 - No functional code changes; documentation-only update. Branch policy respected (no changes to `main`).
 
 ### [$(date)] - Guided Step-by-Step Fix Plan (API ↔ RDS)
+
 - Goal: Make the API (EC2 at 13.60.70.116) connect to RDS PostgreSQL.
 - What we'll do (micro-steps):
-  1) Confirm which Security Group (SG) the API EC2 instance uses
-  2) Ensure the RDS Security Group allows PostgreSQL (5432) from that EC2 SG
-  3) Verify both EC2 and RDS are in the same VPC
-  4) Test DB connection from EC2 with psql
-  5) Set DATABASE_URL (with SSL) on the API server and restart API
-  6) Register a user via API and then log in from the app
+  1. Confirm which Security Group (SG) the API EC2 instance uses
+  2. Ensure the RDS Security Group allows PostgreSQL (5432) from that EC2 SG
+  3. Verify both EC2 and RDS are in the same VPC
+  4. Test DB connection from EC2 with psql
+  5. Set DATABASE_URL (with SSL) on the API server and restart API
+  6. Register a user via API and then log in from the app
 
 - Current status: API health is OK; register returns 500 (DB not reachable). We'll fix SG/VPC first.
 
 ---
 
 ### Next Micro-Step (1)
+
 - Open AWS Console → EC2 → Instances
 - Click the instance that serves your API (the one whose public IPv4 is 13.60.70.116)
 - In the instance details:
   - Copy the Security Group ID (looks like sg-xxxxxxxxxxxxxxxxx)
   - Copy the VPC ID (looks like vpc-xxxxxxxxxxxxxxxxx)
-- Paste both values back to this chat. 
+- Paste both values back to this chat.
 
 ### [$(date)] - EC2 Details Received (Micro-step 1)
+
 - EC2 Instance ID: `i-0f94e1813cbbfbeb9`
 - Public IPv4: `13.60.70.116`
 - Private IPv4: `172.31.22.198`
@@ -857,29 +939,34 @@
 - Region: `eu-north-1`
 
 Next needed:
+
 - Security Group ID(s) attached to this EC2 instance (format `sg-xxxxxxxxxxxxxxxxx`).
 
 Why:
-- We must allow PostgreSQL (5432) inbound on the RDS SG from this EC2 SG to enable DB connectivity. 
+
+- We must allow PostgreSQL (5432) inbound on the RDS SG from this EC2 SG to enable DB connectivity.
 
 ### [$(date)] - Micro-step 2: EC2 Security Groups Confirmed
+
 - EC2 Security Groups attached:
   - `sg-08c3cebc3940f0579` (default)
   - `sg-04dadac7d7d3683e4` (launch-wizard-1)
 - Rationale: RDS must allow PostgreSQL (TCP 5432) inbound from the EC2's SGs so the API can reach the DB.
 
 Next Micro-step (2) - Verify/Adjust RDS inbound rules
-1) AWS Console → RDS → Databases → `database-1` → Connectivity & security → Security group rules → Inbound
-2) Ensure there is a rule:
+
+1. AWS Console → RDS → Databases → `database-1` → Connectivity & security → Security group rules → Inbound
+2. Ensure there is a rule:
    - Type: PostgreSQL
    - Protocol: TCP
    - Port range: 5432
    - Source: `sg-04dadac7d7d3683e4` (EC2 SG)
-3) (Optional but OK) Also allow from `sg-08c3cebc3940f0579` if the EC2 is sometimes attached to it
-4) Click "Save rules".
-5) Reply here with: "RDS inbound updated" (or confirm it was already correct). 
+3. (Optional but OK) Also allow from `sg-08c3cebc3940f0579` if the EC2 is sometimes attached to it
+4. Click "Save rules".
+5. Reply here with: "RDS inbound updated" (or confirm it was already correct).
 
 ### [$(date)] - Micro-step 2A: Where to edit RDS inbound rules
+
 - On the RDS `database-1` page (Connectivity & security):
   - In the "VPC security groups" section, click the linked SG `sg-08c3cebc3940f0579`.
   - This opens the EC2 Security Group page for that SG.
@@ -891,79 +978,101 @@ Next Micro-step (2) - Verify/Adjust RDS inbound rules
     - Source: `sg-04dadac7d7d3683e4` (EC2 SG of the API instance)
     - Description: Allow PostgreSQL from API EC2
   - Save rules.
-- After saving, return here and confirm: "Inbound rule added". 
+- After saving, return here and confirm: "Inbound rule added".
 
 ### [$(date)] - Micro-step 3: Test DB connectivity from EC2
+
 Purpose
+
 - Confirm EC2 (API) can reach RDS on TCP 5432 and, if reachable, verify credentials.
 
 Steps (on EC2 instance i-0f94e1813cbbfbeb9)
-1) Connect to EC2: EC2 → Instances → Select instance → Connect → EC2 Instance Connect (preferred) → Connect
-2) Install tools (first time only):
+
+1. Connect to EC2: EC2 → Instances → Select instance → Connect → EC2 Instance Connect (preferred) → Connect
+2. Install tools (first time only):
    - `sudo dnf install -y nmap-ncat postgresql15`
-3) Test network to RDS 5432:
+3. Test network to RDS 5432:
    - `nc -zv database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com 5432`
    - Expect: `succeeded` (good) or `timed out/refused` (network/SG issue)
-4) If step 3 succeeded, test DB login (needs the RDS master password):
+4. If step 3 succeeded, test DB login (needs the RDS master password):
    - `psql "host=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com port=5432 user=postgres dbname=postgres sslmode=require"`
    - When prompted, enter the master password
    - Expect: `postgres=#` prompt (good)
 
 Interpretation
+
 - If step 3 fails → still a networking/SG/NACL/VPC issue
 - If step 3 passes but step 4 fails → credentials or DB name issue
 - If both pass → API env needs correct DATABASE_URL (with sslmode=require)
 
 Next
-- Paste the exact outputs of steps 3 and (if possible) 4 here. 
+
+- Paste the exact outputs of steps 3 and (if possible) 4 here.
 
 ### [$(date)] - Micro-step 2 Result
+
 - RDS inbound rule for PostgreSQL 5432 from `sg-04dadac7d7d3683e4` already exists (confirmed).
 
 Next Micro-step (3) – Connectivity test from EC2
+
 - Connect to EC2 `i-0f94e1813cbbfbeb9` via EC2 Instance Connect
 - Run:
   - `sudo dnf install -y nmap-ncat postgresql15`
   - `nc -zv database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com 5432`
   - If succeeded, then:
     - `psql "host=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com port=5432 user=postgres dbname=postgres sslmode=require"`
-- Share the exact outputs here. 
+- Share the exact outputs here.
 
 ### [$(date)] - Micro-step 3 Result
+
 - ✅ EC2 → RDS network OK (nc connected to 5432)
 - ✅ psql login OK (SSL; reached `postgres=>`)
 - Conclusion: Networking and RDS credentials are correct. The API 500/400 is now likely due to API configuration (missing/incorrect DATABASE_URL, or DB migrations not applied).
 
 ### Next Micro-step (4): Identify how the API is running and read its env
+
 Run these in the EC2 terminal and paste the outputs:
-1) Check for Docker
+
+1. Check for Docker
+
 ```
 sudo docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"
 ```
-2) If the table is empty, check PM2
+
+2. If the table is empty, check PM2
+
 ```
 pm2 ls || echo "pm2 not found"
 ```
-3) If still unclear, find listening processes (common API ports)
+
+3. If still unclear, find listening processes (common API ports)
+
 ```
 sudo ss -ltnp | grep -E ":80|:3000|:3001|:4000|:8080" || true
 ```
-4) For any PID you see from step 3, show the command
+
+4. For any PID you see from step 3, show the command
+
 ```
 ps -p <PID_FROM_STEP3> -o pid,cmd
 ```
+
 Goal of this step:
-- Discover whether API runs in Docker/PM2/systemd, so we can locate/set DATABASE_URL (with `sslmode=require`) and run DB migrations. 
+
+- Discover whether API runs in Docker/PM2/systemd, so we can locate/set DATABASE_URL (with `sslmode=require`) and run DB migrations.
 
 ### [$(date)] - Clarifications and next actions
+
 - Region naming: **Europe (Stockholm)** in console = AWS region code **eu-north-1**. They are the same.
 - Command context issue: The last commands were typed inside `psql` (prompt `postgres=>`). We must exit `psql` to the Linux shell before running Docker/PM2/ports commands.
 
 How to exit `psql`
+
 - Type `\q` and press Enter. Prompt should change from `postgres=>` to `[ec2-user@ip-... ~]$`.
 
 Micro-step 4 (retry) – discover how API runs
 Run these from the EC2 LINUX SHELL (not inside psql):
+
 ```
 # 1) Is it Docker?
 sudo docker ps --format "table {{.Names}}\t{{.Image}}\t{{.Ports}}"
@@ -974,43 +1083,58 @@ pm2 ls || echo "pm2 not found"
 # 3) What processes listen on common API ports?
 sudo ss -ltnp | grep -E ":80|:3000|:3001|:4000|:8080" || true
 ```
+
 If step 3 prints a PID, run:
+
 ```
 ps -p <PID_FROM_STEP3> -o pid,cmd
 ```
-Paste all outputs here. We'll then set DATABASE_URL and restart the API accordingly. 
+
+Paste all outputs here. We'll then set DATABASE_URL and restart the API accordingly.
 
 ### [$(date)] - Micro-step 5 (Very Simple): Find API app folder
+
 We found the API Node process on port 3000 with PID `60708`.
 Run this ONE command on EC2 and paste the output here:
+
 ```
 sudo readlink -f /proc/60708/cwd
 ```
-- This prints the folder where the API is running (we'll go there next). 
+
+- This prints the folder where the API is running (we'll go there next).
 
 ### [$(date)] - Micro-step 5 Result
+
 - API working directory (PID 60708): `/var/www/html/exight-backend`
 - Next we will check for an `.env` file to set `DATABASE_URL`.
 
 ### Next Micro-step (6): Check for .env
+
 Run this ONE command on EC2 and paste output:
+
 ```
 sudo ls -la /var/www/html/exight-backend
 ```
-- Goal: see if `.env` exists and what files are present. 
+
+- Goal: see if `.env` exists and what files are present.
 
 ### [$(date)] - Micro-step 6 Result
+
 - Found `.env` at `/var/www/html/exight-backend/.env` (size ~185 bytes)
 - Next we will read it to see current DB vars.
 
 ### Next Micro-step (7): Show .env content (read-only)
+
 Run this ONE command on EC2 and paste the output (you may redact password):
+
 ```
 sudo cat /var/www/html/exight-backend/.env
 ```
-- Goal: confirm variable names. If it uses `DATABASE_URL`, we'll set it to the RDS URL with `sslmode=require`. If it uses `DB_HOST/DB_USER/...`, we'll fill those. 
+
+- Goal: confirm variable names. If it uses `DATABASE_URL`, we'll set it to the RDS URL with `sslmode=require`. If it uses `DB_HOST/DB_USER/...`, we'll fill those.
 
 ### [$(date)] - Micro-step 7 Result
+
 - `.env` content found:
   - `DATABASE_URL=postgresql://postgres:*****@database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com:5432/postgres`
   - `JWT_SECRET` set
@@ -1018,50 +1142,67 @@ sudo cat /var/www/html/exight-backend/.env
 - Observation: `sslmode=require` missing in DATABASE_URL.
 
 ### Next Micro-step (8): Set DATABASE_URL with SSL, then restart API
+
 Run these commands on EC2 and paste outputs:
-1) Update DATABASE_URL to include sslmode=require (creates a backup first)
+
+1. Update DATABASE_URL to include sslmode=require (creates a backup first)
+
 ```
 cd /var/www/html/exight-backend && \
 sudo cp .env .env.bak && \
 sudo sed -i 's#^DATABASE_URL=.*#DATABASE_URL=postgresql://postgres:Sisi18101996\!@database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com:5432/postgres?sslmode=require#' .env && \
 sudo cat .env
 ```
-2) Restart the Node API cleanly
+
+2. Restart the Node API cleanly
+
 ```
 PID=$(pgrep -f 'node.*server.js'); if [ -n "$PID" ]; then sudo kill -9 "$PID"; fi
 cd /var/www/html/exight-backend && nohup node server.js > server.log 2>&1 & echo "NEW_PID=$!"
 ```
-3) Check logs for errors (last 100 lines)
+
+3. Check logs for errors (last 100 lines)
+
 ```
 cd /var/www/html/exight-backend && tail -n 100 server.log || true
 ```
-4) Test register and login locally
+
+4. Test register and login locally
+
 ```
 curl -X POST http://localhost:3000/api/auth/register -H "Content-Type: application/json" -d '{"firstName":"Demo","lastName":"User","email":"demo@exight.com","password":"demo123"}'
 curl -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"email":"demo@exight.com","password":"demo123"}'
 ```
-- Share the outputs, especially any errors in `server.log`. 
+
+- Share the outputs, especially any errors in `server.log`.
 
 ### [$(date)] - Micro-step 8 Result
+
 - DATABASE_URL now includes `?sslmode=require` (confirmed)
 - API restarts and shows: `Server running on port 3000`
 - Register still returns `{"error":"Server error"}`; login returns `{"error":"Invalid credentials"}` (expected if user not created).
 - Next we need to identify which Postgres client the API uses to debug the server error.
 
 ### Next Micro-step (9): Identify DB client used by the API
+
 Run this ONE command on EC2 and paste the full output:
+
 ```
 sudo grep -RniE "(Pool|pg\.|pg-promise|sequelize|knex)" /var/www/html/exight-backend || true
 ```
-- Goal: detect whether the code uses `pg` (node-postgres), `pg-promise`, `sequelize`, or `knex` and which file handles connections. 
+
+- Goal: detect whether the code uses `pg` (node-postgres), `pg-promise`, `sequelize`, or `knex` and which file handles connections.
 
 ### [$(date)] - Root cause in backend config
+
 - `config/database.js` uses SQLite (`sqlite3`) at `data/exight.db`
 - Routes (e.g., `routes/expenses.js`) expect a `pool.query(...)` interface (PostgreSQL). This mismatch causes 500 on register.
 - We will switch `config/database.js` to use node-postgres `Pool` with `DATABASE_URL` (already set with `sslmode=require`).
 
 ### Micro-step 10: Replace `config/database.js` with PostgreSQL Pool
+
 Run these on EC2 (safe: makes a backup):
+
 ```
 cd /var/www/html/exight-backend && \
 sudo cp config/database.js config/database.js.bak && \
@@ -1079,6 +1220,7 @@ EOF
 ```
 
 ### Micro-step 11: Restart API and check logs
+
 ```
 PID=$(pgrep -f 'node.*server.js'); if [ -n "$PID" ]; then sudo kill -9 "$PID"; fi
 cd /var/www/html/exight-backend && nohup node server.js > server.log 2>&1 & echo "NEW_PID=$!"
@@ -1086,37 +1228,49 @@ cd /var/www/html/exight-backend && tail -n 100 server.log || true
 ```
 
 ### Micro-step 12: Test register/login locally
+
 ```
 curl -X POST http://localhost:3000/api/auth/register -H "Content-Type: application/json" -d '{"firstName":"Demo","lastName":"User","email":"demo@exight.com","password":"demo123"}'
 curl -X POST http://localhost:3000/api/auth/login -H "Content-Type: application/json" -d '{"email":"demo@exight.com","password":"demo123"}'
 ```
-Paste outputs here. If errors remain, we'll read server.log and adjust. 
+
+Paste outputs here. If errors remain, we'll read server.log and adjust.
 
 ### [$(date)] - Micro-step 13: Locate auth handlers to debug server error
+
 Problem
+
 - `server.log` shows only startup; register returns `Server error` with no stack.
 
 Action
 Run this ONE command on EC2 and paste output:
+
 ```
 sudo grep -RniE "/api/auth|register|login" /var/www/html/exight-backend || true
 ```
+
 Goal
-- Find which file defines auth routes so we can inspect and fix the error (and add logging if needed). 
+
+- Find which file defines auth routes so we can inspect and fix the error (and add logging if needed).
 
 ### [$(date)] - Micro-step 14: Inspect auth route implementation
+
 - We located auth handlers at:
   - `server.js` mounts `/api/auth`
   - `routes/auth.js` defines `/register` and `/login`
 
 Action (read-only):
+
 ```
 sudo sed -n '1,200p' /var/www/html/exight-backend/routes/auth.js
 ```
-Paste the output. We'll align it to PostgreSQL (`pool.query`) and fix any leftover SQLite logic. 
+
+Paste the output. We'll align it to PostgreSQL (`pool.query`) and fix any leftover SQLite logic.
 
 ### [$(date)] - Micro-step 15: Inspect `users` table schema
+
 Run ONE of the following and paste output:
+
 ```
 # Option A (structured list of columns)
 psql "host=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com port=5432 user=postgres dbname=postgres sslmode=require" -Atc "SELECT column_name||' '||data_type FROM information_schema.columns WHERE table_name='users' ORDER BY ordinal_position;"
@@ -1124,10 +1278,13 @@ psql "host=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com port=5432 user=p
 # Option B (psql describe)
 psql "host=database-1.cfiiymea6yya.eu-north-1.rds.amazonaws.com port=5432 user=postgres dbname=postgres sslmode=require" -c "\\d+ users"
 ```
+
 Goal
-- Confirm whether columns are `name` or `first_name/last_name` so we can write the correct SQL in `routes/auth.js`. 
+
+- Confirm whether columns are `name` or `first_name/last_name` so we can write the correct SQL in `routes/auth.js`.
 
 ### [$(date)] - End-to-end auth fix and deployment notes
+
 - Backend (API)
   - Host: EC2 13.60.70.116
   - Stack: Node/Express
@@ -1160,12 +1317,14 @@ Goal
   - Start API: `nohup env NODE_TLS_REJECT_UNAUTHORIZED=0 node server.js > server.log 2>&1 &`
   - Tail logs: `tail -n 120 server.log`
   - Quick DB test: `node -e "require('dotenv').config(); const {Pool}=require('pg'); const p=new Pool({connectionString:process.env.DATABASE_URL, ssl:{rejectUnauthorized:false}}); p.query('SELECT 1', (e,r)=>{console.log('DB_TEST:', e||r.rows); p.end();});"`
-- Test user (web): demo@exight.com / demo123 → should navigate to dashboard. 
+- Test user (web): demo@exight.com / demo123 → should navigate to dashboard.
 
 ### [$(date)] - Server-side persistence for Expenses/Loans (EC2)
+
 - Goal: Persist all data in RDS; no browser/local storage used.
 - EC2 API path: `/var/www/html/exight-backend`
 - Actions to apply on EC2 (copy-paste blocks):
+
 ```
 # 1) Auth middleware for JWT (middleware/auth.js)
 mkdir -p middleware
@@ -1309,13 +1468,14 @@ nohup env NODE_TLS_REJECT_UNAUTHORIZED=0 node server.js > server.log 2>&1 & echo
 sleep 2
 tail -n 80 server.log
 ```
+
 - Endpoints (requires Authorization: Bearer <token>)
   - GET /api/expenses → list
   - POST /api/expenses → create { name, amount, currency, type, deductionDay, isRecurring, totalMonths?, remainingMonths?, remainingAmount? }
   - GET /api/loans → list
   - POST /api/loans → create { personName, amount, currency, dateGiven, description?, status?, totalReceived?, remainingAmount }
 - Next (UI wiring)
-  - Replace local state calls with API calls on load/create; preserve in-memory lists but source from API. 
+  - Replace local state calls with API calls on load/create; preserve in-memory lists but source from API.
 
 ---
 
@@ -1356,9 +1516,9 @@ tail -n 80 server.log
   - Add client error reporting (e.g., Sentry) and structured logging for API failures; surface non-blocking toasts and retry.
 
 - Immediate next steps
-  1) Replace `localStorage` auth with cookie-based session and wire `/auth/me` in `App.tsx`.
-  2) Move expenses/loans reads/writes to React Query; remove `localStorage` mirrors in `Index.tsx`.
-  3) Extract `Dashboard` and enable route-level code-splitting; add skeletons.
+  1. Replace `localStorage` auth with cookie-based session and wire `/auth/me` in `App.tsx`.
+  2. Move expenses/loans reads/writes to React Query; remove `localStorage` mirrors in `Index.tsx`.
+  3. Extract `Dashboard` and enable route-level code-splitting; add skeletons.
 
 Notes: Aligns app with server-only data flow and better UX while keeping the subtle aesthetic.
 
@@ -1394,7 +1554,7 @@ Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable vi
 
 - Created new modular delete confirmation dialog component:
   - **File**: `src/components/DeleteLogobox.tsx`
-  - **Features**: 
+  - **Features**:
     - 3 variants: default, dangerous (red), warning (amber)
     - 3 sizes: sm, md, lg
     - Customizable title, message, item name, button text
@@ -1417,7 +1577,9 @@ Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable vi
 ## Performance Analysis - Component by Component Review
 
 ### 1. Login.tsx Component
+
 **Performance Issues Identified:**
+
 - Large component (1382 lines) with complex state management
 - Multiple useState hooks that could be consolidated
 - Heavy demo data creation on every render
@@ -1425,6 +1587,7 @@ Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable vi
 - Large inline demo data arrays
 
 **Performance Improvements:**
+
 - **Memoize animation variants** using useMemo to prevent recreation on every render
 - **Extract demo data** to separate constants file to reduce component size
 - **Consolidate state** using useReducer for complex form state
@@ -1433,6 +1596,7 @@ Impact: HTTP→HTTPS redirect restored; SPA served over TLS; `/api` reachable vi
 - **Debounce form inputs** to reduce unnecessary re-renders
 
 **Code Changes Needed:**
+
 ```tsx
 // Memoize animation variants
 const containerVariants = useMemo(() => ({
@@ -1454,13 +1618,16 @@ const DEMO_LOANS = [...];
 ---
 
 ### 2. ExpenseDashboard.tsx Component
+
 **Performance Issues Identified:**
+
 - Complex filtering logic runs on every render
 - Multiple console.log statements in production
 - Expensive calculations in renderExpenseCard function
 - Large component with nested conditional rendering
 
 **Performance Improvements:**
+
 - **Memoize filtered expenses** using useMemo to prevent recalculation
 - **Remove console.log statements** for production builds
 - **Extract renderExpenseCard** to separate component with React.memo
@@ -1468,15 +1635,17 @@ const DEMO_LOANS = [...];
 - **Use React.memo** for expense cards to prevent unnecessary re-renders
 
 **Code Changes Needed:**
+
 ```tsx
 // Memoize filtered expenses
 const activeExpenses = useMemo(() => {
-  return expenses.filter(expense => {
+  return expenses.filter((expense) => {
     if (expense.isRecurring) return true;
     const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
     const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
     const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
-    const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
+    const isNewExpense =
+      hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
     return hasRemainingMonths || hasRemainingAmount || isNewExpense;
   });
 }, [expenses]);
@@ -1488,23 +1657,30 @@ const activeExpenses = useMemo(() => {
 ---
 
 ### 3. LoansDashboard.tsx Component
+
 **Performance Issues Identified:**
+
 - Similar filtering logic to ExpenseDashboard
 - Complex loan card rendering with expensive calculations
 - Multiple state variables that could be consolidated
 
 **Performance Improvements:**
+
 - **Memoize filtered loans** using useMemo
 - **Extract loan card rendering** to separate component
 - **Consolidate state** using useReducer for complex loan state
 - **Optimize progress calculations** by pre-computing values
 
 **Code Changes Needed:**
+
 ```tsx
 // Memoize filtered loans
-const activeLoans = useMemo(() => loans.filter(loan => loan.status === 'active'), [loans]);
-const completedLoans = useMemo(() => loans.filter(loan => loan.status === 'completed'), [loans]);
-const writtenOffLoans = useMemo(() => loans.filter(loan => loan.status === 'written-off'), [loans]);
+const activeLoans = useMemo(() => loans.filter((loan) => loan.status === 'active'), [loans]);
+const completedLoans = useMemo(() => loans.filter((loan) => loan.status === 'completed'), [loans]);
+const writtenOffLoans = useMemo(
+  () => loans.filter((loan) => loan.status === 'written-off'),
+  [loans],
+);
 
 // Extract loan card component
 const LoanCard = React.memo(({ loan, index, onUpdateLoan }: LoanCardProps) => {
@@ -1515,23 +1691,30 @@ const LoanCard = React.memo(({ loan, index, onUpdateLoan }: LoanCardProps) => {
 ---
 
 ### 4. ExpenseChart.tsx Component
+
 **Performance Issues Identified:**
+
 - Complex SVG path calculations on every render
 - Expensive chart data processing
 - Animation state management that could be optimized
 
 **Performance Improvements:**
+
 - **Memoize chart data** using useMemo for expensive calculations
 - **Optimize SVG path generation** by caching calculated paths
 - **Use CSS transforms** instead of JavaScript animations where possible
 - **Debounce hover effects** to reduce unnecessary re-renders
 
 **Code Changes Needed:**
+
 ```tsx
 // Memoize chart data
 const chartData = useMemo(() => {
-  const activeExpenses = expenses.filter(expense => 
-    expense.isRecurring || (expense.remainingMonths > 0 && (expense.remainingAmount === undefined || expense.remainingAmount > 0))
+  const activeExpenses = expenses.filter(
+    (expense) =>
+      expense.isRecurring ||
+      (expense.remainingMonths > 0 &&
+        (expense.remainingAmount === undefined || expense.remainingAmount > 0)),
   );
   // ... rest of calculation
 }, [expenses]);
@@ -1548,18 +1731,22 @@ const segments = useMemo(() => {
 ---
 
 ### 5. ConnectedLineChart.tsx Component
+
 **Performance Issues Identified:**
+
 - Complex tooltip positioning calculations
 - SVG path generation on every render
 - Expensive hover state management
 
 **Performance Improvements:**
+
 - **Memoize SVG paths** using useMemo
 - **Optimize tooltip positioning** by pre-calculating positions
 - **Use CSS transforms** for positioning instead of JavaScript calculations
 - **Debounce hover events** to reduce re-renders
 
 **Code Changes Needed:**
+
 ```tsx
 // Memoize SVG paths
 const chartPaths = useMemo(() => {
@@ -1578,39 +1765,57 @@ const tooltipPosition = useMemo(() => {
 ---
 
 ### 6. AddExpenseModal.tsx Component
+
 **Performance Issues Identified:**
+
 - Form state management could be optimized
 - Complex form validation logic
 - Modal state tracking with useEffect
 
 **Performance Improvements:**
+
 - **Use React Hook Form** for better form performance
 - **Memoize form validation** logic
 - **Optimize modal state management**
 - **Debounce form inputs** for better UX
 
 **Code Changes Needed:**
+
 ```tsx
 // Use React Hook Form for better performance
 import { useForm } from 'react-hook-form';
 
-const { register, handleSubmit, watch, formState: { errors } } = useForm();
+const {
+  register,
+  handleSubmit,
+  watch,
+  formState: { errors },
+} = useForm();
 
 // Memoize validation logic
-const validationRules = useMemo(() => ({
-  name: { required: 'Name is required' },
-  amount: { required: 'Amount is required', min: { value: 0, message: 'Amount must be positive' } }
-}), []);
+const validationRules = useMemo(
+  () => ({
+    name: { required: 'Name is required' },
+    amount: {
+      required: 'Amount is required',
+      min: { value: 0, message: 'Amount must be positive' },
+    },
+  }),
+  [],
+);
 ```
 
 ---
 
 ### 7. AddLoanModal.tsx Component
+
 **Performance Issues Identified:**
+
 - Similar form performance issues to AddExpenseModal
 - Modal state management overhead
 
 **Performance Improvements:**
+
 - **Use React Hook Form** for better form handling
 - **Optimize modal state** management
 - **Memoize form validation** rules
@@ -1618,38 +1823,45 @@ const validationRules = useMemo(() => ({
 ---
 
 ### 8. ThemeToggle.tsx Component
+
 **Performance Issues Identified:**
+
 - Minimal performance impact - component is already optimized
 
 **Performance Improvements:**
+
 - **None needed** - component is lightweight and efficient
 
 ---
 
 ### 9. InfoBar.tsx Component
+
 **Performance Issues Identified:**
+
 - Complex expense filtering on every render
 - Expensive calculations for totals
 - Multiple modal state variables
 
 **Performance Improvements:**
+
 - **Memoize expense calculations** using useMemo
 - **Consolidate modal state** using useReducer
 - **Optimize filtering logic** by pre-computing values
 
 **Code Changes Needed:**
+
 ```tsx
 // Memoize expense calculations
 const { totalMonthly, totalYearly, activeExpenses } = useMemo(() => {
-  const activeExpenses = expenses.filter(expense => {
+  const activeExpenses = expenses.filter((expense) => {
     // ... filtering logic
   });
-  
+
   const totalMonthly = activeExpenses.reduce((sum, expense) => sum + expense.amount, 0);
   const totalYearly = activeExpenses.reduce((sum, expense) => {
     // ... yearly calculation
   }, 0);
-  
+
   return { totalMonthly, totalYearly, activeExpenses };
 }, [expenses]);
 
@@ -1657,7 +1869,7 @@ const { totalMonthly, totalYearly, activeExpenses } = useMemo(() => {
 const [modalState, dispatch] = useReducer(modalReducer, {
   monthly: false,
   yearly: false,
-  active: false
+  active: false,
 });
 ```
 
@@ -1666,43 +1878,50 @@ const [modalState, dispatch] = useReducer(modalReducer, {
 ## Overall Performance Optimization Strategy
 
 ### 1. **State Management Optimization**
+
 - Use `useReducer` for complex state instead of multiple `useState`
 - Implement `useMemo` for expensive calculations
 - Use `useCallback` for function references passed to child components
 
 ### 2. **Component Memoization**
+
 - Wrap expensive components in `React.memo`
 - Extract complex rendering logic to separate components
 - Use `useMemo` for computed values
 
 ### 3. **Rendering Optimization**
+
 - Remove unnecessary `console.log` statements
 - Optimize conditional rendering logic
 - Use CSS transforms instead of JavaScript animations where possible
 
 ### 4. **Data Processing**
+
 - Pre-compute filtered data using `useMemo`
 - Cache expensive calculations
 - Implement virtual scrolling for large lists
 
 ### 5. **Bundle Size Optimization**
+
 - Extract large data arrays to separate files
 - Use dynamic imports for heavy components
 - Implement code splitting for better initial load performance
 
 ### 6. **Event Handling**
+
 - Debounce user input events
 - Optimize hover effects and tooltips
 - Use event delegation where appropriate
 
-These optimizations should significantly improve the application's performance, especially for users with large datasets of expenses and loans. 
+These optimizations should significantly improve the application's performance, especially for users with large datasets of expenses and loans.
 
 # Exight 2.0 Development Log
 
 ## Session 5 - Debugging & Testing (Current Session)
+
 **Date:** December 19, 2024  
 **Time:** 2:15 PM  
-**Status:** ✅ COMPLETED  
+**Status:** ✅ COMPLETED
 
 ### **Debugging Tasks Completed:**
 
@@ -1730,7 +1949,7 @@ These optimizations should significantly improve the application's performance, 
    - **All 4 tests passed:**
      - ✅ Dev server running on port 3000
      - ✅ Main bundle accessible
-     - ✅ App component accessible  
+     - ✅ App component accessible
      - ✅ Index component accessible
 
 6. **Login Component Issue Resolution** ✅
@@ -1795,9 +2014,10 @@ These optimizations should significantly improve the application's performance, 
 ---
 
 ## Session 4 - Performance Optimization & React Memoization
+
 **Date:** December 19, 2024  
 **Time:** 1:30 PM  
-**Status:** ✅ COMPLETED  
+**Status:** ✅ COMPLETED
 
 ### **Performance Issues Identified & Fixed:**
 
@@ -1824,7 +2044,7 @@ These optimizations should significantly improve the application's performance, 
 ### **Components Optimized:**
 
 - **ExpenseDashboard** - Now uses React.memo + useMemo + useCallback
-- **LoansDashboard** - Fully optimized with React.memo + useMemo + useCallback  
+- **LoansDashboard** - Fully optimized with React.memo + useMemo + useCallback
 - **Main Index Component** - Optimized with proper memoization
 
 ### **Expected Results:**
@@ -1838,9 +2058,10 @@ These optimizations should significantly improve the application's performance, 
 ---
 
 ## Session 3 - Component Analysis & Optimization Planning
+
 **Date:** December 19, 2024  
 **Time:** 1:15 PM  
-**Status:** ✅ COMPLETED  
+**Status:** ✅ COMPLETED
 
 ### **Components Analyzed:**
 
@@ -1867,9 +2088,10 @@ These optimizations should significantly improve the application's performance, 
 ---
 
 ## Session 2 - Project Analysis & Performance Investigation
+
 **Date:** December 19, 2024  
 **Time:** 1:00 PM  
-**Status:** ✅ COMPLETED  
+**Status:** ✅ COMPLETED
 
 ### **Files Reviewed:**
 
@@ -1896,28 +2118,33 @@ These optimizations should significantly improve the application's performance, 
 ---
 
 ## Session 1 - Initial Setup and Log Creation
+
 **Date:** December 19, 2024  
 **Time:** 12:45 PM  
-**Status:** ✅ COMPLETED  
+**Status:** ✅ COMPLETED
 
 ### **Task:** Performance optimization for slow application
 
-### **User Request:** 
+### **User Request:**
+
 "Can you check the code ? it's too slow. whatever you do. make sure you don't make any changees to any of the functionality"
 
-### **Approach:** 
+### **Approach:**
+
 1. Analyze existing code for performance bottlenecks
 2. Apply React performance optimizations
 3. Maintain all existing functionality
 4. Document all changes made
 
 ### **Files Modified:**
+
 - `src/components/ExpenseDashboard.tsx`
-- `src/components/LoansDashboard.tsx` 
+- `src/components/LoansDashboard.tsx`
 - `src/pages/Index.tsx`
 - `INFO_LOG.md`
 
 ### **Performance Optimizations Applied:**
+
 - React.memo() for component memoization
 - useMemo() for expensive calculations
 - useCallback() for event handlers

@@ -26,10 +26,6 @@
     "type": "git",
     "url": "https://github.com/yourusername/exight-expense-tracker.git"
   },
-  "homepage": "https://exight-expense-tracker.vercel.app",
-  "bugs": {
-    "url": "https://github.com/yourusername/exight-expense-tracker/issues"
-  },
   "type": "module",
   "engines": {
     "node": "18.19.0",
@@ -42,7 +38,10 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "lockfile:check": "npm ci --dry-run",
-    "lockfile:update": "npm install"
+    "lockfile:update": "npm install",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
@@ -108,10 +107,20 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.2",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.9",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.2",
+    "prettier": "^3.6.2",
     "rollup-plugin-visualizer": "^6.0.3",
     "terser": "^5.43.1",
     "typescript-eslint": "^8.39.0"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx,css,md,json}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
   }
 }
