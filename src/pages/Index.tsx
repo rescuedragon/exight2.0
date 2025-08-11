@@ -430,7 +430,16 @@ const TryMe = memo(() => {
   }, []);
 
   const handleScroll = useCallback(() => {
-    // Scroll handling logic here
+    const controls = document.getElementById('tryme-controls');
+    if (!controls) return;
+    if (window.scrollY > 10) {
+      controls.style.opacity = '0';
+      controls.style.pointerEvents = 'none';
+      controls.style.transition = 'opacity 200ms ease';
+    } else {
+      controls.style.opacity = '1';
+      controls.style.pointerEvents = 'auto';
+    }
   }, []);
 
   const handleLogout = useCallback(async () => {
@@ -470,9 +479,9 @@ const TryMe = memo(() => {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Demo Mode Banner removed as requested */}
 
-      {/* Title - Top Left */}
+      {/* Title - Top Left (hidden on scroll within TryMe) */}
       {!isAnyModalOpen && (
-        <div className="fixed top-16 left-6 z-30 space-y-2">
+        <div id="tryme-controls" className="fixed top-16 left-6 z-30 space-y-2">
           <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
             <span 
               className="animate-gradient-x"
@@ -491,9 +500,9 @@ const TryMe = memo(() => {
         </div>
       )}
 
-      {/* Top Right Controls */}
+      {/* Top Right Controls (hidden on scroll within TryMe) */}
       {!isAnyModalOpen && (
-        <div className="fixed top-16 right-6 z-40 flex flex-col gap-2">
+        <div className="fixed top-16 right-6 z-40 flex flex-col gap-2" id="tryme-controls">
           <ThemeToggle />
           <Button
             variant="ghost"

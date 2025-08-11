@@ -153,10 +153,10 @@ const Login = () => {
         className="fixed top-6 left-6 z-30 space-y-2"
       >
         <h1 className="text-5xl md:text-6xl font-extrabold text-foreground tracking-tight leading-tight animate-fade-in-up stagger-1">
-          <span className="gradient-text animate-gradient-x">Exight</span>
+          <span className="gradient-text">Exight</span>
         </h1>
         <div className="h-1 w-24 bg-gradient-to-r from-blue-accent to-purple-accent rounded-full animate-fade-in-up stagger-2"></div>
-        <p className="text-xl md:text-2xl font-bold animate-fade-in-up stagger-3 tracking-wide gradient-text animate-gradient-x">
+        <p className="text-xl md:text-2xl font-bold animate-fade-in-up stagger-3 tracking-wide gradient-text">
           Insights for your expenses.
         </p>
       </motion.div>

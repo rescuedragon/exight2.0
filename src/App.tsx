@@ -24,10 +24,10 @@ const App = () => {
   const recomputeAuth = () => {
     const token = localStorage.getItem('authToken');
     const demoMode = localStorage.getItem('demoMode');
-    const lastLoginDate = localStorage.getItem('lastLoginDate');
 
     setIsDemoMode(demoMode === 'true');
-    setIsAuthenticated(!!token || demoMode === 'true' || !!lastLoginDate);
+    // Only a real token or explicit demo mode counts as authenticated
+    setIsAuthenticated(!!token || demoMode === 'true');
   };
 
   useEffect(() => {
@@ -38,7 +38,7 @@ const App = () => {
     window.addEventListener('authChanged', onAuthChanged);
     // Respond to cross-tab storage changes
     const onStorage = (e: StorageEvent) => {
-      if (['authToken', 'demoMode', 'lastLoginDate'].includes(e.key || '')) {
+      if (['authToken', 'demoMode'].includes(e.key || '')) {
         recomputeAuth();
       }
     };
