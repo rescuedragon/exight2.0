@@ -1,7 +1,6 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Index, { TryMe } from "./pages/Index";
@@ -13,7 +12,7 @@ import { ModalProvider } from "@/contexts/ModalContext";
 import { apiService } from "@/lib/api";
 import { FeedbackModal } from "@/components/FeedbackModal";
 
-const queryClient = new QueryClient();
+
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -70,35 +69,33 @@ const App = () => {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <ModalProvider>
-          <Toaster />
-          <Sonner />
-          <FeedbackModal />
-          <Routes>
-            <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
-            <Route path="/" element={
-              isAuthenticated ? (
-                isDemoMode ? <TryMe /> : <Index />
-              ) : (
-                <Navigate to="/login" />
-              )
-            } />
-            <Route path="/dashboard" element={
-              isAuthenticated ? (
-                isDemoMode ? <TryMe /> : <Index />
-              ) : (
-                <Navigate to="/login" />
-              )
-            } />
-            <Route path="/testspace" element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </ModalProvider>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <TooltipProvider>
+      <ModalProvider>
+        <Toaster />
+        <Sonner />
+        <FeedbackModal />
+        <Routes>
+          <Route path="/login" element={isAuthenticated ? <Navigate to="/" /> : <Login />} />
+          <Route path="/" element={
+            isAuthenticated ? (
+              isDemoMode ? <TryMe /> : <Index />
+            ) : (
+              <Navigate to="/login" />
+            )
+          } />
+          <Route path="/dashboard" element={
+            isAuthenticated ? (
+              isDemoMode ? <TryMe /> : <Index />
+            ) : (
+              <Navigate to="/login" />
+            )
+          } />
+          <Route path="/testspace" element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />} />
+          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </ModalProvider>
+    </TooltipProvider>
   );
 };
 
