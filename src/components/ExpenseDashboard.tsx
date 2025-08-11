@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, useCallback, memo } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -30,36 +30,80 @@ interface ExpenseDashboardProps {
   isPrivacyMode?: boolean;
 }
 
-export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
+// Memoized helper functions
+const getExpenseIcon = (type: ExpenseType) => {
+  switch (type) {
+    case 'EMI':
+      return <div className="h-1 w-1 rounded-full bg-green-600" />;
+    case 'Personal Loan':
+      return <div className="h-1 w-1 rounded-full bg-green-600" />;
+    case 'Borrowed from Someone':
+      return <div className="h-1 w-1 rounded-full bg-green-600" />;
+  }
+};
+
+const getExpenseColor = (type: ExpenseType) => {
+  switch (type) {
+    case 'EMI':
+      return 'bg-gradient-to-r from-blue-accent/20 to-blue-accent/10 text-blue-accent border-blue-accent/30 shadow-sm';
+    case 'Personal Loan':
+      return 'bg-gradient-to-r from-purple-accent/20 to-purple-accent/10 text-purple-accent border-purple-accent/30 shadow-sm';
+    case 'Borrowed from Someone':
+      return 'bg-gradient-to-r from-emerald-accent/20 to-emerald-accent/10 text-emerald-accent border-emerald-accent/30 shadow-sm';
+  }
+};
+
+const getOrdinalSuffix = (day: number): string => {
+  const remainder = day % 10;
+  const teens = Math.floor(day / 10) % 10 === 1;
+  
+  if (teens) return 'th';
+  
+  switch (remainder) {
+    case 1: return 'st';
+    case 2: return 'nd';
+    case 3: return 'rd';
+    default: return 'th';
+  }
+};
+
+export const ExpenseDashboard = memo(({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [partialPayment, setPartialPayment] = useState('');
   const [isRecurringExpanded, setIsRecurringExpanded] = useState(true);
   const [isFixedTimeExpanded, setIsFixedTimeExpanded] = useState(true);
   const { toast } = useToast();
 
-  const getExpenseIcon = (type: ExpenseType) => {
-    switch (type) {
-      case 'EMI':
-        return <div className="h-1 w-1 rounded-full bg-green-600" />;
-      case 'Personal Loan':
-        return <div className="h-1 w-1 rounded-full bg-green-600" />;
-      case 'Borrowed from Someone':
-        return <div className="h-1 w-1 rounded-full bg-green-600" />;
-    }
-  };
+  // Memoized data filtering and calculations
+  const { activeExpenses, recurringExpenses, fixedTimeExpenses } = useMemo(() => {
+    const activeExpenses = expenses.filter(expense => {
+      // Show recurring expenses always
+      if (expense.isRecurring) {
+        return true;
+      }
 
-  const getExpenseColor = (type: ExpenseType) => {
-    switch (type) {
-      case 'EMI':
-        return 'bg-gradient-to-r from-blue-accent/20 to-blue-accent/10 text-blue-accent border-blue-accent/30 shadow-sm';
-      case 'Personal Loan':
-        return 'bg-gradient-to-r from-purple-accent/20 to-purple-accent/10 text-purple-accent border-purple-accent/30 shadow-sm';
-      case 'Borrowed from Someone':
-        return 'bg-gradient-to-r from-emerald-accent/20 to-emerald-accent/10 text-emerald-accent border-emerald-accent/30 shadow-sm';
-    }
-  };
+      // For non-recurring expenses, be more permissive - show if:
+      // 1. Has remaining months > 0, OR
+      // 2. Has remaining amount > 0, OR  
+      // 3. Has total months (new expense), OR
+      // 4. No remaining data but has total months (newly created)
+      const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
+      const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
+      const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+      const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
+      
+      const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
+      return isActive;
+    });
 
-  const formatCurrency = (amount: number, currency: string = 'INR') => {
+    const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);
+    const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
+
+    return { activeExpenses, recurringExpenses, fixedTimeExpenses };
+  }, [expenses]);
+
+  // Memoized currency formatter
+  const formatCurrency = useCallback((amount: number, currency: string = 'INR') => {
     if (isPrivacyMode) {
       return '••••••';
     }
@@ -70,13 +114,15 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
       maximumFractionDigits: 0,
       currencyDisplay: 'symbol'
     }).format(amount).replace(/^₹/, '₹');
-  };
+  }, [isPrivacyMode]);
 
-  const formatNumber = (num: number) => {
+  // Memoized number formatter
+  const formatNumber = useCallback((num: number) => {
     return isPrivacyMode ? '••' : num.toString();
-  };
+  }, [isPrivacyMode]);
 
-  const handlePartialPayment = () => {
+  // Memoized partial payment handler
+  const handlePartialPayment = useCallback(() => {
     if (!selectedExpense || !partialPayment) return;
 
     const payment = parseFloat(partialPayment);
@@ -121,67 +167,11 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
       title: "Success",
       description: `Partial payment of ${formatCurrency(payment)} recorded successfully!`
     });
-  };
+  }, [selectedExpense, partialPayment, formatCurrency, onUpdateExpense, toast]);
 
-  if (expenses.length === 0) {
-    return (
-      <div className="flex flex-col items-center justify-center py-20 text-center">
-        <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
-          <Coins className="h-12 w-12 text-blue-accent" />
-        </div>
-        <h3 className="text-2xl font-bold text-foreground mb-3">No expenses added yet</h3>
-        <p className="text-muted-foreground text-lg mb-6 max-w-md">Start tracking your EMIs and recurring expenses to get insights into your financial commitments</p>
-      </div>
-    );
-  }
-
-  // Filter to show only active expenses (not completed)
-  console.log('ExpenseDashboard - All expenses:', expenses);
-  console.log('ExpenseDashboard - Expenses length:', expenses.length);
-  
-  if (expenses.length === 0) {
-    console.log('ExpenseDashboard - No expenses found, showing empty state');
-  }
-  
-  const activeExpenses = expenses.filter(expense => {
-    console.log('ExpenseDashboard - Processing expense:', expense);
-    
-    // Show recurring expenses always
-    if (expense.isRecurring) {
-      console.log(`ExpenseDashboard - Expense ${expense.name}: isRecurring=true, showing`);
-      return true;
-    }
-
-    // For non-recurring expenses, be more permissive - show if:
-    // 1. Has remaining months > 0, OR
-    // 2. Has remaining amount > 0, OR  
-    // 3. Has total months (new expense), OR
-    // 4. No remaining data but has total months (newly created)
-    const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
-    const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
-    const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
-    const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
-    
-    const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
-
-    console.log(`ExpenseDashboard - Expense ${expense.name}: remainingMonths=${expense.remainingMonths}, remainingAmount=${expense.remainingAmount}, totalMonths=${expense.totalMonths}, isActive=${isActive}`);
-    return isActive;
-  });
-  
-  console.log('ExpenseDashboard - Active expenses:', activeExpenses);
-  console.log('ExpenseDashboard - Active expenses length:', activeExpenses.length);
-
-  // Separate recurring and fixed-time expenses
-  const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);
-  const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
-  
-  console.log('Active expenses:', activeExpenses);
-  console.log('Recurring expenses:', recurringExpenses);
-  console.log('Fixed time expenses:', fixedTimeExpenses);
-
-  const renderExpenseCard = (expense: Expense, index: number) => {
+  // Memoized expense card renderer
+  const renderExpenseCard = useCallback((expense: Expense, index: number) => {
     const progressPercentage = expense.isRecurring ? 0 : Math.round((((expense.totalMonths || 0) - (expense.remainingMonths || 0)) / (expense.totalMonths || 1)) * 100);
-    const staggerClass = `stagger-${Math.min(index + 1, 6)}`;
     
     return (
       <div 
@@ -280,27 +270,6 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
             
             <div className="flex items-center gap-1.5 justify-center w-full">
               <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">Due Day</p>
-                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">{expense.deductionDay}{getOrdinalSuffix(expense.deductionDay)}</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
-                <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">
-                  {expense.isRecurring ? 'Paid YTD' : 'Remaining'}
-                </p>
-                <p className="text-xs font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent">
-                  {expense.isRecurring 
-                    ? formatCurrency(expense.amount * Math.min(new Date().getMonth() + 1, 12), expense.currency)
-                    : `${formatNumber(expense.remainingMonths)} months`
-                  }
-                </p>
-              </div>
-            </div>
-            
-            <div className="flex items-center gap-1.5 justify-center w-full">
-              <div className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20 w-full">
                 <p className="text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-0.5">
                   {expense.isRecurring ? 'Avg/Month' : 'Balance'}
                 </p>
@@ -335,7 +304,20 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
         </div>
       </div>
     );
-  };
+  }, [formatCurrency, handlePartialPayment]);
+
+  // Early return for empty state
+  if (expenses.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-center">
+        <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
+          <Coins className="h-12 w-12 text-blue-accent" />
+        </div>
+        <h3 className="text-2xl font-bold text-foreground mb-3">No expenses added yet</h3>
+        <p className="text-muted-foreground text-lg mb-6 max-w-md">Start tracking your EMIs and recurring expenses to get insights into your financial commitments</p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -468,18 +450,6 @@ export const ExpenseDashboard = ({ expenses, onUpdateExpense, isPrivacyMode = fa
       )}
     </div>
   );
-};
+});
 
-function getOrdinalSuffix(day: number): string {
-  const remainder = day % 10;
-  const teens = Math.floor(day / 10) % 10 === 1;
-  
-  if (teens) return 'th';
-  
-  switch (remainder) {
-    case 1: return 'st';
-    case 2: return 'nd';
-    case 3: return 'rd';
-    default: return 'th';
-  }
-}
+ExpenseDashboard.displayName = 'ExpenseDashboard';

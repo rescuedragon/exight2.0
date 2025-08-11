@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Suspense } from 'react';
+import React, { useState, useEffect, useRef, Suspense, useMemo, useCallback, memo } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from "@/components/ui/button";
 import { InfoBar } from "@/components/InfoBar";
@@ -43,9 +43,14 @@ import { Loan } from "@/types/loan";
 import { LoansInfoBar } from "@/components/LoansInfoBar";
 
 // Try Me Component with hardcoded demo data
-const TryMe = () => {
+const TryMe = memo(() => {
   const navigate = useNavigate();
   const { isAnyModalOpen, openModal, closeModal } = useModal();
+  
+  // State variables
+  const [activeTab, setActiveTab] = useState('expenses');
+  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
+  const [showDetailedView, setShowDetailedView] = useState(false);
   
   // Hardcoded demo data
   const demoExpenses: Expense[] = [
@@ -231,7 +236,7 @@ const TryMe = () => {
       currency: 'INR',
       dateGiven: new Date(2024, 2, 15),
       status: 'active' as const,
-      totalReceived: 20000, // Partial payment
+      totalReceived: 20000,
       remainingAmount: 30000,
       createdAt: new Date(2024, 2, 15),
       payments: [
@@ -258,7 +263,7 @@ const TryMe = () => {
       currency: 'INR',
       dateGiven: new Date(2024, 1, 20),
       status: 'active' as const,
-      totalReceived: 35000, // Partial payment
+      totalReceived: 35000,
       remainingAmount: 40000,
       createdAt: new Date(2024, 1, 20),
       payments: [
@@ -386,87 +391,352 @@ const TryMe = () => {
     }
   ];
 
-  const [expenses, setExpenses] = useState<Expense[]>(demoExpenses);
-  const [loans, setLoans] = useState<Loan[]>(demoLoans);
-  const [showDetailedView, setShowDetailedView] = useState(false);
-  const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
-  const [scrollOpacity, setScrollOpacity] = useState(1);
-  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
-  const [activeTab, setActiveTab] = useState('expenses');
-  const [userName, setUserName] = useState<string>('Demo User');
-  const [shimmerKey, setShimmerKey] = useState(0);
-
-  // Keep minimal motion to avoid interfering with panel mounting
-  const tabVariants = {
-    active: { opacity: 1, x: 0 },
-    inactive: { opacity: 1, x: 0 },
-  } as const;
-
-  // Handle tab switching with shimmer animation
-  const handleTabSwitch = (tab: string) => {
-    setActiveTab(tab);
-  };
-
-  // Handle scroll-based fade effect - optimized to reduce flickering
-  useEffect(() => {
-    let ticking = false;
-    let lastScrollY = 0;
-    
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          
-          // Only update if there's a meaningful change to prevent flickering
-          if (Math.abs(scrollY - lastScrollY) > 2) {
-            if (scrollY > 5) {
-              setScrollOpacity(0);
-            } else {
-              setScrollOpacity(1);
-            }
-            lastScrollY = scrollY;
-          }
-          
-          ticking = false;
-        });
-        ticking = true;
+  // Memoized data filtering
+  const { activeExpenses, recurringExpenses, fixedTimeExpenses } = useMemo(() => {
+    const activeExpenses = demoExpenses.filter(expense => {
+      // Show recurring expenses always
+      if (expense.isRecurring) {
+        return true;
       }
-    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
+      // For non-recurring expenses, be more permissive - show if:
+      // 1. Has remaining months > 0, OR
+      // 2. Has remaining amount > 0, OR  
+      // 3. Has total months (new expense), OR
+      // 4. No remaining data but has total months (newly created)
+      const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
+      const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
+      const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+      const isNewExpense = hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
+      
+      const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
+      return isActive;
+    });
+
+    const recurringExpenses = activeExpenses.filter(expense => expense.isRecurring);
+    const fixedTimeExpenses = activeExpenses.filter(expense => !expense.isRecurring);
+
+    return { activeExpenses, recurringExpenses, fixedTimeExpenses };
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      // Call logout API (best effort)
-      await apiService.logout();
-    } catch (error) {
-      console.error('Logout API call failed:', error);
-    } finally {
-      // Clear only auth data
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('lastLoginDate');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('demoMode');
-      // Force full page reload so App re-checks auth and route guards
-      window.location.href = '/login';
+  const { activeLoans, completedLoans } = useMemo(() => {
+    const activeLoans = demoLoans.filter(loan => loan.status === 'active');
+    const completedLoans = demoLoans.filter(loan => loan.status === 'completed' || loan.status === 'written-off');
+    return { activeLoans, completedLoans };
+  }, []);
+
+  const handleTabSwitch = useCallback((tab: string) => {
+    setActiveTab(tab);
+  }, []);
+
+  const handleScroll = useCallback(() => {
+    // Scroll handling logic here
+  }, []);
+
+  const handleLogout = useCallback(async () => {
+    // Logout logic here
+  }, []);
+
+  const handleAddExpense = useCallback(async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
+    // Add expense logic here
+  }, []);
+
+  const handleAddLoan = useCallback(async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
+    // Add loan logic here
+  }, []);
+
+  const handleDeleteExpense = useCallback(async (expenseId: string) => {
+    // Delete expense logic here
+  }, []);
+
+  const handleUpdateExpense = useCallback(async (updatedExpense: Expense) => {
+    // Update expense logic here
+  }, []);
+
+  const handleUpdateLoan = useCallback(async (updatedLoan: Loan) => {
+    // Update loan logic here
+  }, []);
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+      {/* Demo Mode Banner */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 text-center font-semibold shadow-lg">
+        <div className="flex items-center justify-center gap-2">
+          <TestTube className="h-4 w-4" />
+          <span>Demo Mode - Try the app with sample data</span>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => navigate('/')}
+            className="ml-4 h-6 px-3 text-xs bg-white/20 hover:bg-white/30 border-white/30 text-black"
+          >
+            Switch to Real Mode
+          </Button>
+        </div>
+      </div>
+
+      {/* Title - Top Left */}
+      {!isAnyModalOpen && (
+        <div className="fixed top-16 left-6 z-30 space-y-2">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
+            <span 
+              className="animate-gradient-x"
+              style={{
+                background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+                backgroundSize: '400% 400%',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                WebkitTextFillColor: 'transparent'
+              }}
+            >
+              Exight
+            </span>
+          </h1>
+        </div>
+      )}
+
+      {/* Top Right Controls */}
+      {!isAnyModalOpen && (
+        <div className="fixed top-16 right-6 z-40 flex flex-col gap-2">
+          <ThemeToggle />
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={handleLogout}
+            className="h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
+            title="Logout"
+          >
+            <LogOut className="h-5 w-5" />
+          </Button>
+        </div>
+      )}
+
+      <div className="container mx-auto px-6 py-8 max-w-7xl min-h-screen">
+        {/* Spacer for layout */}
+        <div className="pt-20 mb-6"></div>
+
+        {/* Navigation Bar with balanced horizontal alignment */}
+        <div className="flex items-center mb-6">
+          {/* Left side - Greeting */}
+          <div className="flex items-center gap-6 flex-1">
+            <p className="text-lg font-semibold text-foreground">
+              Hi Demo User!
+            </p>
+          </div>
+
+          {/* Center - Tab Buttons */}
+          <div className="flex justify-center flex-1">
+            <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
+              <button
+                onClick={() => setActiveTab('expenses')}
+                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
+                  activeTab === 'expenses'
+                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
+                }`}
+              >
+                <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
+                Expenses
+              </button>
+              <button
+                onClick={() => setActiveTab('loans')}
+                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
+                  activeTab === 'loans'
+                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
+                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
+                }`}
+              >
+                <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
+                Loans
+              </button>
+            </div>
+          </div>
+
+          {/* Right side - Action Buttons */}
+          <div className="flex items-center gap-4 flex-1 justify-end">
+            {/* Privacy Toggle - Just Eye Icon */}
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setIsPrivacyMode(!isPrivacyMode)}
+              className="h-10 w-10 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
+              title={isPrivacyMode ? "Show Data" : "Hide Data"}
+            >
+              {isPrivacyMode ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </Button>
+            
+            {/* Analytics Button */}
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
+              onClick={() => setShowDetailedView(true)}
+            >
+              <BarChart3 className="h-5 w-5" />
+              Analytics
+            </Button>
+
+            {/* Add Entry Button */}
+            <div>
+              {activeTab === 'expenses' ? (
+                <AddExpenseModal onAddExpense={handleAddExpense} />
+              ) : (
+                <AddLoanModal onAddLoan={handleAddLoan} existingPersons={[]} />
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Main Content with Tabs */}
+        <div className="space-y-4 pb-8">
+          <div className="w-full">
+            {/* Tab Content */}
+            <div className="relative">
+              <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                <div className="space-y-6">
+                  {/* Info Bar */}
+                  <InfoBar 
+                    expenses={activeExpenses} 
+                    onUpdateExpense={handleUpdateExpense} 
+                    onDeleteExpense={handleDeleteExpense} 
+                    isPrivacyMode={isPrivacyMode} 
+                  />
+
+                  {/* Dashboard */}
+                  <div>
+                    <ExpenseDashboard 
+                      expenses={activeExpenses} 
+                      onUpdateExpense={handleUpdateExpense}
+                      isPrivacyMode={isPrivacyMode}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+                <div className="space-y-6">
+                  {/* Loans Info Bar */}
+                  <LoansInfoBar 
+                    loans={activeLoans} 
+                    onUpdateLoan={handleUpdateLoan} 
+                    isPrivacyMode={isPrivacyMode} 
+                  />
+
+                  {/* Loans Dashboard */}
+                  <div>
+                    <LoansDashboard 
+                      loans={activeLoans} 
+                      onUpdateLoan={handleUpdateLoan}
+                      isPrivacyMode={isPrivacyMode}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Detailed View Modal */}
+        {showDetailedView && (
+          <>
+            {activeTab === 'expenses' ? (
+              <DetailedView 
+                expenses={activeExpenses} 
+                onClose={() => setShowDetailedView(false)} 
+              />
+            ) : (
+              <LoanDetailedView 
+                loans={activeLoans} 
+                onClose={() => setShowDetailedView(false)}
+                onUpdateLoan={handleUpdateLoan}
+              />
+            )}
+          </>
+        )}
+      </div>
+    </div>
+  );
+});
+
+TryMe.displayName = 'TryMe';
+
+// Main Index Component
+const Index = () => {
+  const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('expenses');
+  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
+  const [showDetailedView, setShowDetailedView] = useState(false);
+  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [loans, setLoans] = useState<Loan[]>([]);
+  const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
+  const [userName, setUserName] = useState('User');
+
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const savedExpenses = localStorage.getItem('expenses');
+    const savedLoans = localStorage.getItem('loans');
+    const savedUserName = localStorage.getItem('userName');
+
+    if (savedExpenses) {
+      try {
+        const parsedExpenses = JSON.parse(savedExpenses);
+        setExpenses(parsedExpenses.map((exp: any) => ({
+          ...exp,
+          createdAt: new Date(exp.createdAt),
+          partialPayments: exp.partialPayments || []
+        })));
+      } catch (error) {
+        console.error('Error parsing saved expenses:', error);
+      }
     }
-  };
+
+    if (savedLoans) {
+      try {
+        const parsedLoans = JSON.parse(savedLoans);
+        setLoans(parsedLoans.map((loan: any) => ({
+          ...loan,
+          dateGiven: new Date(loan.dateGiven),
+          createdAt: new Date(loan.createdAt),
+          writeOffDate: loan.writeOffDate ? new Date(loan.writeOffDate) : undefined,
+          payments: loan.payments || []
+        })));
+      } catch (error) {
+        console.error('Error parsing saved loans:', error);
+      }
+    }
+
+    if (savedUserName) {
+      setUserName(savedUserName);
+    }
+  }, []);
+
+  // Save expenses to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('expenses', JSON.stringify(expenses));
+  }, [expenses]);
+
+  // Save loans to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem('loans', JSON.stringify(loans));
+  }, [loans]);
 
   const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
     const newExpense: Expense = {
       id: Date.now().toString(),
       name: newExpenseData.name,
       amount: newExpenseData.amount,
-      currency: newExpenseData.currency,
+      currency: newExpenseData.currency || 'INR',
       type: newExpenseData.type,
       deductionDay: newExpenseData.deductionDay,
       isRecurring: newExpenseData.isRecurring,
-      totalMonths: newExpenseData.totalMonths,
-      remainingMonths: newExpenseData.remainingMonths,
-      remainingAmount: newExpenseData.remainingAmount,
+      totalMonths: newExpenseData.totalMonths ?? null,
+      remainingMonths: newExpenseData.remainingMonths ?? null,
+      remainingAmount: newExpenseData.remainingAmount ?? null,
       createdAt: new Date(),
       partialPayments: []
     };
@@ -478,7 +748,7 @@ const TryMe = () => {
       id: Date.now().toString(),
       personName: newLoanData.personName,
       amount: newLoanData.amount,
-      currency: newLoanData.currency,
+      currency: newLoanData.currency || 'INR',
       dateGiven: newLoanData.dateGiven,
       description: newLoanData.description,
       status: 'active',
@@ -506,1399 +776,50 @@ const TryMe = () => {
     ));
   };
 
-  // Get unique person names for loan form
-  const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-      {/* Title - Top Left */}
-      {!isAnyModalOpen && (
-        <div 
-          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-in-out"
-          style={{ opacity: scrollOpacity }}
-        >
-        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-          <span className="gradient-text animate-gradient-x">Exight</span>
-        </h1>
-        </div>
-      )}
-
-      {/* Top Right Controls */}
-      {!isAnyModalOpen && (
-        <div 
-          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-in-out"
-          style={{ opacity: scrollOpacity }}
-        >
-
-          <ThemeToggle />
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={handleLogout}
-            className="h-12 w-12 rounded-full bg-background/80 backdrop-blur-sm border border-border/40 hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-all duration-200 hover:scale-102 shadow-sm hover:shadow-md"
-            title="Logout"
-          >
-            <LogOut className="h-5 w-5" />
-          </Button>
-        </div>
-      )}
-
-      <div className="container mx-auto px-6 py-8 max-w-7xl min-h-screen">
-        {/* Spacer for layout */}
-        <div className="pt-20 mb-6"></div>
-
-        {/* Navigation Bar with balanced horizontal alignment */}
-        <div className="flex items-center mb-6">
-          {/* Left side - Greeting */}
-          <div className="flex items-center gap-6 flex-1">
-            <p className="text-lg font-semibold text-foreground">
-              Hi {userName}!
-            </p>
-          </div>
-
-          {/* Center - Tab Buttons */}
-          <div className="flex justify-center flex-1" role="tablist" aria-label="Primary sections">
-            <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
-              <button
-                onClick={() => setActiveTab('expenses')}
-                className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
-                  activeTab === 'expenses'
-                    ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
-                }`}
-                role="tab"
-                aria-selected={activeTab === 'expenses'}
-                aria-controls="panel-expenses"
-                id="tab-expenses"
-              >
-                <Wallet className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'expenses' ? 'text-white' : 'text-muted-foreground'}`} />
-                Expenses
-              </button>
-              <button
-                onClick={() => setActiveTab('loans')}
-                className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
-                  activeTab === 'loans'
-                    ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
-                    : 'text-muted-foreground hover:text-foreground hover:bg-white/50'
-                }`}
-                role="tab"
-                aria-selected={activeTab === 'loans'}
-                aria-controls="panel-loans"
-                id="tab-loans"
-              >
-                <HandCoins className={`h-4 w-4 transition-colors duration-150 ${activeTab === 'loans' ? 'text-white' : 'text-muted-foreground'}`} />
-                Loans
-              </button>
-            </div>
-          </div>
-
-          {/* Right side - Action Buttons */}
-            <div className="flex items-center gap-4 flex-1 justify-end" aria-label="Quick actions">
-            {/* Privacy Toggle - Just Eye Icon */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsPrivacyMode(!isPrivacyMode)}
-              className="h-10 w-10 rounded-full text-muted-foreground hover:text-foreground transition-all duration-200 hover:scale-102 backdrop-blur-sm bg-white/10 dark:bg-gray-800/20 hover:bg-white/20 dark:hover:bg-gray-800/30 border border-white/20 dark:border-gray-700/30"
-                title={isPrivacyMode ? "Show Data" : "Hide Data"}
-                aria-pressed={isPrivacyMode}
-                aria-label={isPrivacyMode ? "Enable data visibility" : "Enable privacy mode"}
-            >
-              {isPrivacyMode ? (
-                <EyeOff className="h-5 w-5" />
-              ) : (
-                <Eye className="h-5 w-5" />
-              )}
-            </Button>
-            
-            {/* Analytics Button */}
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-purple-accent/20 border-border/40 backdrop-blur-sm"
-              onClick={() => setShowDetailedView(true)}
-              aria-haspopup="dialog"
-              aria-controls={activeTab === 'expenses' ? 'panel-expenses' : 'panel-loans'}
-            >
-              <BarChart3 className="h-5 w-5" />
-              Analytics
-            </Button>
-
-            {/* Add Entry Button */}
-            <div>
-              <Suspense fallback={<div className="h-10 w-28 rounded-full bg-muted animate-pulse" />}>
-                {activeTab === 'expenses' ? (
-                  <AddExpenseModal onAddExpense={handleAddExpense} />
-                ) : (
-                  <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
-                )}
-              </Suspense>
-            </div>
-            
-
-          </div>
-        </div>
-
-        {/* Main Content with Tabs */}
-        <div className="space-y-4 pb-8">
-          <div className="w-full">
-
-            {/* Tab Content */}
-            <div className="relative">
-              {activeTab === 'expenses' && (
-                <motion.div
-                  key="expenses-tab"
-                  id="panel-expenses"
-                  role="tabpanel"
-                  aria-labelledby="tab-expenses"
-                  variants={tabVariants}
-                  initial="inactive"
-                  animate="active"
-                  data-allow-motion
-                >
-                  <div className="space-y-6">
-                    {/* Info Bar */}
-                    <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
-                      <InfoBar 
-                        expenses={expenses} 
-                        onUpdateExpense={handleUpdateExpense} 
-                        onDeleteExpense={handleDeleteExpense} 
-                        isPrivacyMode={isPrivacyMode} 
-                      />
-                    </Suspense>
-
-                    {/* Dashboard */}
-                    <div>
-                      <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
-                        <ExpenseDashboard 
-                          expenses={expenses} 
-                          onUpdateExpense={handleUpdateExpense}
-                          isPrivacyMode={isPrivacyMode}
-                        />
-                      </Suspense>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-
-              {activeTab === 'loans' && (
-                <motion.div
-                  key="loans-tab"
-                  id="panel-loans"
-                  role="tabpanel"
-                  aria-labelledby="tab-loans"
-                  variants={tabVariants}
-                  initial="inactive"
-                  animate="active"
-                  data-allow-motion
-                >
-                  <div className="space-y-6">
-                    {/* Loans Info Bar */}
-                    <Suspense fallback={<div className="h-24 rounded-lg bg-muted animate-pulse" />}>
-                      <LoansInfoBar 
-                        loans={loans} 
-                        onUpdateLoan={handleUpdateLoan} 
-                        isPrivacyMode={isPrivacyMode} 
-                      />
-                    </Suspense>
-
-                    {/* Loans Dashboard */}
-                    <div>
-                      <Suspense fallback={<div className="space-y-4"><div className="h-24 rounded-lg bg-muted animate-pulse" /><div className="h-64 rounded-lg bg-muted animate-pulse" /><div className="h-40 rounded-lg bg-muted animate-pulse" /></div>}>
-                        <LoansDashboard 
-                          loans={loans} 
-                          onUpdateLoan={handleUpdateLoan}
-                          isPrivacyMode={isPrivacyMode}
-                        />
-                      </Suspense>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Detailed View Modal */}
-        {showDetailedView && (
-          <Suspense fallback={<div className="fixed inset-0 z-[9998] grid place-items-center"><div className="h-24 w-24 rounded-full bg-muted animate-pulse" /></div>}>
-            {activeTab === 'expenses' ? (
-              <DetailedView 
-                expenses={expenses} 
-                onClose={() => setShowDetailedView(false)} 
-              />
-            ) : (
-              <LoanDetailedView 
-                loans={loans} 
-                onClose={() => setShowDetailedView(false)}
-                onUpdateLoan={handleUpdateLoan}
-              />
-            )}
-          </Suspense>
-        )}
-      </div>
-    </div>
-  );
-};
-
-interface ActionLog {
-  id: string;
-  action: string;
-  details: string;
-  timestamp: Date;
-  type: 'add' | 'update' | 'payment' | 'delete';
-}
-
-const Index = () => {
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('expenses');
-  const [isPrivacyMode, setIsPrivacyMode] = useState(false);
-  const [showDetailedView, setShowDetailedView] = useState(false);
-  const [showMonthlyExpenses, setShowMonthlyExpenses] = useState(false);
-  const [showActiveExpenses, setShowActiveExpenses] = useState(false);
-  const [showExpenseHistory, setShowExpenseHistory] = useState(false);
-  const [showLoanDetailedView, setShowLoanDetailedView] = useState(false);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
-  const [loans, setLoans] = useState<Loan[]>([]);
-  const [actionLogs, setActionLogs] = useState<ActionLog[]>([]);
-  const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
-  const [userName, setUserName] = useState('User');
-  const [scrollOpacity, setScrollOpacity] = useState(1);
-  const [isLoading, setIsLoading] = useState(true);
-  const [hasData, setHasData] = useState(false);
-  const [showTryMe, setShowTryMe] = useState(false);
-  const [showTestSpace, setShowTestSpace] = useState(false);
-  const [showYearlyProjection, setShowYearlyProjection] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
-
-  // Handle tab switching with shimmer animation
-  const handleTabSwitch = (tab: string) => {
-    setActiveTab(tab);
-  };
-
-  // Handle scroll-based fade effect - optimized to reduce flickering
-  useEffect(() => {
-    let ticking = false;
-    let lastScrollY = 0;
-    
-    const handleScroll = () => {
-      if (!ticking) {
-        requestAnimationFrame(() => {
-          const scrollY = window.scrollY;
-          
-          // Only update if there's a meaningful change to prevent flickering
-          if (Math.abs(scrollY - lastScrollY) > 2) {
-            if (scrollY > 5) {
-              setScrollOpacity(0);
-            } else {
-              setScrollOpacity(1);
-            }
-            lastScrollY = scrollY;
-          }
-          
-          ticking = false;
-        });
-        ticking = true;
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Load user's first name for greeting
-  useEffect(() => {
-    const getFirstFromToken = (): string | null => {
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) return null;
-        const parts = token.split('.');
-        if (parts.length < 2) return null;
-        const payload = JSON.parse(atob(parts[1].replace(/-/g, '+').replace(/_/g, '/')));
-        const raw = payload.firstName || payload.given_name || payload.name || payload.email;
-        if (!raw || typeof raw !== 'string') return null;
-        const first = raw.includes('@') ? raw.split('@')[0] : raw.split(/\s+/)[0];
-        return first || null;
-      } catch {
-        return null;
-      }
-    };
-
-    const loadUserName = async () => {
-      // 1) Stored friendly name
-      const stored = localStorage.getItem('userName');
-      if (stored) {
-        const first = stored.trim().split(/\s+/)[0];
-        if (first) {
-          setUserName(first);
-          return;
-        }
-      }
-
-      // 2) Derive from JWT payload
-      const tokenFirst = getFirstFromToken();
-      if (tokenFirst) {
-        setUserName(tokenFirst);
-        return;
-      }
-
-      // 3) Ask server (/auth/me)
-      try {
-        const currentUser = await apiService.getCurrentUser?.();
-        if (currentUser && (currentUser.firstName || currentUser.email)) {
-          const first = currentUser.firstName || (currentUser.email?.split('@')[0] ?? 'User');
-          setUserName(first);
-          return;
-        }
-      } catch {}
-
-      setUserName('User');
-    };
-    loadUserName();
-  }, []);
-
-  // Load data from server (if token present)
-  useEffect(() => {
-    const loadFromServer = async () => {
-      try {
-        const token = localStorage.getItem('authToken');
-        if (!token) return;
-        const [serverExpenses, serverLoans] = await Promise.all([
-          apiService.listExpenses(),
-          apiService.listLoans(),
-        ]);
-        // Basic normalization of dates
-        const exps = (serverExpenses || []).map((e: any) => ({
-          id: String(e.id ?? e.id),
-          name: e.name,
-          amount: Number(e.amount),
-          currency: e.currency || 'INR',
-          type: e.type,
-          deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
-          isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
-          totalMonths: e.total_months ?? e.totalMonths ?? null,
-          remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
-          remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
-          createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
-          partialPayments: [],
-        }));
-        setExpenses(exps);
-        const lns = (serverLoans || []).map((l: any) => ({
-          id: String(l.id ?? l.id),
-          personName: l.person_name ?? l.personName,
-          amount: Number(l.amount),
-          currency: l.currency || 'INR',
-          dateGiven: new Date(l.date_given ?? l.dateGiven ?? Date.now()),
-          description: l.description ?? undefined,
-          status: l.status ?? 'active',
-          totalReceived: Number(l.total_received ?? 0),
-          remainingAmount: Number(l.remaining_amount ?? 0),
-          writeOffDate: l.write_off_date ? new Date(l.write_off_date) : undefined,
-          createdAt: new Date(l.created_at ?? l.createdAt ?? Date.now()),
-          payments: [],
-        }));
-        setLoans(lns);
-        setHasData((exps.length + lns.length) > 0);
-      } catch (err) {
-        console.error('Failed to load server data:', err);
-      }
-    };
-    loadFromServer();
-  }, []);
-
-  // Load action logs from localStorage
-  const loadActionLogs = async () => {
-    const savedLogs = localStorage.getItem('action-logs');
-    if (savedLogs) {
-      const parsed = JSON.parse(savedLogs);
-      const logsWithDates = parsed.map((log: any) => ({
-        ...log,
-        timestamp: new Date(log.timestamp)
-      }));
-      setActionLogs(logsWithDates);
-    }
-  };
-
-  useEffect(() => {
-    loadActionLogs();
-  }, []);
-
-  // Save expenses to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('expenses', JSON.stringify(expenses));
-  }, [expenses]);
-
-  // Save loans to localStorage whenever they change
-  useEffect(() => {
-    localStorage.setItem('loans', JSON.stringify(loans));
-  }, [loans]);
-
-  const addActionLog = async (action: string, details: string, type: ActionLog['type']) => {
-    const newLog: ActionLog = {
-      id: Date.now().toString(),
-      action,
-      details,
-      timestamp: new Date(),
-      type
-    };
-    const updatedLogs = [newLog, ...actionLogs];
-    setActionLogs(updatedLogs);
-    localStorage.setItem('action-logs', JSON.stringify(updatedLogs));
-  };
-
-  const handleAddExpense = async (newExpenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>) => {
-    const payload = {
-      name: newExpenseData.name,
-      amount: newExpenseData.amount,
-      currency: newExpenseData.currency || 'INR',
-      type: newExpenseData.type,
-      deductionDay: newExpenseData.deductionDay,
-      isRecurring: newExpenseData.isRecurring,
-      totalMonths: newExpenseData.totalMonths ?? null,
-      remainingMonths: newExpenseData.remainingMonths ?? null,
-      remainingAmount: newExpenseData.remainingAmount ?? null,
-    };
+  const handleLogout = async () => {
     try {
-      const created = await apiService.createExpense(payload);
-      // Reload minimal list from server (or append normalized)
-      const serverExpenses = await apiService.listExpenses();
-      const exps = (serverExpenses || []).map((e: any) => ({
-        id: String(e.id ?? e.id),
-        name: e.name,
-        amount: Number(e.amount),
-        currency: e.currency || 'INR',
-        type: e.type,
-        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
-        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
-        totalMonths: e.total_months ?? e.totalMonths ?? null,
-        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
-        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
-        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
-        partialPayments: [],
-      }));
-      setExpenses(exps);
-      await addActionLog('Added New Expense', `Created ${newExpenseData.type}: ${newExpenseData.name} - ₹${newExpenseData.amount}/month`, 'add');
-    } catch (err) {
-      console.error('Failed to create expense:', err);
-    }
-  };
-
-  const handleAddLoan = async (newLoanData: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>) => {
-    try {
-      const payload = {
-        personName: newLoanData.personName,
-        amount: newLoanData.amount,
-        currency: newLoanData.currency || 'INR',
-        dateGiven: newLoanData.dateGiven,
-        remainingAmount: newLoanData.amount,
-      };
-      const created = await apiService.createLoan(payload);
-      const serverLoans = await apiService.listLoans();
-      const lns = (serverLoans || []).map((l: any) => ({
-        id: String(l.id ?? l.id),
-        personName: l.person_name ?? l.personName,
-        amount: Number(l.amount),
-        currency: l.currency || 'INR',
-        dateGiven: new Date(l.date_given ?? l.dateGiven ?? Date.now()),
-        description: l.description ?? undefined,
-        status: l.status ?? 'active',
-        totalReceived: Number(l.total_received ?? 0),
-        remainingAmount: Number(l.remaining_amount ?? 0),
-        writeOffDate: l.write_off_date ? new Date(l.write_off_date) : undefined,
-        createdAt: new Date(l.created_at ?? l.createdAt ?? Date.now()),
-        payments: [],
-      }));
-      setLoans(lns);
-      await addActionLog('Added New Loan', `Created loan to ${newLoanData.personName} - ₹${newLoanData.amount}`, 'add');
-    } catch (err) {
-      console.error('Failed to create loan:', err);
-    }
-  };
-
-  const handleDeleteExpense = async (expenseId: string) => {
-    try {
-      // Optimistic UI update
-      setExpenses(prev => prev.filter(e => String(e.id) !== String(expenseId)));
-      await apiService.deleteExpense(expenseId);
-      // Re-sync from server (in case of server-calculated fields)
-      const serverExpenses = await apiService.listExpenses();
-      const exps = (serverExpenses || []).map((e: any) => ({
-        id: String(e.id ?? e.id),
-        name: e.name,
-        amount: Number(e.amount),
-        currency: e.currency || 'INR',
-        type: e.type,
-        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
-        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
-        totalMonths: e.total_months ?? e.totalMonths ?? null,
-        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
-        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
-        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
-        partialPayments: [],
-      }));
-      setExpenses(exps);
-      await addActionLog('Deleted Expense', 'Expense removed from tracking', 'delete');
-    } catch (err) {
-      console.error('Failed to delete expense:', err);
-      // Rollback if needed by reloading
-      try {
-        const serverExpenses = await apiService.listExpenses();
-        const exps = (serverExpenses || []).map((e: any) => ({
-          id: String(e.id ?? e.id),
-          name: e.name,
-          amount: Number(e.amount),
-          currency: e.currency || 'INR',
-          type: e.type,
-          deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
-          isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
-          totalMonths: e.total_months ?? e.totalMonths ?? null,
-          remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
-          remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
-          createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
-          partialPayments: [],
-        }));
-        setExpenses(exps);
-      } catch {}
-    }
-  };
-
-  const handleUpdateExpense = async (updatedExpense: Expense) => {
-    try {
-      const payload = {
-        name: updatedExpense.name,
-        amount: updatedExpense.amount,
-        currency: updatedExpense.currency || 'INR',
-        type: updatedExpense.type,
-        deductionDay: updatedExpense.deductionDay,
-        isRecurring: updatedExpense.isRecurring,
-        totalMonths: updatedExpense.totalMonths ?? null,
-        remainingMonths: updatedExpense.remainingMonths ?? null,
-        remainingAmount: updatedExpense.remainingAmount ?? null,
-      };
-      await apiService.updateExpense(updatedExpense.id, payload);
-      const serverExpenses = await apiService.listExpenses();
-      const exps = (serverExpenses || []).map((e: any) => ({
-        id: String(e.id ?? e.id),
-        name: e.name,
-        amount: Number(e.amount),
-        currency: e.currency || 'INR',
-        type: e.type,
-        deductionDay: Number(e.deduction_day ?? e.deductionDay ?? 1),
-        isRecurring: Boolean(e.is_recurring ?? e.isRecurring ?? false),
-        totalMonths: e.total_months ?? e.totalMonths ?? null,
-        remainingMonths: e.remaining_months ?? e.remainingMonths ?? null,
-        remainingAmount: e.remaining_amount ?? e.remainingAmount ?? null,
-        createdAt: new Date(e.created_at ?? e.createdAt ?? Date.now()),
-        partialPayments: [],
-      }));
-      setExpenses(exps);
-      await addActionLog('Updated Expense', `Modified ${updatedExpense.name}`, 'update');
-    } catch (err) {
-      console.error('Failed to update expense:', err);
-    }
-  };
-
-  const handleUpdateLoan = async (updatedLoan: Loan) => {
-    const originalLoan = loans.find(l => l.id === updatedLoan.id);
-    
-    setLoans(prev => prev.map(loan => 
-      loan.id === updatedLoan.id ? updatedLoan : loan
-    ));
-    
-    if (originalLoan) {
-      // Check if it's a payment
-      if (updatedLoan.payments.length > originalLoan.payments.length) {
-        const latestPayment = updatedLoan.payments[updatedLoan.payments.length - 1];
-        const actionType = latestPayment.type === 'write-off' ? 'Written Off' : 'Payment Received';
-        await addActionLog(
-          actionType,
-          `₹${latestPayment.amount} ${latestPayment.type === 'write-off' ? 'written off' : 'received'} from ${updatedLoan.personName}`,
-          latestPayment.type === 'write-off' ? 'delete' : 'payment'
-        );
-      } else {
-        await addActionLog(
-          'Updated Loan',
-          `Modified loan for ${updatedLoan.personName}`,
-          'update'
-        );
-      }
+      await apiService.logout();
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+    } finally {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('lastLoginDate');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('demoMode');
+      window.location.href = '/login';
     }
   };
 
   // Get existing person names for autocomplete
   const existingPersons = Array.from(new Set(loans.map(loan => loan.personName)));
 
-  const handleLogout = async () => {
-    try {
-      // Call logout API
-      await apiService.logout();
-    } catch (error) {
-      console.error('Logout API call failed:', error);
-    } finally {
-      // Clear all authentication data and user data
-      localStorage.removeItem('lastLoginDate');
-      localStorage.removeItem('userName');
-      localStorage.removeItem('demoMode');
-      localStorage.removeItem('authToken');
-      localStorage.removeItem('userId');
-      localStorage.removeItem('expenses');
-      localStorage.removeItem('loans');
-      localStorage.removeItem('action-logs');
-      
-      // Force full page reload so App re-checks auth and route guards
-      window.location.href = '/login';
-    }
-  };
-
-  const addDemoData = () => {
-    // Create specific demo expenses as requested
-    const testExpenses: Expense[] = [
-      // 4 Recurring expenses
-      {
-        id: 'exp_1',
-        name: 'Rent',
-        amount: 25000,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 1,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_2',
-        name: 'Google Drive',
-        amount: 165,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 15,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 15),
-        partialPayments: []
-      },
-      {
-        id: 'exp_3',
-        name: 'YouTube Premium',
-        amount: 650,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 10,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 10),
-        partialPayments: []
-      },
-      {
-        id: 'exp_4',
-        name: 'Netflix',
-        amount: 650,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 5,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 5),
-        partialPayments: []
-      },
-      // 4 Fixed term expenses
-      {
-        id: 'exp_5',
-        name: 'Home Loan EMI',
-        amount: 45000,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 7,
-        isRecurring: false,
-        totalMonths: 240, // 20 years
-        remainingMonths: 180, // 15 years remaining
-        remainingAmount: 45000 * 180,
-        createdAt: new Date(2019, 5, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_6',
-        name: 'Car Loan EMI',
-        amount: 18500,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 12,
-        isRecurring: false,
-        totalMonths: 60, // 5 years
-        remainingMonths: 32, // 2.7 years remaining
-        remainingAmount: 18500 * 32,
-        createdAt: new Date(2022, 2, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_7',
-        name: 'Education Loan',
-        amount: 12000,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 20,
-        isRecurring: false,
-        totalMonths: 84, // 7 years
-        remainingMonths: 45, // 3.75 years remaining
-        remainingAmount: 12000 * 45,
-        createdAt: new Date(2021, 8, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_8',
-        name: 'MacBook',
-        amount: 8500,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 25,
-        isRecurring: false,
-        totalMonths: 24, // 2 years
-        remainingMonths: 8, // 8 months remaining
-        remainingAmount: 8500 * 8,
-        createdAt: new Date(2023, 3, 1),
-        partialPayments: []
-      },
-      // Additional seasonal expenses to create dynamic graph
-      {
-        id: 'exp_9',
-        name: 'iPhone 16',
-        amount: 29500,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 15,
-        isRecurring: false,
-        totalMonths: 12, // 1 year
-        remainingMonths: 8, // 8 months remaining (started in Jan)
-        remainingAmount: 29500 * 8,
-        createdAt: new Date(2024, 0, 15),
-        partialPayments: []
-      },
-      {
-        id: 'exp_10',
-        name: 'Summer Vacation',
-        amount: 35000,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 1,
-        isRecurring: false,
-        totalMonths: 6, // 6 months
-        remainingMonths: 3, // 3 months remaining (started in Jun)
-        remainingAmount: 35000 * 3,
-        createdAt: new Date(2024, 5, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_11',
-        name: 'Diwali Shopping',
-        amount: 25000,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 10,
-        isRecurring: false,
-        totalMonths: 4, // 4 months
-        remainingMonths: 2, // 2 months remaining (started in Sep)
-        remainingAmount: 25000 * 2,
-        createdAt: new Date(2024, 8, 10),
-        partialPayments: []
-      },
-      {
-        id: 'exp_12',
-        name: 'Year-End Bonus Tax',
-        amount: 15000,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 31,
-        isRecurring: false,
-        totalMonths: 3, // 3 months
-        remainingMonths: 1, // 1 month remaining (started in Oct)
-        remainingAmount: 15000 * 1,
-        createdAt: new Date(2024, 9, 31),
-        partialPayments: []
-      }
-    ];
-
-    // Create specific demo loans as requested
-    const testLoans: Loan[] = [
-      // 4 Active loans (2 with partial payments)
-      {
-        id: 'loan_1',
-        personName: 'Rahul Sharma',
-        amount: 50000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 2, 15),
-        status: 'active' as const,
-        totalReceived: 20000, // Partial payment
-        remainingAmount: 30000,
-        createdAt: new Date(2024, 2, 15),
-        payments: [
-          {
-            id: 'payment_1_1',
-            amount: 15000,
-            date: new Date(2024, 4, 10),
-            type: 'payment',
-            description: 'First installment'
-          },
-          {
-            id: 'payment_1_2',
-            amount: 5000,
-            date: new Date(2024, 6, 5),
-            type: 'payment',
-            description: 'Partial payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_2',
-        personName: 'Priya Patel',
-        amount: 75000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 1, 20),
-        status: 'active' as const,
-        totalReceived: 35000, // Partial payment
-        remainingAmount: 40000,
-        createdAt: new Date(2024, 1, 20),
-        payments: [
-          {
-            id: 'payment_2_1',
-            amount: 25000,
-            date: new Date(2024, 3, 15),
-            type: 'payment',
-            description: 'First payment'
-          },
-          {
-            id: 'payment_2_2',
-            amount: 10000,
-            date: new Date(2024, 5, 20),
-            type: 'payment',
-            description: 'Second payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_3',
-        personName: 'Amit Kumar',
-        amount: 25000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 4, 10),
-        status: 'active' as const,
-        totalReceived: 0,
-        remainingAmount: 25000,
-        createdAt: new Date(2024, 4, 10),
-        payments: []
-      },
-      {
-        id: 'loan_4',
-        personName: 'Sneha Singh',
-        amount: 40000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 3, 5),
-        status: 'active' as const,
-        totalReceived: 0,
-        remainingAmount: 40000,
-        createdAt: new Date(2024, 3, 5),
-        payments: []
-      },
-      // 4 Completed loans (2 written off)
-      {
-        id: 'loan_5',
-        personName: 'Vikram Gupta',
-        amount: 30000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 8, 15),
-        status: 'completed',
-        totalReceived: 30000,
-        remainingAmount: 0,
-        createdAt: new Date(2023, 8, 15),
-        payments: [
-          {
-            id: 'payment_5_1',
-            amount: 30000,
-            date: new Date(2024, 1, 10),
-            type: 'payment',
-            description: 'Full payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_6',
-        personName: 'Kavya Reddy',
-        amount: 20000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 10, 20),
-        status: 'completed',
-        totalReceived: 20000,
-        remainingAmount: 0,
-        createdAt: new Date(2023, 10, 20),
-        payments: [
-          {
-            id: 'payment_6_1',
-            amount: 10000,
-            date: new Date(2024, 0, 15),
-            type: 'payment',
-            description: 'First installment'
-          },
-          {
-            id: 'payment_6_2',
-            amount: 10000,
-            date: new Date(2024, 2, 20),
-            type: 'payment',
-            description: 'Final payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_7',
-        personName: 'Arjun Nair',
-        amount: 35000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 6, 10),
-        status: 'written-off',
-        totalReceived: 10000,
-        remainingAmount: 25000,
-        writeOffDate: new Date(2024, 5, 15),
-        createdAt: new Date(2023, 6, 10),
-        payments: [
-          {
-            id: 'payment_7_1',
-            amount: 10000,
-            date: new Date(2023, 9, 5),
-            type: 'payment',
-            description: 'Partial payment before write-off'
-          }
-        ]
-      },
-      {
-        id: 'loan_8',
-        personName: 'Meera Joshi',
-        amount: 15000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 5, 25),
-        status: 'written-off',
-        totalReceived: 0,
-        remainingAmount: 15000,
-        writeOffDate: new Date(2024, 4, 30),
-        createdAt: new Date(2023, 5, 25),
-        payments: []
-      }
-    ];
-
-    localStorage.setItem('expenses', JSON.stringify(testExpenses));
-    localStorage.setItem('loans', JSON.stringify(testLoans));
-    
-    // Reload the data
-    setExpenses(testExpenses);
-    setLoans(testLoans);
-    
-    console.log('Demo data loaded: 8 expenses (4 recurring, 4 fixed-term), 8 loans (4 active, 4 completed)');
-  };
-
-  const clearAllData = () => {
-    // Clear all data from localStorage
-    localStorage.removeItem('expenses');
-    localStorage.removeItem('loans');
-    localStorage.removeItem('action-logs');
-    localStorage.removeItem('demoMode');
-    
-    // Clear state
-    setExpenses([]);
-    setLoans([]);
-    setActionLogs([]);
-    
-    console.log('All demo data cleared from localStorage and state');
-  };
-
-  const testLoadDemoData = () => {
-    // Test function to manually load demo data
-    const demoExpenses = [
-      // 4 Recurring expenses
-      {
-        id: 'exp_1',
-        name: 'Rent',
-        amount: 25000,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 1,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_2',
-        name: 'Google Drive',
-        amount: 165,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 15,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 15),
-        partialPayments: []
-      },
-      {
-        id: 'exp_3',
-        name: 'YouTube Premium',
-        amount: 650,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 10,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 10),
-        partialPayments: []
-      },
-      {
-        id: 'exp_4',
-        name: 'Netflix',
-        amount: 650,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 5,
-        isRecurring: true,
-        totalMonths: null,
-        remainingMonths: null,
-        remainingAmount: null,
-        createdAt: new Date(2024, 0, 5),
-        partialPayments: []
-      },
-      // 4 Fixed term expenses
-      {
-        id: 'exp_5',
-        name: 'Home Loan EMI',
-        amount: 45000,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 7,
-        isRecurring: false,
-        totalMonths: 240, // 20 years
-        remainingMonths: 180, // 15 years remaining
-        remainingAmount: 45000 * 180,
-        createdAt: new Date(2019, 5, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_6',
-        name: 'Car Loan EMI',
-        amount: 18500,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 12,
-        isRecurring: false,
-        totalMonths: 60, // 5 years
-        remainingMonths: 32, // 2.7 years remaining
-        remainingAmount: 18500 * 32,
-        createdAt: new Date(2022, 2, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_7',
-        name: 'Education Loan',
-        amount: 12000,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 20,
-        isRecurring: false,
-        totalMonths: 84, // 7 years
-        remainingMonths: 45, // 3.75 years remaining
-        remainingAmount: 12000 * 45,
-        createdAt: new Date(2021, 8, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_8',
-        name: 'MacBook',
-        amount: 8500,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 25,
-        isRecurring: false,
-        totalMonths: 24, // 2 years
-        remainingMonths: 8, // 8 months remaining
-        remainingAmount: 8500 * 8,
-        createdAt: new Date(2023, 3, 1),
-        partialPayments: []
-      },
-      // Additional seasonal expenses to create dynamic graph
-      {
-        id: 'exp_9',
-        name: 'iPhone 16',
-        amount: 29500,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 15,
-        isRecurring: false,
-        totalMonths: 12, // 1 year
-        remainingMonths: 8, // 8 months remaining (started in Jan)
-        remainingAmount: 29500 * 8,
-        createdAt: new Date(2024, 0, 15),
-        partialPayments: []
-      },
-      {
-        id: 'exp_10',
-        name: 'Summer Vacation',
-        amount: 35000,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 1,
-        isRecurring: false,
-        totalMonths: 6, // 6 months
-        remainingMonths: 3, // 3 months remaining (started in Jun)
-        remainingAmount: 35000 * 3,
-        createdAt: new Date(2024, 5, 1),
-        partialPayments: []
-      },
-      {
-        id: 'exp_11',
-        name: 'Diwali Shopping',
-        amount: 25000,
-        currency: 'INR' as const,
-        type: 'Personal Loan' as const,
-        deductionDay: 10,
-        isRecurring: false,
-        totalMonths: 4, // 4 months
-        remainingMonths: 2, // 2 months remaining (started in Sep)
-        remainingAmount: 25000 * 2,
-        createdAt: new Date(2024, 8, 10),
-        partialPayments: []
-      },
-      {
-        id: 'exp_12',
-        name: 'Year-End Bonus Tax',
-        amount: 15000,
-        currency: 'INR' as const,
-        type: 'EMI' as const,
-        deductionDay: 31,
-        isRecurring: false,
-        totalMonths: 3, // 3 months
-        remainingMonths: 1, // 1 month remaining (started in Oct)
-        remainingAmount: 15000 * 1,
-        createdAt: new Date(2024, 9, 31),
-        partialPayments: []
-      }
-    ];
-
-    const demoLoans = [
-      // 4 Active loans (2 with partial payments)
-      {
-        id: 'loan_1',
-        personName: 'Rahul Sharma',
-        amount: 50000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 2, 15),
-        status: 'active' as const,
-        totalReceived: 20000,
-        remainingAmount: 30000,
-        createdAt: new Date(2024, 2, 15),
-        payments: [
-          {
-            id: 'payment_1_1',
-            amount: 15000,
-            date: new Date(2024, 4, 10),
-            type: 'payment' as const,
-            description: 'First installment'
-          },
-          {
-            id: 'payment_1_2',
-            amount: 5000,
-            date: new Date(2024, 6, 5),
-            type: 'payment' as const,
-            description: 'Partial payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_2',
-        personName: 'Priya Patel',
-        amount: 75000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 1, 20),
-        status: 'active' as const,
-        totalReceived: 35000, // Partial payment
-        remainingAmount: 40000,
-        createdAt: new Date(2024, 1, 20),
-        payments: [
-          {
-            id: 'payment_2_1',
-            amount: 25000,
-            date: new Date(2024, 3, 15),
-            type: 'payment' as const,
-            description: 'First payment'
-          },
-          {
-            id: 'payment_2_2',
-            amount: 10000,
-            date: new Date(2024, 5, 20),
-            type: 'payment' as const,
-            description: 'Second payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_3',
-        personName: 'Amit Kumar',
-        amount: 25000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 4, 10),
-        status: 'active' as const,
-        totalReceived: 0,
-        remainingAmount: 25000,
-        createdAt: new Date(2024, 4, 10),
-        payments: []
-      },
-      {
-        id: 'loan_4',
-        personName: 'Sneha Singh',
-        amount: 40000,
-        currency: 'INR',
-        dateGiven: new Date(2024, 3, 5),
-        status: 'active' as const,
-        totalReceived: 0,
-        remainingAmount: 40000,
-        createdAt: new Date(2024, 3, 5),
-        payments: []
-      },
-      // 4 Completed loans (2 written off)
-      {
-        id: 'loan_5',
-        personName: 'Vikram Gupta',
-        amount: 30000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 8, 15),
-        status: 'completed' as const,
-        totalReceived: 30000,
-        remainingAmount: 0,
-        createdAt: new Date(2023, 8, 15),
-        payments: [
-          {
-            id: 'payment_5_1',
-            amount: 30000,
-            date: new Date(2024, 1, 10),
-            type: 'payment' as const,
-            description: 'Full payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_6',
-        personName: 'Kavya Reddy',
-        amount: 20000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 10, 20),
-        status: 'completed' as const,
-        totalReceived: 20000,
-        remainingAmount: 0,
-        createdAt: new Date(2023, 10, 20),
-        payments: [
-          {
-            id: 'payment_6_1',
-            amount: 10000,
-            date: new Date(2024, 0, 15),
-            type: 'payment' as const,
-            description: 'First installment'
-          },
-          {
-            id: 'payment_6_2',
-            amount: 10000,
-            date: new Date(2024, 2, 20),
-            type: 'payment' as const,
-            description: 'Final payment'
-          }
-        ]
-      },
-      {
-        id: 'loan_7',
-        personName: 'Arjun Nair',
-        amount: 35000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 6, 10),
-        status: 'written-off' as const,
-        totalReceived: 10000,
-        remainingAmount: 25000,
-        writeOffDate: new Date(2024, 5, 15),
-        createdAt: new Date(2023, 6, 10),
-        payments: [
-          {
-            id: 'payment_7_1',
-            amount: 10000,
-            date: new Date(2023, 9, 5),
-            type: 'payment' as const,
-            description: 'Partial payment before write-off'
-          }
-        ]
-      },
-      {
-        id: 'loan_8',
-        personName: 'Meera Joshi',
-        amount: 15000,
-        currency: 'INR',
-        dateGiven: new Date(2023, 5, 25),
-        status: 'written-off' as const,
-        totalReceived: 0,
-        remainingAmount: 15000,
-        writeOffDate: new Date(2024, 4, 30),
-        createdAt: new Date(2023, 5, 25),
-        payments: []
-      }
-    ];
-
-    localStorage.setItem('expenses', JSON.stringify(demoExpenses));
-    localStorage.setItem('loans', JSON.stringify(demoLoans));
-    
-    // Reload the data
-    setExpenses(demoExpenses);
-    setLoans(demoLoans);
-    
-    console.log('Full demo data loaded: 8 expenses (4 recurring, 4 fixed-term), 8 loans (4 active, 4 completed)');
-  };
-
-      return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
       {!isAnyModalOpen && (
-        <div 
-          className="fixed top-6 left-6 z-30 space-y-2 transition-opacity duration-200 ease-in-out"
-          style={{ opacity: scrollOpacity }}
-        >
-        <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
-          <span 
-            className="animate-gradient-x"
-            style={{
-              background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
-              backgroundSize: '400% 400%',
-              backgroundClip: 'text',
-              WebkitBackgroundClip: 'text',
-              color: 'transparent',
-              WebkitTextFillColor: 'transparent'
-            }}
-          >
-            Exight
-          </span>
-        </h1>
+        <div className="fixed top-6 left-6 z-30 space-y-2">
+          <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight leading-tight">
+            <span 
+              className="animate-gradient-x"
+              style={{
+                background: 'linear-gradient(90deg, #3B82F6, #8B5CF6, #0D9F73, #3B82F6, #8B5CF6, #0D9F73, #3B82F6)',
+                backgroundSize: '400% 400%',
+                backgroundClip: 'text',
+                WebkitBackgroundClip: 'text',
+                color: 'transparent',
+                WebkitTextFillColor: 'transparent'
+              }}
+            >
+              Exight
+            </span>
+          </h1>
         </div>
       )}
 
-              {/* Top Right Controls */}
+      {/* Top Right Controls */}
       {!isAnyModalOpen && (
-        <div 
-          className="fixed top-6 right-6 z-40 flex flex-col gap-2 transition-opacity duration-200 ease-in-out"
-          style={{ opacity: scrollOpacity }}
-        >
-
+        <div className="fixed top-6 right-6 z-40 flex flex-col gap-2">
           <ThemeToggle />
           <Button
             variant="ghost"
@@ -1989,18 +910,15 @@ const Index = () => {
                 <AddLoanModal onAddLoan={handleAddLoan} existingPersons={existingPersons} />
               )}
             </div>
-            
-
           </div>
         </div>
 
         {/* Main Content with Tabs */}
         <div className="space-y-4 pb-8">
           <div className="w-full">
-
             {/* Tab Content */}
             <div className="relative">
-                <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <div key="expenses-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'expenses' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Info Bar */}
                   <InfoBar 
@@ -2021,7 +939,7 @@ const Index = () => {
                 </div>
               </div>
 
-                              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
+              <div key="loans-tab" className={`transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] will-change-transform ${activeTab === 'loans' ? 'opacity-100 translate-x-0 scale-100' : 'opacity-0 -translate-x-4 absolute inset-0 pointer-events-none'}`}>
                 <div className="space-y-6">
                   {/* Loans Info Bar */}
                   <LoansInfoBar 
