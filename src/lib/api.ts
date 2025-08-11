@@ -31,8 +31,16 @@ export interface ApiResponse<T> {
   error?: string;
 }
 
-// Prefer env-based configuration with a sensible default to the EC2 server
-const API_BASE_URL = import.meta.env?.VITE_API_BASE_URL || 'http://13.60.70.116/api';
+// Prefer env-based configuration. If not provided, use same-origin to avoid
+// mixed-content/CORS issues in HTTPS environments; finally fall back to EC2 IP.
+const API_BASE_URL = (() => {
+  const envUrl = import.meta.env?.VITE_API_BASE_URL;
+  if (envUrl && typeof envUrl === 'string') return envUrl;
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return `${window.location.origin}/api`;
+  }
+  return 'http://13.60.70.116/api';
+})();
 
 interface MockUser {
   password: string;
