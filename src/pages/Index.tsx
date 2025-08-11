@@ -438,7 +438,11 @@ const TryMe = memo(() => {
       await apiService.logout();
     } finally {
       localStorage.removeItem('demoMode');
-      window.location.href = '/login';
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('lastLoginDate');
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userId');
+      window.location.replace('/login');
     }
   }, []);
 

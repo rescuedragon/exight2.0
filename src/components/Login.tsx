@@ -35,6 +35,8 @@ const Login = () => {
           if (first) localStorage.setItem('userName', first);
           if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
           localStorage.setItem('lastLoginDate', new Date().toDateString());
+          // Ensure demo mode is turned off after real login
+          localStorage.removeItem('demoMode');
         } catch (localStorageError) {
           console.warn('Failed to save user data to localStorage:', localStorageError);
         }
@@ -54,6 +56,8 @@ const Login = () => {
           if (first) localStorage.setItem('userName', first);
           if (response?.user?.id) localStorage.setItem('userId', String(response.user.id));
           localStorage.setItem('lastLoginDate', new Date().toDateString());
+          // Ensure demo mode is turned off after registration
+          localStorage.removeItem('demoMode');
         } catch (localStorageError) {
           console.warn('Failed to save user data to localStorage:', localStorageError);
         }
@@ -300,7 +304,7 @@ const Login = () => {
           {/* Promo Panel */}
           <div className="order-1 md:order-2 w-full max-w-xl justify-self-center md:justify-self-start flex flex-col justify-center">
             <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-3 md:mb-4">
-              Track your <span className="gradient-text">expenses & loans</span>
+              Track your <span className="gradient-text animate-gradient-x">expenses & loans</span>
             </h2>
             <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-xl">
               Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.

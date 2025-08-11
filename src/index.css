@@ -160,6 +160,12 @@ body[data-modal-open="true"] *::-webkit-scrollbar {
   }
 }
 
+/* Utility to animate gradient backgrounds horizontally */
+.animate-gradient-x {
+  background-size: 400% 400% !important;
+  animation: gradient-x 8s linear infinite !important;
+}
+
 /* Scroll-based fade transitions - Optimized */
 .scroll-fade {
   transition: opacity 0.3s ease-out, transform 0.3s ease-out;

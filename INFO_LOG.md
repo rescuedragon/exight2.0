@@ -3,6 +3,8 @@
 - Date: 2025-08-11
 - Changes:
   - Unified API types with app types in `src/lib/api.ts`; normalized IDs to strings; added normalization helpers for expenses and loans; API base selection now: `VITE_API_BASE_URL` → same-origin `/api` → fallback `http://13.60.70.116/api` to prevent mixed-content and CORS “Failed to fetch” during HTTPS.
+  - Added `.animate-gradient-x` in `src/index.css` and applied to "expenses & loans" headline in `src/components/Login.tsx` for continuous gradient animation.
+  - Fixed demo/logout flow: `src/components/Login.tsx` clears `demoMode` upon successful login/register; `TryMe` logout in `src/pages/Index.tsx` now clears auth + demo flags and hard-navigates to `/login` to avoid landing back on demo.
   - Improved login reliability: graceful mock fallback for known users when backend is unreachable; dispatch `authChanged` on token changes.
   - Updated route auth state to react to auth/storage events in `src/App.tsx`.
   - Tweaked login layout spacing/centering in `src/components/Login.tsx`.
