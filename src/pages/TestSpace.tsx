@@ -311,7 +311,7 @@ const TestSpace = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="splitType">Split Type</Label>
-                <Select value={expenseData.splitType} onValueChange={(value: any) => setExpenseData(prev => ({ ...prev, splitType: value }))}>
+                <Select value={expenseData.splitType} onValueChange={(value: 'equal' | 'exact' | 'percentage' | 'shares' | 'itemized') => setExpenseData(prev => ({ ...prev, splitType: value }))}>
                   <SelectTrigger className="rounded-xl">
                     <SelectValue />
                   </SelectTrigger>
@@ -482,7 +482,12 @@ const TestSpace = () => {
 
   const ReceiptUploadModal = () => {
     const [uploadedReceipt, setUploadedReceipt] = useState<string | null>(null);
-    const [ocrResult, setOcrResult] = useState<any>(null);
+    const [ocrResult, setOcrResult] = useState<{
+      total: number;
+      items: Array<{ name: string; price: number }>;
+      tax: number;
+      tip: number;
+    } | null>(null);
 
     const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
@@ -571,7 +576,7 @@ const TestSpace = () => {
                         </div>
                         <div className="space-y-2">
                           <p className="font-medium">Items:</p>
-                          {ocrResult.items.map((item: any, index: number) => (
+                          {ocrResult.items.map((item: { name: string; price: number }, index: number) => (
                             <div key={index} className="flex justify-between items-center p-2 bg-gray-50 rounded">
                               <span>{item.name}</span>
                               <span className="font-medium">{formatCurrency(item.price)}</span>

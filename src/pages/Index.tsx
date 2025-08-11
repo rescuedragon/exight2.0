@@ -685,7 +685,7 @@ const Index = () => {
     if (savedExpenses) {
       try {
         const parsedExpenses = JSON.parse(savedExpenses);
-        setExpenses(parsedExpenses.map((exp: any) => ({
+        setExpenses(parsedExpenses.map((exp: { createdAt: string; partialPayments?: unknown[]; [key: string]: unknown }) => ({
           ...exp,
           createdAt: new Date(exp.createdAt),
           partialPayments: exp.partialPayments || []
@@ -698,7 +698,7 @@ const Index = () => {
     if (savedLoans) {
       try {
         const parsedLoans = JSON.parse(savedLoans);
-        setLoans(parsedLoans.map((loan: any) => ({
+        setLoans(parsedLoans.map((loan: { dateGiven: string; createdAt: string; writeOffDate?: string; payments?: unknown[]; [key: string]: unknown }) => ({
           ...loan,
           dateGiven: new Date(loan.dateGiven),
           createdAt: new Date(loan.createdAt),

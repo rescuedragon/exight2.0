@@ -1,23 +1,13 @@
+import { LoginRequest, RegisterRequest, AuthResponse, ApiResponse } from './types';
+
 // Mock authentication system - no backend required
 // Prefer same-origin API to avoid CORS/mixed-content in production
 const API_BASE_URL = (typeof window !== 'undefined'
   ? `${window.location.origin.replace(/\/$/, '')}/api`
   : 'http://13.60.70.116/api');
 
-export interface LoginRequest {
-  email: string;
+interface MockUser {
   password: string;
-}
-
-export interface RegisterRequest {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-}
-
-export interface AuthResponse {
-  token: string;
   user: {
     id: string;
     firstName: string;
@@ -26,16 +16,84 @@ export interface AuthResponse {
   };
 }
 
-export interface ApiResponse<T> {
+interface Expense {
+  id: string | number;
+  name: string;
+  amount: number;
+  currency: string;
+  type: string;
+  deductionDay: number;
+  isRecurring: boolean;
+  totalMonths?: number | null;
+  remainingMonths?: number | null;
+  remainingAmount?: number | null;
+  createdAt: Date;
+  partialPayments: unknown[];
+}
+
+interface Loan {
+  id: string | number;
+  personName: string;
+  amount: number;
+  currency: string;
+  dateGiven: Date;
+  description: string;
+  status: string;
+  totalReceived: number;
+  remainingAmount: number;
+  createdAt: Date;
+  payments: unknown[];
+}
+
+interface FeedbackPayload {
+  name?: string;
+  email?: string;
+  message: string;
+}
+
+interface FeedbackResponse {
   success: boolean;
-  data?: T;
+  data?: unknown;
+}
+
+interface AuthResponseWrapper {
+  success: boolean;
+  data: AuthResponse;
+  message?: string;
+  error?: string;
+}
+
+interface ExpenseResponseWrapper {
+  success: boolean;
+  data: Expense[];
+  message?: string;
+  error?: string;
+}
+
+interface LoanResponseWrapper {
+  success: boolean;
+  data: Loan[];
+  message?: string;
+  error?: string;
+}
+
+interface SingleExpenseResponseWrapper {
+  success: boolean;
+  data: Expense;
+  message?: string;
+  error?: string;
+}
+
+interface SingleLoanResponseWrapper {
+  success: boolean;
+  data: Loan;
   message?: string;
   error?: string;
 }
 
 class ApiService {
   private token: string | null = null;
-  private mockUsers: Map<string, { password: string; user: any }> = new Map();
+  private mockUsers: Map<string, MockUser> = new Map();
 
   constructor() {
     // Initialize with some mock users
@@ -68,8 +126,8 @@ class ApiService {
       const storedUsers = localStorage.getItem('mockUsers');
       if (storedUsers) {
         const users = JSON.parse(storedUsers);
-        users.forEach((userData: any) => {
-          this.mockUsers.set(userData.email, userData);
+        users.forEach((userData: MockUser) => {
+          this.mockUsers.set(userData.user.email, userData);
         });
       }
     } catch (error) {
@@ -202,7 +260,12 @@ class ApiService {
     };
   }
 
-  private handleMockCheckAuth(): ApiResponse<any> {
+  private handleMockCheckAuth(): ApiResponse<{
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  }> {
     const token = this.getToken();
     if (!token) {
       return {
@@ -225,7 +288,7 @@ class ApiService {
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
-  ): Promise<any> {
+  ): Promise<T> {
     const url = `${API_BASE_URL}${endpoint}`;
     const token = this.getToken();
 
@@ -244,7 +307,7 @@ class ApiService {
 
       // Gracefully handle empty/204 responses
       if (response.status === 204) {
-        return { success: true } as any;
+        return { success: true } as T;
       }
 
       // Some servers return empty body with 200/202
@@ -258,7 +321,7 @@ class ApiService {
       }
 
       console.log(`API call successful:`, data);
-      return data; // may be {token,user} or {success,data}
+      return data as T; // may be {token,user} or {success,data}
     } catch (error) {
       console.error('API request failed:', error);
       throw error;
@@ -267,22 +330,22 @@ class ApiService {
 
   // Authentication methods
   async login(credentials: LoginRequest): Promise<AuthResponse> {
-    const res = await this.request<any>('/auth/login', {
+    const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/login', {
       method: 'POST',
       body: JSON.stringify(credentials),
     });
 
     // Normalize backend response shape
-    if (res && res.token) {
+    if (res && 'token' in res && res.token) {
       this.setToken(res.token);
       return res as AuthResponse;
     }
-    if (res && res.success && res.data) {
+    if (res && 'success' in res && res.success && res.data) {
       this.setToken(res.data.token);
-      return res.data as AuthResponse;
+      return res.data;
     }
 
-    throw new Error((res && (res.message || res.error)) || 'Login failed');
+    throw new Error((res && 'message' in res && res.message) || (res && 'error' in res && res.error) || 'Login failed');
   }
 
   async register(userData: RegisterRequest): Promise<AuthResponse> {
@@ -292,21 +355,21 @@ class ApiService {
       password: userData.password,
       name: `${userData.firstName ?? ''} ${userData.lastName ?? ''}`.trim() || userData.email.split('@')[0],
     };
-    const res = await this.request<any>('/auth/register', {
+    const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/register', {
       method: 'POST',
       body: JSON.stringify(payload),
     });
 
-    if (res && res.token) {
+    if (res && 'token' in res && res.token) {
       this.setToken(res.token);
       return res as AuthResponse;
     }
-    if (res && res.success && res.data) {
+    if (res && 'success' in res && res.success && res.data) {
       this.setToken(res.data.token);
-      return res.data as AuthResponse;
+      return res.data;
     }
 
-    throw new Error((res && (res.message || res.error)) || 'Registration failed');
+    throw new Error((res && 'message' in res && res.message) || (res && 'error' in res && res.error) || 'Registration failed');
   }
 
   async logout(): Promise<void> {
@@ -323,7 +386,7 @@ class ApiService {
 
   async checkAuth(): Promise<boolean> {
     try {
-      const response = await this.request('/auth/me');
+      const response = await this.request<{ success?: boolean }>('/auth/me');
       if (response && response.success !== undefined) return !!response.success;
       // If backend has no /auth/me, fall back to token
       return !!this.getToken();
@@ -340,11 +403,14 @@ class ApiService {
     email?: string;
   } | null> {
     try {
-      const res = await this.request<any>('/auth/me');
+      const res = await this.request<{
+        user?: { id?: string | number; firstName?: string; lastName?: string; email?: string };
+        data?: { id?: string | number; firstName?: string; lastName?: string; email?: string };
+      }>('/auth/me');
       // Support various backend response shapes
       if (res && res.user) return res.user;
       if (res && res.data) return res.data;
-      return res ?? null;
+      return null;
     } catch (error) {
       return null;
     }
@@ -361,90 +427,90 @@ class ApiService {
   }
 
   // Expenses API (server-backed)
-  async listExpenses(): Promise<any[]> {
-    const res = await this.request<any[]>('/expenses');
-    return (res && res.success !== undefined) ? (res.data as any[]) : (res as any[]);
+  async listExpenses(): Promise<Expense[]> {
+    const res = await this.request<Expense[] | ExpenseResponseWrapper>('/expenses');
+    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Expense[]);
   }
 
-  async createExpense(payload: any): Promise<any> {
-    const res = await this.request<any>('/expenses', {
+  async createExpense(payload: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>): Promise<Expense> {
+    const res = await this.request<Expense | SingleExpenseResponseWrapper>('/expenses', {
       method: 'POST',
       body: JSON.stringify(payload),
     });
-    return (res && res.success !== undefined) ? res.data : res;
+    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Expense);
   }
 
-  async updateExpense(id: string | number, payload: any): Promise<any> {
+  async updateExpense(id: string | number, payload: Partial<Expense>): Promise<Expense> {
     const numericId = typeof id === 'string' && /^\d+$/.test(id) ? Number(id) : id;
     try {
-      const res = await this.request<any>(`/expenses/${numericId}`, {
+      const res = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses/${numericId}`, {
         method: 'PUT',
         body: JSON.stringify(payload),
       });
-      return (res && res.success !== undefined) ? res.data : res;
+      return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Expense);
     } catch (e1) {
       try {
-        const res2 = await this.request<any>(`/expenses?id=${numericId}`, {
+        const res2 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses?id=${numericId}`, {
           method: 'PUT',
           body: JSON.stringify(payload),
         });
-        return (res2 && res2.success !== undefined) ? res2.data : res2;
+        return (res2 && 'success' in res2 && res2.success !== undefined) ? res2.data : (res2 as Expense);
       } catch (e2) {
-        const res3 = await this.request<any>(`/expenses/${numericId}/update`, {
+        const res3 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses/${numericId}/update`, {
           method: 'POST',
           body: JSON.stringify(payload),
         });
-        return (res3 && res3.success !== undefined) ? res3.data : res3;
+        return (res3 && 'success' in res3 && res3.success !== undefined) ? res3.data : (res3 as Expense);
       }
     }
   }
 
-  async deleteExpense(id: string | number): Promise<any> {
+  async deleteExpense(id: string | number): Promise<{ success: boolean }> {
     // Try several common delete shapes to maximize compatibility
     const numericId = typeof id === 'string' && /^\d+$/.test(id) ? Number(id) : id;
     try {
-      const res = await this.request<any>(`/expenses/${numericId}`, { method: 'DELETE' });
-      return (res && res.success !== undefined) ? res.data : res;
+      const res = await this.request<{ success: boolean }>(`/expenses/${numericId}`, { method: 'DELETE' });
+      return res;
     } catch (e1) {
       try {
-        const res2 = await this.request<any>(`/expenses?id=${numericId}`, { method: 'DELETE' });
-        return (res2 && res2.success !== undefined) ? res2.data : res2;
+        const res2 = await this.request<{ success: boolean }>(`/expenses?id=${numericId}`, { method: 'DELETE' });
+        return res2;
       } catch (e2) {
-        const res3 = await this.request<any>(`/expenses/${numericId}/delete`, { method: 'POST' });
-        return (res3 && res3.success !== undefined) ? res3.data : res3;
+        const res3 = await this.request<{ success: boolean }>(`/expenses/${numericId}/delete`, { method: 'POST' });
+        return res3;
       }
     }
   }
 
   // Loans API (server-backed)
-  async listLoans(): Promise<any[]> {
-    const res = await this.request<any[]>('/loans');
-    return (res && res.success !== undefined) ? (res.data as any[]) : (res as any[]);
+  async listLoans(): Promise<Loan[]> {
+    const res = await this.request<Loan[] | LoanResponseWrapper>('/loans');
+    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Loan[]);
   }
 
-  async createLoan(payload: any): Promise<any> {
-    const res = await this.request<any>('/loans', {
+  async createLoan(payload: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>): Promise<Loan> {
+    const res = await this.request<Loan | SingleLoanResponseWrapper>('/loans', {
       method: 'POST',
       body: JSON.stringify(payload),
     });
-    return (res && res.success !== undefined) ? res.data : res;
+    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Loan);
   }
 
   // Feedback (server-backed; falls back to mailto if endpoint is missing)
-  async sendFeedback(payload: { name?: string; email?: string; message: string }): Promise<any> {
+  async sendFeedback(payload: FeedbackPayload): Promise<FeedbackResponse> {
     try {
-      const res = await this.request<any>('/feedback', {
+      const res = await this.request<FeedbackResponse>('/feedback', {
         method: 'POST',
         body: JSON.stringify(payload),
       });
-      return (res && res.success !== undefined) ? res.data : res;
+      return res;
     } catch (e) {
       const subject = encodeURIComponent('Exight Feedback');
       const body = encodeURIComponent(`Name: ${payload.name || ''}\nEmail: ${payload.email || ''}\n\n${payload.message}`);
       if (typeof window !== 'undefined') {
         window.location.href = `mailto:feedback@exight.in?subject=${subject}&body=${body}`;
       }
-      return { success: true } as any;
+      return { success: true };
     }
   }
 }
