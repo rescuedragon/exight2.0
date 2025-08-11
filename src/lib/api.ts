@@ -30,8 +30,8 @@ export interface ApiResponse<T> {
 }
 
 // Mock authentication system - no backend required
-// Prefer same-origin API to avoid CORS/mixed-content in production
-const API_BASE_URL = 'http://13.60.70.116/api';
+// Prefer HTTPS dev domain to avoid mixed-content on https site
+const API_BASE_URL = 'https://dev.exight.in/api';
 
 interface MockUser {
   password: string;

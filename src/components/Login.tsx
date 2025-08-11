@@ -165,15 +165,7 @@ const Login = () => {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="w-full max-w-md"
         >
-          {/* Demo Mode Button */}
-          <div className="text-center mb-6">
-            <Button
-              onClick={handleDemoMode}
-              className="w-full py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold rounded-xl shadow-lg transition-all duration-300"
-            >
-              🚀 Try Demo Mode
-            </Button>
-          </div>
+          {/* Demo Mode removed for dev environment to mirror real app */}
 
           {/* Login/Register Form */}
           <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-2 border-white/20 shadow-2xl">
