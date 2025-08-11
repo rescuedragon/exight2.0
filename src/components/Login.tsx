@@ -152,8 +152,17 @@ const Login = () => {
         </p>
       </motion.div>
 
-      {/* Theme Toggle */}
-      <div className="fixed top-6 right-6 z-50">
+      {/* Theme Toggle + Try Demo */}
+      <div className="fixed top-6 right-6 z-50 flex items-center gap-2">
+        <Button
+          onClick={handleDemoMode}
+          variant="outline"
+          size="sm"
+          className="rounded-full px-3 h-8 hidden sm:inline-flex"
+          title="Try demo without creating an account"
+        >
+          🚀 Try Demo
+        </Button>
         <ThemeToggle />
       </div>
 
@@ -170,13 +179,26 @@ const Login = () => {
           {/* Login/Register Form */}
           <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-2 border-white/20 shadow-2xl">
             <CardContent className="p-8">
-              <div className="text-center mb-6">
+              <div className="text-center mb-4">
                 <h2 className="text-3xl font-bold text-foreground mb-2">
                   {isLogin ? "Welcome Back" : "Create Account"}
                 </h2>
                 <p className="text-muted-foreground">
                   {isLogin ? "Sign in to your account" : "Start managing your expenses"}
                 </p>
+              </div>
+
+              {/* Subtle feature highlights */}
+              <div className="mb-6 grid grid-cols-1 gap-2 text-sm text-muted-foreground">
+                <div className="flex items-center gap-2 justify-center">
+                  <Shield className="h-4 w-4" /> Private & secure
+                </div>
+                <div className="flex items-center gap-2 justify-center">
+                  <BarChart3 className="h-4 w-4" /> Smart analytics & projections
+                </div>
+                <div className="flex items-center gap-2 justify-center">
+                  <HandCoins className="h-4 w-4" /> Track expenses and loans together
+                </div>
               </div>
 
               {error && (
