@@ -467,7 +467,16 @@ const TryMe = memo(() => {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => navigate('/')}
+            onClick={() => {
+              // Clear demo mode and demo data
+              localStorage.removeItem('demoMode');
+              localStorage.removeItem('expenses');
+              localStorage.removeItem('loans');
+              localStorage.removeItem('userName');
+              localStorage.removeItem('lastLoginDate');
+              // Redirect to login to start fresh
+              window.location.href = '/login';
+            }}
             className="ml-4 h-6 px-3 text-xs bg-white/20 hover:bg-white/30 border-white/30 text-black"
           >
             Switch to Real Mode
@@ -675,6 +684,7 @@ const Index = () => {
   const [loans, setLoans] = useState<Loan[]>([]);
   const [isAnyModalOpen, setIsAnyModalOpen] = useState(false);
   const [userName, setUserName] = useState('User');
+  const [isDemoMode, setIsDemoMode] = useState(false);
 
   // Load data from localStorage on component mount
   useEffect(() => {
