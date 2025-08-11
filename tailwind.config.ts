@@ -9,6 +9,23 @@ export default {
 		"./src/**/*.{ts,tsx}",
 	],
 	prefix: "",
+	// Enable JIT mode for better performance
+	mode: "jit",
+	// Optimize for production
+	corePlugins: {
+		// Disable unused core plugins
+		preflight: true,
+		container: true,
+	},
+	// Optimize variants
+	variants: {
+		extend: {
+			// Only include variants that are actually used
+			opacity: ['hover', 'focus'],
+			scale: ['hover', 'focus'],
+			transform: ['hover', 'focus'],
+		},
+	},
 	theme: {
 		container: {
 			center: true,

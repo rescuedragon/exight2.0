@@ -12,6 +12,7 @@ import Login from "./components/Login";
 import { ModalProvider } from "@/contexts/ModalContext";
 import { apiService } from "@/lib/api";
 import { FeedbackModal } from "@/components/FeedbackModal";
+import { performanceMonitor } from "@/lib/performance-monitor";
 
 const queryClient = new QueryClient();
 
