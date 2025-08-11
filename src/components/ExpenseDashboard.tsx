@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { 
   CreditCard, 
   Banknote, 
@@ -28,9 +29,10 @@ interface ExpenseDashboardProps {
   expenses: Expense[];
   onUpdateExpense: (expense: Expense) => void;
   isPrivacyMode?: boolean;
+  isLoading?: boolean;
 }
 
-const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
+const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = false, isLoading = false }: ExpenseDashboardProps) => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
   const [partialPayment, setPartialPayment] = useState('');
   const [isRecurringExpanded, setIsRecurringExpanded] = useState(true);
@@ -311,8 +313,75 @@ const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = 
 
   return (
     <div className="space-y-6">
+      {/* Loading Skeletons */}
+      {isLoading && (
+        <>
+          {/* Recurring Expenses Skeleton */}
+          <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <Skeleton className="h-12 w-12 rounded-3xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-48" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+              </div>
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="p-4 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20">
+                    <div className="flex items-center justify-between mb-3">
+                      <Skeleton className="h-5 w-32" />
+                      <Skeleton className="h-4 w-20" />
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      {[1, 2, 3, 4].map((j) => (
+                        <div key={j} className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20">
+                          <Skeleton className="h-3 w-16 mx-auto mb-1" />
+                          <Skeleton className="h-3 w-12 mx-auto" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Fixed-Time Expenses Skeleton */}
+          <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
+            <div className="p-6">
+              <div className="flex items-center gap-4 mb-4">
+                <Skeleton className="h-12 w-12 rounded-3xl" />
+                <div className="space-y-2">
+                  <Skeleton className="h-6 w-48" />
+                  <Skeleton className="h-4 w-32" />
+                </div>
+              </div>
+              <div className="space-y-4">
+                {[1, 2].map((i) => (
+                  <div key={i} className="p-4 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20">
+                    <div className="flex items-center justify-between mb-3">
+                      <Skeleton className="h-5 w-32" />
+                      <Skeleton className="h-4 w-20" />
+                    </div>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+                      {[1, 2, 3, 4].map((j) => (
+                        <div key={j} className="text-center p-1.5 rounded-2xl bg-gradient-to-br from-white/20 to-white/10 dark:from-gray-800/30 dark:to-gray-700/20 backdrop-blur-sm border border-white/20 dark:border-gray-600/20">
+                          <Skeleton className="h-3 w-16 mx-auto mb-1" />
+                          <Skeleton className="h-3 w-12 mx-auto" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
       {/* Header - Completed expenses info only */}
-      {expenses.length > activeExpenses.length && (
+      {!isLoading && expenses.length > activeExpenses.length && (
         <div className="flex justify-end">
           <p className="text-sm text-muted-foreground">
             {expenses.length - activeExpenses.length} completed expense{expenses.length - activeExpenses.length !== 1 ? 's' : ''} in history
@@ -321,7 +390,7 @@ const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = 
       )}
       
       {/* Recurring Expenses Section */}
-      {recurringExpenses.length > 0 && (
+      {!isLoading && recurringExpenses.length > 0 && (
         <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
           <div 
             className="flex items-center justify-between cursor-pointer p-6 hover:backdrop-blur-md hover:bg-gradient-to-r hover:from-white/20 hover:via-white/10 hover:to-white/20 dark:hover:from-gray-800/30 dark:hover:via-gray-700/20 dark:hover:to-gray-800/30 transition-all duration-500"
@@ -373,7 +442,7 @@ const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = 
       )}
       
       {/* Fixed-Time Expenses Section */}
-      {fixedTimeExpenses.length > 0 && (
+      {!isLoading && fixedTimeExpenses.length > 0 && (
         <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
           <div 
             className="flex items-center justify-between cursor-pointer p-6 hover:backdrop-blur-md hover:bg-gradient-to-r hover:from-white/20 hover:via-white/10 hover:to-white/20 dark:hover:from-gray-800/30 dark:hover:via-gray-700/20 dark:hover:to-gray-800/30 transition-all duration-500"
@@ -429,7 +498,7 @@ const ExpenseDashboardComponent = ({ expenses, onUpdateExpense, isPrivacyMode = 
       )}
       
       {/* Empty State */}
-      {activeExpenses.length === 0 && (
+      {!isLoading && activeExpenses.length === 0 && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
             <Coins className="h-12 w-12 text-blue-accent" />

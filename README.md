@@ -15,6 +15,16 @@ A modern, intuitive expense tracking application built with React, TypeScript, a
 - **🌙 Dark/Light Mode**: Beautiful themes for any preference
 - **💾 Local Storage**: Your data stays private and secure on your device
 
+## 🏗️ Architecture
+
+![Exight 2.0 Architecture](docs/architecture.svg)
+
+The application follows a modern client-server architecture with:
+- **Frontend**: React + TypeScript with local storage for offline capability
+- **Backend**: Node.js + Express REST API
+- **Database**: PostgreSQL for persistent data storage
+- **Data Flow**: Frontend ↔ Backend ↔ Database with local storage fallback
+
 ## 🚀 Getting Started
 
 ### Prerequisites
@@ -106,11 +116,32 @@ The built files will be in the `dist/` directory.
 
 ## 🤝 Contributing
 
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for detailed information.
+
+### Where to Contribute
+
+- **🐛 Bug Fixes**: Check the [Issues](https://github.com/yourusername/exight-expense-tracker/issues) page
+- **✨ New Features**: Open a discussion first to align on the feature scope
+- **📚 Documentation**: Help improve our docs, README, and code comments
+- **🎨 UI/UX**: Enhance the user interface and experience
+- **🧪 Testing**: Add tests and improve test coverage
+- **🔧 Performance**: Optimize bundle size, loading times, and runtime performance
+
+### Quick Start for Contributors
+
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. Make your changes following our [coding standards](CONTRIBUTING.md#code-style)
+4. Commit with conventional commit format: `git commit -m "feat: add amazing feature"`
+5. Push to your branch (`git push origin feature/amazing-feature`)
+6. Open a Pull Request
+
+### Need Help?
+
+- 📖 Read our [Contributing Guide](CONTRIBUTING.md)
+- 📋 Check our [Code of Conduct](CODE_OF_CONDUCT.md)
+- 🐛 Report bugs via [Issues](https://github.com/yourusername/exight-expense-tracker/issues)
+- 💬 Join discussions in [Discussions](https://github.com/yourusername/exight-expense-tracker/discussions)
 
 ## 📄 License
 

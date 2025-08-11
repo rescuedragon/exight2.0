@@ -36,7 +36,8 @@ import {
   X,
   CheckCircle,
   AlertTriangle,
-  Clock
+  Clock,
+  Download
 } from "lucide-react";
 import { Expense } from "@/types/expense";
 import { Loan } from "@/types/loan";
@@ -1854,6 +1855,27 @@ const Index = () => {
     console.log('Full demo data loaded: 8 expenses (4 recurring, 4 fixed-term), 8 loans (4 active, 4 completed)');
   };
 
+  const exportData = () => {
+    const exportData = {
+      expenses,
+      loans,
+      actionLogs,
+      exportDate: new Date().toISOString(),
+      version: '1.0.0'
+    };
+    
+    const dataStr = JSON.stringify(exportData, null, 2);
+    const dataBlob = new Blob([dataStr], { type: 'application/json' });
+    
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(dataBlob);
+    link.download = `exight-data-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    
+    // Log the export action
+    addActionLog('Export Data', 'User exported all data to JSON', 'export');
+  };
+
       return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
       {/* Title - Top Left */}
@@ -1958,6 +1980,18 @@ const Index = () => {
               )}
             </Button>
             
+            {/* Export Button */}
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="gap-3 rounded-full px-6 hover:shadow-lg transition-all duration-200 hover:scale-102 hover:shadow-green-accent/20 border-border/40 backdrop-blur-sm"
+              onClick={exportData}
+              title="Export all data to JSON"
+            >
+              <Download className="h-5 w-5" />
+              Export
+            </Button>
+
             {/* Analytics Button */}
             <Button 
               variant="outline" 
