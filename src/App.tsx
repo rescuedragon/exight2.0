@@ -1,7 +1,7 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Index, { TryMe } from "./pages/Index";
 import { Mail } from "lucide-react";
@@ -19,15 +19,41 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(false);
 
-  useEffect(() => {
-    // Simple auth check without API calls
+  const location = useLocation();
+
+  const recomputeAuth = () => {
     const token = localStorage.getItem('authToken');
     const demoMode = localStorage.getItem('demoMode');
     const lastLoginDate = localStorage.getItem('lastLoginDate');
-    
+
     setIsDemoMode(demoMode === 'true');
     setIsAuthenticated(!!token || demoMode === 'true' || !!lastLoginDate);
+  };
+
+  useEffect(() => {
+    // Initial check
+    recomputeAuth();
+    // Respond to auth events from apiService
+    const onAuthChanged = () => recomputeAuth();
+    window.addEventListener('authChanged', onAuthChanged);
+    // Respond to cross-tab storage changes
+    const onStorage = (e: StorageEvent) => {
+      if (['authToken', 'demoMode', 'lastLoginDate'].includes(e.key || '')) {
+        recomputeAuth();
+      }
+    };
+    window.addEventListener('storage', onStorage);
+    return () => {
+      window.removeEventListener('authChanged', onAuthChanged);
+      window.removeEventListener('storage', onStorage);
+    };
   }, []);
+
+  useEffect(() => {
+    // Re-evaluate on route changes to be safe
+    recomputeAuth();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.pathname]);
 
   if (isLoading) {
     return (

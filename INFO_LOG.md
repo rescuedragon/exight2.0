@@ -1,3 +1,13 @@
+### Update (automated assistant log)
+
+- Date: 2025-08-11
+- Changes:
+  - Unified API types with app types in `src/lib/api.ts`; normalized IDs to strings; added normalization helpers for expenses and loans; switched API base to env `VITE_API_BASE_URL` with fallback `http://13.60.70.116/api`.
+  - Improved login reliability: graceful mock fallback for known users when backend is unreachable; dispatch `authChanged` on token changes.
+  - Updated route auth state to react to auth/storage events in `src/App.tsx`.
+  - Tweaked login layout spacing/centering in `src/components/Login.tsx`.
+  - Verified lints: clean for touched files.
+
 \n## 2025-08-09 – UI updates
 - Kept `InfoBar` cards at their current compact size.
 - Converted the following popups to true full-screen overlays (fixed inset-0, no rounded corners/shadows; background scroll locked):

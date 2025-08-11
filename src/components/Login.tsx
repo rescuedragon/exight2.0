@@ -172,20 +172,20 @@ const Login = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex items-center justify-center min-h-screen px-4">
+      <div className="flex items-center justify-center min-h-screen px-4 pt-28 md:pt-24 pb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-6xl grid md:grid-cols-2 gap-10 items-stretch mt-8 md:mt-0"
+          className="w-full max-w-6xl grid md:grid-cols-2 gap-8 md:gap-10 items-center"
         >
           {/* Demo Mode removed for dev environment to mirror real app */}
 
           {/* Login/Register Form */}
-          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-800/50 shadow-xl order-2 md:order-1 min-h-[560px]">
-            <CardContent className="p-8 h-full flex flex-col">
+          <Card className="w-full max-w-md justify-self-center backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-800/50 shadow-xl order-2 md:order-1">
+            <CardContent className="p-6 sm:p-8 h-full flex flex-col">
               <div className="text-center mb-4">
-                <h2 className="text-3xl font-bold text-foreground mb-2">
+                <h2 className="text-2xl sm:text-3xl font-bold text-foreground mb-1 sm:mb-2">
                   {isLogin ? "Welcome Back" : "Create Account"}
                 </h2>
                 <p className="text-muted-foreground">
@@ -298,14 +298,14 @@ const Login = () => {
             </CardContent>
           </Card>
           {/* Promo Panel */}
-          <div className="order-1 md:order-2 min-h-[560px] flex flex-col justify-center">
-            <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4">
+          <div className="order-1 md:order-2 w-full max-w-xl justify-self-center md:justify-self-start flex flex-col justify-center">
+            <h2 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-3 md:mb-4">
               Track your <span className="gradient-text">expenses & loans</span>
             </h2>
-            <p className="text-lg text-muted-foreground mb-8 max-w-xl">
+            <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8 max-w-xl">
               Monitor EMIs, track loans given to friends, and get smart insights to take control of your finances.
             </p>
-            <div className="grid sm:grid-cols-2 gap-4">
+            <div className="grid sm:grid-cols-2 gap-3 md:gap-4">
               <div className="rounded-2xl p-5 bg-white/70 dark:bg-gray-900/60 border border-white/30 dark:border-gray-800/60 shadow-sm">
                 <div className="flex items-start gap-3">
                   <BarChart3 className="h-5 w-5 text-purple-500" />

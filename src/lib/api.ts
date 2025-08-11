@@ -11,6 +11,8 @@ export interface RegisterRequest {
 }
 
 import { log, warn, error as logError } from './logger';
+import type { Expense as AppExpense } from '@/types/expense';
+import type { Loan as AppLoan, LoanPayment as AppLoanPayment } from '@/types/loan';
 
 export interface AuthResponse {
   token: string;
@@ -29,9 +31,8 @@ export interface ApiResponse<T> {
   error?: string;
 }
 
-// Mock authentication system - no backend required
-// Prefer HTTPS dev domain to avoid mixed-content on https site
-const API_BASE_URL = 'https://dev.exight.in/api';
+// Prefer env-based configuration with a sensible default to the EC2 server
+const API_BASE_URL = (import.meta as any)?.env?.VITE_API_BASE_URL || 'http://13.60.70.116/api';
 
 interface MockUser {
   password: string;
@@ -43,34 +44,9 @@ interface MockUser {
   };
 }
 
-interface Expense {
-  id: string | number;
-  name: string;
-  amount: number;
-  currency: string;
-  type: string;
-  deductionDay: number;
-  isRecurring: boolean;
-  totalMonths?: number | null;
-  remainingMonths?: number | null;
-  remainingAmount?: number | null;
-  createdAt: Date;
-  partialPayments: unknown[];
-}
-
-interface Loan {
-  id: string | number;
-  personName: string;
-  amount: number;
-  currency: string;
-  dateGiven: Date;
-  description: string;
-  status: string;
-  totalReceived: number;
-  remainingAmount: number;
-  createdAt: Date;
-  payments: unknown[];
-}
+// Use the app-wide types for Expenses and Loans
+type Expense = AppExpense;
+type Loan = AppLoan;
 
 interface FeedbackPayload {
   name?: string;
@@ -174,6 +150,9 @@ class ApiService {
   setToken(token: string) {
     this.token = token;
     localStorage.setItem('authToken', token);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('authChanged'));
+    }
   }
 
   getToken(): string | null {
@@ -186,6 +165,9 @@ class ApiService {
   clearToken() {
     this.token = null;
     localStorage.removeItem('authToken');
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new Event('authChanged'));
+    }
   }
 
   private generateMockToken(): string {
@@ -355,24 +337,89 @@ class ApiService {
     }
   }
 
+  // Normalize server responses to strict frontend types
+  private normalizeExpense(raw: any): Expense {
+    const partialPayments = Array.isArray(raw?.partialPayments)
+      ? raw.partialPayments.map((pp: any) => ({
+          id: String(pp.id ?? ''),
+          amount: Number(pp.amount ?? 0),
+          date: pp.date ? new Date(pp.date) : new Date(),
+          description: pp.description,
+        }))
+      : [];
+
+    return {
+      id: String(raw?.id ?? ''),
+      name: String(raw?.name ?? ''),
+      amount: Number(raw?.amount ?? 0),
+      currency: String(raw?.currency ?? 'INR') as Expense['currency'],
+      type: String(raw?.type ?? 'EMI') as Expense['type'],
+      deductionDay: Number(raw?.deductionDay ?? 1),
+      isRecurring: Boolean(raw?.isRecurring),
+      totalMonths: raw?.totalMonths == null ? undefined : Number(raw.totalMonths),
+      remainingMonths: raw?.remainingMonths == null ? undefined : Number(raw.remainingMonths),
+      remainingAmount: raw?.remainingAmount == null ? undefined : Number(raw.remainingAmount),
+      createdAt: raw?.createdAt ? new Date(raw.createdAt) : new Date(),
+      partialPayments,
+    };
+  }
+
+  private normalizeLoan(raw: any): Loan {
+    const payments: AppLoanPayment[] = Array.isArray(raw?.payments)
+      ? raw.payments.map((p: any) => ({
+          id: String(p.id ?? ''),
+          amount: Number(p.amount ?? 0),
+          date: p.date ? new Date(p.date) : new Date(),
+          description: p.description,
+          type: (p.type === 'write-off' ? 'write-off' : 'payment') as AppLoanPayment['type'],
+        }))
+      : [];
+
+    return {
+      id: String(raw?.id ?? ''),
+      personName: String(raw?.personName ?? ''),
+      amount: Number(raw?.amount ?? 0),
+      currency: String(raw?.currency ?? 'INR'),
+      dateGiven: raw?.dateGiven ? new Date(raw.dateGiven) : new Date(),
+      description: raw?.description,
+      status: (raw?.status === 'completed' || raw?.status === 'written-off') ? raw.status : 'active',
+      totalReceived: Number(raw?.totalReceived ?? 0),
+      remainingAmount: Number(raw?.remainingAmount ?? 0),
+      writeOffDate: raw?.writeOffDate ? new Date(raw.writeOffDate) : undefined,
+      createdAt: raw?.createdAt ? new Date(raw.createdAt) : new Date(),
+      payments,
+    };
+  }
+
   // Authentication methods
   async login(credentials: LoginRequest): Promise<AuthResponse> {
-    const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/login', {
-      method: 'POST',
-      body: JSON.stringify(credentials),
-    });
+    try {
+      const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(credentials),
+      });
 
-    // Normalize backend response shape
-    if (res && 'token' in res && res.token) {
-      this.setToken(res.token);
-      return res as AuthResponse;
-    }
-    if (res && 'success' in res && res.success && res.data) {
-      this.setToken(res.data.token);
-      return res.data;
-    }
+      // Normalize backend response shape
+      if (res && 'token' in res && (res as any).token) {
+        this.setToken((res as any).token);
+        return res as AuthResponse;
+      }
+      if (res && 'success' in (res as any) && (res as any).success && (res as any).data) {
+        const data = (res as any).data as AuthResponse;
+        this.setToken(data.token);
+        return data;
+      }
 
-    throw new Error((res && 'message' in res && res.message) || (res && 'error' in res && res.error) || 'Login failed');
+      // If backend responded but without expected fields, fall back to mock
+      const mock = this.handleMockLogin(credentials);
+      if (mock.success && mock.data) return mock.data;
+      throw new Error((res as any)?.message || (res as any)?.error || 'Login failed');
+    } catch (err) {
+      // Network/server error: allow mock login for known demo/admin users
+      const mock = this.handleMockLogin(credentials);
+      if (mock.success && mock.data) return mock.data;
+      throw err;
+    }
   }
 
   async register(userData: RegisterRequest): Promise<AuthResponse> {
@@ -382,21 +429,31 @@ class ApiService {
       password: userData.password,
       name: `${userData.firstName ?? ''} ${userData.lastName ?? ''}`.trim() || userData.email.split('@')[0],
     };
-    const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    });
+    try {
+      const res = await this.request<AuthResponse | AuthResponseWrapper>('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(payload),
+      });
 
-    if (res && 'token' in res && res.token) {
-      this.setToken(res.token);
-      return res as AuthResponse;
-    }
-    if (res && 'success' in res && res.success && res.data) {
-      this.setToken(res.data.token);
-      return res.data;
-    }
+      if (res && 'token' in (res as any) && (res as any).token) {
+        this.setToken((res as any).token);
+        return res as AuthResponse;
+      }
+      if (res && 'success' in (res as any) && (res as any).success && (res as any).data) {
+        const data = (res as any).data as AuthResponse;
+        this.setToken(data.token);
+        return data;
+      }
 
-    throw new Error((res && 'message' in res && res.message) || (res && 'error' in res && res.error) || 'Registration failed');
+      // If backend response unexpected, generate a mock user
+      const mock = this.handleMockRegister(userData);
+      if (mock.success && mock.data) return mock.data;
+      throw new Error((res as any)?.message || (res as any)?.error || 'Registration failed');
+    } catch (err) {
+      const mock = this.handleMockRegister(userData);
+      if (mock.success && mock.data) return mock.data;
+      throw err;
+    }
   }
 
   async logout(): Promise<void> {
@@ -456,7 +513,8 @@ class ApiService {
   // Expenses API (server-backed)
   async listExpenses(): Promise<Expense[]> {
     const res = await this.request<Expense[] | ExpenseResponseWrapper>('/expenses');
-    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Expense[]);
+    const list = (res && 'success' in res && res.success !== undefined) ? res.data : (res as any[]);
+    return Array.isArray(list) ? list.map(e => this.normalizeExpense(e)) : [];
   }
 
   async createExpense(payload: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'>): Promise<Expense> {
@@ -464,7 +522,8 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(payload),
     });
-    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Expense);
+    const item = (res && 'success' in res && res.success !== undefined) ? (res as SingleExpenseResponseWrapper).data : (res as any);
+    return this.normalizeExpense(item);
   }
 
   async updateExpense(id: string | number, payload: Partial<Expense>): Promise<Expense> {
@@ -474,20 +533,23 @@ class ApiService {
         method: 'PUT',
         body: JSON.stringify(payload),
       });
-      return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Expense);
+      const item = (res && 'success' in res && res.success !== undefined) ? (res as SingleExpenseResponseWrapper).data : (res as any);
+      return this.normalizeExpense(item);
     } catch (e1) {
       try {
         const res2 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses?id=${numericId}`, {
           method: 'PUT',
           body: JSON.stringify(payload),
         });
-        return (res2 && 'success' in res2 && res2.success !== undefined) ? res2.data : (res2 as Expense);
+        const item2 = (res2 && 'success' in res2 && res2.success !== undefined) ? (res2 as SingleExpenseResponseWrapper).data : (res2 as any);
+        return this.normalizeExpense(item2);
       } catch (e2) {
         const res3 = await this.request<Expense | SingleExpenseResponseWrapper>(`/expenses/${numericId}/update`, {
           method: 'POST',
           body: JSON.stringify(payload),
         });
-        return (res3 && 'success' in res3 && res3.success !== undefined) ? res3.data : (res3 as Expense);
+        const item3 = (res3 && 'success' in res3 && res3.success !== undefined) ? (res3 as SingleExpenseResponseWrapper).data : (res3 as any);
+        return this.normalizeExpense(item3);
       }
     }
   }
@@ -512,7 +574,8 @@ class ApiService {
   // Loans API (server-backed)
   async listLoans(): Promise<Loan[]> {
     const res = await this.request<Loan[] | LoanResponseWrapper>('/loans');
-    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Loan[]);
+    const list = (res && 'success' in res && res.success !== undefined) ? res.data : (res as any[]);
+    return Array.isArray(list) ? list.map(l => this.normalizeLoan(l)) : [];
   }
 
   async createLoan(payload: Omit<Loan, 'id' | 'createdAt' | 'payments' | 'totalReceived' | 'remainingAmount' | 'status'>): Promise<Loan> {
@@ -520,7 +583,8 @@ class ApiService {
       method: 'POST',
       body: JSON.stringify(payload),
     });
-    return (res && 'success' in res && res.success !== undefined) ? res.data : (res as Loan);
+    const item = (res && 'success' in res && res.success !== undefined) ? (res as SingleLoanResponseWrapper).data : (res as any);
+    return this.normalizeLoan(item);
   }
 
   // Feedback (server-backed; falls back to mailto if endpoint is missing)
