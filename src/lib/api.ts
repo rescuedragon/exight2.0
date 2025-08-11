@@ -10,6 +10,8 @@ export interface RegisterRequest {
   password: string;
 }
 
+import { log, warn, error as logError } from './logger';
+
 export interface AuthResponse {
   token: string;
   user: {
@@ -156,7 +158,7 @@ class ApiService {
         });
       }
     } catch (error) {
-      console.log('No stored mock users found');
+      warn('No stored mock users found');
     }
   }
 
@@ -165,7 +167,7 @@ class ApiService {
       const users = Array.from(this.mockUsers.values());
       localStorage.setItem('mockUsers', JSON.stringify(users));
     } catch (error) {
-      console.error('Failed to save mock users to storage');
+      logError('Failed to save mock users to storage');
     }
   }
 
@@ -194,12 +196,12 @@ class ApiService {
     endpoint: string,
     options: RequestInit = {}
   ): Promise<ApiResponse<T>> {
-    console.log("Mock request called for endpoint:", endpoint);
+    log("Mock request called for endpoint:", endpoint);
     // Simulate network delay
     await new Promise(resolve => setTimeout(resolve, 500));
     
     const body = options.body ? JSON.parse(options.body as string) : {};
-    console.log("Mock request body:", body);
+    log("Mock request body:", body);
     
     switch (endpoint) {
       case '/auth/login':
@@ -216,12 +218,12 @@ class ApiService {
   }
 
   private handleMockLogin(credentials: LoginRequest): ApiResponse<AuthResponse> {
-    console.log("Mock login called with:", credentials);
+    log("Mock login called with:", credentials);
     const userData = this.mockUsers.get(credentials.email);
-    console.log("Found user data:", userData);
+    log("Found user data:", userData);
     
     if (!userData || userData.password !== credentials.password) {
-      console.log("Login failed - invalid credentials");
+      warn("Login failed - invalid credentials");
       return {
         success: false,
         message: 'Invalid email or password'
@@ -230,7 +232,7 @@ class ApiService {
 
     const token = this.generateMockToken();
     this.setToken(token);
-    console.log("Mock login successful, token generated:", token);
+    log("Mock login successful, token generated:", token);
 
     return {
       success: true,
@@ -327,7 +329,7 @@ class ApiService {
     };
 
     try {
-      console.log(`Making API call to: ${url}`);
+      log(`Making API call to: ${url}`);
       const response = await fetch(url, config);
 
       // Gracefully handle empty/204 responses
@@ -341,14 +343,14 @@ class ApiService {
 
       if (!response.ok) {
         const message = (data && (data.message || data.error)) || `HTTP error! status: ${response.status}`;
-        console.error(`API Error: ${response.status} - ${message}`);
+        logError(`API Error: ${response.status} - ${message}`);
         throw new Error(message);
       }
 
-      console.log(`API call successful:`, data);
+      log(`API call successful:`, data);
       return data as T; // may be {token,user} or {success,data}
     } catch (error) {
-      console.error('API request failed:', error);
+      logError('API request failed:', error);
       throw error;
     }
   }
@@ -403,7 +405,7 @@ class ApiService {
         method: 'POST',
       });
     } catch (error) {
-      console.error('Logout API call failed:', error);
+      logError('Logout API call failed:', error);
     } finally {
       this.clearToken();
     }
