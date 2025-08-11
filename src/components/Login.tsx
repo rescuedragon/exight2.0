@@ -162,10 +162,10 @@ const Login = () => {
         <Button
           onClick={handleDemoMode}
           size="sm"
-          className="hidden sm:inline-flex items-center gap-2 rounded-full px-4 h-9 border border-white/50 bg-gradient-to-r from-indigo-200 via-purple-200 to-emerald-200 text-foreground shadow-sm hover:shadow-md transition-all"
+          className="hidden sm:inline-flex items-center gap-2 rounded-full px-4 h-9 border border-white/40 dark:border-white/10 bg-white/40 dark:bg-gray-800/30 text-foreground shadow-sm hover:shadow-md transition-all hover:bg-gradient-to-r hover:from-indigo-200 hover:via-purple-200 hover:to-emerald-200 dark:hover:from-indigo-600/40 dark:hover:via-purple-600/40 dark:hover:to-emerald-600/40"
           title="Preview the app instantly with sample data"
         >
-          <span className="inline-block h-2 w-2 rounded-full bg-blue-600 animate-bounce" />
+          <span className="inline-block h-2 w-2 rounded-full bg-blue-600 dark:bg-blue-400 animate-bounce" />
           <span className="font-semibold">Try me</span>
         </Button>
         <ThemeToggle />
@@ -177,12 +177,12 @@ const Login = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
-          className="w-full max-w-6xl grid md:grid-cols-2 gap-8 items-center"
+          className="w-full max-w-6xl grid md:grid-cols-2 gap-10 items-center mt-8 md:mt-0"
         >
           {/* Demo Mode removed for dev environment to mirror real app */}
 
           {/* Login/Register Form */}
-          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border-2 border-white/20 shadow-2xl order-2 md:order-1">
+          <Card className="backdrop-blur-sm bg-white/80 dark:bg-gray-900/80 border border-white/20 dark:border-gray-800/50 shadow-xl order-2 md:order-1">
             <CardContent className="p-8">
               <div className="text-center mb-4">
                 <h2 className="text-3xl font-bold text-foreground mb-2">
@@ -193,18 +193,7 @@ const Login = () => {
                 </p>
               </div>
 
-              {/* Subtle feature highlights */}
-              <div className="mb-6 grid grid-cols-1 gap-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-2 justify-center">
-                  <Shield className="h-4 w-4" /> Private & secure
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  <BarChart3 className="h-4 w-4" /> Smart analytics & projections
-                </div>
-                <div className="flex items-center gap-2 justify-center">
-                  <HandCoins className="h-4 w-4" /> Track expenses and loans together
-                </div>
-              </div>
+              {/* Feature line removed as requested */}
 
               {error && (
                 <div className="mb-4 p-3 bg-red-100 dark:bg-red-900/20 border border-red-300 dark:border-red-700 rounded-lg text-red-700 dark:text-red-300 text-sm">

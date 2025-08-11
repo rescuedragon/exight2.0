@@ -464,30 +464,7 @@ const TryMe = memo(() => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:from-gray-900 dark:via-gray-900 dark:to-gray-900">
-      {/* Demo Mode Banner */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-4 py-2 text-center font-semibold shadow-lg">
-        <div className="flex items-center justify-center gap-2">
-          <TestTube className="h-4 w-4" />
-          <span>Demo Mode - Try the app with sample data</span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              // Clear demo mode and demo data
-              localStorage.removeItem('demoMode');
-              localStorage.removeItem('expenses');
-              localStorage.removeItem('loans');
-              localStorage.removeItem('userName');
-              localStorage.removeItem('lastLoginDate');
-              // Redirect to login to start fresh
-              window.location.href = '/login';
-            }}
-            className="ml-4 h-6 px-3 text-xs bg-white/20 hover:bg-white/30 border-white/30 text-black"
-          >
-            Switch to Real Mode
-          </Button>
-        </div>
-      </div>
+      {/* Demo Mode Banner removed as requested */}
 
       {/* Title - Top Left */}
       {!isAnyModalOpen && (
