@@ -28,7 +28,14 @@ interface AddExpenseModalProps {
 export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
   const { openModal, closeModal } = useModal();
   const [open, setOpen] = useState(false);
-  type Frequency = 'weekly' | 'monthly' | 'quarterly' | 'half-yearly' | 'yearly';
+  type Frequency =
+    | 'daily'
+    | 'weekly'
+    | 'fortnightly'
+    | 'monthly'
+    | 'half-yearly'
+    | 'yearly'
+    | 'custom';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -38,10 +45,16 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     deductionDay: '',
     isRecurring: false,
     frequency: 'monthly' as Frequency,
+    equateMonthly: true,
+    intervalDays: '30',
     totalMonths: '',
     remainingMonths: '',
     remainingAmount: '',
   });
+  const [forexRate, setForexRate] = useState<number | null>(null);
+  const [lockRate, setLockRate] = useState(true);
+  const [forexLoading, setForexLoading] = useState(false);
+  const [forexError, setForexError] = useState<string | null>(null);
   const { toast } = useToast();
 
   // Track modal state
@@ -53,22 +66,75 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     }
   }, [open, openModal, closeModal]);
 
-  const frequencyToMonthly = (amount: number, frequency: Frequency): number => {
+  const occurrencesPerYear = (frequency: Frequency): number => {
     switch (frequency) {
+      case 'daily':
+        return 365;
       case 'weekly':
-        return (amount * 52) / 12;
+        return 52;
+      case 'fortnightly':
+        return 26;
       case 'monthly':
-        return amount;
-      case 'quarterly':
-        return amount / 3;
+        return 12;
       case 'half-yearly':
-        return amount / 6;
+        return 2;
       case 'yearly':
-        return amount / 12;
-      default:
-        return amount;
+        return 1;
+      case 'custom': {
+        const days = Math.max(1, parseInt(formData.intervalDays || '30'));
+        return 365 / days;
+      }
     }
   };
+
+  const normalizeToMonthly = (perOccurrenceAmount: number, frequency: Frequency): number => {
+    if (frequency === 'monthly') return perOccurrenceAmount;
+    if (formData.equateMonthly) {
+      return (perOccurrenceAmount * occurrencesPerYear(frequency)) / 12;
+    }
+    // Non-equated approximation per month
+    switch (frequency) {
+      case 'daily':
+        return perOccurrenceAmount * 30;
+      case 'weekly':
+        return (perOccurrenceAmount * 52) / 12;
+      case 'fortnightly':
+        return (perOccurrenceAmount * 26) / 12;
+      case 'half-yearly':
+        return perOccurrenceAmount / 6;
+      case 'yearly':
+        return perOccurrenceAmount / 12;
+      case 'custom': {
+        const days = Math.max(1, parseInt(formData.intervalDays || '30'));
+        return (perOccurrenceAmount * 30) / days;
+      }
+      default:
+        return perOccurrenceAmount;
+    }
+  };
+
+  // Fetch forex rate when currency changes (and not INR)
+  useEffect(() => {
+    async function fetchRate() {
+      setForexError(null);
+      setForexRate(null);
+      if (formData.currency === 'INR') return;
+      try {
+        setForexLoading(true);
+        const res = await fetch(`https://open.er-api.com/v6/latest/${formData.currency}`);
+        const data = (await res.json()) as { result?: string; rates?: Record<string, number> };
+        const rate = data?.rates?.INR;
+        if (typeof rate === 'number') setForexRate(rate);
+        else setForexError('FX rate unavailable');
+      } catch (e) {
+        setForexError('Failed to fetch FX rate');
+      } finally {
+        setForexLoading(false);
+      }
+    }
+    fetchRate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [formData.currency]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -92,13 +158,17 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
     }
 
     const inputAmount = parseFloat(formData.amount);
-    const amount = frequencyToMonthly(inputAmount, formData.frequency);
+    let amount = normalizeToMonthly(inputAmount, formData.frequency);
+    // Convert to INR if needed and locked
+    if (formData.currency !== 'INR' && lockRate && forexRate) {
+      amount = amount * forexRate;
+    }
     const deductionDay = formData.deductionDay ? parseInt(formData.deductionDay) : 1; // Default to 1st if not specified
 
     const expenseData: Omit<Expense, 'id' | 'createdAt' | 'partialPayments'> = {
       name: formData.name,
       amount,
-      currency: formData.currency,
+      currency: formData.currency === 'INR' || !forexRate || !lockRate ? formData.currency : 'INR',
       type: formData.type,
       deductionDay,
       isRecurring: formData.isRecurring,
@@ -128,10 +198,14 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
       deductionDay: '',
       isRecurring: false,
       frequency: 'monthly',
+      equateMonthly: true,
+      intervalDays: '30',
       totalMonths: '',
       remainingMonths: '',
       remainingAmount: '',
     });
+    setForexRate(null);
+    setForexError(null);
 
     setOpen(false);
     toast({
@@ -230,6 +304,33 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                       <SelectItem value="JPY">JPY (¥)</SelectItem>
                     </SelectContent>
                   </Select>
+                  {formData.currency !== 'INR' && (
+                    <div className="text-xs text-muted-foreground space-y-2">
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="checkbox"
+                          id="lockRate"
+                          checked={lockRate}
+                          onChange={(e) => setLockRate(e.target.checked)}
+                          className="h-4 w-4 rounded border-border/40"
+                        />
+                        <Label htmlFor="lockRate">Lock current FX to INR for this expense</Label>
+                      </div>
+                      <div>
+                        {forexLoading ? (
+                          <span>Fetching FX rate…</span>
+                        ) : forexError ? (
+                          <span className="text-destructive">{forexError}</span>
+                        ) : forexRate ? (
+                          <span>
+                            1 {formData.currency} ≈ {forexRate.toFixed(2)} INR
+                          </span>
+                        ) : (
+                          <span>FX rate unavailable</span>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -246,16 +347,49 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     <SelectValue placeholder="Monthly" />
                   </SelectTrigger>
                   <SelectContent className="premium-card border-border/40">
+                    <SelectItem value="daily">Daily</SelectItem>
                     <SelectItem value="weekly">Weekly</SelectItem>
+                    <SelectItem value="fortnightly">Fortnightly</SelectItem>
                     <SelectItem value="monthly">Monthly</SelectItem>
-                    <SelectItem value="quarterly">Quarterly</SelectItem>
                     <SelectItem value="half-yearly">Half-yearly</SelectItem>
                     <SelectItem value="yearly">Yearly</SelectItem>
+                    <SelectItem value="custom">Custom…</SelectItem>
                   </SelectContent>
                 </Select>
                 <p className="text-xs text-muted-foreground">
                   We'll normalize this to a monthly amount for dashboards.
                 </p>
+                {formData.frequency === 'custom' && (
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="intervalDays">Custom interval (days)</Label>
+                      <Input
+                        id="intervalDays"
+                        type="number"
+                        min="1"
+                        value={formData.intervalDays}
+                        onChange={(e) =>
+                          setFormData((prev) => ({ ...prev, intervalDays: e.target.value }))
+                        }
+                        className="bg-background border-border/40 rounded-xl h-12"
+                      />
+                    </div>
+                  </div>
+                )}
+                <div className="flex items-center gap-2">
+                  <input
+                    id="equateMonthly"
+                    type="checkbox"
+                    checked={formData.equateMonthly}
+                    onChange={(e) =>
+                      setFormData((prev) => ({ ...prev, equateMonthly: e.target.checked }))
+                    }
+                    className="h-4 w-4 rounded border-border/40"
+                  />
+                  <Label htmlFor="equateMonthly" className="text-sm">
+                    Equate as monthly transaction (annualized/12)
+                  </Label>
+                </div>
               </div>
 
               {/* Expense Type removed per request (defaults to EMI under the hood) */}
