@@ -898,6 +898,14 @@
 
 _This log will be updated with each development session to maintain a complete record of all activities and decisions._
 
+### [2025-08-12] Micro-step — README polish and roadmap update
+
+- Verified dev env: `https://dev.exight.in` → 200 OK; `/api/health` → `{status:"OK"}`.
+- Completed IMPROVEMENT_IDEAS.md 1.4 (README concise + screenshots + Where to contribute).
+- Updated counters in `IMPROVEMENT_IDEAS.md`: [PENDING] 294, [COMPLETED] 28, Total 8.70%.
+- README: added Screenshots section referencing placeholder assets and live dev URL.
+- No functional code changes.
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).

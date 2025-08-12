@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 295  
-[COMPLETED] - 27
+[PENDING] - 294  
+[COMPLETED] - 28
 
-Total percent complete - 8.39%
+Total percent complete - 8.70%
 
 Rules:
 
@@ -61,7 +61,7 @@ Rules:
    1.1. Add a CONTRIBUTING.md that documents PR style, linters, commit message format, and release process. [COMPLETED]
    1.2. Add CODE_OF_CONDUCT.md and SECURITY.md with clear reporting instructions. [COMPLETED]
    1.3. Add a CONVENTIONS.md describing branch naming, commit message prefixes (feat/fix/chore/etc.), and issue templates. [COMPLETED]
-   1.4. Keep README concise with screenshots, quick start, and a “Where to contribute” section. [PENDING]
+   1.4. Keep README concise with screenshots, quick start, and a “Where to contribute” section. [COMPLETED]
    1.5. Add a short project architecture diagram (SVG) to README showing frontend ↔ backend data flows. [COMPLETED]
    1.6. Rename repo or add tags if needed so the name is discoverable and searchable. [COMPLETED]
    1.7. Ensure upload-instructions.md is up-to-date and matches actual deploy steps. [COMPLETED]

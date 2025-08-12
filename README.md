@@ -51,6 +51,14 @@ The application follows a modern client-server architecture with:
 - **Local Storage**: Browser storage for offline functionality
 - **External APIs**: Integration with financial services
 
+## 📷 Screenshots (Dev)
+
+> Live dev: `https://dev.exight.in`
+
+| Login                            | Dashboard                            |
+| -------------------------------- | ------------------------------------ |
+| ![Login](public/placeholder.svg) | ![Dashboard](public/placeholder.svg) |
+
 ## 🛠️ Built With
 
 - **React 18** - Modern React with hooks
