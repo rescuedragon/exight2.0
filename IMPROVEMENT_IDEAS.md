@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 275  
-<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 47
+[PENDING] - 274  
+<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 48
 
-Total percent complete - 14.58%
+Total percent complete - 14.91%
 
 Rules:
 
@@ -34,6 +34,7 @@ Rules:
 
 <div>
 
+<span style="color:#16a34a">✅ 7.3. Add a budget check (max JS payload, image size) as part of CI.</span><br/>
 <span style="color:#16a34a">✅ 22.2. Add social preview images (og:image) and meta tags to index.html.</span><br/>
 <span style="color:#16a34a">✅ 22.3. Ensure index.html has helpful meta title and description for SEO.</span><br/>
 <span style="color:#16a34a">✅ 26.2. Ensure meta viewport tag is present and optimized in index.html.</span><br/>
@@ -158,7 +159,7 @@ Rules:
    GitHub
 
    7.2. Add Lighthouse CI step to enforce performance regressions aren’t introduced on PRs. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-   7.3. Add a budget check (max JS payload, image size) as part of CI. [PENDING]
+   7.3. Add a budget check (max JS payload, image size) as part of CI. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    7.4. Remove or lazy-load heavy libraries (e.g., only import Recharts on analytics route). [PENDING]
    7.5. Setup route-level code splitting and verify network waterfall for initial route. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    7.6. Convert images to modern formats (AVIF/WebP) and serve responsive sizes with srcset. [PENDING]

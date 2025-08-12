@@ -2369,6 +2369,21 @@ These optimizations should significantly improve the application's performance, 
 - Updated `README.md` with CI badges.
 - Updated `IMPROVEMENT_IDEAS.md`: marked 7.2 and 14.8 as COMPLETED; counters updated to PENDING 275, COMPLETED 47 (14.58%).
 
+### [2025-08-12] CI — Bundle and asset budget checks (7.3)
+
+- Added strict bundle/asset budgets to `/.github/workflows/ci.yml` for Vite outputs in `dist/assets`.
+- Budgets enforced in CI step:
+  - Total JS ≤ 2 MB, per JS file ≤ 700 KB, per image ≤ 600 KB (png/jpg/jpeg/webp/avif/svg).
+  - Prints friendly diagnostics and fails the job if limits exceeded.
+- No app functionality changed; CI-only safety net. Verified workflow syntax.
+- Updated `IMPROVEMENT_IDEAS.md`: 7.3 set to COMPLETED; counters adjusted.
+
+### [2025-08-12] CI — Budget check path fix (support dist layouts)
+
+- Updated `/.github/workflows/ci.yml` to scan JS/CSS/images anywhere under `dist/` (not only `dist/assets/`).
+- Prints top-20 largest files, enforces same budgets: total JS ≤ 2 MB, per JS ≤ 700 KB, per image ≤ 600 KB.
+- Reason: local build layout used `dist/js` and `dist/css`. Now robust to both layouts.
+
 ### [2025-08-12] Next focus selected — Security (5.10 TLS enforcement + HSTS)
 
 - Rationale: High-impact security hardening with low app-risk; aligns with production readiness.

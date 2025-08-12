@@ -49,37 +49,52 @@ jobs:
             exit 1
           fi
 
-          if [ ! -d "dist/js" ]; then
-            echo "❌ js directory not found in dist"
+          echo "✅ Core build artifacts present"
+
+          # Detect any JS/CSS files anywhere under dist
+          js_files=$(find dist -type f -name "*.js" 2>/dev/null | wc -l | tr -d ' ')
+          css_files=$(find dist -type f -name "*.css" 2>/dev/null | wc -l | tr -d ' ')
+          if [ "$js_files" -eq 0 ]; then
+            echo "❌ No JS files found under dist. Unexpected build layout."
+            ls -la dist || true
             exit 1
           fi
 
-          if [ ! -d "dist/css" ]; then
-            echo "❌ css directory not found in dist"
+          echo "📊 Largest built files (top 20):"
+          find dist -type f -printf "%s\t%p\n" | sort -nr | head -n 20 | awk '{kb=$1/1024; printf("%8.0f KB  %s\n", kb, $2)}'
+
+          # Calculate total JS and CSS sizes (bytes) across dist
+          total_js=$(find dist -type f -name "*.js" -printf "%s\n" 2>/dev/null | awk '{s+=$1} END{print s+0}')
+          total_css=$(find dist -type f -name "*.css" -printf "%s\n" 2>/dev/null | awk '{s+=$1} END{print s+0}')
+          echo "📦 Total JS: $((total_js/1024)) KB | Total CSS: $((total_css/1024)) KB"
+
+          # Enforce budgets
+          max_total_js=$((2*1024*1024))      # 2 MB total JS (raw)
+          max_chunk_js=$((700*1024))         # 700 KB per JS file (raw)
+          max_asset_img=$((600*1024))        # 600 KB per image asset (raw)
+
+          if [ "$total_js" -gt "$max_total_js" ]; then
+            echo "❌ Total JS too large: $((total_js/1024)) KB (max: $((max_total_js/1024)) KB)"
             exit 1
           fi
 
-          echo "✅ All build artifacts present"
-
-          # Check bundle sizes
-          echo "📊 Bundle size analysis:"
-          du -h dist/js/*.js | sort -hr
-          du -h dist/css/*.css | sort -hr
-
-          # Check total bundle size
-          total_js=$(du -cb dist/js/*.js | tail -1 | cut -f1)
-          total_css=$(du -cb dist/css/*.css | tail -1 | cut -f1)
-          total=$((total_js + total_css))
-
-          echo "📦 Total bundle size: $((total / 1024)) KB"
-
-          # Fail if bundle is too large (e.g., > 2MB)
-          if [ $total -gt 2097152 ]; then
-            echo "❌ Bundle size too large: $((total / 1024)) KB (max: 2048 KB)"
+          # Per-file JS budget
+          too_big_js=$(find dist -type f -name "*.js" -size +${max_chunk_js}c -printf "%p (%s bytes)\n" 2>/dev/null | sed -n '1p')
+          if [ -n "$too_big_js" ]; then
+            echo "❌ A JS chunk exceeds limit ($((max_chunk_js/1024)) KB): $too_big_js"
+            echo "Tip: verify code-splitting and lazy-load heavy routes/components."
             exit 1
           fi
 
-          echo "✅ Bundle size within limits"
+          # Per-file image budget (png|jpg|jpeg|webp|avif|svg) anywhere under dist
+          too_big_img=$(find dist -type f \( -iname "*.png" -o -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.webp" -o -iname "*.avif" -o -iname "*.svg" \) -size +${max_asset_img}c -printf "%p (%s bytes)\n" 2>/dev/null | sed -n '1p')
+          if [ -n "$too_big_img" ]; then
+            echo "❌ An image exceeds limit ($((max_asset_img/1024)) KB): $too_big_img"
+            echo "Tip: use responsive images, compression, or modern formats (WebP/AVIF)."
+            exit 1
+          fi
+
+          echo "✅ Bundle and asset sizes within limits"
 
       - name: Upload build artifacts (for debugging)
         if: github.event_name == 'pull_request'
