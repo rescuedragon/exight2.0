@@ -18,7 +18,35 @@ const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 // Respect reverse proxy (for correct req.ip and protocol)
 app.set('trust proxy', true);
 
+// Security headers
 app.use(helmet());
+
+// Optional HTTPS enforcement and HSTS
+const ENFORCE_HTTPS = String(process.env.ENFORCE_HTTPS || 'false').toLowerCase() === 'true';
+const ENABLE_HSTS = String(process.env.ENABLE_HSTS || 'false').toLowerCase() === 'true';
+
+if (ENFORCE_HTTPS) {
+  app.use((req, res, next) => {
+    const proto = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+    if (proto !== 'https') {
+      const host = req.headers.host;
+      const url = `https://${host}${req.originalUrl}`;
+      return res.redirect(301, url);
+    }
+    next();
+  });
+}
+
+if (ENABLE_HSTS) {
+  app.use((req, res, next) => {
+    // Set HSTS only when the request is already HTTPS to avoid mixed-mode issues
+    const proto = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
+    if (proto === 'https') {
+      res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+    }
+    next();
+  });
+}
 app.use(compression());
 app.use(express.json({ limit: '256kb' }));
 

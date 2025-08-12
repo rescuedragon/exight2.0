@@ -181,6 +181,77 @@ jobs:
 
             echo "🎉 Dev deployment completed!"
 
+      - name: Configure Apache headers (HSTS + caching)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT || '22' }}
+          script: |
+            echo "🛡️  Configuring Apache HSTS + caching headers..."
+            CONF_PATH_HTTPD=/etc/httpd/conf.d/exight-dev-headers.conf
+            CONF_PATH_APACHE2=/etc/apache2/conf-enabled/exight-dev-headers.conf
+            CONTENT='\
+<IfModule mod_headers.c>\n\
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"\n\
+  <FilesMatch "\\.(?:js|css|svg|png|jpe?g|gif|webp|avif|ico)$">\n\
+    Header set Cache-Control "public, max-age=31536000, immutable"\n\
+  </FilesMatch>\n\
+  <FilesMatch "\\.(?:json)$">\n\
+    Header set Cache-Control "public, max-age=3600"\n\
+  </FilesMatch>\n\
+  <FilesMatch "\\.(?:html)$">\n\
+    Header set Cache-Control "no-cache"\n\
+  </FilesMatch>\n\
+</IfModule>\n\
+<IfModule mod_expires.c>\n\
+  ExpiresActive On\n\
+  ExpiresDefault "access plus 1 hour"\n\
+  ExpiresByType text/html "access plus 0 seconds"\n\
+  ExpiresByType text/css "access plus 1 year"\n\
+  ExpiresByType application/javascript "access plus 1 year"\n\
+  ExpiresByType image/svg+xml "access plus 1 year"\n\
+  ExpiresByType image/png "access plus 1 year"\n\
+  ExpiresByType image/jpeg "access plus 1 year"\n\
+  ExpiresByType image/webp "access plus 1 year"\n\
+  ExpiresByType image/avif "access plus 1 year"\n\
+  ExpiresByType image/x-icon "access plus 1 year"\n\
+  ExpiresByType application/json "access plus 1 hour"\n\
+</IfModule>\n'
+            if [ -d "/etc/httpd/conf.d" ]; then
+              echo "Writing $CONF_PATH_HTTPD"
+              echo -e "$CONTENT" | sudo tee "$CONF_PATH_HTTPD" >/dev/null
+              sudo systemctl reload httpd || sudo systemctl restart httpd
+            elif [ -d "/etc/apache2" ]; then
+              echo "Writing $CONF_PATH_APACHE2"
+              echo -e "$CONTENT" | sudo tee "$CONF_PATH_APACHE2" >/dev/null
+              sudo systemctl reload apache2 || sudo systemctl restart apache2
+            else
+              echo "⚠️  Apache config directory not found; skipping"
+            fi
+
+      - name: Verify HSTS header
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DEV_HOST }}
+          username: ${{ secrets.DEV_USERNAME }}
+          key: ${{ secrets.DEV_SSH_KEY }}
+          port: ${{ secrets.DEV_SSH_PORT || '22' }}
+          script: |
+            echo "🔎 Checking HSTS header on https://dev.exight.in ..."
+            if command -v curl >/dev/null 2>&1; then
+              HDR=$(curl -sI https://dev.exight.in/ | grep -i "Strict-Transport-Security" || true)
+              echo "Response header: $HDR"
+              if [ -z "$HDR" ]; then
+                echo "⚠️  HSTS header not detected. Check Apache modules and config."
+              else
+                echo "✅ HSTS header present."
+              fi
+            else
+              echo "⚠️  curl not available on server; skipping verification."
+            fi
+
       - name: Health Check
         run: |
           echo "🏥 Performing health check..."

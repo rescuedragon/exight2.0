@@ -2322,3 +2322,50 @@ These optimizations should significantly improve the application's performance, 
 - Problem: Dev deploy workflow failed due to tests. The integration test couldn't find label "Payment Amount" because `DropdownMenu`/`Dialog` content wasn't mounted under test mocks.
 - Change: In `src/components/__tests__/ExpenseFlow.integration.test.tsx`, mocked `@/components/ui/dropdown-menu` and simplified `@/components/ui/dialog` so their content always renders in tests. No app logic changed.
 - Result: `npm test` → all 3 tests pass locally. `npm run lint` → 0 errors (only existing warnings).
+
+### [2025-08-12] Implemented env-gated HTTPS enforcement + HSTS groundwork (5.10 partial)
+
+- Code changes:
+  - `server/feedback-api/server.js`: added optional `ENFORCE_HTTPS` (301 http→https) and `ENABLE_HSTS` (sets `Strict-Transport-Security` on HTTPS requests). Guarded by env flags.
+  - `apache-config.conf`: added commented, production-only snippets for global http→https redirect and HSTS header with module requirements.
+  - `docs/ENV_VARS.md`: documented `ENFORCE_HTTPS` and `ENABLE_HSTS` with local defaults and prod guidance.
+- Verification:
+  - Lint: OK (no new errors; existing warnings remain).
+  - Tests: OK (3/3 pass).
+- Next steps to complete 5.10:
+  1. Ensure :443 vhost and certs exist on server, enable `ssl`, `rewrite`, `headers`.
+  2. Set env in prod: `ENFORCE_HTTPS=true`, `ENABLE_HSTS=true`.
+  3. Enable Apache redirect/HSTS snippets and reload Apache.
+  4. Verify no redirect loops and headers present via curl.
+- Status: Partially complete; pending server-side enablement and verification.
+
+### [2025-08-12] Server caching headers configured (7.10) + counters updated
+
+- Apache: Added long-term caching for hashed static assets, no-cache for `index.html`, moderate cache for JSON. Includes `Expires` and `Cache-Control` with `immutable` where applicable. `FileETag MTime Size` set.
+- Files changed: `apache-config.conf`.
+- Marked 7.10 as COMPLETED in `IMPROVEMENT_IDEAS.md`.
+- Corrected 5.10 back to PENDING until HTTPS/HSTS are enabled and verified on server.
+- Header counters updated: PENDING 277, COMPLETED 45, Total 13.98%.
+
+### [2025-08-12] Dev deploy workflow: Apache headers automation (HSTS + caching)
+
+- Updated `.github/workflows/deploy-dev.yml` to:
+  - Push a small Apache config fragment to set `Strict-Transport-Security` and caching headers on dev host.
+  - Reload Apache and verify HSTS via curl.
+- Notes:
+  - This complements `apache-config.conf` defaults on the host. It does not affect local dev.
+  - For full TLS redirect, infra must have :443 vhost + certs and enable the redirect snippet (still pending).
+
+### [2025-08-12] Next focus selected — Security (5.10 TLS enforcement + HSTS)
+
+- Rationale: High-impact security hardening with low app-risk; aligns with production readiness.
+- Scope:
+  - Apache (`apache-config.conf`): add HTTP→HTTPS redirect and `Strict-Transport-Security` header for prod; gated by env to avoid affecting dev.
+  - Express (`server/feedback-api/server.js`): enable HSTS via middleware when behind TLS and `ENFORCE_HTTPS=true`.
+- Plan:
+  1. Update `apache-config.conf`: 301 redirect to HTTPS; add `Strict-Transport-Security: max-age=31536000; includeSubDomains; preload` for prod hosts only.
+  2. Update `server/feedback-api/server.js`: add HSTS middleware (helmet or manual header) and optional HTTPS-enforce redirect when `x-forwarded-proto !== 'https'` and `ENFORCE_HTTPS=true`.
+  3. Add env flags: `ENFORCE_HTTPS` and `ENABLE_HSTS` (true in prod only). Document in `docs/ENV_VARS.md`.
+  4. Test locally (flags off), then on dev (no redirects), then on prod-like to verify headers and no loops.
+  5. On success, mark 5.10 as COMPLETED in `IMPROVEMENT_IDEAS.md` and update counters.
+- Status: Pending implementation.

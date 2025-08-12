@@ -13,6 +13,8 @@ Do not commit `.env` files. Secrets must be set in your deployment environment (
 - `ALLOWED_ORIGINS` (comma-separated list, example: `https://dev.exight.in`)
 - `JWT_SECRET` (strong random string; do not commit)
 - `GOOGLE_CLIENT_ID` (same as frontend)
+- `ENFORCE_HTTPS` (set `true` in production behind TLS to 301 redirect http→https)
+- `ENABLE_HSTS` (set `true` in production to add `Strict-Transport-Security` header)
 
 SMTP (Hostinger)
 
@@ -64,4 +66,7 @@ SMTP_HOST=smtp.hostinger.com
 SMTP_PORT=465
 SMTP_USER=feedback@exight.in
 SMTP_PASS=<smtp-password>
+# For production only (leave false locally)
+ENFORCE_HTTPS=false
+ENABLE_HSTS=false
 ```

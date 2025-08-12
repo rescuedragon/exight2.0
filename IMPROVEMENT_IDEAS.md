@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 278  
-<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 44
+[PENDING] - 277  
+<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 45
 
-Total percent complete - 13.66%
+Total percent complete - 13.98%
 
 Rules:
 
@@ -165,7 +165,7 @@ Rules:
 7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 7.8. Defer non-critical scripts and fonts; preconnect to analytics endpoints if used. [PENDING]
 7.9. Use font-display: swap and self-host key fonts where possible for FOUT reduction. [PENDING]
-7.10. Add server-side caching headers for static assets and set long expirations with content-hash filenames. [PENDING]
+7.10. Add server-side caching headers for static assets and set long expirations with content-hash filenames. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 7.11. Audit third-party scripts and remove or lazy-load them if they block rendering. [PENDING]
 7.12. Use requestIdleCallback or setTimeout to move low-priority computations off main thread. [PENDING]
 7.13. Profile React renders with React DevTools and fix expensive renders (memoize components; avoid expensive inline functions). [PENDING]
