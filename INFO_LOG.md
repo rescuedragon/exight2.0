@@ -964,6 +964,13 @@ _This log will be updated with each development session to maintain a complete r
 - Marking 13.1 as [COMPLETED] — no changes needed; requirement already satisfied.
 - Counters updated (10.87%).
 
+### [2025-08-12] Micro-step — Route-level code splitting (7.5)
+
+- Implemented lazy-loaded routes in `src/App.tsx` using `React.lazy` + `Suspense` for `Index`, `TryMe`, `Login`, `NotFound`, `TestSpace`.
+- Build verifies chunked outputs: separate JS files for `Index`, `Login`, `NotFound`, `TestSpace`, and smaller main index bundle.
+- Lint/type-check/build: clean (only existing warnings).
+- Updated `IMPROVEMENT_IDEAS.md` 7.5 to [COMPLETED]; counters updated (11.18%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
