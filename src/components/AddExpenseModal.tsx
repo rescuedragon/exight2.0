@@ -236,7 +236,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           </p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 mt-1">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_theme(1px)_1fr] items-start gap-4 md:gap-6">
             {/* Left Column */}
             <div className="space-y-6">
               {/* Recurring toggle moved to top-left */}
@@ -305,8 +305,8 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     </SelectContent>
                   </Select>
                   {formData.currency !== 'INR' && (
-                    <div className="text-[11px] text-muted-foreground space-y-1">
-                      <div className="flex items-center gap-2">
+                    <div className="text-[11px] text-muted-foreground mt-1">
+                      <div className="flex items-center gap-2 rounded-lg border border-border/40 px-2 py-1 bg-secondary/30">
                         <input
                           type="checkbox"
                           id="lockRate"
@@ -314,20 +314,25 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                           onChange={(e) => setLockRate(e.target.checked)}
                           className="h-3.5 w-3.5 rounded border-border/40"
                         />
-                        <Label htmlFor="lockRate">Lock current FX to INR for this expense</Label>
-                      </div>
-                      <div>
-                        {forexLoading ? (
-                          <span>Fetching FX rate…</span>
-                        ) : forexError ? (
-                          <span className="text-destructive">{forexError}</span>
-                        ) : forexRate ? (
-                          <span>
-                            1 {formData.currency} ≈ {forexRate.toFixed(2)} INR
+                        <span className="inline-flex items-center gap-1">
+                          <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600">
+                            ₹
                           </span>
-                        ) : (
-                          <span>FX rate unavailable</span>
-                        )}
+                          <span className="font-medium">Locked FX</span>
+                        </span>
+                        <span className="ml-auto tabular-nums text-foreground/80">
+                          {forexLoading ? (
+                            <span>…</span>
+                          ) : forexError ? (
+                            <span className="text-destructive">N/A</span>
+                          ) : forexRate ? (
+                            <span>
+                              1 {formData.currency} ≈ {forexRate.toFixed(2)} INR
+                            </span>
+                          ) : (
+                            <span>N/A</span>
+                          )}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -394,6 +399,12 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
 
               {/* Expense Type removed per request (defaults to EMI under the hood) */}
             </div>
+
+            {/* Divider */}
+            <div
+              className="hidden md:block w-px h-full bg-gradient-to-b from-transparent via-border/80 to-transparent"
+              aria-hidden
+            />
 
             {/* Right Column */}
             <div className="space-y-5">

@@ -73,6 +73,9 @@
 body {
   color: hsl(var(--foreground));
   background: hsl(var(--background));
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', Inter, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
 }
 
 /* Premium Card Styles */
