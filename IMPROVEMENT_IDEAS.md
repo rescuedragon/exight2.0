@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 292  
-[COMPLETED] - 30
+[PENDING] - 291  
+[COMPLETED] - 31
 
-Total percent complete - 9.32%
+Total percent complete - 9.63%
 
 Rules:
 
@@ -86,7 +86,7 @@ Rules:
    3.2. Add Prettier integration and pre-commit hook to format before commits. [COMPLETED]
    3.3. Add Husky pre-commit hooks for lint-staged to run ESLint and tests. [COMPLETED]
    3.4. Enforce no-explicit-any unless necessary; document exceptions. [COMPLETED]
-   3.5. Run static analysis tools; use TypeScript strict: true and fix resulting errors. [PENDING]
+   3.5. Run static analysis tools; use TypeScript strict: true and fix resulting errors. [COMPLETED]
    3.6. Require type generation for API shapes (OpenAPI or typed clients) where possible. [PENDING]
    3.7. Replace console.log with a logging abstraction that can be disabled in prod. [COMPLETED]
    3.8. Remove dead code with automated checks (unused exports, dead imports). [PENDING]

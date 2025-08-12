@@ -920,6 +920,13 @@ _This log will be updated with each development session to maintain a complete r
 - Ran lint: 0 errors (only hook/fast-refresh warnings remain). No functional changes.
 - Updated `IMPROVEMENT_IDEAS.md` 3.7 to [COMPLETED]; counters updated (9.32%).
 
+### [2025-08-12] Micro-step — TypeScript strict mode (3.5)
+
+- Enabled `strict: true`, `noImplicitAny: true`, and `strictNullChecks: true` in `tsconfig.app.json` / root `tsconfig.json`.
+- Type-check run: `npx tsc --noEmit` → 0 errors.
+- No code changes required; existing types are compatible.
+- Updated `IMPROVEMENT_IDEAS.md` 3.5 to [COMPLETED]; counters updated (9.63%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
