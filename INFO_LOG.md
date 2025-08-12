@@ -906,6 +906,13 @@ _This log will be updated with each development session to maintain a complete r
 - README: added Screenshots section referencing placeholder assets and live dev URL.
 - No functional code changes.
 
+### [2025-08-12] Micro-step — Enforce no-explicit-any and document exceptions
+
+- Enabled ESLint rule `@typescript-eslint/no-explicit-any` as error in `eslint.config.js`.
+- Ran lint: 0 errors, 12 warnings (hooks and fast-refresh warnings only). No `any` violations present.
+- Documented exceptions policy in `CONVENTIONS.md` (prefer `unknown` + type guards; if unavoidable, single-line disable with rationale).
+- Updated `IMPROVEMENT_IDEAS.md` 3.4 to [COMPLETED]; counters updated.
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).

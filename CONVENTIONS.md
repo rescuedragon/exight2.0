@@ -278,7 +278,7 @@ src/
 - Use strict mode
 - Prefer interfaces over types for objects
 - Use meaningful type names
-- Avoid `any` type
+- Avoid `any` type (enforced by ESLint). If absolutely necessary for 3rd-party APIs, use `unknown` + a type guard, or isolate `any` in a tiny adapter with a comment `// eslint-disable-next-line @typescript-eslint/no-explicit-any` and rationale.
 - Use union types for better type safety
 
 ```typescript
@@ -300,6 +300,12 @@ interface Expense {
   date: any;
 }
 ```
+
+#### Exceptions policy
+
+- Only allowed in: interop/adapters for third-party libs with untyped payloads.
+- Prefer `unknown` and refine with type guards.
+- If you must use `any`, add a one-line rationale above and disable the rule for that line only.
 
 ### React Components
 
