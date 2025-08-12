@@ -35,7 +35,6 @@ import {
 } from 'lucide-react';
 import { Expense, ExpenseType } from '@/types/expense';
 import { useToast } from '@/hooks/use-toast';
-import { ActiveExpensesModal } from '@/components/ActiveExpensesModal';
 
 interface ExpenseDashboardProps {
   expenses: Expense[];
@@ -90,44 +89,36 @@ export const ExpenseDashboard = memo(
     const [partialPayment, setPartialPayment] = useState('');
     const [isRecurringExpanded, setIsRecurringExpanded] = useState(true);
     const [isFixedTimeExpanded, setIsFixedTimeExpanded] = useState(true);
-    const [showManageModal, setShowManageModal] = useState(false);
     const { toast } = useToast();
 
     // Memoized data filtering and calculations
-    const { activeExpenses, recurringExpenses, fixedTimeExpenses, completedExpenses } =
-      useMemo(() => {
-        const activeExpenses = expenses.filter((expense) => {
-          // Show recurring expenses always
-          if (expense.isRecurring) {
-            return true;
-          }
+    const { activeExpenses, recurringExpenses, fixedTimeExpenses } = useMemo(() => {
+      const activeExpenses = expenses.filter((expense) => {
+        // Show recurring expenses always
+        if (expense.isRecurring) {
+          return true;
+        }
 
-          // For non-recurring expenses, be more permissive - show if:
-          // 1. Has remaining months > 0, OR
-          // 2. Has remaining amount > 0, OR
-          // 3. Has total months (new expense), OR
-          // 4. No remaining data but has total months (newly created)
-          const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
-          const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
-          const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
-          const isNewExpense =
-            hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
+        // For non-recurring expenses, be more permissive - show if:
+        // 1. Has remaining months > 0, OR
+        // 2. Has remaining amount > 0, OR
+        // 3. Has total months (new expense), OR
+        // 4. No remaining data but has total months (newly created)
+        const hasRemainingMonths = expense.remainingMonths && expense.remainingMonths > 0;
+        const hasRemainingAmount = expense.remainingAmount && expense.remainingAmount > 0;
+        const hasTotalMonths = expense.totalMonths && expense.totalMonths > 0;
+        const isNewExpense =
+          hasTotalMonths && (!expense.remainingMonths || expense.remainingMonths > 0);
 
-          const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
-          return isActive;
-        });
+        const isActive = hasRemainingMonths || hasRemainingAmount || isNewExpense;
+        return isActive;
+      });
 
-        const recurringExpenses = activeExpenses.filter((expense) => expense.isRecurring);
-        const fixedTimeExpenses = activeExpenses.filter((expense) => !expense.isRecurring);
+      const recurringExpenses = activeExpenses.filter((expense) => expense.isRecurring);
+      const fixedTimeExpenses = activeExpenses.filter((expense) => !expense.isRecurring);
 
-        const completedExpenses = expenses.filter(
-          (expense) =>
-            !expense.isRecurring &&
-            ((expense.remainingMonths ?? 0) <= 0 || (expense.remainingAmount ?? 0) <= 0),
-        );
-
-        return { activeExpenses, recurringExpenses, fixedTimeExpenses, completedExpenses };
-      }, [expenses]);
+      return { activeExpenses, recurringExpenses, fixedTimeExpenses };
+    }, [expenses]);
 
     // Memoized currency formatter
     const formatCurrency = useCallback(
@@ -419,18 +410,7 @@ export const ExpenseDashboard = memo(
 
     return (
       <div className="space-y-6">
-        {/* Header - Completed expenses info only */}
-        {expenses.length > activeExpenses.length && (
-          <div className="flex justify-between items-center">
-            <p className="text-sm text-muted-foreground">
-              {expenses.length - activeExpenses.length} completed expense
-              {expenses.length - activeExpenses.length !== 1 ? 's' : ''} in history
-            </p>
-            <Button variant="outline" size="sm" onClick={() => setShowManageModal(true)}>
-              View
-            </Button>
-          </div>
-        )}
+        {/* Dashboard intentionally does not surface completed expenses */}
 
         {/* Recurring Expenses Section */}
         {recurringExpenses.length > 0 && (
@@ -562,50 +542,21 @@ export const ExpenseDashboard = memo(
           </div>
         )}
 
-        {/* Empty or Completed-only State */}
+        {/* Empty state when there are no active expenses */}
         {activeExpenses.length === 0 && (
-          <div className="space-y-6">
-            {completedExpenses.length > 0 ? (
-              <div className="backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl overflow-hidden shadow-2xl">
-                <div className="flex items-center justify-between p-6">
-                  <div className="flex items-center gap-3">
-                    <CheckCircle className="h-5 w-5 text-emerald-accent" />
-                    <h3 className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-200 bg-clip-text text-transparent tracking-tight">
-                      Completed Expenses
-                    </h3>
-                  </div>
-                  <Button variant="outline" size="sm" onClick={() => setShowManageModal(true)}>
-                    Manage
-                  </Button>
-                </div>
-                <div className="border-t border-white/20 dark:border-gray-700/30">
-                  <div className="p-6 space-y-4">
-                    {completedExpenses.map((expense, index) => renderExpenseCard(expense, index))}
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
-                  <Coins className="h-12 w-12 text-blue-accent" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground mb-3">No expenses added yet</h3>
-                <p className="text-muted-foreground text-lg mb-6 max-w-md">
-                  Start tracking your EMIs and recurring expenses to get insights into your
-                  financial commitments
-                </p>
-              </div>
-            )}
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <div className="p-6 bg-gradient-to-br from-blue-accent/10 to-purple-accent/10 rounded-3xl mb-6 shadow-lg">
+              <Coins className="h-12 w-12 text-blue-accent" />
+            </div>
+            <h3 className="text-2xl font-bold text-foreground mb-3">No active expenses</h3>
+            <p className="text-muted-foreground text-lg mb-6 max-w-md">
+              You're all clear. Add a recurring expense (rent, subscriptions) or an EMI to start
+              tracking.
+            </p>
           </div>
         )}
 
-        {showManageModal && (
-          <ActiveExpensesModal
-            expenses={expenses}
-            onClose={() => setShowManageModal(false)}
-            onUpdateExpense={onUpdateExpense}
-          />
-        )}
+        {/* Manage modal removed from dashboard to keep focus on active expenses */}
       </div>
     );
   },
