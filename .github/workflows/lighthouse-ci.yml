@@ -1,0 +1,21 @@
+name: Lighthouse CI (dev)
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  lhci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Audit dev.exight.in with Lighthouse
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://dev.exight.in/
+          configPath: .lighthouse/ci-config.json
+          uploadArtifacts: true
+          runs: 2
+          temporaryPublicStorage: true
+

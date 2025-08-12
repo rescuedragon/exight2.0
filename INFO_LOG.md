@@ -2362,6 +2362,13 @@ These optimizations should significantly improve the application's performance, 
 - Style: soft gradient background (teal→green), subtle drop shadow, clean lines optimized for small sizes.
 - No breaking changes; index.html already points to `/favicon.svg`.
 
+### [2025-08-12] CI — Lighthouse budgets + Dependabot
+
+- Added `/.github/workflows/lighthouse-ci.yml` + `/.lighthouse/ci-config.json` with basic budgets and assertions.
+- Added `/.github/dependabot.yml` for weekly npm and Actions updates.
+- Updated `README.md` with CI badges.
+- Updated `IMPROVEMENT_IDEAS.md`: marked 7.2 and 14.8 as COMPLETED; counters updated to PENDING 275, COMPLETED 47 (14.58%).
+
 ### [2025-08-12] Next focus selected — Security (5.10 TLS enforcement + HSTS)
 
 - Rationale: High-impact security hardening with low app-risk; aligns with production readiness.

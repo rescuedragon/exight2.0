@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 277  
-<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 45
+[PENDING] - 275  
+<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 47
 
-Total percent complete - 13.98%
+Total percent complete - 14.58%
 
 Rules:
 
@@ -157,25 +157,25 @@ Rules:
    7.1. Compare lighthouse_before.json and lighthouse_after.json and add a changelog of what improved. [PENDING]
    GitHub
 
-7.2. Add Lighthouse CI step to enforce performance regressions aren’t introduced on PRs. [PENDING]
-7.3. Add a budget check (max JS payload, image size) as part of CI. [PENDING]
-7.4. Remove or lazy-load heavy libraries (e.g., only import Recharts on analytics route). [PENDING]
-7.5. Setup route-level code splitting and verify network waterfall for initial route. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-7.6. Convert images to modern formats (AVIF/WebP) and serve responsive sizes with srcset. [PENDING]
-7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-7.8. Defer non-critical scripts and fonts; preconnect to analytics endpoints if used. [PENDING]
-7.9. Use font-display: swap and self-host key fonts where possible for FOUT reduction. [PENDING]
-7.10. Add server-side caching headers for static assets and set long expirations with content-hash filenames. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-7.11. Audit third-party scripts and remove or lazy-load them if they block rendering. [PENDING]
-7.12. Use requestIdleCallback or setTimeout to move low-priority computations off main thread. [PENDING]
-7.13. Profile React renders with React DevTools and fix expensive renders (memoize components; avoid expensive inline functions). [PENDING]
-7.14. Replace heavy charting with lighter rendering or virtualized views if datasets grow. [PENDING]
-7.15. Use IntersectionObserver for lazy load of below-the-fold content. [PENDING]
-7.16. Run source-map-explorer or rollup-plugin-visualizer to understand heavy modules. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-7.17. Establish performance monitoring (Sentry performance, NewRelic, or lightweight RUM) to track TTFB, FCP, TTI. [PENDING]
-7.18. Add memory leak checks for long-lived pages (profile in Chrome, ensure no accumulating timers). [PENDING]
-7.19. Reduce JS runtime by removing polyfills targeted at old browsers if not needed. [PENDING]
-7.20. Precompute projections server-side (or worker) to reduce client CPU on analytics. [PENDING]
+   7.2. Add Lighthouse CI step to enforce performance regressions aren’t introduced on PRs. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   7.3. Add a budget check (max JS payload, image size) as part of CI. [PENDING]
+   7.4. Remove or lazy-load heavy libraries (e.g., only import Recharts on analytics route). [PENDING]
+   7.5. Setup route-level code splitting and verify network waterfall for initial route. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   7.6. Convert images to modern formats (AVIF/WebP) and serve responsive sizes with srcset. [PENDING]
+   7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   7.8. Defer non-critical scripts and fonts; preconnect to analytics endpoints if used. [PENDING]
+   7.9. Use font-display: swap and self-host key fonts where possible for FOUT reduction. [PENDING]
+   7.10. Add server-side caching headers for static assets and set long expirations with content-hash filenames. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   7.11. Audit third-party scripts and remove or lazy-load them if they block rendering. [PENDING]
+   7.12. Use requestIdleCallback or setTimeout to move low-priority computations off main thread. [PENDING]
+   7.13. Profile React renders with React DevTools and fix expensive renders (memoize components; avoid expensive inline functions). [PENDING]
+   7.14. Replace heavy charting with lighter rendering or virtualized views if datasets grow. [PENDING]
+   7.15. Use IntersectionObserver for lazy load of below-the-fold content. [PENDING]
+   7.16. Run source-map-explorer or rollup-plugin-visualizer to understand heavy modules. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   7.17. Establish performance monitoring (Sentry performance, NewRelic, or lightweight RUM) to track TTFB, FCP, TTI. [PENDING]
+   7.18. Add memory leak checks for long-lived pages (profile in Chrome, ensure no accumulating timers). [PENDING]
+   7.19. Reduce JS runtime by removing polyfills targeted at old browsers if not needed. [PENDING]
+   7.20. Precompute projections server-side (or worker) to reduce client CPU on analytics. [PENDING]
 
 8. Testing (Unit / Integration / E2E)
    8.1. Add unit tests for all utility functions (formatters, math logic for EMI calculations). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
@@ -261,7 +261,7 @@ Rules:
     14.5. Rate-limit feedback endpoint and add spam detection heuristics (CAPTCHA if public). [PENDING]
     14.6. Add secure headers via server (CSP, X-Frame-Options, X-XSS-Protection). [PENDING]
     14.7. Implement least-privilege rules for any deployed services and rotate keys periodically. [PENDING]
-    14.8. Add dependency scanning in CI to detect vulnerable packages (Dependabot or Snyk). [PENDING]
+    14.8. Add dependency scanning in CI to detect vulnerable packages (Dependabot or Snyk). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
     14.9. Add a data deletion flow or “wipe my data” option for privacy-minded users. [PENDING]
     14.10. Review logs to redact PII (emails, account numbers) before shipping to external services. [PENDING]
 

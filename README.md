@@ -1,5 +1,9 @@
 # Exight - Expense Tracker
 
+[![CI & Lint](https://img.shields.io/github/actions/workflow/status/rescuedragon/exight2.0/test.yml?branch=dev)](https://github.com/rescuedragon/exight2.0/actions)
+[![Deploy Dev](https://img.shields.io/github/actions/workflow/status/rescuedragon/exight2.0/deploy-dev.yml?label=deploy-dev&branch=dev)](https://github.com/rescuedragon/exight2.0/actions)
+[![Lighthouse CI](https://img.shields.io/badge/Lighthouse-CI-blue)](.github/workflows/lighthouse-ci.yml)
+
 **Insights for your expenses.** 🚀 Auto-deployment enabled!
 
 A modern, intuitive expense tracking application built with React, TypeScript, and Tailwind CSS. Track your EMIs, recurring expenses, and get detailed insights into your financial commitments.
