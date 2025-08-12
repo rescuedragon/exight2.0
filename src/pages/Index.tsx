@@ -1,9 +1,22 @@
-import React, { useState, useEffect, useRef, Suspense, useMemo, useCallback, memo } from 'react';
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  Suspense,
+  useMemo,
+  useCallback,
+  memo,
+  startTransition,
+} from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { InfoBar } from '@/components/InfoBar';
-import { ExpenseDashboard } from '@/components/ExpenseDashboard';
-import { LoansDashboard } from '@/components/LoansDashboard';
+const ExpenseDashboard = React.lazy(() =>
+  import('@/components/ExpenseDashboard').then((m) => ({ default: m.ExpenseDashboard })),
+);
+const LoansDashboard = React.lazy(() =>
+  import('@/components/LoansDashboard').then((m) => ({ default: m.LoansDashboard })),
+);
 const DetailedView = React.lazy(() =>
   import('@/components/DetailedView').then((m) => ({ default: m.DetailedView })),
 );
@@ -552,7 +565,7 @@ const TryMe = memo(() => {
           <div className="flex justify-center flex-1">
             <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
-                onClick={() => setActiveTab('expenses')}
+                onClick={() => startTransition(() => setActiveTab('expenses'))}
                 className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'expenses'
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
@@ -565,7 +578,7 @@ const TryMe = memo(() => {
                 Expenses
               </button>
               <button
-                onClick={() => setActiveTab('loans')}
+                onClick={() => startTransition(() => setActiveTab('loans'))}
                 className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'loans'
                     ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
@@ -633,13 +646,17 @@ const TryMe = memo(() => {
                     isPrivacyMode={isPrivacyMode}
                   />
 
-                  {/* Dashboard */}
+                  {/* Dashboard (lazy) */}
                   <div>
-                    <ExpenseDashboard
-                      expenses={activeExpenses}
-                      onUpdateExpense={handleUpdateExpense}
-                      isPrivacyMode={isPrivacyMode}
-                    />
+                    <Suspense
+                      fallback={<div className="h-40 rounded-2xl bg-muted/40 animate-pulse" />}
+                    >
+                      <ExpenseDashboard
+                        expenses={activeExpenses}
+                        onUpdateExpense={handleUpdateExpense}
+                        isPrivacyMode={isPrivacyMode}
+                      />
+                    </Suspense>
                   </div>
                 </div>
               </div>
@@ -656,13 +673,17 @@ const TryMe = memo(() => {
                     isPrivacyMode={isPrivacyMode}
                   />
 
-                  {/* Loans Dashboard */}
+                  {/* Loans Dashboard (lazy) */}
                   <div>
-                    <LoansDashboard
-                      loans={activeLoans}
-                      onUpdateLoan={handleUpdateLoan}
-                      isPrivacyMode={isPrivacyMode}
-                    />
+                    <Suspense
+                      fallback={<div className="h-40 rounded-2xl bg-muted/40 animate-pulse" />}
+                    >
+                      <LoansDashboard
+                        loans={activeLoans}
+                        onUpdateLoan={handleUpdateLoan}
+                        isPrivacyMode={isPrivacyMode}
+                      />
+                    </Suspense>
                   </div>
                 </div>
               </div>
@@ -881,7 +902,7 @@ const Index = () => {
           <div className="flex justify-center flex-1">
             <div className="grid w-auto grid-cols-2 gap-1 bg-white/10 backdrop-blur-sm rounded-lg p-1 shadow-lg border border-white/20">
               <button
-                onClick={() => setActiveTab('expenses')}
+                onClick={() => startTransition(() => setActiveTab('expenses'))}
                 className={`flex items-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'expenses'
                     ? 'bg-gradient-to-r from-blue-500 to-purple-600 text-white shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 transform scale-105'
@@ -894,7 +915,7 @@ const Index = () => {
                 Expenses
               </button>
               <button
-                onClick={() => setActiveTab('loans')}
+                onClick={() => startTransition(() => setActiveTab('loans'))}
                 className={`flex items-center justify-center gap-2 px-6 py-2 rounded-md text-sm font-medium transition-all duration-150 ease-out ${
                   activeTab === 'loans'
                     ? 'bg-gradient-to-r from-emerald-500 to-teal-600 text-white shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transform scale-105'
