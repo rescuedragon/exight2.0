@@ -227,21 +227,21 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl w-[98vw] sm:w-[92vw] max-h-[90vh] overflow-y-auto rounded-[20px] sm:rounded-[28px] shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
-        <DialogHeader className="pb-2">
-          <DialogTitle className="text-3xl font-extrabold gradient-text animate-gradient-x">
+        <DialogHeader className="pb-1">
+          <DialogTitle className="text-2xl sm:text-3xl font-extrabold gradient-text animate-gradient-x">
             Add New Expense
           </DialogTitle>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Track payments with flexible frequency and optional remaining balance auto-calc
           </p>
         </DialogHeader>
-        <form onSubmit={handleSubmit} className="space-y-8 mt-2">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <form onSubmit={handleSubmit} className="space-y-6 mt-1">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
             {/* Left Column */}
             <div className="space-y-6">
               {/* Recurring toggle moved to top-left */}
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-4 bg-gradient-to-r from-blue-accent/10 to-purple-accent/10 rounded-xl border border-blue-accent/20">
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2 p-3 bg-gradient-to-r from-blue-accent/10 to-purple-accent/10 rounded-xl border border-blue-accent/20">
                   <input
                     type="checkbox"
                     id="isRecurring"
@@ -249,15 +249,15 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, isRecurring: e.target.checked }))
                     }
-                    className="h-5 w-5 rounded border-border/40 text-blue-accent focus:ring-blue-accent/20"
+                    className="h-4 w-4 rounded border-border/40 text-blue-accent focus:ring-blue-accent/20"
                   />
-                  <Label htmlFor="isRecurring" className="text-sm font-semibold text-foreground">
+                  <Label htmlFor="isRecurring" className="text-xs font-semibold text-foreground">
                     Recurring
                   </Label>
                 </div>
               </div>
-              <div className="space-y-3">
-                <Label htmlFor="name" className="text-sm font-semibold text-foreground">
+              <div className="space-y-2">
+                <Label htmlFor="name" className="text-xs font-semibold text-foreground">
                   Expense Name *
                 </Label>
                 <Input
@@ -265,13 +265,13 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                   value={formData.name}
                   onChange={(e) => setFormData((prev) => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g., Home Loan EMI"
-                  className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
+                  className="bg-background border-border/40 rounded-xl h-10 text-base focus:ring-2 focus:ring-blue-accent/20"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                <div className="space-y-3">
-                  <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
+              <div className="grid grid-cols-2 gap-3 sm:gap-3">
+                <div className="space-y-2">
+                  <Label htmlFor="amount" className="text-xs font-semibold text-foreground">
                     Amount *
                   </Label>
                   <Input
@@ -280,11 +280,11 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     value={formData.amount}
                     onChange={(e) => setFormData((prev) => ({ ...prev, amount: e.target.value }))}
                     placeholder="50000"
-                    className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
+                    className="bg-background border-border/40 rounded-xl h-10 text-base focus:ring-2 focus:ring-blue-accent/20"
                   />
                 </div>
-                <div className="space-y-3">
-                  <Label htmlFor="currency" className="text-sm font-semibold text-foreground">
+                <div className="space-y-2">
+                  <Label htmlFor="currency" className="text-xs font-semibold text-foreground">
                     Currency
                   </Label>
                   <Select
@@ -293,7 +293,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                       setFormData((prev) => ({ ...prev, currency: value }))
                     }
                   >
-                    <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
+                    <SelectTrigger className="bg-background border-border/40 rounded-xl h-10 text-base">
                       <SelectValue placeholder="Choose currency" />
                     </SelectTrigger>
                     <SelectContent className="premium-card border-border/40 radix-select-content">
@@ -305,14 +305,14 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     </SelectContent>
                   </Select>
                   {formData.currency !== 'INR' && (
-                    <div className="text-xs text-muted-foreground space-y-2">
+                    <div className="text-[11px] text-muted-foreground space-y-1">
                       <div className="flex items-center gap-2">
                         <input
                           type="checkbox"
                           id="lockRate"
                           checked={lockRate}
                           onChange={(e) => setLockRate(e.target.checked)}
-                          className="h-4 w-4 rounded border-border/40"
+                          className="h-3.5 w-3.5 rounded border-border/40"
                         />
                         <Label htmlFor="lockRate">Lock current FX to INR for this expense</Label>
                       </div>
@@ -335,15 +335,15 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
               </div>
 
               {/* Frequency selector */}
-              <div className="space-y-3">
-                <Label className="text-sm font-semibold text-foreground">Expense Frequency</Label>
+              <div className="space-y-2">
+                <Label className="text-xs font-semibold text-foreground">Expense Frequency</Label>
                 <Select
                   value={formData.frequency}
                   onValueChange={(value: Frequency) =>
                     setFormData((prev) => ({ ...prev, frequency: value }))
                   }
                 >
-                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-base sm:text-lg">
+                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-10 text-sm sm:text-base">
                     <SelectValue placeholder="Monthly" />
                   </SelectTrigger>
                   <SelectContent className="premium-card border-border/40 radix-select-content">
@@ -356,7 +356,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     <SelectItem value="custom">Custom…</SelectItem>
                   </SelectContent>
                 </Select>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground">
                   We'll normalize this to a monthly amount for dashboards.
                 </p>
                 {formData.frequency === 'custom' && (
@@ -371,7 +371,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                         onChange={(e) =>
                           setFormData((prev) => ({ ...prev, intervalDays: e.target.value }))
                         }
-                        className="bg-background border-border/40 rounded-xl h-12"
+                        className="bg-background border-border/40 rounded-xl h-10"
                       />
                     </div>
                   </div>
@@ -384,9 +384,9 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     onChange={(e) =>
                       setFormData((prev) => ({ ...prev, equateMonthly: e.target.checked }))
                     }
-                    className="h-4 w-4 rounded border-border/40"
+                    className="h-3.5 w-3.5 rounded border-border/40"
                   />
-                  <Label htmlFor="equateMonthly" className="text-sm">
+                  <Label htmlFor="equateMonthly" className="text-xs">
                     Equate as monthly transaction (annualized/12)
                   </Label>
                 </div>
@@ -396,9 +396,9 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
             </div>
 
             {/* Right Column */}
-            <div className="space-y-6">
-              <div className="space-y-3">
-                <Label htmlFor="deductionDay" className="text-sm font-semibold text-foreground">
+            <div className="space-y-5">
+              <div className="space-y-2">
+                <Label htmlFor="deductionDay" className="text-xs font-semibold text-foreground">
                   Deduction Day (defaults to 1st)
                 </Label>
                 <Input
@@ -411,7 +411,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     setFormData((prev) => ({ ...prev, deductionDay: e.target.value }))
                   }
                   placeholder="1 (default)"
-                  className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
+                  className="bg-background border-border/40 rounded-xl h-10 text-base focus:ring-2 focus:ring-blue-accent/20"
                 />
               </div>
 
@@ -419,8 +419,8 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
 
               {!formData.isRecurring && (
                 <>
-                  <div className="space-y-3">
-                    <Label htmlFor="totalMonths" className="text-sm font-semibold text-foreground">
+                  <div className="space-y-2">
+                    <Label htmlFor="totalMonths" className="text-xs font-semibold text-foreground">
                       Total Months *
                     </Label>
                     <Input
@@ -431,15 +431,15 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                         setFormData((prev) => ({ ...prev, totalMonths: e.target.value }))
                       }
                       placeholder="240"
-                      className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
+                      className="bg-background border-border/40 rounded-xl h-10 text-base focus:ring-2 focus:ring-blue-accent/20"
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                    <div className="space-y-3">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-3">
+                    <div className="space-y-2">
                       <Label
                         htmlFor="remainingMonths"
-                        className="text-sm font-semibold text-foreground"
+                        className="text-xs font-semibold text-foreground"
                       >
                         Repaid Months
                       </Label>
@@ -451,13 +451,13 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                           setFormData((prev) => ({ ...prev, remainingMonths: e.target.value }))
                         }
                         placeholder="0 (how many months already paid)"
-                        className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
+                        className="bg-background border-border/40 rounded-xl h-10 text-base focus:ring-2 focus:ring-blue-accent/20"
                       />
                     </div>
-                    <div className="space-y-3">
+                    <div className="space-y-2">
                       <Label
                         htmlFor="remainingAmount"
-                        className="text-sm font-semibold text-foreground"
+                        className="text-xs font-semibold text-foreground"
                       >
                         Remaining Amount
                       </Label>
@@ -469,7 +469,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                           setFormData((prev) => ({ ...prev, remainingAmount: e.target.value }))
                         }
                         placeholder="Auto calculated"
-                        className="bg-background border-border/40 rounded-xl h-12 text-lg focus:ring-2 focus:ring-blue-accent/20"
+                        className="bg-background border-border/40 rounded-xl h-10 text-base focus:ring-2 focus:ring-blue-accent/20"
                       />
                     </div>
                   </div>
@@ -478,18 +478,18 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
             </div>
           </div>
 
-          <div className="flex justify-end space-x-4 pt-6 border-t border-border/20">
+          <div className="flex justify-end space-x-3 pt-5 border-t border-border/20">
             <Button
               type="button"
               variant="outline"
               onClick={() => setOpen(false)}
-              className="rounded-full px-8 h-12"
+              className="rounded-full px-6 h-10"
             >
               Cancel
             </Button>
             <Button
               type="submit"
-              className="rounded-full px-8 h-12 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+              className="rounded-full px-6 h-10 bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             >
               Save Expense
             </Button>
