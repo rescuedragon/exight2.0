@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 285  
-[COMPLETED] - 37
+[PENDING] - 281  
+[COMPLETED] - 41
 
-Total percent complete - 11.49%
+Total percent complete - 12.72%
 
 Rules:
 
@@ -327,8 +327,8 @@ Rules:
 
 22. Marketing & Distribution
     22.1. Prepare a short landing page that explains benefits in 3 bullets and CTA to repo or deployed demo. [PENDING]
-    22.2. Add social preview images (og:image) and meta tags to index.html. [PENDING]
-    22.3. Ensure index.html has helpful meta title and description for SEO. [PENDING]
+    22.2. Add social preview images (og:image) and meta tags to index.html. [COMPLETED]
+    22.3. Ensure index.html has helpful meta title and description for SEO. [COMPLETED]
     22.4. Add demo deployment (Vercel/Netlify) with a seeded demo mode for testers. [PENDING]
     22.5. Create a short YouTube demo and GIFs for the README. [PENDING]
     22.6. Add analytics to measure traffic on the demo page and UI flows visitors use. [PENDING]
@@ -375,9 +375,9 @@ Rules:
 
 26. Miscellaneous very-fine-grain improvements (micro-nits)
     26.1. Add a favicon and multiple sizes for better brand recognition in tabs (16, 32, 48). [PENDING]
-    26.2. Ensure meta viewport tag is present and optimized in index.html. [PENDING]
+    26.2. Ensure meta viewport tag is present and optimized in index.html. [COMPLETED]
     26.3. Add concise file headers for license and copyright in top-level files. [PENDING]
-    26.4. Ensure index.html includes theme-color meta tag for mobile browsers. [PENDING]
+    26.4. Ensure index.html includes theme-color meta tag for mobile browsers. [COMPLETED]
     26.5. Hard-code critical CSS into critical path for first paint if necessary. [PENDING]
     26.6. Reduce console noise in dev mode by silencing non-actionable warnings. [PENDING]
     26.7. Add server and client test credentials for local dev only and document them. [PENDING]

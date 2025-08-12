@@ -977,6 +977,12 @@ _This log will be updated with each development session to maintain a complete r
 - Production CSS output (build) shows purge active: `dist/css/index-*.css` ≈ 116kB and gz ≈ 17kB.
 - Marking 7.7 as [COMPLETED]. Counters updated (11.49%).
 
+### [2025-08-12] Micro-step — Meta tags & social preview (22.2, 22.3, 26.2, 26.4)
+
+- Updated `index.html` to include Open Graph/Twitter image (`/architecture-diagram.svg`).
+- Verified viewport and theme-color tags present; SEO title/description set.
+- Updated `IMPROVEMENT_IDEAS.md` 22.2, 22.3, 26.2, 26.4 to [COMPLETED]; counters updated (12.72%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
