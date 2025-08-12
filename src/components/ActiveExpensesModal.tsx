@@ -31,6 +31,7 @@ import {
   AlertCircle,
 } from 'lucide-react';
 import { Expense, ExpenseType } from '@/types/expense';
+import { log } from '@/lib/logger';
 import { useToast } from '@/hooks/use-toast';
 import { useModal } from '@/contexts/ModalContext';
 
@@ -146,7 +147,7 @@ export const ActiveExpensesModal = ({
     const remainingMonths = parseInt(editForm.remainingMonths);
     const calculatedRemainingAmount = monthlyPayment * remainingMonths;
 
-    console.log('Edit Debug:', {
+    log('Edit Debug:', {
       monthlyPayment,
       remainingMonths,
       calculatedRemainingAmount,
@@ -165,7 +166,7 @@ export const ActiveExpensesModal = ({
       remainingAmount: editForm.isRecurring ? undefined : calculatedRemainingAmount,
     };
 
-    console.log('Updated Expense:', updatedExpense);
+    log('Updated Expense:', updatedExpense);
 
     onUpdateExpense(updatedExpense);
     setEditingExpense(null);

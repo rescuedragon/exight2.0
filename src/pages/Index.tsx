@@ -16,6 +16,7 @@ import { ThemeToggle } from '@/components/ThemeToggle';
 import { useModal } from '@/contexts/ModalContext';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '@/lib/api';
+import { error as logError } from '@/lib/logger';
 import {
   Wallet,
   HandCoins,
@@ -746,7 +747,7 @@ const Index = () => {
       const created = await apiService.createExpense(newExpenseData);
       setExpenses((prev) => [created, ...prev]);
     } catch (e) {
-      console.error('Create expense failed', e);
+      logError('Create expense failed', e);
     }
   };
 
@@ -760,7 +761,7 @@ const Index = () => {
       const created = await apiService.createLoan(newLoanData);
       setLoans((prev) => [created, ...prev]);
     } catch (e) {
-      console.error('Create loan failed', e);
+      logError('Create loan failed', e);
     }
   };
 
@@ -769,7 +770,7 @@ const Index = () => {
       await apiService.deleteExpense(expenseId);
       setExpenses((prev) => prev.filter((expense) => String(expense.id) !== String(expenseId)));
     } catch (e) {
-      console.error('Delete expense failed', e);
+      logError('Delete expense failed', e);
     }
   };
 
@@ -780,7 +781,7 @@ const Index = () => {
         prev.map((expense) => (String(expense.id) === String(saved.id) ? saved : expense)),
       );
     } catch (e) {
-      console.error('Update expense failed', e);
+      logError('Update expense failed', e);
     }
   };
 
@@ -792,7 +793,7 @@ const Index = () => {
     try {
       await apiService.logout();
     } catch (error) {
-      console.error('Logout API call failed:', error);
+      logError('Logout API call failed:', error);
     } finally {
       localStorage.removeItem('authToken');
       localStorage.removeItem('lastLoginDate');

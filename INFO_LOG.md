@@ -913,6 +913,13 @@ _This log will be updated with each development session to maintain a complete r
 - Documented exceptions policy in `CONVENTIONS.md` (prefer `unknown` + type guards; if unavoidable, single-line disable with rationale).
 - Updated `IMPROVEMENT_IDEAS.md` 3.4 to [COMPLETED]; counters updated.
 
+### [2025-08-12] Micro-step — Swap console.\* to logger (3.7)
+
+- Replaced direct console calls in `NotFound.tsx`, `InfoBar.tsx`, `ActiveExpensesModal.tsx`, `DeleteLogoboxDemo.tsx`, `Login.tsx`, and `pages/Index.tsx` with `src/lib/logger.ts` (`log`, `warn`, `error`).
+- Logger already suppresses output in production builds.
+- Ran lint: 0 errors (only hook/fast-refresh warnings remain). No functional changes.
+- Updated `IMPROVEMENT_IDEAS.md` 3.7 to [COMPLETED]; counters updated (9.32%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).

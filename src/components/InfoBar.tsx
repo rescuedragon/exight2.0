@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { log } from '@/lib/logger';
 import { IndianRupee } from 'lucide-react';
 import { Expense } from '@/types/expense';
 import { MonthlyExpensesModal } from '@/components/MonthlyExpensesModal';
@@ -23,7 +24,7 @@ export const InfoBar = ({
   const [showActiveModal, setShowActiveModal] = useState(false);
 
   // Filter to show only active expenses
-  console.log('InfoBar - All expenses:', expenses);
+  log('InfoBar - All expenses:', expenses);
 
   const activeExpenses = expenses.filter((expense) => {
     if (expense.isRecurring) return true;
@@ -38,7 +39,7 @@ export const InfoBar = ({
     return hasRemainingMonths || hasRemainingAmount || isNewExpense;
   });
 
-  console.log('InfoBar - Active expenses:', activeExpenses);
+  log('InfoBar - Active expenses:', activeExpenses);
 
   const totalMonthly = activeExpenses.reduce((sum, expense) => sum + expense.amount, 0);
 

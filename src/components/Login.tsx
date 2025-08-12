@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '@/lib/api';
+import { warn as logWarn, error as logError } from '@/lib/logger';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -52,7 +53,7 @@ const Login = () => {
           // Ensure demo mode is turned off after real login
           localStorage.removeItem('demoMode');
         } catch (localStorageError) {
-          console.warn('Failed to save user data to localStorage:', localStorageError);
+          logWarn('Failed to save user data to localStorage:', localStorageError);
         }
         // Navigate faster without full reload
         navigate('/', { replace: true });
@@ -73,13 +74,13 @@ const Login = () => {
           // Ensure demo mode is turned off after registration
           localStorage.removeItem('demoMode');
         } catch (localStorageError) {
-          console.warn('Failed to save user data to localStorage:', localStorageError);
+          logWarn('Failed to save user data to localStorage:', localStorageError);
         }
         // Navigate faster without full reload
         navigate('/', { replace: true });
       }
     } catch (error: unknown) {
-      console.error('Auth error:', error);
+      logError('Auth error:', error);
       const errorMessage =
         error instanceof Error ? error.message : 'Authentication failed. Please try again.';
       setError(errorMessage);
@@ -153,7 +154,7 @@ const Login = () => {
       // Navigate to main app
       window.location.href = '/';
     } catch (error) {
-      console.error('Demo mode setup failed:', error);
+      logError('Demo mode setup failed:', error);
       setError('Failed to setup demo mode. Please try again.');
     }
   };

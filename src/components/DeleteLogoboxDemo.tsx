@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { DeleteLogobox } from './DeleteLogobox';
+import { log } from '@/lib/logger';
 
 export const DeleteLogoboxDemo: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -8,7 +9,7 @@ export const DeleteLogoboxDemo: React.FC = () => {
   const [size, setSize] = useState<'sm' | 'md' | 'lg'>('md');
 
   const handleDelete = () => {
-    console.log('Item deleted!');
+    log('Item deleted!');
     // Your delete logic here
   };
 
