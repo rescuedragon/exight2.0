@@ -359,7 +359,11 @@ class ApiService {
   // Normalize server responses to strict frontend types
   private normalizeExpense(raw: unknown): Expense {
     const rec = raw as Record<string, unknown>;
-    const partialPayments = Array.isArray(rec?.partialPayments)
+    // Support both camelCase and snake_case from API
+    const get = (camel: string, snake: string): unknown =>
+      (rec as Record<string, unknown>)?.[camel] ?? (rec as Record<string, unknown>)?.[snake];
+
+    const partialPayments = Array.isArray(get('partialPayments', 'partial_payments'))
       ? (rec.partialPayments as unknown[]).map((ppRaw: unknown) => {
           const pp = ppRaw as Record<string, unknown>;
           return {
@@ -373,26 +377,37 @@ class ApiService {
       : [];
 
     return {
-      id: String(rec?.id ?? ''),
-      name: String(rec?.name ?? ''),
-      amount: Number(rec?.amount ?? 0),
-      currency: String(rec?.currency ?? 'INR') as Expense['currency'],
-      type: String(rec?.type ?? 'EMI') as Expense['type'],
-      deductionDay: Number(rec?.deductionDay ?? 1),
-      isRecurring: Boolean(rec?.isRecurring),
-      totalMonths: rec?.totalMonths == null ? undefined : Number(rec.totalMonths as number),
+      id: String(get('id', 'id') ?? ''),
+      name: String(get('name', 'name') ?? ''),
+      amount: Number(get('amount', 'amount') ?? 0),
+      currency: String(get('currency', 'currency') ?? 'INR') as Expense['currency'],
+      type: String(get('type', 'type') ?? 'EMI') as Expense['type'],
+      deductionDay: Number(get('deductionDay', 'deduction_day') ?? 1),
+      isRecurring: Boolean(get('isRecurring', 'is_recurring') ?? false),
+      totalMonths:
+        get('totalMonths', 'total_months') == null
+          ? undefined
+          : Number(get('totalMonths', 'total_months') as number),
       remainingMonths:
-        rec?.remainingMonths == null ? undefined : Number(rec.remainingMonths as number),
+        get('remainingMonths', 'remaining_months') == null
+          ? undefined
+          : Number(get('remainingMonths', 'remaining_months') as number),
       remainingAmount:
-        rec?.remainingAmount == null ? undefined : Number(rec.remainingAmount as number),
-      createdAt: rec?.createdAt ? new Date(rec.createdAt as string) : new Date(),
+        get('remainingAmount', 'remaining_amount') == null
+          ? undefined
+          : Number(get('remainingAmount', 'remaining_amount') as number),
+      createdAt: (get('createdAt', 'created_at') as string)
+        ? new Date((get('createdAt', 'created_at') as string) ?? '')
+        : new Date(),
       partialPayments,
     };
   }
 
   private normalizeLoan(raw: unknown): Loan {
     const rec = raw as Record<string, unknown>;
-    const payments: AppLoanPayment[] = Array.isArray(rec?.payments)
+    const get = (camel: string, snake: string): unknown =>
+      (rec as Record<string, unknown>)?.[camel] ?? (rec as Record<string, unknown>)?.[snake];
+    const payments: AppLoanPayment[] = Array.isArray(get('payments', 'payments'))
       ? (rec.payments as unknown[]).map((pRaw: unknown) => {
           const p = pRaw as Record<string, unknown>;
           return {
@@ -406,19 +421,25 @@ class ApiService {
       : [];
 
     return {
-      id: String(rec?.id ?? ''),
-      personName: String(rec?.personName ?? ''),
-      amount: Number(rec?.amount ?? 0),
-      currency: String(rec?.currency ?? 'INR'),
-      dateGiven: rec?.dateGiven ? new Date(rec.dateGiven as string) : new Date(),
-      description: rec?.description as string | undefined,
-      status: (rec?.status === 'completed' || rec?.status === 'written-off'
-        ? (rec.status as Loan['status'])
+      id: String(get('id', 'id') ?? ''),
+      personName: String(get('personName', 'person_name') ?? ''),
+      amount: Number(get('amount', 'amount') ?? 0),
+      currency: String(get('currency', 'currency') ?? 'INR'),
+      dateGiven: (get('dateGiven', 'date_given') as string)
+        ? new Date((get('dateGiven', 'date_given') as string) ?? '')
+        : new Date(),
+      description: (get('description', 'description') as string) || undefined,
+      status: (get('status', 'status') === 'completed' || get('status', 'status') === 'written-off'
+        ? (get('status', 'status') as Loan['status'])
         : 'active') as Loan['status'],
-      totalReceived: Number(rec?.totalReceived ?? 0),
-      remainingAmount: Number(rec?.remainingAmount ?? 0),
-      writeOffDate: rec?.writeOffDate ? new Date(rec.writeOffDate as string) : undefined,
-      createdAt: rec?.createdAt ? new Date(rec.createdAt as string) : new Date(),
+      totalReceived: Number(get('totalReceived', 'total_received') ?? 0),
+      remainingAmount: Number(get('remainingAmount', 'remaining_amount') ?? 0),
+      writeOffDate: (get('writeOffDate', 'write_off_date') as string)
+        ? new Date((get('writeOffDate', 'write_off_date') as string) ?? '')
+        : undefined,
+      createdAt: (get('createdAt', 'created_at') as string)
+        ? new Date((get('createdAt', 'created_at') as string) ?? '')
+        : new Date(),
       payments,
     };
   }
