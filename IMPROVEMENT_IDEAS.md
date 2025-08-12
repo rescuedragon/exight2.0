@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 291  
-[COMPLETED] - 31
+[PENDING] - 290  
+[COMPLETED] - 32
 
-Total percent complete - 9.63%
+Total percent complete - 9.94%
 
 Rules:
 
@@ -420,7 +420,7 @@ Rules:
     29.8. Add undo toast after destructive actions for quick recovery. [PENDING]
     29.9. Add Lighthouse CI to prevent regressions. [PENDING]
     29.10. Add a simple accessibility audit (axe) and fix top 5 issues. [PENDING]
-    29.11. Fix white screen issue by correcting API base URL configuration. [PENDING]
+    29.11. Fix white screen issue by correcting API base URL configuration. [COMPLETED]
 
 30. Long-term roadmap items
     30.1. Add optional cloud sync & account management with encrypted server-side storage. [PENDING]
