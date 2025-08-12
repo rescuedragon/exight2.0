@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useId, useMemo, useState } from 'react';
 
 interface ExpenseDetail {
   name: string;
@@ -31,6 +31,28 @@ export const ConnectedLineChart = ({
   height = 320,
 }: ConnectedLineChartProps) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  const gradientId = useId().replace(/:/g, '_') + '_areaGradient';
+
+  const maxValue = Math.max(...data.map((d) => d.value));
+  const minValue = Math.min(...data.map((d) => d.value));
+  const valueRange = Math.max(1, maxValue - minValue);
+
+  const gradientStops = useMemo(() => {
+    if (!data || data.length === 0) return null;
+    return data.map((point, index) => {
+      const offset = (index / (data.length - 1)) * 100;
+      const normalized = (point.value - minValue) / valueRange; // 0 at trough → 1 at peak
+      const opacity = 0.12 + normalized * 0.28; // lighter at low, darker at high
+      return (
+        <stop
+          key={index}
+          offset={`${offset}%`}
+          stopColor={color}
+          stopOpacity={Number(opacity.toFixed(3))}
+        />
+      );
+    });
+  }, [data, color, minValue, valueRange]);
 
   if (!data || data.length === 0) {
     return (
@@ -39,8 +61,6 @@ export const ConnectedLineChart = ({
       </div>
     );
   }
-
-  const maxValue = Math.max(...data.map((d) => d.value));
 
   return (
     <div className="w-full">
@@ -73,10 +93,9 @@ export const ConnectedLineChart = ({
               preserveAspectRatio="none"
             >
               <defs>
-                <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stopColor={color} stopOpacity="0.2" />
-                  <stop offset="50%" stopColor={color} stopOpacity="0.1" />
-                  <stop offset="100%" stopColor={color} stopOpacity="0.02" />
+                {/* Horizontal gradient whose opacity follows data intensity (min → max) */}
+                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+                  {gradientStops}
                 </linearGradient>
               </defs>
 
@@ -109,7 +128,7 @@ export const ConnectedLineChart = ({
 
                   return path;
                 })()}
-                fill="url(#areaGradient)"
+                fill={`url(#${gradientId})`}
               />
 
               {/* Straight connecting line */}

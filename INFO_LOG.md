@@ -2243,3 +2243,51 @@ These optimizations should significantly improve the application's performance, 
 - Updated `IMPROVEMENT_IDEAS.md`: all "[COMPLETED]" tokens are now high-contrast pill badges (dark green bg, white text) for better readability.
 - No content changes; counts unchanged.
 - Suggested next priority: 5.1 input validation + rate limiting, and 5.8 consistent error shape on the API; then 5.2 OpenAPI/Swagger spec.
+
+### [2025-08-12] UI — Monthly Expenses Overview polish + data-driven gradient
+
+- `ConnectedLineChart.tsx`: area fill now uses a horizontal gradient whose opacity follows the global min→max monthly totals (lighter at troughs, darker at peaks). Uses stable `useId()` per instance.
+- `MonthlyExpensesModal.tsx`: tightened header spacing and increased chart height to 360 for better clarity.
+- Result: visually richer overview; highlight intensity matches data peaks and troughs. No functional changes.
+
+### [2025-08-12] API hardening for feedback API (5.1, 5.3, 5.8, 5.2 partial)
+
+- Input validation: added `zod` schema for POST /api/feedback (name/email optional, message 5-4000 chars).
+- Rate limiting: simple in-memory limiter (5/min per IP) with 429 and Retry-After.
+- Error shape: unified `{ error: { code, message, details? } }` across errors.
+- Docs: served `/api/openapi.json` and `/api/docs` (ReDoc) — minimal OpenAPI with feedback + health endpoints.
+- Files: `server/feedback-api/server.js`. No breaking changes to client.
+
+### [2025-08-12] Auth — Google Sign-In button on Login page
+
+- Added `src/lib/google.ts` to load GIS and render the official button.
+- `Login.tsx`: renders a Google button (uses `VITE_GOOGLE_CLIENT_ID`). On credential, POSTs to `/api/auth/google`; if backend not ready, falls back to creating a mock account from Google claims.
+- Server work pending: implement `/api/auth/google` to verify Google ID token and issue app JWT.
+- No breaking changes to email/password flow.
+
+### [2025-08-12] Auth — Google backend endpoint implemented
+
+- `server/feedback-api/server.js`: added `/api/auth/google` token verification via Google tokeninfo and JWT minting; added `/api/auth/me`.
+- Uses env: `GOOGLE_CLIENT_ID` (or `VITE_GOOGLE_CLIENT_ID`) and `JWT_SECRET`.
+- OpenAPI extended with auth paths.
+- End-to-end Google sign-in now functional.
+
+### [2025-08-12] API items progressed (5.2, 5.3, 5.4)
+
+- OpenAPI now includes auth and feedback; docs at `/api/docs` + `/api/openapi.json`.
+- Rate limiting confirmed (5/min/IP).
+- CORS: strict allowlist via `ALLOWED_ORIGINS` env (comma-separated); replies include Vary: Origin.
+- Updated IMPROVEMENT_IDEAS.md to mark 5.2/5.3/5.4 completed.
+
+### [2025-08-12] Testing — Vitest added and first unit test (8.1)
+
+- Installed Vitest, JSDOM, and Testing Library.
+- Configured tests in `vite.config.ts` and scripts in `package.json`.
+- Added unit test for `cn` utility (`src/lib/utils.test.ts`) — green.
+- Next: snapshot tests for UI (8.2) and CI job to run tests on PRs (8.7).
+
+### [2025-08-12] Testing — snapshot + CI (8.2, 8.7)
+
+- Added header snapshot test (`src/components/__tests__/Header.snapshot.test.tsx`).
+- Configured `src/setupTests.ts` with jest-dom matchers under Vitest.
+- New workflow `.github/workflows/test.yml` runs lint and tests on push/PR to `dev`.

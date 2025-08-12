@@ -9,6 +9,13 @@ export default defineConfig(({ command, mode }) => {
   const isAnalyze = mode === 'analyze';
 
   return {
+    test: {
+      environment: 'jsdom',
+      setupFiles: ['./src/setupTests.ts'],
+      coverage: {
+        provider: 'v8',
+      },
+    },
     server: {
       host: '::',
       port: 3000,

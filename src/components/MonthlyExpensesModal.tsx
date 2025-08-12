@@ -262,10 +262,10 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
 
             {/* Chart */}
             <Card className="premium-card">
-              <CardHeader>
+              <CardHeader className="pb-0">
                 <CardTitle className="text-xl font-bold">Monthly Breakdown</CardTitle>
               </CardHeader>
-              <CardContent className="p-6">
+              <CardContent className="p-6 pt-4">
                 <ConnectedLineChart
                   data={monthlyData.map((data, index) => ({
                     label: data.month,
@@ -278,6 +278,7 @@ export const MonthlyExpensesModal = ({ expenses, onClose }: MonthlyExpensesModal
                   formatValue={formatCurrency}
                   title="Monthly Spending Trend"
                   color="#3b82f6"
+                  height={360}
                 />
               </CardContent>
             </Card>

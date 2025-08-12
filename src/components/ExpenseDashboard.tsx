@@ -17,22 +17,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  CreditCard,
-  Banknote,
-  Users,
-  Calendar,
-  IndianRupee,
-  Clock,
-  Coins,
-  TrendingDown,
-  ChevronDown,
-  ChevronUp,
-  Repeat,
-  Timer,
-  MoreVertical,
-  CheckCircle,
-} from 'lucide-react';
+import { Coins, ChevronDown, ChevronUp, MoreVertical, CheckCircle } from 'lucide-react';
 import { Expense, ExpenseType } from '@/types/expense';
 import { useToast } from '@/hooks/use-toast';
 
@@ -41,18 +26,6 @@ interface ExpenseDashboardProps {
   onUpdateExpense: (expense: Expense) => void;
   isPrivacyMode?: boolean;
 }
-
-// Memoized helper functions
-const getExpenseIcon = (type: ExpenseType) => {
-  switch (type) {
-    case 'EMI':
-      return <div className="h-1 w-1 rounded-full bg-green-600" />;
-    case 'Personal Loan':
-      return <div className="h-1 w-1 rounded-full bg-green-600" />;
-    case 'Borrowed from Someone':
-      return <div className="h-1 w-1 rounded-full bg-green-600" />;
-  }
-};
 
 const getExpenseColor = (type: ExpenseType) => {
   switch (type) {
@@ -65,23 +38,7 @@ const getExpenseColor = (type: ExpenseType) => {
   }
 };
 
-const getOrdinalSuffix = (day: number): string => {
-  const remainder = day % 10;
-  const teens = Math.floor(day / 10) % 10 === 1;
-
-  if (teens) return 'th';
-
-  switch (remainder) {
-    case 1:
-      return 'st';
-    case 2:
-      return 'nd';
-    case 3:
-      return 'rd';
-    default:
-      return 'th';
-  }
-};
+// omitted: ordinal suffix helper not needed in current UI
 
 export const ExpenseDashboard = memo(
   ({ expenses, onUpdateExpense, isPrivacyMode = false }: ExpenseDashboardProps) => {
@@ -152,7 +109,8 @@ export const ExpenseDashboard = memo(
       if (!selectedExpense || !partialPayment) return;
 
       const payment = parseFloat(partialPayment);
-      if (payment <= 0 || payment > selectedExpense.remainingAmount) {
+      const remainingAmount = selectedExpense.remainingAmount ?? 0;
+      if (payment <= 0 || payment > remainingAmount) {
         toast({
           title: 'Error',
           description: 'Invalid payment amount',
@@ -163,7 +121,7 @@ export const ExpenseDashboard = memo(
 
       const updatedExpense = {
         ...selectedExpense,
-        remainingAmount: selectedExpense.remainingAmount - payment,
+        remainingAmount: remainingAmount - payment,
         partialPayments: [
           ...selectedExpense.partialPayments,
           {
@@ -178,7 +136,8 @@ export const ExpenseDashboard = memo(
       // Update remaining months proportionally
       const paymentRatio = payment / selectedExpense.amount;
       const monthsReduced = Math.floor(paymentRatio);
-      updatedExpense.remainingMonths = Math.max(0, updatedExpense.remainingMonths - monthsReduced);
+      const baseRemainingMonths = updatedExpense.remainingMonths ?? 0;
+      updatedExpense.remainingMonths = Math.max(0, baseRemainingMonths - monthsReduced);
 
       // If remaining amount is 0 or less, mark as completed
       if (updatedExpense.remainingAmount <= 0) {
@@ -255,6 +214,7 @@ export const ExpenseDashboard = memo(
                           variant="ghost"
                           size="sm"
                           className="h-6 w-6 p-0 rounded-full hover:bg-white/30 dark:hover:bg-gray-800/40 transition-all duration-200 hover:scale-105"
+                          aria-label="More options"
                         >
                           <MoreVertical className="h-3.5 w-3.5 text-muted-foreground" />
                         </Button>

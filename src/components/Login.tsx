@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '@/lib/api';
+import { renderGoogleButton } from '@/lib/google';
 import { warn as logWarn, error as logError } from '@/lib/logger';
 
 const Login = () => {
@@ -34,6 +35,8 @@ const Login = () => {
   const [lastName, setLastName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID as string | undefined;
+  const [googleReady, setGoogleReady] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +96,71 @@ const Login = () => {
   useEffect(() => {
     void apiService.healthCheck().catch(() => undefined);
   }, []);
+
+  // Initialize Google button once the container is mounted
+  useEffect(() => {
+    const mount = document.getElementById('google-signin-button');
+    if (!mount || !googleClientId || googleReady) return;
+    renderGoogleButton(googleClientId, mount, async (idToken: string) => {
+      try {
+        setIsLoading(true);
+        setError('');
+        // Send the Google ID token to backend; fall back to mock if backend not ready
+        const res = await fetch(`${location.origin}/api/auth/google`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ idToken }),
+        }).then(async (r) => {
+          const t = await r.text();
+          return { ok: r.ok, json: t ? JSON.parse(t) : {} } as {
+            ok: boolean;
+            json: Record<string, unknown>;
+          };
+        });
+
+        if (res.ok && res.json?.token) {
+          apiService.setToken(res.json.token);
+          try {
+            const first = res.json?.user?.firstName || res.json?.user?.name || 'User';
+            if (first) localStorage.setItem('userName', first);
+            if (res.json?.user?.id) localStorage.setItem('userId', String(res.json.user.id));
+            localStorage.setItem('lastLoginDate', new Date().toDateString());
+            localStorage.removeItem('demoMode');
+          } catch {
+            /* noop */
+          }
+          navigate('/', { replace: true });
+        } else {
+          // Fallback: create a mock user based on Google email claim if backend is missing
+          try {
+            const payload = JSON.parse(atob(idToken.split('.')[1]));
+            const emailFromGoogle = payload?.email as string | undefined;
+            if (emailFromGoogle) {
+              const mock = await apiService.register({
+                firstName: payload?.given_name || 'Google',
+                lastName: payload?.family_name || 'User',
+                email: emailFromGoogle,
+                password: Math.random().toString(36).slice(2),
+              });
+              if (mock?.token) navigate('/', { replace: true });
+              return;
+            }
+          } catch {
+            /* noop */
+          }
+          setError('Google sign-in failed. Please try email login.');
+        }
+      } catch (e) {
+        setError('Google sign-in failed.');
+      } finally {
+        setIsLoading(false);
+      }
+    })
+      .then(() => setGoogleReady(true))
+      .catch(() => {
+        setGoogleReady(false);
+      });
+  }, [googleClientId, googleReady, navigate]);
 
   const handleDemoMode = () => {
     try {
@@ -321,6 +389,20 @@ const Login = () => {
                   )}
                 </Button>
               </form>
+
+              {/* Divider */}
+              <div className="my-4 flex items-center">
+                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-800" />
+                <span className="px-3 text-xs text-muted-foreground">or</span>
+                <div className="flex-1 h-px bg-gray-200 dark:bg-gray-800" />
+              </div>
+
+              {/* Google Button Mount */}
+              <div
+                id="google-signin-button"
+                className="flex justify-center"
+                aria-label="Continue with Google"
+              />
 
               <div className="text-center mt-6">
                 <button

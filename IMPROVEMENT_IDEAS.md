@@ -112,7 +112,7 @@ Rules:
    3.6. Require type generation for API shapes (OpenAPI or typed clients) where possible. [PENDING]
    3.7. Replace console.log with a logging abstraction that can be disabled in prod. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    3.8. Remove dead code with automated checks (unused exports, dead imports). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-   3.9. Establish a file & folder naming convention (kebab vs camel) and apply consistently. [PENDING]
+   3.9. Establish a file & folder naming convention (kebab vs camel) and` apply consistently. [PENDING]
    3.10. Add comments at the top of complex components explaining purpose and props. [PENDING]
 
 4. Architecture & State Management
@@ -128,14 +128,14 @@ Rules:
    4.10. Encapsulate UI state versus server state (keep server state in React Query; keep ephemeral UI state in component or a small store). [PENDING]
 
 5. API & Backend (server/feedback-api)
-   5.1. Review server/feedback-api for input validation and rate limiting. [PENDING]
-   5.2. Add API schema (OpenAPI/Swagger) for the feedback API and endpoints used by the frontend. [PENDING]
-   5.3. Implement server-side request throttling to avoid spam from feedback endpoint. [PENDING]
-   5.4. Ensure CORS is configured with strict origins for production. [PENDING]
+   5.1. Review server/feedback-api for input validation and rate limiting. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   5.2. Add API schema (OpenAPI/Swagger) for the feedback API and endpoints used by the frontend. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   5.3. Implement server-side request throttling to avoid spam from feedback endpoint. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   5.4. Ensure CORS is configured with strict origins for production. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    5.5. Add server-side logging structured JSON and integrate with centralized log system (or file rotation). [PENDING]
    5.6. Add health-check endpoint and readiness probe for containerized deploys. [PENDING]
    5.7. Add tests for server endpoints (supertest or pytest depending on stack). [PENDING]
-   5.8. Ensure API errors have consistent shape (code, message, details) so frontend can show friendly messages. [PENDING]
+   5.8. Ensure API errors have consistent shape (code, message, details) so frontend can show friendly messages. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    5.9. Secret management: ensure .env is not committed and production secrets are kept in secret store. [PENDING]
    5.10. Add TLS enforcement and HSTS headers on server responses. [PENDING]
 
@@ -176,13 +176,13 @@ Rules:
 7.20. Precompute projections server-side (or worker) to reduce client CPU on analytics. [PENDING]
 
 8. Testing (Unit / Integration / E2E)
-   8.1. Add unit tests for all utility functions (formatters, math logic for EMI calculations). [PENDING]
-   8.2. Add component snapshot tests for critical UI elements (Header, ExpenseCard, AddExpenseModal). [PENDING]
+   8.1. Add unit tests for all utility functions (formatters, math logic for EMI calculations). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   8.2. Add component snapshot tests for critical UI elements (Header, ExpenseCard, AddExpenseModal). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    8.3. Add integration tests for key flows: add expense → make partial payment → update analytics. [PENDING]
    8.4. Add E2E tests (Playwright or Cypress) for real-user flows across supported browsers. [PENDING]
    8.5. Run coverage thresholds and require PRs to not reduce total coverage below target (e.g., 75%). [PENDING]
    8.6. Add visual regression tests (Percy or Chromatic) for UI stability across changes. [PENDING]
-   8.7. Add CI jobs to run tests on PRs and to run quick smoke tests on deploy. [PENDING]
+   8.7. Add CI jobs to run tests on PRs and to run quick smoke tests on deploy. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    8.8. Add tests for failure modes: storage unavailable, network errors, rate limit responses. [PENDING]
    8.9. Mock 3rd-party services in tests to ensure determinism. [PENDING]
    8.10. Add test checklist in PR template for manual checks prior to merge. [PENDING]
