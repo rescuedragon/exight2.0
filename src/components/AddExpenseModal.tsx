@@ -236,7 +236,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           </p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-6 mt-1">
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_theme(1px)_1fr] items-start gap-4 md:gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1px_1fr] items-start gap-4 md:gap-6">
             {/* Left Column */}
             <div className="space-y-6">
               {/* Recurring toggle moved to top-left */}
