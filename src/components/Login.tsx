@@ -196,7 +196,7 @@ const Login = () => {
       </div>
 
       {/* Main Content */}
-      <div className="flex items-center justify-center min-h-screen px-4 pt-28 md:pt-24 pb-10">
+      <div className="flex items-center justify-center min-h-screen px-3 sm:px-4 pt-24 md:pt-24 pb-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -231,7 +231,7 @@ const Login = () => {
               >
                 {!isLogin && (
                   <>
-                    <div className="grid grid-cols-2 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                       <div>
                         <Label htmlFor="firstName" className="text-sm font-medium text-foreground">
                           First Name

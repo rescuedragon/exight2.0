@@ -432,13 +432,13 @@ export const ActiveExpensesModal = ({
   return createPortal(
     <div className="fixed inset-0 z-[9999] bg-background animate-fade-in-up overscroll-none">
       <Card className="w-screen h-screen rounded-none border-0 shadow-none premium-card animate-scale-in flex flex-col">
-        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-6 px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
+        <CardHeader className="flex-shrink-0 flex flex-row items-center justify-between py-5 px-4 sm:py-6 sm:px-8 bg-gradient-to-r from-purple-accent/5 to-blue-accent/5 border-b border-border/20">
           <div className="flex items-center gap-4">
             <div className="p-3 bg-gradient-to-br from-purple-accent/20 to-purple-accent/10 rounded-2xl">
               <Wallet className="h-6 w-6 text-purple-accent" />
             </div>
             <div>
-              <CardTitle className="text-3xl font-bold text-foreground">
+              <CardTitle className="text-2xl sm:text-3xl font-bold text-foreground">
                 Expense Management
               </CardTitle>
               <p className="text-muted-foreground font-medium">
@@ -450,13 +450,13 @@ export const ActiveExpensesModal = ({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="h-12 w-12 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors"
+            className="h-10 w-10 sm:h-12 sm:w-12 rounded-full hover:bg-destructive/10 hover:text-destructive transition-colors"
           >
             <X className="h-5 w-5" />
           </Button>
         </CardHeader>
 
-        <CardContent className="flex-1 overflow-y-auto p-8">
+        <CardContent className="flex-1 overflow-y-auto p-4 sm:p-8">
           <div className="space-y-8">
             {/* Active Expenses */}
             <div>
