@@ -2237,3 +2237,9 @@ These optimizations should significantly improve the application's performance, 
 - Moved helper functions outside components
 
 ### **Status:** All optimizations completed successfully
+
+### [2025-08-12] Visual tweak — clearer COMPLETED badges
+
+- Updated `IMPROVEMENT_IDEAS.md`: all "[COMPLETED]" tokens are now high-contrast pill badges (dark green bg, white text) for better readability.
+- No content changes; counts unchanged.
+- Suggested next priority: 5.1 input validation + rate limiting, and 5.8 consistent error shape on the API; then 5.2 OpenAPI/Swagger spec.

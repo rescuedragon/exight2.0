@@ -16,18 +16,18 @@ ALWAYS do these:
 
 #Go through the IMPROVEMENT_IDEA.md and tell me what should you work on next.
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
-CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
+CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
 [PENDING] - 281  
-[COMPLETED] - 41
+<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 41
 
 Total percent complete - 12.72%
 
 Rules:
 
-1. Every item must be marked as [PENDING] or [COMPLETED].
-2. If a **main point** has subpoints, and **all subpoints** are marked [COMPLETED],  
-   → automatically mark the **main point** as [COMPLETED].
+1. Every item must be marked as [PENDING] or <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>.
+2. If a **main point** has subpoints, and **all subpoints** are marked <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>,  
+   → automatically mark the **main point** as <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>.
 3. This header updates automatically in real-time as statuses change.
 
 ## ✅ Completed Items (Most Recent First)
@@ -52,7 +52,7 @@ Rules:
 
 </div>
 
-## 🚀 PERFORMANCE OPTIMIZATIONS [COMPLETED]
+## 🚀 PERFORMANCE OPTIMIZATIONS <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 
 ### ✅ Major Performance Improvements Implemented:
 
@@ -80,38 +80,38 @@ Rules:
 ---
 
 1. Repo / Project hygiene
-   1.1. Add a CONTRIBUTING.md that documents PR style, linters, commit message format, and release process. [COMPLETED]
-   1.2. Add CODE_OF_CONDUCT.md and SECURITY.md with clear reporting instructions. [COMPLETED]
-   1.3. Add a CONVENTIONS.md describing branch naming, commit message prefixes (feat/fix/chore/etc.), and issue templates. [COMPLETED]
-   1.4. Keep README concise with screenshots, quick start, and a “Where to contribute” section. [COMPLETED]
-   1.5. Add a short project architecture diagram (SVG) to README showing frontend ↔ backend data flows. [COMPLETED]
-   1.6. Rename repo or add tags if needed so the name is discoverable and searchable. [COMPLETED]
-   1.7. Ensure upload-instructions.md is up-to-date and matches actual deploy steps. [COMPLETED]
-   1.8. Remove any unused files or create .cleanup list for planned deletions. [COMPLETED]
-   1.9. Add a single-line summary and license info to package.json. [COMPLETED]
-   1.10. Verify README commands for current package manager (npm/yarn/bun). [COMPLETED]
+   1.1. Add a CONTRIBUTING.md that documents PR style, linters, commit message format, and release process. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.2. Add CODE_OF_CONDUCT.md and SECURITY.md with clear reporting instructions. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.3. Add a CONVENTIONS.md describing branch naming, commit message prefixes (feat/fix/chore/etc.), and issue templates. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.4. Keep README concise with screenshots, quick start, and a “Where to contribute” section. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.5. Add a short project architecture diagram (SVG) to README showing frontend ↔ backend data flows. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.6. Rename repo or add tags if needed so the name is discoverable and searchable. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.7. Ensure upload-instructions.md is up-to-date and matches actual deploy steps. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.8. Remove any unused files or create .cleanup list for planned deletions. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.9. Add a single-line summary and license info to package.json. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   1.10. Verify README commands for current package manager (npm/yarn/bun). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 
 2. Build & Deployment
-   2.1. Verify Vite production config (vite.config.ts) for optimal build flags. [COMPLETED]
-   2.2. Add a build:analyze script to generate bundle report (rollup-plugin-visualizer or vite-plugin-visualizer). [COMPLETED]
-   2.3. Add CI step to run npm run build and fail early if build breaks. [COMPLETED]
-   2.4. Add a predeploy step that runs tests & lint before deploy. [COMPLETED]
-   2.5. Add exact Node version in package.json engines and use .nvmrc. [COMPLETED]
-   2.6. Harden production build: set process.env.NODE_ENV='production' explicitly where needed. [COMPLETED]
-   2.7. Add deterministic builds by pinning dependency versions in lockfile. [COMPLETED]
-   2.8. Inspect deploy.sh and vercel.json for secrets leakage and tighten permission. [COMPLETED]
-   2.9. Scripted upload for dist that verifies file integrity and filesize. [COMPLETED]
-   2.10. Add map of deployment stages (dev/staging/prod) and the exact steps to push to each. [COMPLETED]
+   2.1. Verify Vite production config (vite.config.ts) for optimal build flags. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.2. Add a build:analyze script to generate bundle report (rollup-plugin-visualizer or vite-plugin-visualizer). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.3. Add CI step to run npm run build and fail early if build breaks. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.4. Add a predeploy step that runs tests & lint before deploy. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.5. Add exact Node version in package.json engines and use .nvmrc. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.6. Harden production build: set process.env.NODE_ENV='production' explicitly where needed. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.7. Add deterministic builds by pinning dependency versions in lockfile. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.8. Inspect deploy.sh and vercel.json for secrets leakage and tighten permission. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.9. Scripted upload for dist that verifies file integrity and filesize. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   2.10. Add map of deployment stages (dev/staging/prod) and the exact steps to push to each. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 
 3. Code Quality, Linting & Formatting
-   3.1. Add/verify ESLint config enforces TypeScript rules and React hooks rules (eslint.config.js). [COMPLETED]
-   3.2. Add Prettier integration and pre-commit hook to format before commits. [COMPLETED]
-   3.3. Add Husky pre-commit hooks for lint-staged to run ESLint and tests. [COMPLETED]
-   3.4. Enforce no-explicit-any unless necessary; document exceptions. [COMPLETED]
-   3.5. Run static analysis tools; use TypeScript strict: true and fix resulting errors. [COMPLETED]
+   3.1. Add/verify ESLint config enforces TypeScript rules and React hooks rules (eslint.config.js). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   3.2. Add Prettier integration and pre-commit hook to format before commits. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   3.3. Add Husky pre-commit hooks for lint-staged to run ESLint and tests. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   3.4. Enforce no-explicit-any unless necessary; document exceptions. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   3.5. Run static analysis tools; use TypeScript strict: true and fix resulting errors. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    3.6. Require type generation for API shapes (OpenAPI or typed clients) where possible. [PENDING]
-   3.7. Replace console.log with a logging abstraction that can be disabled in prod. [COMPLETED]
-   3.8. Remove dead code with automated checks (unused exports, dead imports). [COMPLETED]
+   3.7. Replace console.log with a logging abstraction that can be disabled in prod. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   3.8. Remove dead code with automated checks (unused exports, dead imports). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    3.9. Establish a file & folder naming convention (kebab vs camel) and apply consistently. [PENDING]
    3.10. Add comments at the top of complex components explaining purpose and props. [PENDING]
 
@@ -158,9 +158,9 @@ Rules:
 7.2. Add Lighthouse CI step to enforce performance regressions aren’t introduced on PRs. [PENDING]
 7.3. Add a budget check (max JS payload, image size) as part of CI. [PENDING]
 7.4. Remove or lazy-load heavy libraries (e.g., only import Recharts on analytics route). [PENDING]
-7.5. Setup route-level code splitting and verify network waterfall for initial route. [COMPLETED]
+7.5. Setup route-level code splitting and verify network waterfall for initial route. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 7.6. Convert images to modern formats (AVIF/WebP) and serve responsive sizes with srcset. [PENDING]
-7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. [COMPLETED]
+7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 7.8. Defer non-critical scripts and fonts; preconnect to analytics endpoints if used. [PENDING]
 7.9. Use font-display: swap and self-host key fonts where possible for FOUT reduction. [PENDING]
 7.10. Add server-side caching headers for static assets and set long expirations with content-hash filenames. [PENDING]
@@ -169,7 +169,7 @@ Rules:
 7.13. Profile React renders with React DevTools and fix expensive renders (memoize components; avoid expensive inline functions). [PENDING]
 7.14. Replace heavy charting with lighter rendering or virtualized views if datasets grow. [PENDING]
 7.15. Use IntersectionObserver for lazy load of below-the-fold content. [PENDING]
-7.16. Run source-map-explorer or rollup-plugin-visualizer to understand heavy modules. [COMPLETED]
+7.16. Run source-map-explorer or rollup-plugin-visualizer to understand heavy modules. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 7.17. Establish performance monitoring (Sentry performance, NewRelic, or lightweight RUM) to track TTFB, FCP, TTI. [PENDING]
 7.18. Add memory leak checks for long-lived pages (profile in Chrome, ensure no accumulating timers). [PENDING]
 7.19. Reduce JS runtime by removing polyfills targeted at old browsers if not needed. [PENDING]
@@ -240,7 +240,7 @@ Rules:
     12.10. Add animation-off toggle in settings for users who prefer static UI. [PENDING]
 
 13. Charts & Analytics UI
-    13.1. Lazy-load Recharts only on the analytics route to avoid initial bundle bloat. [COMPLETED]
+    13.1. Lazy-load Recharts only on the analytics route to avoid initial bundle bloat. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
     13.2. Add chart tooltips with explicit explanations and unit labels (₹, $, %, etc). [PENDING]
     13.3. Provide data export (CSV / image) for charts and allow date range selection. [PENDING]
     13.4. Add small multiples instead of single dense charts when comparing categories. [PENDING]
@@ -349,8 +349,8 @@ Rules:
 
 22. Marketing & Distribution
     22.1. Prepare a short landing page that explains benefits in 3 bullets and CTA to repo or deployed demo. [PENDING]
-    22.2. Add social preview images (og:image) and meta tags to index.html. [COMPLETED]
-    22.3. Ensure index.html has helpful meta title and description for SEO. [COMPLETED]
+    22.2. Add social preview images (og:image) and meta tags to index.html. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+    22.3. Ensure index.html has helpful meta title and description for SEO. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
     22.4. Add demo deployment (Vercel/Netlify) with a seeded demo mode for testers. [PENDING]
     22.5. Create a short YouTube demo and GIFs for the README. [PENDING]
     22.6. Add analytics to measure traffic on the demo page and UI flows visitors use. [PENDING]
@@ -397,9 +397,9 @@ Rules:
 
 26. Miscellaneous very-fine-grain improvements (micro-nits)
     26.1. Add a favicon and multiple sizes for better brand recognition in tabs (16, 32, 48). [PENDING]
-    26.2. Ensure meta viewport tag is present and optimized in index.html. [COMPLETED]
+    26.2. Ensure meta viewport tag is present and optimized in index.html. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
     26.3. Add concise file headers for license and copyright in top-level files. [PENDING]
-    26.4. Ensure index.html includes theme-color meta tag for mobile browsers. [COMPLETED]
+    26.4. Ensure index.html includes theme-color meta tag for mobile browsers. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
     26.5. Hard-code critical CSS into critical path for first paint if necessary. [PENDING]
     26.6. Reduce console noise in dev mode by silencing non-actionable warnings. [PENDING]
     26.7. Add server and client test credentials for local dev only and document them. [PENDING]
@@ -442,7 +442,7 @@ Rules:
     29.8. Add undo toast after destructive actions for quick recovery. [PENDING]
     29.9. Add Lighthouse CI to prevent regressions. [PENDING]
     29.10. Add a simple accessibility audit (axe) and fix top 5 issues. [PENDING]
-    29.11. Fix white screen issue by correcting API base URL configuration. [COMPLETED]
+    29.11. Fix white screen issue by correcting API base URL configuration. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
 
 30. Long-term roadmap items
     30.1. Add optional cloud sync & account management with encrypted server-side storage. [PENDING]
