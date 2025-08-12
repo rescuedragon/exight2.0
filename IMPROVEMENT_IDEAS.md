@@ -30,6 +30,28 @@ Rules:
    → automatically mark the **main point** as [COMPLETED].
 3. This header updates automatically in real-time as statuses change.
 
+## ✅ Completed Items (Most Recent First)
+
+<div>
+
+<span style="color:#16a34a">✅ 22.2. Add social preview images (og:image) and meta tags to index.html.</span><br/>
+<span style="color:#16a34a">✅ 22.3. Ensure index.html has helpful meta title and description for SEO.</span><br/>
+<span style="color:#16a34a">✅ 26.2. Ensure meta viewport tag is present and optimized in index.html.</span><br/>
+<span style="color:#16a34a">✅ 26.4. Ensure index.html includes theme-color meta tag for mobile browsers.</span><br/>
+<span style="color:#16a34a">✅ 13.1. Lazy-load Recharts only on the analytics route to avoid initial bundle bloat.</span><br/>
+<span style="color:#16a34a">✅ 7.7. Purge Tailwind CSS using config to strip unused classes from production bundle.</span><br/>
+<span style="color:#16a34a">✅ 7.5. Setup route-level code splitting and verify network waterfall for initial route.</span><br/>
+<span style="color:#16a34a">✅ 7.16. Run rollup-plugin-visualizer to understand heavy modules.</span><br/>
+<span style="color:#16a34a">✅ 3.8. Remove dead code with automated checks (unused exports, dead imports).</span><br/>
+<span style="color:#16a34a">✅ 3.7. Replace console.log with a logging abstraction that can be disabled in prod.</span><br/>
+<span style="color:#16a34a">✅ 3.5. Run static analysis tools; use TypeScript strict: true and fix resulting errors.</span><br/>
+<span style="color:#16a34a">✅ 3.4. Enforce no-explicit-any unless necessary; document exceptions.</span><br/>
+<span style="color:#16a34a">✅ 29.11. Fix white screen issue by correcting API base URL configuration.</span><br/>
+<span style="color:#16a34a">✅ 1.1–1.10 Repo / Project hygiene items.</span><br/>
+<span style="color:#16a34a">✅ 2.1–2.10 Build & Deployment items.</span><br/>
+
+</div>
+
 ## 🚀 PERFORMANCE OPTIMIZATIONS [COMPLETED]
 
 ### ✅ Major Performance Improvements Implemented:
