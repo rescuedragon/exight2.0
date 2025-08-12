@@ -296,7 +296,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
                       <SelectValue placeholder="Choose currency" />
                     </SelectTrigger>
-                    <SelectContent className="premium-card border-border/40">
+                    <SelectContent className="premium-card border-border/40 radix-select-content">
                       <SelectItem value="INR">INR (₹)</SelectItem>
                       <SelectItem value="USD">USD ($)</SelectItem>
                       <SelectItem value="EUR">EUR (€)</SelectItem>
@@ -346,7 +346,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                   <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-base sm:text-lg">
                     <SelectValue placeholder="Monthly" />
                   </SelectTrigger>
-                  <SelectContent className="premium-card border-border/40">
+                  <SelectContent className="premium-card border-border/40 radix-select-content">
                     <SelectItem value="daily">Daily</SelectItem>
                     <SelectItem value="weekly">Weekly</SelectItem>
                     <SelectItem value="fortnightly">Fortnightly</SelectItem>

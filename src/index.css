@@ -117,6 +117,11 @@ body[data-modal-open='true'] {
   backdrop-filter: blur(8px);
 }
 
+/* Select dropdown must float above dialog overlays and content */
+.radix-select-content {
+  z-index: 11000 !important;
+}
+
 /* Hide scrollbars and background content when modal is open */
 body[data-modal-open='true'] * {
   scrollbar-width: none;
