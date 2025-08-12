@@ -12,6 +12,13 @@ export default defineConfig(({ command, mode }) => {
     test: {
       environment: 'jsdom',
       setupFiles: ['./src/setupTests.ts'],
+      exclude: [
+        // Exclude Node server tests (run via `npm run test:server`)
+        'server/feedback-api/tests/**',
+        // Exclude any tests inside dependencies and nested workspaces
+        '**/node_modules/**',
+        'exight2.0/**',
+      ],
       coverage: {
         provider: 'v8',
       },

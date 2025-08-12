@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 281  
-<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 41
+[PENDING] - 278  
+<span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span> - 44
 
-Total percent complete - 12.72%
+Total percent complete - 13.66%
 
 Rules:
 
@@ -132,11 +132,13 @@ Rules:
    5.2. Add API schema (OpenAPI/Swagger) for the feedback API and endpoints used by the frontend. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    5.3. Implement server-side request throttling to avoid spam from feedback endpoint. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
    5.4. Ensure CORS is configured with strict origins for production. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-   5.5. Add server-side logging structured JSON and integrate with centralized log system (or file rotation). [PENDING]
-   5.6. Add health-check endpoint and readiness probe for containerized deploys. [PENDING]
-   5.7. Add tests for server endpoints (supertest or pytest depending on stack). [PENDING]
+   5.5. Add server-side logging structured JSON and integrate with centralized log system (or file rotation). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   5.6. Add health-check endpoint and readiness probe for containerized deploys. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+   5.7. Add tests for server endpoints (supertest or pytest depending on stack). <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+
    5.8. Ensure API errors have consistent shape (code, message, details) so frontend can show friendly messages. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
-   5.9. Secret management: ensure .env is not committed and production secrets are kept in secret store. [PENDING]
+   5.9. Secret management: ensure .env is not committed and production secrets are kept in secret store. <span style="background:#065f46;color:#fff;padding:0.1em 0.5em;border-radius:9999px;font-weight:700">COMPLETED</span>
+
    5.10. Add TLS enforcement and HSTS headers on server responses. [PENDING]
 
 6. Data persistence & offline

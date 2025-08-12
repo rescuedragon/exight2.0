@@ -2279,6 +2279,31 @@ These optimizations should significantly improve the application's performance, 
 - CORS: strict allowlist via `ALLOWED_ORIGINS` env (comma-separated); replies include Vary: Origin.
 - Updated IMPROVEMENT_IDEAS.md to mark 5.2/5.3/5.4 completed.
 
+### [2025-08-12] Server — Structured JSON access/error logging + health (5.5, 5.6)
+
+- Implemented JSON access logs with daily file rotation by date in `server/feedback-api/logs/access-YYYY-MM-DD.log`.
+- Added `app.set('trust proxy', true)` for accurate client IPs behind Apache.
+- Added centralized error handler to emit structured error lines to log.
+- Health endpoint `/api/health` already present and confirmed. Ready for readiness probes.
+- Files changed: `server/feedback-api/server.js`.
+- Updated `IMPROVEMENT_IDEAS.md`: marked 5.5 and 5.6 as COMPLETED; counters updated.
+
+### [2025-08-12] Server tests — Basic endpoint coverage (5.7)
+
+- Exported Express app for testing without binding port in `server/feedback-api/server.js`.
+- Added CommonJS build `server/feedback-api/server.cjs` to work with Node test runner.
+- Wrote server tests using `node:test` + `supertest`: `GET /api/health` and feedback validation path.
+- Added script `npm run test:server` to run backend tests.
+- All server tests passing.
+- Updated `IMPROVEMENT_IDEAS.md` 5.7 to COMPLETED; counters updated.
+
+### [2025-08-12] Secrets management docs and enforcement (5.9)
+
+- Verified `.env` and variants are gitignored.
+- Added `docs/ENV_VARS.md` documenting all required env vars and instructing to set secrets in GitHub Actions.
+- No sensitive values added to repo; only docs.
+- Updated `IMPROVEMENT_IDEAS.md` 5.9 to COMPLETED; counters updated.
+
 ### [2025-08-12] Testing — Vitest added and first unit test (8.1)
 
 - Installed Vitest, JSDOM, and Testing Library.

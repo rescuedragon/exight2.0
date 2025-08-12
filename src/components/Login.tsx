@@ -106,7 +106,9 @@ const Login = () => {
         setIsLoading(true);
         setError('');
         // Send the Google ID token to backend; fall back to mock if backend not ready
-        const res = await fetch(`${location.origin}/api/auth/google`, {
+        const baseUrl =
+          (import.meta.env?.VITE_API_BASE_URL as string | undefined) || `${location.origin}/api`;
+        const res = await fetch(`${baseUrl}/auth/google`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ idToken }),
