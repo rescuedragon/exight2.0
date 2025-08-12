@@ -12,6 +12,7 @@ const Index = lazy(() => import('./pages/Index').then((m) => ({ default: m.defau
 const TryMe = lazy(() => import('./pages/Index').then((m) => ({ default: m.TryMe })));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const TestSpace = lazy(() => import('./pages/TestSpace'));
+const Groups = lazy(() => import('./pages/Groups'));
 const Login = lazy(() => import('./components/Login'));
 
 const App = () => {
@@ -99,6 +100,10 @@ const App = () => {
             <Route
               path="/testspace"
               element={isAuthenticated ? <TestSpace /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/groups"
+              element={isAuthenticated ? <Groups /> : <Navigate to="/login" />}
             />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
