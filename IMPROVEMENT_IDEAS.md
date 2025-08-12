@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 289  
-[COMPLETED] - 33
+[PENDING] - 288  
+[COMPLETED] - 34
 
-Total percent complete - 10.25%
+Total percent complete - 10.56%
 
 Rules:
 
@@ -147,7 +147,7 @@ Rules:
 7.13. Profile React renders with React DevTools and fix expensive renders (memoize components; avoid expensive inline functions). [PENDING]
 7.14. Replace heavy charting with lighter rendering or virtualized views if datasets grow. [PENDING]
 7.15. Use IntersectionObserver for lazy load of below-the-fold content. [PENDING]
-7.16. Run source-map-explorer or rollup-plugin-visualizer to understand heavy modules. [PENDING]
+7.16. Run source-map-explorer or rollup-plugin-visualizer to understand heavy modules. [COMPLETED]
 7.17. Establish performance monitoring (Sentry performance, NewRelic, or lightweight RUM) to track TTFB, FCP, TTI. [PENDING]
 7.18. Add memory leak checks for long-lived pages (profile in Chrome, ensure no accumulating timers). [PENDING]
 7.19. Reduce JS runtime by removing polyfills targeted at old browsers if not needed. [PENDING]

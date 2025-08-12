@@ -939,6 +939,24 @@ _This log will be updated with each development session to maintain a complete r
 - Ran `npx tsc --noEmit` and `npm run lint` — 0 errors; no unused exports/imports detected to prune.
 - Updated `IMPROVEMENT_IDEAS.md` 3.8 to [COMPLETED]; counters updated (10.25%).
 
+### [2025-08-12] Micro-step — Bundle analysis (7.16)
+
+- Ran `npm run build:analyze` (rollup-plugin-visualizer). Output summary:
+  - vendor: 370.35kB (gz 114.41kB)
+  - index (app): 326.76kB (gz 80.06kB)
+  - radix: 110.99kB (gz 34.89kB)
+  - toast: 28.71kB (gz 8.35kB)
+  - utils: 21.03kB (gz 7.13kB)
+  - icons: 18.03kB (gz 3.90kB)
+  - themes: 3.34kB (gz 1.52kB)
+  - CSS: 116.10kB (gz 17.24kB)
+- Actionable next steps:
+  1. Confirm React Router tree-shaking and ensure no dev-only imports in main bundle.
+  2. Lazy-load radix-heavy modals/routes, verify chunk boundaries.
+  3. Defer lucide icon imports to per-component or use tree-shaken named imports only.
+  4. Audit date-fns usage and only import specific functions.
+- Updated `IMPROVEMENT_IDEAS.md` 7.16 to [COMPLETED]; counters updated (10.56%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
