@@ -957,6 +957,13 @@ _This log will be updated with each development session to maintain a complete r
   4. Audit date-fns usage and only import specific functions.
 - Updated `IMPROVEMENT_IDEAS.md` 7.16 to [COMPLETED]; counters updated (10.56%).
 
+### [2025-08-12] Micro-step — Recharts lazy-load check (13.1)
+
+- Verified charts implementation doesn't directly import `recharts`; custom SVG-based charts used (`ExpenseChart`, `ConnectedLineChart`).
+- `src/components/ui/chart.tsx` wraps `recharts` under a component, but no consumers import it; thus Recharts is not in the initial route bundle.
+- Marking 13.1 as [COMPLETED] — no changes needed; requirement already satisfied.
+- Counters updated (10.87%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).

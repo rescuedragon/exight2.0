@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 288  
-[COMPLETED] - 34
+[PENDING] - 287  
+[COMPLETED] - 35
 
-Total percent complete - 10.56%
+Total percent complete - 10.87%
 
 Rules:
 
@@ -218,7 +218,7 @@ Rules:
     12.10. Add animation-off toggle in settings for users who prefer static UI. [PENDING]
 
 13. Charts & Analytics UI
-    13.1. Lazy-load Recharts only on the analytics route to avoid initial bundle bloat. [PENDING]
+    13.1. Lazy-load Recharts only on the analytics route to avoid initial bundle bloat. [COMPLETED]
     13.2. Add chart tooltips with explicit explanations and unit labels (₹, $, %, etc). [PENDING]
     13.3. Provide data export (CSV / image) for charts and allow date range selection. [PENDING]
     13.4. Add small multiples instead of single dense charts when comparing categories. [PENDING]
