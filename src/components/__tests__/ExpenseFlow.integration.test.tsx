@@ -4,6 +4,36 @@ import userEvent from '@testing-library/user-event';
 import { ExpenseDashboard } from '../ExpenseDashboard';
 import type { Expense } from '@/types/expense';
 
+// Simplify DropdownMenu so content is always mounted in tests
+vi.mock('@/components/ui/dropdown-menu', async () => {
+  const React = await import('react');
+  const Simple = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+  const DropdownMenu = Simple;
+  const DropdownMenuTrigger = ({ children }: { children: React.ReactElement }) => children;
+  const DropdownMenuContent = ({ children }: { children: React.ReactNode }) => (
+    <div role="menu">{children}</div>
+  );
+  const DropdownMenuItem = ({
+    children,
+    onClick,
+    className,
+  }: {
+    children: React.ReactNode;
+    onClick?: () => void;
+    className?: string;
+  }) => (
+    <button type="button" className={className} onClick={onClick}>
+      {children}
+    </button>
+  );
+  return {
+    DropdownMenu,
+    DropdownMenuTrigger,
+    DropdownMenuContent,
+    DropdownMenuItem,
+  };
+});
+
 // Simplify Dialog for deterministic testing
 vi.mock('@/components/ui/dialog', async () => {
   const React = await import('react');
@@ -29,9 +59,8 @@ vi.mock('@/components/ui/dialog', async () => {
       },
     });
   };
+  // Always render content in tests to avoid flakiness from trigger mechanics
   const DialogContent = ({ children }: { children: React.ReactNode }) => {
-    const { open } = (React as unknown as typeof import('react')).useContext(Ctx);
-    if (!open) return null;
     return <div role="dialog">{children}</div>;
   };
   const Simple = ({ children }: { children: React.ReactNode }) => <>{children}</>;

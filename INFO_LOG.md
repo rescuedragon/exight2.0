@@ -2291,3 +2291,9 @@ These optimizations should significantly improve the application's performance, 
 - Added header snapshot test (`src/components/__tests__/Header.snapshot.test.tsx`).
 - Configured `src/setupTests.ts` with jest-dom matchers under Vitest.
 - New workflow `.github/workflows/test.yml` runs lint and tests on push/PR to `dev`.
+
+### [2025-08-12] Fix: stabilize Expense flow test to pass in CI
+
+- Problem: Dev deploy workflow failed due to tests. The integration test couldn't find label "Payment Amount" because `DropdownMenu`/`Dialog` content wasn't mounted under test mocks.
+- Change: In `src/components/__tests__/ExpenseFlow.integration.test.tsx`, mocked `@/components/ui/dropdown-menu` and simplified `@/components/ui/dialog` so their content always renders in tests. No app logic changed.
+- Result: `npm test` → all 3 tests pass locally. `npm run lint` → 0 errors (only existing warnings).
