@@ -18,10 +18,10 @@ ALWAYS do these:
 #Yes please continue but make sure to keep updating the Completed, Pending and Total percent as and when you complete and in each step/stage make sure everything is working properly before continuing with the next.
 CRITIAL - KEEP UPDATING THIS EVERY MICROSTEP - CHANGE [PENDING] TO [COMPLETED] for every action completed and updte in real time. Also, Total percent completed should be updated in this step. Also the [PENDING] and [COMPLETED] JUST BELOW. (dev site is 'dev.exight.in' - degub this arfter completing each step)
 
-[PENDING] - 286  
-[COMPLETED] - 36
+[PENDING] - 285  
+[COMPLETED] - 37
 
-Total percent complete - 11.18%
+Total percent complete - 11.49%
 
 Rules:
 
@@ -138,7 +138,7 @@ Rules:
 7.4. Remove or lazy-load heavy libraries (e.g., only import Recharts on analytics route). [PENDING]
 7.5. Setup route-level code splitting and verify network waterfall for initial route. [COMPLETED]
 7.6. Convert images to modern formats (AVIF/WebP) and serve responsive sizes with srcset. [PENDING]
-7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. [PENDING]
+7.7. Purge Tailwind CSS using config to strip unused classes from production bundle. [COMPLETED]
 7.8. Defer non-critical scripts and fonts; preconnect to analytics endpoints if used. [PENDING]
 7.9. Use font-display: swap and self-host key fonts where possible for FOUT reduction. [PENDING]
 7.10. Add server-side caching headers for static assets and set long expirations with content-hash filenames. [PENDING]

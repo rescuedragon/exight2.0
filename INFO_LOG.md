@@ -971,6 +971,12 @@ _This log will be updated with each development session to maintain a complete r
 - Lint/type-check/build: clean (only existing warnings).
 - Updated `IMPROVEMENT_IDEAS.md` 7.5 to [COMPLETED]; counters updated (11.18%).
 
+### [2025-08-12] Micro-step — Tailwind purge verification (7.7)
+
+- Confirmed Tailwind v3 JIT purge is configured via `content` in `tailwind.config.ts` and used by Vite/PostCSS.
+- Production CSS output (build) shows purge active: `dist/css/index-*.css` ≈ 116kB and gz ≈ 17kB.
+- Marking 7.7 as [COMPLETED]. Counters updated (11.49%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
