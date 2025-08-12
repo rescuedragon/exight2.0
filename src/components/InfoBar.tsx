@@ -1,10 +1,16 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { log } from '@/lib/logger';
 import { IndianRupee } from 'lucide-react';
 import { Expense } from '@/types/expense';
-import { MonthlyExpensesModal } from '@/components/MonthlyExpensesModal';
-import { YearlyProjectionModal } from '@/components/YearlyProjectionModal';
-import { ActiveExpensesModal } from '@/components/ActiveExpensesModal';
+const MonthlyExpensesModal = lazy(() =>
+  import('@/components/MonthlyExpensesModal').then((m) => ({ default: m.MonthlyExpensesModal })),
+);
+const YearlyProjectionModal = lazy(() =>
+  import('@/components/YearlyProjectionModal').then((m) => ({ default: m.YearlyProjectionModal })),
+);
+const ActiveExpensesModal = lazy(() =>
+  import('@/components/ActiveExpensesModal').then((m) => ({ default: m.ActiveExpensesModal })),
+);
 
 interface InfoBarProps {
   expenses: Expense[];
@@ -76,10 +82,10 @@ export const InfoBar = ({
 
   return (
     <>
-      <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-6 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
-        <div className="grid grid-cols-3 gap-6 justify-start ml-20">
+      <div className="w-full backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 rounded-3xl p-4 sm:p-6 animate-fade-in-up stagger-1 shadow-2xl border border-white/20 infobar-container">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 justify-start ml-0 sm:ml-6 lg:ml-20">
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
+            className="flex items-center justify-start space-x-4 sm:space-x-5 animate-fade-in-up stagger-2 cursor-pointer backdrop-blur-md rounded-2xl p-4 sm:-m-4 transition-all duration-200 w-full group"
             onClick={() => setShowMonthlyModal(true)}
           >
             <div
@@ -115,7 +121,7 @@ export const InfoBar = ({
           </div>
 
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
+            className="flex items-center justify-start space-x-4 sm:space-x-5 animate-fade-in-up stagger-3 cursor-pointer backdrop-blur-md rounded-2xl p-4 sm:-m-4 transition-all duration-200 w-full group"
             onClick={() => setShowYearlyModal(true)}
           >
             <div
@@ -150,7 +156,7 @@ export const InfoBar = ({
           </div>
 
           <div
-            className="flex items-center justify-start space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md rounded-2xl p-4 -m-4 transition-all duration-200 w-full group"
+            className="flex items-center justify-start space-x-4 sm:space-x-5 animate-fade-in-up stagger-4 cursor-pointer backdrop-blur-md rounded-2xl p-4 sm:-m-4 transition-all duration-200 w-full group"
             onClick={() => setShowActiveModal(true)}
           >
             <div
@@ -186,20 +192,26 @@ export const InfoBar = ({
 
       {/* Modals */}
       {showMonthlyModal && (
-        <MonthlyExpensesModal expenses={expenses} onClose={() => setShowMonthlyModal(false)} />
+        <Suspense fallback={null}>
+          <MonthlyExpensesModal expenses={expenses} onClose={() => setShowMonthlyModal(false)} />
+        </Suspense>
       )}
 
       {showYearlyModal && (
-        <YearlyProjectionModal expenses={expenses} onClose={() => setShowYearlyModal(false)} />
+        <Suspense fallback={null}>
+          <YearlyProjectionModal expenses={expenses} onClose={() => setShowYearlyModal(false)} />
+        </Suspense>
       )}
 
       {showActiveModal && (
-        <ActiveExpensesModal
-          expenses={expenses}
-          onClose={() => setShowActiveModal(false)}
-          onUpdateExpense={onUpdateExpense}
-          onDeleteExpense={onDeleteExpense}
-        />
+        <Suspense fallback={null}>
+          <ActiveExpensesModal
+            expenses={expenses}
+            onClose={() => setShowActiveModal(false)}
+            onUpdateExpense={onUpdateExpense}
+            onDeleteExpense={onDeleteExpense}
+          />
+        </Suspense>
       )}
     </>
   );

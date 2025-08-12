@@ -226,7 +226,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           Add Expense
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl w-[92vw] max-h-[90vh] overflow-y-auto rounded-[28px] shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
+      <DialogContent className="max-w-2xl w-[98vw] sm:w-[92vw] max-h-[90vh] overflow-y-auto rounded-[20px] sm:rounded-[28px] shadow-2xl border border-border/40 bg-gradient-to-br from-card to-background">
         <DialogHeader className="pb-2">
           <DialogTitle className="text-3xl font-extrabold gradient-text animate-gradient-x">
             Add New Expense
@@ -236,7 +236,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
           </p>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-8 mt-2">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {/* Left Column */}
             <div className="space-y-6">
               {/* Recurring toggle moved to top-left */}
@@ -269,7 +269,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
                 <div className="space-y-3">
                   <Label htmlFor="amount" className="text-sm font-semibold text-foreground">
                     Amount *
@@ -343,7 +343,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     setFormData((prev) => ({ ...prev, frequency: value }))
                   }
                 >
-                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-lg">
+                  <SelectTrigger className="bg-background border-border/40 rounded-xl h-12 text-base sm:text-lg">
                     <SelectValue placeholder="Monthly" />
                   </SelectTrigger>
                   <SelectContent className="premium-card border-border/40">
@@ -435,7 +435,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     />
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-3">
                       <Label
                         htmlFor="remainingMonths"

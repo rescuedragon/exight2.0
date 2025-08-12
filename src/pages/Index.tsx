@@ -4,41 +4,36 @@ import { Button } from '@/components/ui/button';
 import { InfoBar } from '@/components/InfoBar';
 import { ExpenseDashboard } from '@/components/ExpenseDashboard';
 import { LoansDashboard } from '@/components/LoansDashboard';
-import { DetailedView } from '@/components/DetailedView';
-import { MonthlyExpensesModal } from '@/components/MonthlyExpensesModal';
-import { ActiveExpensesModal } from '@/components/ActiveExpensesModal';
-import { ExpenseHistory } from '@/components/ExpenseHistory';
-import { LoanDetailedView } from '@/components/LoanDetailedView';
-import { AddExpenseModal } from '@/components/AddExpenseModal';
-import { AddLoanModal } from '@/components/AddLoanModal';
-import { YearlyProjectionModal } from '@/components/YearlyProjectionModal';
+const DetailedView = React.lazy(() =>
+  import('@/components/DetailedView').then((m) => ({ default: m.DetailedView })),
+);
+const MonthlyExpensesModal = React.lazy(() =>
+  import('@/components/MonthlyExpensesModal').then((m) => ({ default: m.MonthlyExpensesModal })),
+);
+const ActiveExpensesModal = React.lazy(() =>
+  import('@/components/ActiveExpensesModal').then((m) => ({ default: m.ActiveExpensesModal })),
+);
+const ExpenseHistory = React.lazy(() =>
+  import('@/components/ExpenseHistory').then((m) => ({ default: m.ExpenseHistory })),
+);
+const LoanDetailedView = React.lazy(() =>
+  import('@/components/LoanDetailedView').then((m) => ({ default: m.LoanDetailedView })),
+);
+const AddExpenseModal = React.lazy(() =>
+  import('@/components/AddExpenseModal').then((m) => ({ default: m.AddExpenseModal })),
+);
+const AddLoanModal = React.lazy(() =>
+  import('@/components/AddLoanModal').then((m) => ({ default: m.AddLoanModal })),
+);
+const YearlyProjectionModal = React.lazy(() =>
+  import('@/components/YearlyProjectionModal').then((m) => ({ default: m.YearlyProjectionModal })),
+);
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { useModal } from '@/contexts/ModalContext';
 import { useNavigate } from 'react-router-dom';
 import { apiService } from '@/lib/api';
 import { error as logError } from '@/lib/logger';
-import {
-  Wallet,
-  HandCoins,
-  BarChart3,
-  Eye,
-  EyeOff,
-  LogOut,
-  Calendar,
-  TrendingUp,
-  History,
-  Users,
-  Settings,
-  Play,
-  TestTube,
-  Target,
-  ArrowRight,
-  Plus,
-  X,
-  CheckCircle,
-  AlertTriangle,
-  Clock,
-} from 'lucide-react';
+import { Wallet, HandCoins, BarChart3, Eye, EyeOff, LogOut } from 'lucide-react';
 import { Expense } from '@/types/expense';
 import { Loan } from '@/types/loan';
 import { LoansInfoBar } from '@/components/LoansInfoBar';
@@ -64,9 +59,9 @@ const TryMe = memo(() => {
       type: 'EMI' as const,
       deductionDay: 1,
       isRecurring: true,
-      totalMonths: null,
-      remainingMonths: null,
-      remainingAmount: null,
+      totalMonths: undefined,
+      remainingMonths: undefined,
+      remainingAmount: undefined,
       createdAt: new Date(2024, 0, 1),
       partialPayments: [],
     },
@@ -78,9 +73,9 @@ const TryMe = memo(() => {
       type: 'EMI' as const,
       deductionDay: 15,
       isRecurring: true,
-      totalMonths: null,
-      remainingMonths: null,
-      remainingAmount: null,
+      totalMonths: undefined,
+      remainingMonths: undefined,
+      remainingAmount: undefined,
       createdAt: new Date(2024, 0, 15),
       partialPayments: [],
     },
@@ -92,9 +87,9 @@ const TryMe = memo(() => {
       type: 'EMI' as const,
       deductionDay: 10,
       isRecurring: true,
-      totalMonths: null,
-      remainingMonths: null,
-      remainingAmount: null,
+      totalMonths: undefined,
+      remainingMonths: undefined,
+      remainingAmount: undefined,
       createdAt: new Date(2024, 0, 10),
       partialPayments: [],
     },
@@ -106,9 +101,9 @@ const TryMe = memo(() => {
       type: 'EMI' as const,
       deductionDay: 5,
       isRecurring: true,
-      totalMonths: null,
-      remainingMonths: null,
-      remainingAmount: null,
+      totalMonths: undefined,
+      remainingMonths: undefined,
+      remainingAmount: undefined,
       createdAt: new Date(2024, 0, 5),
       partialPayments: [],
     },
@@ -542,7 +537,7 @@ const TryMe = memo(() => {
         </div>
       )}
 
-      <div className="container mx-auto px-6 py-8 max-w-7xl min-h-screen">
+      <div className="container mx-auto px-3 sm:px-4 md:px-6 py-6 sm:py-8 max-w-7xl min-h-screen">
         {/* Spacer for layout */}
         <div className="pt-20 mb-6"></div>
 
@@ -677,7 +672,7 @@ const TryMe = memo(() => {
 
         {/* Detailed View Modal */}
         {showDetailedView && (
-          <>
+          <Suspense fallback={null}>
             {activeTab === 'expenses' ? (
               <DetailedView expenses={activeExpenses} onClose={() => setShowDetailedView(false)} />
             ) : (
@@ -687,7 +682,7 @@ const TryMe = memo(() => {
                 onUpdateLoan={handleUpdateLoan}
               />
             )}
-          </>
+          </Suspense>
         )}
       </div>
     </div>
