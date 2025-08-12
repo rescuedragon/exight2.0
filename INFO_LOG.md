@@ -933,6 +933,12 @@ _This log will be updated with each development session to maintain a complete r
 - Marked `IMPROVEMENT_IDEAS.md` 29.11 as [COMPLETED] to reflect the already-fixed API base URL configuration.
 - Counters updated (9.94%).
 
+### [2025-08-12] Micro-step — Dead code check (3.8)
+
+- Enabled `noUnusedLocals` and `noUnusedParameters` in `tsconfig.app.json`.
+- Ran `npx tsc --noEmit` and `npm run lint` — 0 errors; no unused exports/imports detected to prune.
+- Updated `IMPROVEMENT_IDEAS.md` 3.8 to [COMPLETED]; counters updated (10.25%).
+
 ### [2025-08-11] Micro-step – ESLint config verified and roadmap updated
 
 - Verified `eslint.config.js` enforces TypeScript and React Hooks rules (extends `@eslint/js` + `typescript-eslint` recommended; includes `eslint-plugin-react-hooks` recommended).
