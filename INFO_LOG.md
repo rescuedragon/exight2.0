@@ -2356,6 +2356,12 @@ These optimizations should significantly improve the application's performance, 
   - This complements `apache-config.conf` defaults on the host. It does not affect local dev.
   - For full TLS redirect, infra must have :443 vhost + certs and enable the redirect snippet (still pending).
 
+### [2025-08-12] Brand — redesigned favicon (browser tab icon)
+
+- Replaced `public/favicon.svg` with a minimal lock + "E" monogram to reflect security focus and brand initial.
+- Style: soft gradient background (teal→green), subtle drop shadow, clean lines optimized for small sizes.
+- No breaking changes; index.html already points to `/favicon.svg`.
+
 ### [2025-08-12] Next focus selected — Security (5.10 TLS enforcement + HSTS)
 
 - Rationale: High-impact security hardening with low app-risk; aligns with production readiness.

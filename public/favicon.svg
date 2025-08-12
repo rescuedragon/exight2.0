@@ -1,21 +1,38 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
   <defs>
-    <linearGradient id="g1" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#3B82F6"/>
-      <stop offset="100%" stop-color="#8B5CF6"/>
+    <linearGradient id="bg" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#10b981"/>
     </linearGradient>
-    <linearGradient id="g2" x1="0%" y1="100%" x2="100%" y2="0%">
-      <stop offset="0%" stop-color="#0EA5E9"/>
-      <stop offset="100%" stop-color="#10B981"/>
+    <linearGradient id="lock" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#e2fbe8" stop-opacity="0.95"/>
     </linearGradient>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-opacity="0.2"/>
+    <linearGradient id="mono" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <filter id="soft" x="-15%" y="-15%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="6" stdDeviation="10" flood-opacity="0.18"/>
     </filter>
   </defs>
-  <!-- Rounded square background to match app cards -->
-  <rect x="24" y="24" width="208" height="208" rx="36" fill="url(#g1)" filter="url(#shadow)"/>
-  <!-- Stylized E frame -->
-  <path d="M76 176v-96h88l-18 24H100v16h48l-18 24h-30v32z" fill="#ffffff" opacity="0.95"/>
-  <!-- Upward arrow overlay -->
-  <path d="M112 156l44-44v18h20V82h-48v20h18l-44 44z" fill="url(#g2)"/>
+
+  <!-- Rounded background -->
+  <rect x="24" y="24" width="208" height="208" rx="36" fill="url(#bg)" filter="url(#soft)"/>
+
+  <!-- Minimal lock symbol (privacy/security) -->
+  <g transform="translate(80,74)">
+    <!-- shackle -->
+    <path d="M28 36v-10c0-11 9-20 20-20s20 9 20 20v10" fill="none" stroke="url(#mono)" stroke-width="10" stroke-linecap="round"/>
+    <!-- body -->
+    <rect x="16" y="36" width="64" height="56" rx="12" fill="url(#lock)"/>
+    <!-- keyhole -->
+    <circle cx="48" cy="64" r="8" fill="#0f172a" opacity="0.9"/>
+    <rect x="45" y="64" width="6" height="16" rx="3" fill="#0f172a" opacity="0.9"/>
+  </g>
+
+  <!-- Subtle E monogram (Exight) -->
+  <g transform="translate(48,92)">
+    <path d="M0 0h56a6 6 0 0 1 0 12H12v12h44a6 6 0 0 1 0 12H12v12h44a6 6 0 0 1 0 12H0V0z" fill="url(#mono)" opacity="0.35"/>
+  </g>
 </svg>
