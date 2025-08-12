@@ -350,7 +350,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     </div>
                   </div>
                 )}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 mt-1.5 px-0.5">
                   <input
                     id="equateMonthly"
                     type="checkbox"
@@ -360,7 +360,7 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
                     }
                     className="h-3.5 w-3.5 rounded border-border/40"
                   />
-                  <Label htmlFor="equateMonthly" className="text-xs">
+                  <Label htmlFor="equateMonthly" className="text-xs leading-tight">
                     Equate as monthly transaction (annualized/12)
                   </Label>
                 </div>
@@ -458,23 +458,25 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
 
               {/* FX lock summary box (bottom-right) */}
               {formData.currency !== 'INR' && (
-                <div className="flex justify-end">
-                  <div className="text-[11px] text-muted-foreground mt-1 rounded-xl border border-border/40 px-3 py-2 bg-secondary/40 shadow-sm">
-                    <div className="flex items-center gap-2">
-                      <input
-                        type="checkbox"
-                        id="lockRate"
-                        checked={lockRate}
-                        onChange={(e) => setLockRate(e.target.checked)}
-                        className="h-3.5 w-3.5 rounded border-border/40"
-                      />
-                      <span className="inline-flex items-center gap-1">
-                        <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600">
-                          ₹
+                <div className="mt-2">
+                  <div className="w-full text-[11px] text-muted-foreground rounded-xl border border-border/40 px-3 py-2 bg-secondary/40 shadow-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <label htmlFor="lockRate" className="flex items-center gap-2 cursor-pointer">
+                        <input
+                          type="checkbox"
+                          id="lockRate"
+                          checked={lockRate}
+                          onChange={(e) => setLockRate(e.target.checked)}
+                          className="h-3.5 w-3.5 rounded border-border/40"
+                        />
+                        <span className="inline-flex items-center gap-1">
+                          <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-emerald-500/15 text-emerald-600">
+                            ₹
+                          </span>
+                          <span className="font-medium leading-tight">Locked FX</span>
                         </span>
-                        <span className="font-medium">Locked FX</span>
-                      </span>
-                      <span className="ml-3 tabular-nums text-foreground/80">
+                      </label>
+                      <span className="tabular-nums text-foreground/80 leading-tight">
                         {forexLoading ? (
                           <span>…</span>
                         ) : forexError ? (
