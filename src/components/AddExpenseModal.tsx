@@ -241,20 +241,20 @@ export const AddExpenseModal = ({ onAddExpense }: AddExpenseModalProps) => {
             <div className="space-y-6">
               {/* Recurring toggle moved to top-left */}
               <div className="space-y-3">
-                <div className="flex items-center space-x-2 p-3 bg-gradient-to-r from-blue-accent/10 to-purple-accent/10 rounded-xl border border-blue-accent/20">
-                  <input
-                    type="checkbox"
-                    id="isRecurring"
-                    checked={formData.isRecurring}
-                    onChange={(e) =>
-                      setFormData((prev) => ({ ...prev, isRecurring: e.target.checked }))
-                    }
-                    className="h-4 w-4 rounded border-border/40 text-blue-accent focus:ring-blue-accent/20"
-                  />
-                  <Label htmlFor="isRecurring" className="text-xs font-semibold text-foreground">
-                    Recurring
-                  </Label>
-                </div>
+                <button
+                  type="button"
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, isRecurring: !prev.isRecurring }))
+                  }
+                  role="switch"
+                  aria-checked={formData.isRecurring}
+                  className={`w-full p-3 rounded-xl border transition-all duration-200 focus-ring
+                    flex items-center justify-center select-none
+                    bg-gradient-to-r from-blue-accent/10 to-purple-accent/10 border-blue-accent/20
+                    ${formData.isRecurring ? 'ring-2 ring-blue-accent/30 bg-blue-accent/15' : ''}`}
+                >
+                  <span className="text-xs font-semibold text-foreground">Recurring</span>
+                </button>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="name" className="text-xs font-semibold text-foreground">
