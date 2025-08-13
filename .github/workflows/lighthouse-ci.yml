@@ -9,6 +9,9 @@ jobs:
   lhci:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Audit dev.exight.in with Lighthouse
         uses: treosh/lighthouse-ci-action@v12
         with:

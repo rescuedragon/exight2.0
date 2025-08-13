@@ -2384,6 +2384,12 @@ These optimizations should significantly improve the application's performance, 
 - Prints top-20 largest files, enforces same budgets: total JS ≤ 2 MB, per JS ≤ 700 KB, per image ≤ 600 KB.
 - Reason: local build layout used `dist/js` and `dist/css`. Now robust to both layouts.
 
+### [2025-08-13] CI — Fix Lighthouse workflow checkout
+
+- Added a `Checkout code` step to `.github/workflows/lighthouse-ci.yml` so the action can read `.lighthouse/ci-config.json`.
+- Reason: CI error `ENOENT: no such file or directory, open '.lighthouse/ci-config.json'` because the repo wasn’t checked out.
+- No functionality change; CI-only fix.
+
 ### [2025-08-12] Next focus selected — Security (5.10 TLS enforcement + HSTS)
 
 - Rationale: High-impact security hardening with low app-risk; aligns with production readiness.
