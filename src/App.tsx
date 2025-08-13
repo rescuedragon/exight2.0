@@ -67,6 +67,21 @@ const App = () => {
     );
   }
 
+  // Fallback: if not authenticated and auth check failed due to non-JSON API, show login instead of blank
+  if (!isLoading && !isAuthenticated) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <TooltipProvider>
+          <ModalProvider>
+            <Toaster />
+            <Sonner />
+            <Login />
+          </ModalProvider>
+        </TooltipProvider>
+      </QueryClientProvider>
+    );
+  }
+
   return (
     <TooltipProvider>
       <ModalProvider>

@@ -25,6 +25,7 @@ interface ExpenseDashboardProps {
   expenses: Expense[];
   onUpdateExpense: (expense: Expense) => void;
   isPrivacyMode?: boolean;
+  isLoading?: boolean;
 }
 
 const getExpenseColor = (type: ExpenseType) => {

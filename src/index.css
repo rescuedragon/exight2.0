@@ -37,33 +37,45 @@
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 40% 98%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 212.7 26.8% 83.9%;
-  --chart-1: 220 70% 50%;
-  --chart-2: 160 60% 45%;
-  --chart-3: 30 80% 55%;
-  --chart-4: 280 65% 60%;
-  --chart-5: 340 75% 55%;
-  --blue-accent: 217 91% 60%;
-  --purple-accent: 262 83% 58%;
-  --emerald-accent: 142 76% 36%;
+  /* Apple-like deep slate palette with luminous accents */
+  --background: 222 30% 8%;
+  --foreground: 220 20% 96%;
+
+  --card: 222 28% 10%;
+  --card-foreground: 220 20% 96%;
+
+  --popover: 222 28% 10%;
+  --popover-foreground: 220 20% 96%;
+
+  --primary: 220 90% 66%; /* electric blue for emphasis */
+  --primary-foreground: 222 28% 8%;
+
+  --secondary: 225 22% 16%;
+  --secondary-foreground: 220 20% 96%;
+
+  --muted: 225 22% 16%;
+  --muted-foreground: 220 12% 72%;
+
+  --accent: 225 22% 16%;
+  --accent-foreground: 220 20% 96%;
+
+  --destructive: 0 70% 45%;
+  --destructive-foreground: 0 0% 98%;
+
+  --border: 220 18% 20%;
+  --input: 220 18% 20%;
+  --ring: 220 90% 66%;
+
+  /* Chart accents tuned for dark */
+  --chart-1: 221 83% 53%;
+  --chart-2: 162 73% 46%;
+  --chart-3: 28 95% 55%;
+  --chart-4: 266 85% 64%;
+  --chart-5: 340 82% 60%;
+
+  --blue-accent: 221 83% 60%;
+  --purple-accent: 266 85% 64%;
+  --emerald-accent: 160 64% 45%;
 }
 
 * {
@@ -80,7 +92,7 @@ body {
 
 /* Premium Card Styles */
 .premium-card {
-  @apply backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-gray-900/20 dark:via-gray-800/10 dark:to-gray-900/20 border border-white/20 dark:border-gray-700/30 rounded-3xl shadow-2xl;
+  @apply backdrop-blur-xl bg-gradient-to-r from-white/10 via-white/5 to-white/10 dark:from-slate-900/40 dark:via-slate-800/20 dark:to-slate-900/40 border border-white/20 dark:border-white/10 rounded-3xl shadow-2xl;
 }
 
 /* Gradient Background */
@@ -102,6 +114,26 @@ body {
   );
   transform: translateY(-2px);
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode global background glow */
+.dark body {
+  background:
+    radial-gradient(900px 600px at 20% 0%, rgba(99, 102, 241, 0.16), transparent 60%),
+    radial-gradient(700px 500px at 85% 10%, rgba(56, 189, 248, 0.12), transparent 60%),
+    linear-gradient(180deg, hsl(222 28% 8%) 0%, hsl(225 22% 12%) 100%);
+}
+
+/* Elevated dark surfaces */
+.dark-surface {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.dark .shadow-ambient {
+  box-shadow:
+    0 10px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 /* Shadow Utilities */

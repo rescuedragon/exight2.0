@@ -71,7 +71,7 @@ export const FeedbackModal = () => {
           <span>Feedback</span>
         </button>
       </DialogTrigger>
-      <DialogContent className="max-w-lg w-[92vw] rounded-[28px] border border-border/40 bg-card shadow-2xl">
+      <DialogContent className="max-w-xl w-[96vw] rounded-[28px] border border-white/25 dark:border-white/10 bg-gradient-to-br from-white/95 to-white/85 dark:from-slate-900/70 dark:to-slate-900/60 shadow-ambient backdrop-blur-2xl p-7">
         <DialogHeader>
           <DialogTitle className="text-2xl font-extrabold gradient-text animate-gradient-x">
             We'd love your feedback
@@ -89,8 +89,8 @@ export const FeedbackModal = () => {
               <Input
                 value={form.name || ''}
                 onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-                placeholder="Jane Doe"
-                className="mt-1"
+                placeholder=""
+                className="mt-1 rounded-3xl"
               />
             </div>
             <div>
@@ -99,8 +99,8 @@ export const FeedbackModal = () => {
                 type="email"
                 value={form.email || ''}
                 onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
-                placeholder="you@example.com"
-                className="mt-1"
+                placeholder=""
+                className="mt-1 rounded-3xl"
               />
             </div>
           </div>
@@ -111,13 +111,18 @@ export const FeedbackModal = () => {
               value={form.message}
               onChange={(e) => setForm((f) => ({ ...f, message: e.target.value }))}
               placeholder="Tell us what's great, what's annoying, or what you'd love to see next."
-              className="mt-1 min-h-[120px]"
+              className="mt-1 min-h-[140px] rounded-3xl bg-white/70 dark:bg-background/70 border-2 border-border/40 dark:border-border/60"
               required
             />
           </div>
 
           <div className="flex items-center justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setOpen(false)}
+              className="rounded-full"
+            >
               Cancel
             </Button>
             <Button
@@ -129,6 +134,9 @@ export const FeedbackModal = () => {
             </Button>
           </div>
         </form>
+
+        {/* Minimal success toast style inline (only text) */}
+        {/* We keep functionality unchanged; toast still shows from useToast. This is a visual backup if needed. */}
       </DialogContent>
     </Dialog>
   );

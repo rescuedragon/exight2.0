@@ -9,7 +9,11 @@ interface LoansInfoBarProps {
   isPrivacyMode?: boolean;
 }
 
-export const LoansInfoBar = ({ loans, onUpdateLoan, isPrivacyMode = false }: LoansInfoBarProps) => {
+const LoansInfoBarComponent = ({
+  loans,
+  onUpdateLoan,
+  isPrivacyMode = false,
+}: LoansInfoBarProps) => {
   const [showDetailModal, setShowDetailModal] = useState(false);
 
   const activeLoans = loans.filter((loan) => loan.status === 'active');
