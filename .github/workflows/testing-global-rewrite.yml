@@ -1,0 +1,52 @@
+name: Apply global rewrite redirect for testing
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  global-rewrite:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Write global mod_rewrite rule and reload Apache
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            FILE=/etc/httpd/conf.d/zzz-global-testing-redirect.conf
+            echo "==> Writing $FILE"
+            sudo tee "$FILE" >/dev/null <<'EOF'
+            # Managed by GitHub Actions: global redirect for testing.exight.in to GitHub Pages
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteCond %{HTTP_HOST} ^testing\.exight\.in$ [NC]
+              RewriteRule ^/(.*)$ https://rescuedragon.github.io/exight2.0/$1 [R=301,L]
+            </IfModule>
+            EOF
+
+            echo "==> Test config"
+            if command -v httpd >/dev/null 2>&1; then
+              sudo httpd -t
+            else
+              sudo apachectl configtest || true
+            fi
+
+            echo "==> Reload"
+            sudo systemctl reload httpd || sudo service httpd reload
+
+            echo "==> Verify"
+            curl -I -s http://testing.exight.in | sed -n '1,20p' || true
+            curl -I -s https://testing.exight.in | sed -n '1,20p' || true
+
+
