@@ -25,7 +25,15 @@ jobs:
             set -euo pipefail
 
             echo "==> Creating redirect config for testing.exight.in"
-            sudo bash -lc 'cat > /etc/httpd/conf.d/redirect-testing.conf <<"EOF"\n# Auto-managed by GitHub Actions: Redirect testing.exight.in to GitHub Pages\n# Applies at server context using mod_rewrite and restricts by Host header\n<IfModule mod_rewrite.c>\n  RewriteEngine On\n  RewriteCond %{HTTP_HOST} ^testing\\.exight\\.in$ [NC]\n  RewriteRule ^/(.*)$ https://rescuedragon.github.io/exight2.0/$1 [R=301,L]\n</IfModule>\nEOF'
+            sudo tee /etc/httpd/conf.d/redirect-testing.conf >/dev/null <<'EOF'
+            # Auto-managed by GitHub Actions: Redirect testing.exight.in to GitHub Pages
+            # Applies at server context using mod_rewrite and restricts by Host header
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteCond %{HTTP_HOST} ^testing\.exight\.in$ [NC]
+              RewriteRule ^/(.*)$ https://rescuedragon.github.io/exight2.0/$1 [R=301,L]
+            </IfModule>
+            EOF
 
             echo "==> Checking loaded modules for mod_rewrite"
             sudo apachectl -M | grep -i rewrite || echo "mod_rewrite not listed; continuing"
