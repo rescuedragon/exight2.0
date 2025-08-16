@@ -1,0 +1,40 @@
+name: Inspect testing Apache config
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Inspect Apache vhosts and docroots
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+            echo "==> httpd -V"
+            (httpd -V || apachectl -V) 2>/dev/null || true
+            echo "==> httpd -S"
+            (httpd -S || apachectl -S) 2>/dev/null || true
+            echo "==> Loaded modules"
+            (httpd -M || apachectl -M) 2>/dev/null | sort || true
+            echo "==> Grep ServerName and DocumentRoot"
+            sudo grep -RniE "ServerName|DocumentRoot" /etc/httpd/conf /etc/httpd/conf.d 2>/dev/null || true
+            echo "==> Candidate docroots"
+            for d in /var/www/html /var/www/html-testing /usr/share/httpd/noindex; do
+              if [ -d "$d" ]; then
+                echo "-- $d"; sudo ls -la "$d"; [ -f "$d/index.html" ] && { echo "First 20 lines of $d/index.html:"; sudo sed -n '1,20p' "$d/index.html"; }
+              fi
+            done
+
