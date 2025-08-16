@@ -160,8 +160,8 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
         </h3>
       </div>
 
-      {/* Features grid - Fill remaining space */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 w-full flex-1">
+      {/* Features grid - Fill remaining space exactly */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 w-full flex-1 items-stretch content-stretch">
         {features.map((feature, index) => (
           <button
             key={index}

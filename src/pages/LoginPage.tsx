@@ -13,14 +13,14 @@ const LoginPage = () => {
       </div>
 
       {/* Scaling wrapper for entire page */}
-      <div className="h-full w-full flex items-stretch justify-center">
+      <div className="h-full w-full flex items-center justify-center">
         <ScreenScale className="w-full">
-          <div className="mx-auto max-w-[1400px] h-full flex items-stretch justify-center">
+          <div className="mx-auto max-w-[1400px] h-[700px] flex items-stretch justify-center">
             {/* 40/60 split container */}
             <div className="w-full h-full flex items-stretch justify-center">
               {/* Left: Auth 40% */}
               <div className="w-[40%] h-full flex items-stretch justify-start">
-                <div className="w-full max-w-[520px] h-full pl-6 pr-6 pt-10 flex flex-col">
+                <div className="w-full max-w-[520px] h-full pl-6 pr-6 pt-6 flex flex-col">
                   {/* Brand (pinned top-left) */}
                   <div className="text-left">
                     <h1 className="text-[44px] leading-none font-extrabold tracking-tight typography-heading">
@@ -49,8 +49,8 @@ const LoginPage = () => {
 
               {/* Right: Promo 60% */}
               <div className="w-[60%] h-full flex items-center justify-center px-8">
-                <div className="w-full max-w-[760px]">
-                  <div className="mb-6 text-center">
+                <div className="w-full max-w-[760px] h-full flex flex-col">
+                  <div className="mb-4 text-center">
                     <h2 className="text-3xl md:text-4xl typography-heading text-foreground">
                       Take control of your <span className="gradient-text">financial future</span>
                     </h2>
@@ -58,7 +58,9 @@ const LoginPage = () => {
                       Join thousands of users who trust Exight to manage their expenses, track EMIs, and gain valuable financial insights.
                     </p>
                   </div>
-                  <PromotionalFeatures className="h-[520px]" />
+                  <div className="flex-1">
+                    <PromotionalFeatures className="h-full" />
+                  </div>
                 </div>
               </div>
             </div>
