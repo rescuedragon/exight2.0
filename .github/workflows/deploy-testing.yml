@@ -39,6 +39,18 @@ jobs:
         echo "<!-- TESTING BUILD: $(date) -->" >> ./dist/index.html
         echo "<!-- Build ID: $(date +%s) -->" >> ./dist/index.html
         echo "<!-- Hash: $GITHUB_SHA -->" >> ./dist/index.html
+    
+    - name: Prepare remote temp dir
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.TEST_USERNAME }}
+        key: ${{ secrets.TEST_SSH_KEY }}
+        port: ${{ secrets.TEST_SSH_PORT }}
+        script_stop: true
+        script: |
+          rm -rf /tmp/exight_testing_dist
+          mkdir -p /tmp/exight_testing_dist/dist
       
     - name: Upload dist to testing server
       uses: appleboy/scp-action@v0.1.7
@@ -47,8 +59,8 @@ jobs:
         username: ${{ secrets.TEST_USERNAME }}
         key: ${{ secrets.TEST_SSH_KEY }}
         port: ${{ secrets.TEST_SSH_PORT }}
-        source: "dist/*"
-        target: "/tmp/exight_testing_dist"
+        source: "dist/**"
+        target: "/tmp/exight_testing_dist/dist"
 
     - name: Deploy to testing Apache
       uses: appleboy/ssh-action@v1.0.3
