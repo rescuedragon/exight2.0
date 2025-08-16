@@ -2,7 +2,7 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { PromotionalFeatures } from "@/components/PromotionalFeatures";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
-import ScreenScale from "@/components/ScreenScale";
+// Removed ScreenScale to avoid transform-based scaling which causes subpixel blur and misalignment
 
 const LoginPage = () => {
 	return (
@@ -12,15 +12,14 @@ const LoginPage = () => {
 				<ThemeToggle />
 			</div>
 
-			{/* Scaling wrapper for entire page */}
-			<div className="h-full w-full flex items-start justify-center pt-16 pb-8">
-				<ScreenScale className="w-full flex items-center justify-center">
-					<div className="mx-auto max-w-[1400px] h-[760px] flex items-stretch justify-center px-6 md:px-8">
-						{/* 40/60 split container */}
-						<div className="w-full h-full flex flex-col md:flex-row items-stretch justify-center gap-10 md:gap-16">
+			{/* Content wrapper */}
+			<div className="h-full w-full flex items-start justify-center pt-16 pb-12">
+				<div className="mx-auto w-full max-w-[1280px] px-6 md:px-8">
+					{/* 40/60 split container */}
+					<div className="grid grid-cols-1 md:grid-cols-[520px_minmax(0,1fr)] gap-10 md:gap-16 items-start">
 							{/* Left: Auth 40% */}
-							<div className="w-full md:w-[40%] h-full flex items-stretch justify-center">
-								<div className="w-full max-w-[500px] h-full px-6 md:px-8 pt-2 pb-3 flex flex-col">
+							<div className="w-full md:w-auto h-full flex items-stretch justify-center">
+								<div className="w-full max-w-[520px] h-full px-0 md:px-2 pt-1 pb-2 flex flex-col">
 									{/* Brand inside left column for perfect left alignment */}
 									<div className="select-none mb-6">
 										<h1 className="text-[32px] md:text-[36px] leading-none font-extrabold tracking-tight typography-heading">
@@ -52,7 +51,7 @@ const LoginPage = () => {
 							</div>
 
 							{/* Right: Promo 60% */}
-							<div className="w-full md:w-[60%] h-full flex items-center justify-center px-2 md:px-8">
+							<div className="w-full h-full flex items-start justify-center px-0 md:px-4">
 								<div className="w-full max-w-[760px] h-full flex flex-col">
 									<div className="mb-4 text-center">
 										<h2 className="text-3xl md:text-4xl typography-heading text-foreground">
@@ -67,9 +66,8 @@ const LoginPage = () => {
 									</div>
 								</div>
 							</div>
-						</div>
 					</div>
-				</ScreenScale>
+				</div>
 			</div>
 		</div>
 	);
