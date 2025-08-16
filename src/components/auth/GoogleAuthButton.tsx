@@ -14,26 +14,39 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
   const navigate = useNavigate();
 
   const handleGoogleAuth = async () => {
-    // Don't redirect - just show info message
-    setShowInfo(true);
+    setIsLoading(true);
+    setShowInfo(false);
+    
+    try {
+      // Redirect to backend Google OAuth endpoint  
+      const BASE_URL = 'https://exight.in';
+      window.location.href = `${BASE_URL}/auth/google`;
+    } catch (error) {
+      console.error('Google auth failed:', error);
+      setShowInfo(true);
+      setIsLoading(false);
+    }
+    
     onClick?.();
   };
 
   return (
     <div>
       {showInfo && (
-        <div className="mb-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 text-xs">
-          <p className="font-medium mb-1">🚧 Google sign-in is not yet available</p>
-          <p>The backend server needs Google OAuth endpoints configured. Please use the email/password sign-up form above to create your account.</p>
+        <div className="mb-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-300 text-xs">
+          <p className="font-medium mb-1">⚠️ Google sign-in temporarily unavailable</p>
+          <p>Checking Google OAuth endpoint... Please try email/password sign-in for now, or try Google sign-in again in a moment.</p>
         </div>
       )}
       <Button
         type="button"
         variant="outline"
         onClick={handleGoogleAuth}
+        disabled={isLoading}
         className={cn(
           "w-full h-12 bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 text-gray-900 dark:text-gray-100 typography-button text-xs rounded-xl transition-all duration-200 shadow-sm hover:shadow-md dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]",
           "flex items-center justify-center gap-2",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
           className
         )}
       >
@@ -59,7 +72,7 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
             fill="#EA4335"
           />
         </svg>
-        CONTINUE WITH GOOGLE
+        {isLoading ? 'CONNECTING...' : 'CONTINUE WITH GOOGLE'}
       </Button>
     </div>
   );
