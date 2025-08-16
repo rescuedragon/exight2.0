@@ -165,27 +165,27 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               openModal(feature);
             }}
             className={cn(
-              "group relative p-6 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
-              "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02]",
+              "group relative p-6 bg-white dark:bg-slate-900/50 dark:backdrop-blur-sm rounded-3xl border border-gray-100 dark:border-slate-700/50 hover:border-emerald-200 dark:hover:border-emerald-500/50 shadow-sm hover:shadow-lg dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]",
+              "transition-all duration-300 hover:shadow-xl dark:hover:shadow-[0_8px_30px_-8px_rgba(16,185,129,0.2)] hover:-translate-y-1 hover:scale-[1.02]",
               "cursor-pointer h-[180px] flex flex-col text-left",
-              "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
+              "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 focus:border-emerald-300 dark:focus:border-emerald-400"
             )}
           >
             {/* Feature content */}
             <div className="flex items-start gap-4">
               {/* Feature icon */}
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon className="h-6 w-6 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 dark:from-emerald-900/30 dark:to-purple-900/30 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <feature.icon className="h-6 w-6 text-emerald-600 dark:text-emerald-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300" />
                 </div>
               </div>
               
               {/* Text content */}
               <div className="flex-1">
-                <h4 className="typography-feature-title text-gray-900 text-base mb-2">
+                <h4 className="typography-feature-title text-gray-900 dark:text-gray-100 text-base mb-2">
                   {feature.title}
                 </h4>
-                <p className="text-gray-600 typography-body text-sm leading-6">
+                <p className="text-gray-600 dark:text-gray-400 typography-body text-sm leading-6">
                   {feature.subtitle}
                 </p>
               </div>

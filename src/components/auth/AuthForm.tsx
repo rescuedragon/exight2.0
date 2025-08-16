@@ -54,10 +54,10 @@ export function AuthForm({ className }: AuthFormProps) {
   return (
     <div className={cn("w-full", className)}>
       <Tabs defaultValue="login" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-50 p-1.5 rounded-xl" role="tablist" aria-label="Authentication mode">
+        <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
             value="login" 
-            className="rounded-lg py-3 px-4 text-sm typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+            className="rounded-lg py-2.5 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
             role="tab"
             aria-selected={true}
           >
@@ -65,7 +65,7 @@ export function AuthForm({ className }: AuthFormProps) {
           </TabsTrigger>
           <TabsTrigger 
             value="register" 
-            className="rounded-lg py-3 px-4 text-sm typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+            className="rounded-lg py-2.5 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
             role="tab"
             aria-selected={false}
           >
@@ -74,49 +74,44 @@ export function AuthForm({ className }: AuthFormProps) {
         </TabsList>
 
         <TabsContent value="login" className="space-y-4">
-          <div className="space-y-1 text-center">
-            <h2 className="text-xl typography-heading text-gray-900">Welcome back</h2>
-            <p className="text-gray-600 text-sm typography-body">Enter your credentials to access your account</p>
-          </div>
-          
           <form onSubmit={handleSubmitLogin} className="space-y-4">
             <div className="space-y-1">
-              <Label htmlFor="login-email" className="text-sm typography-body text-gray-900">
+              <Label htmlFor="login-email" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Email
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                 <Input
                   id="login-email"
                   type="email"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="pl-11 h-12 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-base"
+                  className="pl-11 h-12 border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200 typography-body text-base"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="login-password" className="text-sm typography-body text-gray-900">
+              <Label htmlFor="login-password" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Password
               </Label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                 <Input
                   id="login-password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
                   value={formData.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
-                  className="pl-11 pr-11 h-12 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-base"
+                  className="pl-11 pr-11 h-12 border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200 typography-body text-base"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -127,7 +122,7 @@ export function AuthForm({ className }: AuthFormProps) {
             <div className="flex items-center justify-end pt-1">
               <button
                 type="button"
-                className="text-sm text-emerald-600 hover:text-emerald-700 typography-small transition-colors"
+                className="text-sm text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 typography-small transition-colors"
               >
                 Forgot password?
               </button>
@@ -135,7 +130,7 @@ export function AuthForm({ className }: AuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl dark:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)]"
             >
               SIGN IN
             </Button>
@@ -143,67 +138,62 @@ export function AuthForm({ className }: AuthFormProps) {
         </TabsContent>
 
         <TabsContent value="register" className="space-y-4">
-          <div className="space-y-1 text-center">
-            <h2 className="text-xl typography-heading text-gray-900">Create account</h2>
-            <p className="text-gray-600 text-sm typography-body">Sign up to start managing your finances</p>
-          </div>
-          
           <form onSubmit={handleSubmitRegister} className="space-y-4">
             <div className="space-y-1">
-              <Label htmlFor="register-name" className="text-sm typography-body text-gray-900">
+              <Label htmlFor="register-name" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Full Name
               </Label>
               <div className="relative">
-                <User className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <User className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                 <Input
                   id="register-name"
                   type="text"
                   placeholder="Enter your full name"
                   value={formData.name}
                   onChange={(e) => handleInputChange("name", e.target.value)}
-                  className="pl-11 h-12 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-base"
+                  className="pl-11 h-12 border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200 typography-body text-base"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="register-email" className="text-sm typography-body text-gray-900">
+              <Label htmlFor="register-email" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Email
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                 <Input
                   id="register-email"
                   type="email"
                   placeholder="Enter your email"
                   value={formData.email}
                   onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="pl-11 h-12 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-base"
+                  className="pl-11 h-12 border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200 typography-body text-base"
                   required
                 />
               </div>
             </div>
 
             <div className="space-y-1">
-              <Label htmlFor="register-password" className="text-sm typography-body text-gray-900">
+              <Label htmlFor="register-password" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Password
               </Label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3.5 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 dark:text-gray-500" />
                 <Input
                   id="register-password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
                   value={formData.password}
                   onChange={(e) => handleInputChange("password", e.target.value)}
-                  className="pl-11 pr-11 h-12 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-base"
+                  className="pl-11 pr-11 h-12 border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200 typography-body text-base"
                   required
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute right-3.5 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
                   aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
@@ -213,7 +203,7 @@ export function AuthForm({ className }: AuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl dark:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)]"
             >
               CREATE ACCOUNT
             </Button>

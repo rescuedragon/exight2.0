@@ -19,7 +19,7 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
       variant="outline"
       onClick={handleGoogleAuth}
       className={cn(
-        "w-full h-12 bg-white border-gray-200 hover:bg-gray-50 text-gray-900 typography-button text-xs rounded-xl transition-all duration-200 shadow-sm hover:shadow-md",
+        "w-full h-12 bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 text-gray-900 dark:text-gray-100 typography-button text-xs rounded-xl transition-all duration-200 shadow-sm hover:shadow-md dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]",
         "flex items-center justify-center gap-2",
         className
       )}

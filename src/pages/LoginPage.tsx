@@ -6,11 +6,11 @@ import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
 const LoginPage = () => {
 	return (
-		<div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900">
+		<div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/20">
 			{/* Fixed header bar with logo and theme toggle */}
-			<div className="absolute top-0 left-0 right-0 h-24 flex items-center justify-between px-12 z-50">
+			<div className="absolute top-0 left-0 right-0 h-32 flex items-center justify-between px-12 z-50">
 				{/* Brand at top-left - Much bigger */}
-				<div className="select-none">
+				<div className="select-none pt-4">
 					<h1 className="text-[48px] leading-none font-extrabold tracking-tight typography-heading">
 						<span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">Exight</span>
 					</h1>
@@ -23,7 +23,7 @@ const LoginPage = () => {
 
 			{/* Main content area with fixed layout */}
 			<div className="h-full w-full flex items-center justify-center">
-				<div className="w-full h-full max-w-[1600px] px-12 pt-24 pb-8 flex items-center">
+				<div className="w-full h-full max-w-[1600px] px-12 pt-32 pb-8 flex items-center">
 					{/* Container with 60/40 split - promotional features left, auth right */}
 					<div className="w-full h-[calc(100vh-8rem)] max-h-[800px] grid grid-cols-1 lg:grid-cols-[1fr_520px] gap-16 items-center">
 						{/* Left: Promotional Features 60% */}
@@ -45,20 +45,20 @@ const LoginPage = () => {
 						</div>
 
 						{/* Right: Auth Form 40% */}
-						<div className="w-full max-w-[520px] mx-auto lg:mx-0 flex items-center justify-center h-full">
+						<div className="w-full max-w-[520px] mx-auto lg:mx-0 flex items-start justify-center h-full pt-16">
 							<div className="w-full max-w-[440px]">
 								{/* Auth card container with depth */}
-								<div className="rounded-3xl bg-white/90 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-800/70 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] p-10">
+								<div className="rounded-3xl bg-white/90 dark:bg-slate-900/80 dark:backdrop-blur-xl border border-gray-200/80 dark:border-slate-700/50 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-10">
 									<div className="w-full space-y-5">
 										<AuthForm />
 										<div className="flex items-center gap-3">
-											<div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
-											<span className="text-[11px] text-gray-500 typography-small tracking-wide">OR</span>
-											<div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
+											<div className="flex-1 border-t border-gray-200 dark:border-slate-700/50"></div>
+											<span className="text-[11px] text-gray-500 dark:text-gray-400 typography-small tracking-wide">OR</span>
+											<div className="flex-1 border-t border-gray-200 dark:border-slate-700/50"></div>
 										</div>
 										<GoogleAuthButton />
-										<p className="pt-2 text-[11px] text-gray-500 typography-small text-center leading-tight">
-											By signing in, you agree to our <button className="text-emerald-600 hover:text-emerald-700 underline">Terms of Service</button> and <button className="text-emerald-600 hover:text-emerald-700 underline">Privacy Policy</button>
+										<p className="pt-2 text-[11px] text-gray-500 dark:text-gray-400 typography-small text-center leading-tight">
+											By signing in, you agree to our <button className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline">Terms of Service</button> and <button className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline">Privacy Policy</button>
 										</p>
 									</div>
 								</div>
