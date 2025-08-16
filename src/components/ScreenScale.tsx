@@ -11,8 +11,8 @@ interface ScreenScaleProps {
 export const ScreenScale = ({
   children,
   baseWidth = 1440, // MacBook Air M1 width
-  maxScale = 1.1,
-  minScale = 0.9,
+  maxScale = 1.05,
+  minScale = 0.92,
   className
 }: ScreenScaleProps) => {
   const [scale, setScale] = useState(1);

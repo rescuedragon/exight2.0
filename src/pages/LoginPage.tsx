@@ -13,24 +13,26 @@ const LoginPage = () => {
       </div>
 
       {/* Scaling wrapper for entire page */}
-      <div className="h-full w-full flex items-center justify-center">
+      <div className="h-full w-full flex items-stretch justify-center">
         <ScreenScale className="w-full">
-          <div className="mx-auto max-w-[1400px] h-full flex items-center justify-center">
+          <div className="mx-auto max-w-[1400px] h-full flex items-stretch justify-center">
             {/* 40/60 split container */}
-            <div className="w-full h-full flex items-center justify-center">
+            <div className="w-full h-full flex items-stretch justify-center">
               {/* Left: Auth 40% */}
-              <div className="w-[40%] h-full flex items-center justify-center">
-                <div className="w-full max-w-[420px] space-y-4">
+              <div className="w-[40%] h-full flex items-start justify-start">
+                <div className="w-full max-w-[460px] pt-14 pl-6 pr-6 space-y-4">
                   {/* Brand */}
-                  <div className="text-left mb-2">
-                    <h1 className="text-[44px] leading-none font-extrabold tracking-tight">
+                  <div className="text-left">
+                    <h1 className="text-[44px] leading-none font-extrabold tracking-tight typography-heading">
                       <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">Exight</span>
                     </h1>
                     <p className="mt-2 text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
                   </div>
 
                   {/* Tabs + Form */}
-                  <AuthForm />
+                  <div className="mt-4">
+                    <AuthForm />
+                  </div>
 
                   {/* Divider and Google */}
                   <div className="flex items-center space-x-3">

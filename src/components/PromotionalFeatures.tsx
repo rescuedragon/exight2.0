@@ -214,7 +214,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           />
           
           {/* Modal Content - Fixed size for all states */}
-          <div className="relative overflow-hidden bg-white rounded-2xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[94vw] h-[72vh] max-w-[1200px] md:w-[92vw] md:h-[70vh] md:max-w-[1280px] lg:max-w-[1320px] scale-[0.96] md:scale-100 lg:scale-[1.03]">
+          <div className="relative overflow-hidden bg-white rounded-2xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px]">
           {selectedFeature && !showLoginInModal && (
             <div className="h-full flex">
               {/* Left Panel - Header & Description */}
