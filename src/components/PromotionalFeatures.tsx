@@ -160,8 +160,8 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
         </h3>
       </div>
 
-      {/* Features grid - Fill remaining space exactly, force equal card heights */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-2 [grid-auto-rows:1fr] gap-4 md:gap-5 w-full h-full items-stretch content-stretch">
+      {/* Features grid - Fill remaining space exactly */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 w-full flex-1 items-stretch content-stretch">
         {features.map((feature, index) => (
           <button
             key={index}
@@ -175,7 +175,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               "group relative p-4 md:p-5 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
               "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2 hover:scale-[1.02] md:hover:scale-105",
               "cursor-pointer h-full flex flex-col text-left justify-between",
-              "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300 min-h-[180px]"
+              "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
             )}
           >
             {/* Feature icon */}
