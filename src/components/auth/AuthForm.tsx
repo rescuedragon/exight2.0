@@ -19,40 +19,72 @@ export function AuthForm({ className }: AuthFormProps) {
     name: "",
     confirmPassword: ""
   });
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (error) setError(null);
   };
 
   const handleSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    
     try {
       const { authAPI } = await import("@/services/api");
-      await authAPI.login({ email: formData.email, password: formData.password });
+      const response = await authAPI.login({ 
+        email: formData.email, 
+        password: formData.password 
+      });
+      
+      console.log('Login successful:', response);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Login failed', error);
-      alert('Invalid email or password');
+      console.error('Login failed:', error);
+      setError(error instanceof Error ? error.message : 'Login failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleSubmitRegister = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    
     try {
       const [firstName, ...rest] = formData.name.split(' ');
       const lastName = rest.join(' ');
+      
       const { authAPI } = await import("@/services/api");
-      await authAPI.register({ email: formData.email, password: formData.password, firstName, lastName });
+      const response = await authAPI.register({ 
+        email: formData.email, 
+        password: formData.password, 
+        firstName, 
+        lastName 
+      });
+      
+      console.log('Registration successful:', response);
       navigate('/dashboard');
     } catch (error) {
-      console.error('Registration failed', error);
-      alert('Registration failed');
+      console.error('Registration failed:', error);
+      setError(error instanceof Error ? error.message : 'Registration failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className={cn("w-full transition-all duration-700 ease-in-out", className)}>
+      {error && (
+        <div className="mb-4 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-sm">
+          {error}
+        </div>
+      )}
       <Tabs defaultValue="login" className="w-full transition-all duration-700 ease-in-out">
         <TabsList className="grid w-full grid-cols-2 mb-6 p-1 h-12 rounded-3xl bg-gray-100 dark:bg-slate-800/60 border border-black/5 dark:border-slate-700/60 overflow-hidden" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
@@ -130,9 +162,10 @@ export function AuthForm({ className }: AuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl dark:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)]"
+              disabled={isLoading}
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl dark:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              SIGN IN
+              {isLoading ? 'SIGNING IN...' : 'SIGN IN'}
             </Button>
           </form>
         </TabsContent>
@@ -203,9 +236,10 @@ export function AuthForm({ className }: AuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl dark:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)]"
+              disabled={isLoading}
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl dark:shadow-[0_10px_30px_-10px_rgba(16,185,129,0.3)] disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              CREATE ACCOUNT
+              {isLoading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
             </Button>
           </form>
         </TabsContent>
