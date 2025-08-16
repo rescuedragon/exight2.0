@@ -54,10 +54,10 @@ export function AuthForm({ className }: AuthFormProps) {
   return (
     <div className={cn("w-full", className)}>
       <Tabs defaultValue="login" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-100 dark:bg-gray-800 p-1 rounded-xl" role="tablist" aria-label="Authentication mode">
+        <TabsList className="grid w-full grid-cols-2 mb-6 p-1 h-12 rounded-2xl bg-gray-100 dark:bg-slate-800/60 border border-black/5 dark:border-slate-700/60 overflow-hidden" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
             value="login" 
-            className="rounded-lg py-2.5 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
+            className="rounded-xl h-10 flex items-center justify-center text-sm font-semibold transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-none"
             role="tab"
             aria-selected={true}
           >
@@ -65,7 +65,7 @@ export function AuthForm({ className }: AuthFormProps) {
           </TabsTrigger>
           <TabsTrigger 
             value="register" 
-            className="rounded-lg py-2.5 px-4 text-sm font-medium transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-gray-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-sm"
+            className="rounded-xl h-10 flex items-center justify-center text-sm font-semibold transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-none"
             role="tab"
             aria-selected={false}
           >

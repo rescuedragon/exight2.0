@@ -208,11 +208,11 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           />
           
           {/* Modal Content - Fixed size for all states */}
-          <div className="relative overflow-hidden bg-white rounded-[2rem] border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px]">
+          <div className="relative overflow-hidden rounded-[2rem] border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px] bg-white dark:bg-slate-950/90 dark:backdrop-blur-xl">
           {selectedFeature && !showLoginInModal && (
             <div className="h-full flex">
               {/* Left Panel - Header & Description */}
-              <div className="w-2/5 bg-gradient-to-br from-gray-50 to-gray-100/50 p-6 md:p-8 lg:p-10 flex flex-col justify-center">
+              <div className="w-2/5 p-6 md:p-8 lg:p-10 flex flex-col justify-center bg-gradient-to-br from-gray-50 to-gray-100/50 dark:from-slate-900 dark:to-slate-900/40">
                 {/* Modal Header */}
                 <div className="space-y-6">
                   <div className="space-y-3">
@@ -221,7 +221,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   </div>
 
                   {/* Description */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 md:p-6 border border-white/20">
+                  <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-4 md:p-6 border border-white/20 dark:border-slate-700/40">
                     <p className="text-gray-700 typography-body text-base md:text-lg">{selectedFeature.modalContent.description}</p>
                   </div>
 
@@ -247,11 +247,11 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               <div className="w-3/5 p-6 md:p-8 lg:p-10 flex flex-col">
                 {/* Features Section */}
                 <div className="flex-1">
-                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 mb-4 md:mb-6">Key Features</h4>
+                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 dark:text-gray-100 mb-4 md:mb-6">Key Features</h4>
                   <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
                     {selectedFeature.modalContent.features.map((item, idx) => (
-                      <div key={idx} className="p-3 md:p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors duration-200">
-                        <span className="text-gray-700 typography-body text-sm md:text-base">{item.text}</span>
+                      <div key={idx} className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900/40 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-900/60 transition-colors duration-200 border border-transparent dark:border-slate-700/40">
+                        <span className="text-gray-700 dark:text-gray-300 typography-body text-sm md:text-base">{item.text}</span>
                       </div>
                     ))}
                   </div>
@@ -259,11 +259,11 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
 
                 {/* Benefits Section */}
                 <div className="flex-1">
-                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 mb-4 md:mb-6">Benefits</h4>
+                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 dark:text-gray-100 mb-4 md:mb-6">Benefits</h4>
                   <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {selectedFeature.modalContent.benefits.map((benefit, idx) => (
-                      <div key={idx} className="p-3 md:p-4 bg-emerald-50 rounded-2xl">
-                        <span className="text-gray-700 typography-body text-sm md:text-base">{benefit}</span>
+                      <div key={idx} className="p-3 md:p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-transparent dark:border-emerald-800/30">
+                        <span className="text-gray-700 dark:text-gray-300 typography-body text-sm md:text-base">{benefit}</span>
                       </div>
                     ))}
                   </div>
@@ -300,13 +300,13 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                 </button>
               </div>
 
-              {/* Login Content */}
-              <div className="flex-1 flex items-start justify-center px-5 md:px-6 pb-4 pt-1 overflow-y-auto">
-                <div className="w-full max-w-sm space-y-2">
+              {/* Login Content - fill available height */}
+              <div className="flex-1 flex items-stretch justify-center px-5 md:px-6 pb-4 pt-1 overflow-y-auto">
+                <div className="w-full max-w-sm flex flex-col">
 
                   {/* Auth form - Compact version for fixed modal */}
-                  <form onSubmit={handleSubmit} className="w-full">
-                    <div className="grid w-full grid-cols-2 mb-4 bg-gray-50 p-1 rounded-lg">
+                  <form onSubmit={handleSubmit} className="w-full flex-1 flex flex-col">
+                    <div className="grid w-full grid-cols-2 mb-4 bg-gray-50 dark:bg-slate-900/50 p-1 rounded-lg">
                       <button 
                         type="button"
                         onClick={() => setActiveTab('login')}
@@ -331,7 +331,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                       </button>
                     </div>
                     
-                    <div className="space-y-2">
+                    <div className="space-y-2 flex-1">
                       {activeTab === 'register' && (
                         <div className="space-y-1">
                           <label className="text-xs typography-body text-gray-900">Full Name</label>
@@ -399,7 +399,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                       
                       <button 
                         type="submit"
-                        className="w-full h-9 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white text-xs typography-button rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+                        className="w-full h-10 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 dark:from-emerald-500 dark:to-purple-500 dark:hover:from-emerald-600 dark:hover:to-purple-600 text-white text-xs typography-button rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
                       >
                         {activeTab === 'login' ? 'SIGN IN' : 'CREATE ACCOUNT'}
                       </button>
@@ -407,14 +407,14 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   </form>
 
                   {/* Divider */}
-                  <div className="flex items-center space-x-3">
-                    <div className="flex-1 border-t border-gray-200"></div>
-                    <span className="text-xs text-gray-500 typography-small">or</span>
-                    <div className="flex-1 border-t border-gray-200"></div>
+                  <div className="flex items-center space-x-3 mt-3">
+                    <div className="flex-1 border-t border-gray-200 dark:border-slate-800"></div>
+                    <span className="text-xs text-gray-500 dark:text-gray-400 typography-small">or</span>
+                    <div className="flex-1 border-t border-gray-200 dark:border-slate-800"></div>
                   </div>
 
                   {/* Google auth - Compact */}
-                  <button className="w-full h-9 bg-white border border-gray-200 hover:bg-gray-50 text-gray-900 text-xs typography-button rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2">
+                  <button className="w-full h-10 bg-white dark:bg-slate-900/50 border border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-900 text-gray-900 dark:text-gray-100 text-xs typography-button rounded-lg transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-2">
                     <svg className="w-4 h-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                       <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
