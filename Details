@@ -1,2 +1,3 @@
 [2025-08-16 18:49:10] Login layout updated: enforce 40/60 grid, vertical centering, responsive stack. Files: src/pages/LoginPage.tsx
 [2025-08-16 18:54:28] Tweak: full-bleed login grid, reduce side spacing.
+[2025-08-16 19:00:08] Expand content to fill containers: wider auth column content, full-height features grid.

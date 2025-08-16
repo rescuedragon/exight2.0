@@ -23,7 +23,7 @@ const LoginPage = () => {
       <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-center gap-x-12 px-4 md:px-8">
         {/* Left: Auth (40%) */}
         <div className="flex items-center justify-center py-16 lg:py-0">
-          <div className="w-full max-w-[520px] space-y-5">
+          <div className="w-full space-y-5 px-2 sm:px-4">
             <AuthForm />
             <div className="flex items-center gap-3">
               <div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
@@ -39,7 +39,7 @@ const LoginPage = () => {
 
         {/* Right: Promo (60%) */}
         <div className="flex flex-col items-center justify-center py-16 lg:py-0">
-          <div className="w-full max-w-[860px] text-center mb-6">
+          <div className="w-full text-center mb-6 px-2 sm:px-4">
             <h2 className="text-3xl md:text-4xl typography-heading text-foreground">
               Take control of your <span className="gradient-text">financial future</span>
             </h2>
@@ -47,7 +47,7 @@ const LoginPage = () => {
               Join thousands of users who trust Exight to manage their expenses, track EMIs, and gain valuable financial insights.
             </p>
           </div>
-          <PromotionalFeatures className="w-full max-w-[900px]" />
+          <PromotionalFeatures className="w-full h-full" />
         </div>
       </div>
     </div>
