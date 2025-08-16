@@ -6,6 +6,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Index from "./pages/Index";
 import Login from "./pages/Login";
+import LandingPage from "./pages/LandingPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -59,8 +60,9 @@ const App = () => {
         <Toaster />
         <Sonner />
         <Routes>
-          <Route path="/" element={shouldLogin ? <Navigate to="/login" /> : <Index />} />
+          <Route path="/" element={shouldLogin ? <Login /> : <Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/landing" element={<LandingPage />} />
           <Route path="/dashboard" element={shouldLogin ? <Navigate to="/login" /> : <Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
