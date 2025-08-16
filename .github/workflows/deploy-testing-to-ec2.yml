@@ -1,0 +1,91 @@
+name: Deploy testing build to EC2 (serve from Apache)
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build application
+        run: npm run build
+
+      - name: Prepare SPA 404
+        run: cp ./dist/index.html ./dist/404.html
+
+      - name: Add build marker
+        run: |
+          echo "<!-- TEST EC2 DEPLOY: $(date -u) -->" >> ./dist/index.html
+
+      - name: Upload dist to server (staging area)
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT }}
+          source: "dist/*"
+          target: "/tmp/exight_testing_dist"
+
+      - name: Activate build on Apache
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            echo "==> Detecting Apache DocumentRoot for testing.exight.in"
+            DOCROOT=$(sudo bash -lc 'grep -Ri "ServerName\\s\+testing\\.exight\\.in" -n /etc/httpd/conf* -R | cut -d: -f1 | sort -u | head -n1 | xargs -r grep -i "DocumentRoot" -n | awk '{print $NF}' | head -n1') || true
+            if [ -z "${DOCROOT:-}" ]; then
+              # Fallback to global DocumentRoot
+              DOCROOT=$(sudo bash -lc 'grep -i "^DocumentRoot" /etc/httpd/conf/httpd.conf | awk '{print $2}' | head -n1') || true
+            fi
+            if [ -z "${DOCROOT:-}" ]; then
+              DOCROOT="/var/www/html"
+            fi
+            echo "Using DocumentRoot: $DOCROOT"
+            sudo mkdir -p "$DOCROOT"
+
+            echo "==> Backing up current site"
+            TS=$(date +%s)
+            sudo mkdir -p /var/www/backups
+            if [ -d "$DOCROOT" ]; then
+              sudo tar -C "$DOCROOT" -czf "/var/www/backups/testing_${TS}.tar.gz" . || true
+            fi
+
+            echo "==> Replacing site contents"
+            sudo rm -rf "$DOCROOT"/*
+            sudo cp -a /tmp/exight_testing_dist/. "$DOCROOT"/
+
+            echo "==> Ensure permissions"
+            sudo chown -R root:root "$DOCROOT"
+            sudo find "$DOCROOT" -type d -exec chmod 755 {} +
+            sudo find "$DOCROOT" -type f -exec chmod 644 {} +
+
+            echo "==> Validate Apache config and reload"
+            sudo apachectl configtest
+            sudo systemctl reload httpd || sudo service httpd reload
+
+            echo "==> Done. Current index headers:"
+            curl -I -s https://testing.exight.in | sed -n '1,20p'
+
+
