@@ -1,4 +1,4 @@
-name: Deploy to Testing Environment
+name: Deploy to Testing Environment (testing.exight.in)
 
 on:
   push:
@@ -7,15 +7,10 @@ on:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 jobs:
   deploy-to-testing:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     
     steps:
     - name: Checkout code
@@ -39,23 +34,68 @@ jobs:
     - name: Add 404.html for SPA routing
       run: cp ./dist/index.html ./dist/404.html
       
-    - name: Force complete rebuild
+    - name: Add testing build marker
       run: |
-        echo "<!-- COMPLETE REBUILD: $(date) -->" >> ./dist/index.html
+        echo "<!-- TESTING BUILD: $(date) -->" >> ./dist/index.html
         echo "<!-- Build ID: $(date +%s) -->" >> ./dist/index.html
         echo "<!-- Hash: $GITHUB_SHA -->" >> ./dist/index.html
       
-    - name: Setup Pages
-      uses: actions/configure-pages@v4
-      
-    - name: Upload to GitHub Pages
-      uses: actions/upload-pages-artifact@v3
+    - name: Upload dist to testing server
+      uses: appleboy/scp-action@v0.1.7
       with:
-        path: ./dist
-        
-    - name: Deploy to GitHub Pages
-      id: deployment
-      uses: actions/deploy-pages@v4
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.TEST_USERNAME }}
+        key: ${{ secrets.TEST_SSH_KEY }}
+        port: ${{ secrets.TEST_SSH_PORT }}
+        source: "dist/*"
+        target: "/tmp/exight_testing_dist"
+
+    - name: Deploy to testing Apache
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.TEST_HOST }}
+        username: ${{ secrets.TEST_USERNAME }}
+        key: ${{ secrets.TEST_SSH_KEY }}
+        port: ${{ secrets.TEST_SSH_PORT }}
+        script_stop: true
+        script: |
+          set -euo pipefail
+
+          echo "==> Removing any redirect rules for testing.exight.in"
+          sudo rm -f /etc/httpd/conf.d/redirect-testing.conf || true
+
+          echo "==> Detecting Apache DocumentRoot for testing.exight.in"
+          DOCROOT=$(sudo bash -lc 'grep -Ri "ServerName\\s\+testing\\.exight\\.in" -n /etc/httpd/conf* -R | cut -d: -f1 | sort -u | head -n1 | xargs -r grep -i "DocumentRoot" -n | awk '{print $NF}' | head -n1') || true
+          if [ -z "${DOCROOT:-}" ]; then
+            # Create a specific directory for testing
+            DOCROOT="/var/www/testing.exight.in"
+          fi
+          echo "Using DocumentRoot: $DOCROOT"
+          sudo mkdir -p "$DOCROOT"
+
+          echo "==> Backing up current testing site"
+          TS=$(date +%s)
+          sudo mkdir -p /var/www/backups
+          if [ -d "$DOCROOT" ]; then
+            sudo tar -C "$DOCROOT" -czf "/var/www/backups/testing_${TS}.tar.gz" . || true
+          fi
+
+          echo "==> Deploying to testing"
+          sudo rm -rf "$DOCROOT"/*
+          sudo cp -a /tmp/exight_testing_dist/dist/. "$DOCROOT"/
+
+          echo "==> Setting permissions"
+          sudo chown -R root:root "$DOCROOT"
+          sudo find "$DOCROOT" -type d -exec chmod 755 {} +
+          sudo find "$DOCROOT" -type f -exec chmod 644 {} +
+
+          echo "==> Validating Apache config and reloading"
+          sudo apachectl configtest
+          sudo systemctl reload httpd || sudo service httpd reload
+
+          echo "==> Testing deployment complete!"
+          echo "🌐 Live at: https://testing.exight.in"
+          curl -I -s https://testing.exight.in | sed -n '1,5p'
         
     - name: Notify deployment completion
       run: |
