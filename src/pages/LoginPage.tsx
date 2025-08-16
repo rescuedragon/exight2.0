@@ -14,8 +14,8 @@ const LoginPage = () => {
 
       {/* Scaling wrapper for entire page */}
       <div className="h-full w-full flex items-center justify-center">
-        <ScreenScale className="w-full">
-          <div className="mx-auto max-w-[1400px] h-[700px] flex items-stretch justify-center">
+        <ScreenScale className="w-full flex items-center justify-center">
+          <div className="mx-auto max-w-[1400px] h-[760px] flex items-stretch justify-center">
             {/* 40/60 split container */}
             <div className="w-full h-full flex items-stretch justify-center">
               {/* Left: Auth 40% */}
