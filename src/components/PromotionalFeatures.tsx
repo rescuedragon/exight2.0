@@ -110,6 +110,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
   });
 
   const openModal = (feature: typeof features[0]) => {
+    console.log('Opening modal for feature:', feature.title);
     setSelectedFeature(feature);
     setIsModalOpen(true);
   };
@@ -150,7 +151,12 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
         {features.map((feature, index) => (
           <button
             key={index}
-            onClick={() => openModal(feature)}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Feature card clicked:', feature.title);
+              openModal(feature);
+            }}
             className={cn(
               "group relative p-6 bg-white rounded-2xl border border-gray-100 hover:border-emerald-200",
               "transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:scale-105",
