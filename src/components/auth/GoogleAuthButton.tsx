@@ -1,134 +1,26 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { authAPI } from "@/services/api";
 
 interface GoogleAuthButtonProps {
   className?: string;
   onClick?: () => void;
 }
 
-// Google OAuth configuration
-const GOOGLE_CLIENT_ID = "176712194964-34r23nnq9no31e92mgkjmo1qu87c63nu.apps.googleusercontent.com";
-
 export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-  const [debugInfo, setDebugInfo] = useState<string>('');
   const navigate = useNavigate();
-
-  // Debug effect to check Google loading
-  React.useEffect(() => {
-    let attempts = 0;
-    const maxAttempts = 10;
-    
-    const checkGoogle = () => {
-      attempts++;
-      
-      if (typeof window.google !== 'undefined') {
-        setDebugInfo('✅ Google Identity Services loaded');
-        console.log('Google object available:', window.google);
-        console.log('Available methods:', Object.keys(window.google.accounts || {}));
-      } else if (attempts < maxAttempts) {
-        setDebugInfo(`⏳ Loading Google services... (${attempts}/${maxAttempts})`);
-        setTimeout(checkGoogle, 1000);
-      } else {
-        setDebugInfo('❌ Google Identity Services failed to load');
-        console.error('Google Identity Services script failed to load after 10 seconds');
-      }
-    };
-    
-    checkGoogle();
-  }, []);
 
   const handleGoogleAuth = async () => {
     setIsLoading(true);
     setShowInfo(false);
     
     try {
-      // Check if Google Identity Services is loaded
-      if (typeof window.google === 'undefined') {
-        // Try to wait for it to load
-        await new Promise((resolve, reject) => {
-          let attempts = 0;
-          const checkGoogle = () => {
-            attempts++;
-            if (typeof window.google !== 'undefined') {
-              resolve(true);
-            } else if (attempts < 10) {
-              setTimeout(checkGoogle, 500);
-            } else {
-              reject(new Error('Google Identity Services failed to load'));
-            }
-          };
-          checkGoogle();
-        });
-      }
-
-      console.log('Initializing Google OAuth with client ID:', GOOGLE_CLIENT_ID);
-
-      // Initialize Google OAuth
-      window.google.accounts.id.initialize({
-        client_id: GOOGLE_CLIENT_ID,
-        callback: handleGoogleCallback,
-        auto_select: false,
-        cancel_on_tap_outside: true,
-      });
-
-      // Use alternative OAuth 2.0 flow for better compatibility
-      const authInstance = window.google.accounts.oauth2.initTokenClient({
-        client_id: GOOGLE_CLIENT_ID,
-        scope: 'email profile openid',
-        callback: async (tokenResponse: any) => {
-          console.log('OAuth token response:', tokenResponse);
-          
-          if (tokenResponse.access_token) {
-            try {
-              // Get user info from Google
-              const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
-                headers: {
-                  'Authorization': `Bearer ${tokenResponse.access_token}`,
-                },
-              });
-              
-              const userInfo = await userInfoResponse.json();
-              console.log('User info from Google:', userInfo);
-              
-              // Create a JWT-like token for our backend
-              const fakeJWT = btoa(JSON.stringify({
-                iss: 'accounts.google.com',
-                aud: GOOGLE_CLIENT_ID,
-                sub: userInfo.id,
-                email: userInfo.email,
-                email_verified: userInfo.verified_email,
-                name: userInfo.name,
-                picture: userInfo.picture,
-                given_name: userInfo.given_name,
-                family_name: userInfo.family_name,
-                iat: Math.floor(Date.now() / 1000),
-                exp: Math.floor(Date.now() / 1000) + 3600
-              }));
-
-              // Send to our backend
-              const result = await authAPI.googleLogin(fakeJWT);
-              
-              if (result.token) {
-                console.log('Login successful, redirecting to dashboard');
-                navigate('/');
-              }
-            } catch (error) {
-              console.error('Error processing OAuth token:', error);
-              setShowInfo(true);
-            } finally {
-              setIsLoading(false);
-            }
-          }
-        },
-      });
-
-      // Request access token
-      authInstance.requestAccessToken();
+      // Simple server-driven OAuth flow: let backend handle Google redirect
+      const BASE_URL = 'https://exight.in';
+      window.location.href = `${BASE_URL}/auth/google`;
     } catch (error) {
       console.error('Google auth failed:', error);
       setShowInfo(true);
@@ -138,39 +30,7 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     onClick?.();
   };
 
-  const handleGoogleCallback = async (response: { credential: string }) => {
-    try {
-      console.log('Google callback received credential:', response.credential ? 'Yes' : 'No');
-      
-      if (!response.credential) {
-        throw new Error('No credential received from Google');
-      }
-
-      // Send the credential token to our backend
-      console.log('Sending credential to backend...');
-      const result = await authAPI.googleLogin(response.credential);
-      
-      console.log('Backend response:', result);
-      
-      if (result.token) {
-        console.log('Login successful, redirecting to dashboard');
-        // Successfully authenticated, redirect to dashboard
-        navigate('/');
-      } else {
-        throw new Error('No authentication token received from backend');
-      }
-    } catch (error) {
-      console.error('Google login failed:', error);
-      setShowInfo(true);
-      
-      // Show specific error message
-      if (error instanceof Error) {
-        console.error('Error details:', error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // No client-side callback needed in server-driven flow
 
   return (
     <div>
