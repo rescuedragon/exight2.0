@@ -1,0 +1,203 @@
+import { useState } from "react";
+import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
+
+interface AuthFormProps {
+  className?: string;
+}
+
+export function AuthForm({ className }: AuthFormProps) {
+  const [showPassword, setShowPassword] = useState(false);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    name: "",
+    confirmPassword: ""
+  });
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement auth logic
+    console.log("Form submitted:", formData);
+  };
+
+  return (
+    <div className={cn("w-full", className)}>
+      <Tabs defaultValue="login" className="w-full">
+        <TabsList className="grid w-full grid-cols-2 mb-4 bg-gray-50 p-1 rounded-lg" role="tablist" aria-label="Authentication mode">
+          <TabsTrigger 
+            value="login" 
+            className="rounded-md py-2 px-3 text-xs typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+            role="tab"
+            aria-selected={true}
+          >
+            SIGN IN
+          </TabsTrigger>
+          <TabsTrigger 
+            value="register" 
+            className="rounded-md py-2 px-3 text-xs typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+            role="tab"
+            aria-selected={false}
+          >
+            SIGN UP
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="login" className="space-y-3">
+          <div className="space-y-1 text-center">
+            <h2 className="text-lg typography-heading text-gray-900">Welcome back</h2>
+            <p className="text-gray-600 text-xs typography-body">Enter your credentials to access your account</p>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <div className="space-y-1">
+              <Label htmlFor="login-email" className="text-xs typography-body text-gray-900">
+                Email
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                <Input
+                  id="login-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  className="pl-8 h-9 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-sm"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <Label htmlFor="login-password" className="text-xs typography-body text-gray-900">
+                Password
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                <Input
+                  id="login-password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange("password", e.target.value)}
+                  className="pl-8 pr-8 h-9 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-sm"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end pt-1">
+              <button
+                type="button"
+                className="text-xs text-emerald-600 hover:text-emerald-700 typography-small transition-colors"
+              >
+                Forgot password?
+              </button>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-9 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-xs rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              SIGN IN
+            </Button>
+          </form>
+        </TabsContent>
+
+        <TabsContent value="register" className="space-y-2">
+          <div className="space-y-1 text-center">
+            <h2 className="text-lg typography-heading text-gray-900">Create account</h2>
+            <p className="text-gray-600 text-xs typography-body">Sign up to start managing your finances</p>
+          </div>
+          
+          <form onSubmit={handleSubmit} className="space-y-2">
+            <div className="space-y-1">
+              <Label htmlFor="register-name" className="text-xs typography-body text-gray-900">
+                Full Name
+              </Label>
+              <div className="relative">
+                <User className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                <Input
+                  id="register-name"
+                  type="text"
+                  placeholder="Enter your full name"
+                  value={formData.name}
+                  onChange={(e) => handleInputChange("name", e.target.value)}
+                  className="pl-8 h-9 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-sm"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <Label htmlFor="register-email" className="text-xs typography-body text-gray-900">
+                Email
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                <Input
+                  id="register-email"
+                  type="email"
+                  placeholder="Enter your email"
+                  value={formData.email}
+                  onChange={(e) => handleInputChange("email", e.target.value)}
+                  className="pl-8 h-9 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-sm"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="space-y-1">
+              <Label htmlFor="register-password" className="text-xs typography-body text-gray-900">
+                Password
+              </Label>
+              <div className="relative">
+                <Lock className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                <Input
+                  id="register-password"
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Create a password"
+                  value={formData.password}
+                  onChange={(e) => handleInputChange("password", e.target.value)}
+                  className="pl-8 pr-8 h-9 border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200 typography-body text-sm"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                </button>
+              </div>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-9 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-xs rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+            >
+              CREATE ACCOUNT
+            </Button>
+          </form>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+}
