@@ -20,11 +20,11 @@ const LoginPage = () => {
       </div>
 
       {/* 40/60 grid that vertically centers both sides - full-bleed width */}
-      <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-stretch gap-x-12 px-4 md:px-8">
+      <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-center gap-x-12 px-4 md:px-8">
         {/* Left: Auth (40%) */}
-        <div className="h-full flex items-center justify-center py-8 lg:py-0">
-          <div className="w-full h-full flex flex-col justify-center space-y-5 px-2 sm:px-4">
-            <AuthForm className="h-full flex flex-col justify-center" />
+        <div className="flex items-center justify-center py-16 lg:py-0">
+          <div className="w-full space-y-5 px-2 sm:px-4 transform origin-center lg:scale-y-125">
+            <AuthForm />
             <div className="flex items-center gap-3">
               <div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
               <span className="text-xs text-gray-500 typography-small">or</span>
@@ -38,7 +38,7 @@ const LoginPage = () => {
         </div>
 
         {/* Right: Promo (60%) */}
-        <div className="h-full flex flex-col items-center justify-center py-12 lg:py-0">
+        <div className="flex flex-col items-center justify-center py-16 lg:py-0 transform origin-center lg:scale-y-125">
           <div className="w-full text-center mb-6 px-2 sm:px-4">
             <h2 className="text-3xl md:text-4xl typography-heading text-foreground">
               Take control of your <span className="gradient-text">financial future</span>

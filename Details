@@ -2,3 +2,4 @@
 [2025-08-16 18:54:28] Tweak: full-bleed login grid, reduce side spacing.
 [2025-08-16 19:00:08] Expand content to fill containers: wider auth column content, full-height features grid.
 [2025-08-16 19:07:03] Vertical fill: auth form and features now stretch to occupy full column heights.
+[2025-08-16 19:11:35] Vertical scale by 250n both login columns for fuller height usage on large screens.
