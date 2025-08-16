@@ -165,7 +165,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               openModal(feature);
             }}
             className={cn(
-              "group relative p-6 bg-white rounded-2xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
+              "group relative p-6 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
               "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02]",
               "cursor-pointer h-[180px] flex flex-col text-left",
               "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
@@ -175,7 +175,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
             <div className="flex items-start gap-4">
               {/* Feature icon */}
               <div className="flex-shrink-0">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                   <feature.icon className="h-6 w-6 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
                 </div>
               </div>
@@ -192,7 +192,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
             </div>
 
             {/* Subtle gradient overlay on hover */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </button>
         ))}
       </div>
@@ -208,7 +208,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           />
           
           {/* Modal Content - Fixed size for all states */}
-          <div className="relative overflow-hidden bg-white rounded-3xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px]">
+          <div className="relative overflow-hidden bg-white rounded-[2rem] border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px]">
           {selectedFeature && !showLoginInModal && (
             <div className="h-full flex">
               {/* Left Panel - Header & Description */}
@@ -221,7 +221,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   </div>
 
                   {/* Description */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-3xl p-4 md:p-6 border border-white/20">
                     <p className="text-gray-700 typography-body text-base md:text-lg">{selectedFeature.modalContent.description}</p>
                   </div>
 
@@ -229,13 +229,13 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   <div className="flex space-x-3">
                     <button 
                       onClick={handleGetStartedInModal}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-purple-600 text-white py-2.5 md:py-3 px-5 md:px-6 rounded-xl typography-button hover:from-emerald-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-purple-600 text-white py-2.5 md:py-3 px-5 md:px-6 rounded-2xl typography-button hover:from-emerald-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                     >
                       Get Started
                     </button>
                     <button 
                       onClick={closeModal}
-                      className="px-5 md:px-6 py-2.5 md:py-3 border border-gray-200 text-gray-700 rounded-xl typography-button hover:bg-gray-50 transition-all duration-200"
+                      className="px-5 md:px-6 py-2.5 md:py-3 border border-gray-200 text-gray-700 rounded-2xl typography-button hover:bg-gray-50 transition-all duration-200"
                     >
                       Close
                     </button>

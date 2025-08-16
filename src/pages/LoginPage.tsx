@@ -48,7 +48,7 @@ const LoginPage = () => {
 						<div className="w-full max-w-[520px] mx-auto lg:mx-0 flex items-center justify-center h-full">
 							<div className="w-full max-w-[440px]">
 								{/* Auth card container with depth */}
-								<div className="rounded-2xl bg-white/90 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-800/70 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] p-10">
+								<div className="rounded-3xl bg-white/90 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-800/70 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] p-10">
 									<div className="w-full space-y-5">
 										<AuthForm />
 										<div className="flex items-center gap-3">

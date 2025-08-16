@@ -54,10 +54,10 @@ export function AuthForm({ className }: AuthFormProps) {
   return (
     <div className={cn("w-full", className)}>
       <Tabs defaultValue="login" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-50 p-1.5 rounded-lg" role="tablist" aria-label="Authentication mode">
+        <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-50 p-1.5 rounded-xl" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
             value="login" 
-            className="rounded-md py-3 px-4 text-sm typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+            className="rounded-lg py-3 px-4 text-sm typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
             role="tab"
             aria-selected={true}
           >
@@ -65,7 +65,7 @@ export function AuthForm({ className }: AuthFormProps) {
           </TabsTrigger>
           <TabsTrigger 
             value="register" 
-            className="rounded-md py-3 px-4 text-sm typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
+            className="rounded-lg py-3 px-4 text-sm typography-button transition-all data-[state=active]:bg-white data-[state=active]:text-gray-900 data-[state=active]:shadow-sm"
             role="tab"
             aria-selected={false}
           >
@@ -135,7 +135,7 @@ export function AuthForm({ className }: AuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-sm rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               SIGN IN
             </Button>
@@ -213,7 +213,7 @@ export function AuthForm({ className }: AuthFormProps) {
 
             <Button
               type="submit"
-              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-sm rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl"
+              className="w-full h-12 bg-gradient-to-r from-emerald-600 to-purple-600 hover:from-emerald-700 hover:to-purple-700 text-white typography-button text-sm rounded-xl transition-all duration-200 shadow-lg hover:shadow-xl"
             >
               CREATE ACCOUNT
             </Button>
