@@ -13,14 +13,14 @@ const LoginPage = () => {
 			</div>
 
 			{/* Scaling wrapper for entire page */}
-			<div className="h-full w-full flex items-center justify-center">
+			<div className="h-full w-full flex items-start justify-center pt-16 pb-8">
 				<ScreenScale className="w-full flex items-center justify-center">
 					<div className="mx-auto max-w-[1400px] h-[760px] flex items-stretch justify-center px-6 md:px-8">
 						{/* 40/60 split container */}
-						<div className="w-full h-full flex flex-col md:flex-row items-stretch justify-center gap-8 md:gap-0">
+						<div className="w-full h-full flex flex-col md:flex-row items-stretch justify-center gap-10 md:gap-16">
 							{/* Left: Auth 40% */}
 							<div className="w-full md:w-[40%] h-full flex items-stretch justify-center">
-								<div className="w-full max-w-[520px] h-full px-6 md:px-8 pt-6 pb-3 flex flex-col">
+								<div className="w-full max-w-[500px] h-full px-6 md:px-8 pt-2 pb-3 flex flex-col">
 									{/* Brand inside left column for perfect left alignment */}
 									<div className="select-none mb-6">
 										<h1 className="text-[32px] md:text-[36px] leading-none font-extrabold tracking-tight typography-heading">
@@ -30,8 +30,8 @@ const LoginPage = () => {
 									</div>
 
 									{/* Middle: Tabs + Form + Divider + Google */}
-									<div className="flex-1 flex items-center">
-										<div className="w-full space-y-5">
+									<div className="flex-1 flex items-start">
+										<div className="w-full space-y-5 mt-2">
 											<AuthForm />
 											<div className="flex items-center gap-3">
 												<div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
