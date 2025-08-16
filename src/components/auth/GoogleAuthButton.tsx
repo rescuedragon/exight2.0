@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -15,7 +15,32 @@ const GOOGLE_CLIENT_ID = "176712194964-34r23nnq9no31e92mgkjmo1qu87c63nu.apps.goo
 export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
+  const [debugInfo, setDebugInfo] = useState<string>('');
   const navigate = useNavigate();
+
+  // Debug effect to check Google loading
+  React.useEffect(() => {
+    let attempts = 0;
+    const maxAttempts = 10;
+    
+    const checkGoogle = () => {
+      attempts++;
+      
+      if (typeof window.google !== 'undefined') {
+        setDebugInfo('✅ Google Identity Services loaded');
+        console.log('Google object available:', window.google);
+        console.log('Available methods:', Object.keys(window.google.accounts || {}));
+      } else if (attempts < maxAttempts) {
+        setDebugInfo(`⏳ Loading Google services... (${attempts}/${maxAttempts})`);
+        setTimeout(checkGoogle, 1000);
+      } else {
+        setDebugInfo('❌ Google Identity Services failed to load');
+        console.error('Google Identity Services script failed to load after 10 seconds');
+      }
+    };
+    
+    checkGoogle();
+  }, []);
 
   const handleGoogleAuth = async () => {
     setIsLoading(true);
@@ -51,39 +76,59 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
         cancel_on_tap_outside: true,
       });
 
-      // Try rendering a button first as fallback
-      const buttonContainer = document.createElement('div');
-      buttonContainer.style.position = 'fixed';
-      buttonContainer.style.top = '-1000px';
-      document.body.appendChild(buttonContainer);
+      // Use alternative OAuth 2.0 flow for better compatibility
+      const authInstance = window.google.accounts.oauth2.initTokenClient({
+        client_id: GOOGLE_CLIENT_ID,
+        scope: 'email profile openid',
+        callback: async (tokenResponse: any) => {
+          console.log('OAuth token response:', tokenResponse);
+          
+          if (tokenResponse.access_token) {
+            try {
+              // Get user info from Google
+              const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
+                headers: {
+                  'Authorization': `Bearer ${tokenResponse.access_token}`,
+                },
+              });
+              
+              const userInfo = await userInfoResponse.json();
+              console.log('User info from Google:', userInfo);
+              
+              // Create a JWT-like token for our backend
+              const fakeJWT = btoa(JSON.stringify({
+                iss: 'accounts.google.com',
+                aud: GOOGLE_CLIENT_ID,
+                sub: userInfo.id,
+                email: userInfo.email,
+                email_verified: userInfo.verified_email,
+                name: userInfo.name,
+                picture: userInfo.picture,
+                given_name: userInfo.given_name,
+                family_name: userInfo.family_name,
+                iat: Math.floor(Date.now() / 1000),
+                exp: Math.floor(Date.now() / 1000) + 3600
+              }));
 
-      window.google.accounts.id.renderButton(buttonContainer, {
-        theme: 'outline',
-        size: 'large',
-        type: 'standard',
-        text: 'signin_with',
-        shape: 'rectangular',
+              // Send to our backend
+              const result = await authAPI.googleLogin(fakeJWT);
+              
+              if (result.token) {
+                console.log('Login successful, redirecting to dashboard');
+                navigate('/');
+              }
+            } catch (error) {
+              console.error('Error processing OAuth token:', error);
+              setShowInfo(true);
+            } finally {
+              setIsLoading(false);
+            }
+          }
+        },
       });
 
-      // Clean up the hidden button
-      setTimeout(() => {
-        if (buttonContainer.parentNode) {
-          buttonContainer.parentNode.removeChild(buttonContainer);
-        }
-      }, 1000);
-
-      // Prompt for Google sign-in
-      window.google.accounts.id.prompt((notification: any) => {
-        console.log('Google prompt notification:', notification);
-        if (notification.isNotDisplayed()) {
-          console.log('Google prompt not displayed, reason:', notification.getNotDisplayedReason());
-          throw new Error(`Google sign-in not available: ${notification.getNotDisplayedReason()}`);
-        }
-        if (notification.isSkippedMoment()) {
-          console.log('Google prompt skipped, reason:', notification.getSkippedReason());
-          throw new Error(`Google sign-in skipped: ${notification.getSkippedReason()}`);
-        }
-      });
+      // Request access token
+      authInstance.requestAccessToken();
     } catch (error) {
       console.error('Google auth failed:', error);
       setShowInfo(true);
@@ -129,10 +174,15 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
 
   return (
     <div>
+      {debugInfo && (
+        <div className="mb-2 p-2 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 text-xs">
+          {debugInfo}
+        </div>
+      )}
       {showInfo && (
         <div className="mb-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs">
           <p className="font-medium mb-1">⚠️ Google sign-in failed</p>
-          <p>Unable to complete Google authentication. Please try again or use email/password authentication above.</p>
+          <p>Unable to complete Google authentication. This may be due to OAuth domain restrictions. Please try again or use email/password authentication above.</p>
         </div>
       )}
       <Button

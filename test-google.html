@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Google OAuth Test</title>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <h1>Google OAuth Test</h1>
+    <div id="status">Loading...</div>
+    <div id="g_id_onload" 
+         data-client_id="176712194964-34r23nnq9no31e92mgkjmo1qu87c63nu.apps.googleusercontent.com"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="handleCredentialResponse"></div>
+    <div class="g_id_signin" data-type="standard"></div>
+
+    <script>
+        function handleCredentialResponse(response) {
+            console.log("Encoded JWT ID token: " + response.credential);
+            document.getElementById('status').innerHTML = 'Success! Got credential: ' + response.credential.substring(0, 50) + '...';
+        }
+
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                if (typeof google !== 'undefined') {
+                    document.getElementById('status').innerHTML = 'Google Identity Services loaded successfully!';
+                    console.log('Google object:', google);
+                } else {
+                    document.getElementById('status').innerHTML = 'Failed to load Google Identity Services';
+                }
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
