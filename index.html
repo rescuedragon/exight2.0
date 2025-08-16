@@ -21,6 +21,37 @@
     
     <!-- Google Identity Services -->
     <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Inline runtime error capture (temporary) -->
+    <script>
+      (function(){
+        function show(msg){
+          var box=document.createElement('pre');
+          box.textContent=msg;
+          box.style.position='fixed';
+          box.style.left='12px';
+          box.style.bottom='12px';
+          box.style.maxWidth='90vw';
+          box.style.maxHeight='40vh';
+          box.style.overflow='auto';
+          box.style.zIndex='99999';
+          box.style.background='rgba(220,38,38,0.1)';
+          box.style.border='1px solid rgba(220,38,38,0.4)';
+          box.style.color='#991b1b';
+          box.style.padding='8px 10px';
+          box.style.borderRadius='8px';
+          box.style.fontFamily='ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace';
+          document.addEventListener('DOMContentLoaded', function(){ document.body.appendChild(box); });
+        }
+        window.addEventListener('error', function(e){
+          try{show('[JS error] '+(e.message||'')+(e.filename?(' @ '+e.filename+':'+e.lineno+':'+e.colno):''));}catch(_){}
+        });
+        window.addEventListener('unhandledrejection', function(e){
+          var r=e&&e.reason; var msg = typeof r==='string'? r : (r&& (r.stack||r.message)) || 'Promise rejection';
+          try{show('[Promise] '+msg);}catch(_){}
+        });
+      })();
+    </script>
   </head>
 
   <body>
