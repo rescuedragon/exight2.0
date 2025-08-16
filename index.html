@@ -55,6 +55,19 @@
   </head>
 
   <body>
+    <noscript>
+      <div style="margin:16px;padding:12px;border:1px solid #e11d48;border-radius:12px;color:#991b1b;background:#fff0f3;font-family:system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji;">
+        JavaScript is disabled. Please enable it to use Exight.
+      </div>
+    </noscript>
+    <div id="boot-check" style="position:fixed;left:12px;top:12px;padding:6px 10px;background:#eef2ff;border:1px solid #c7d2fe;border-radius:10px;color:#1e3a8a;font-size:12px;font-family:ui-sans-serif, system-ui;z-index:99998">Booting…</div>
+    <script>
+      (function(){
+        var el=document.getElementById('boot-check');
+        if(el){ el.textContent='Inline JS OK @ '+new Date().toISOString(); }
+        setTimeout(function(){ if(el&&el.parentNode){ el.parentNode.removeChild(el);} }, 8000);
+      })();
+    </script>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
