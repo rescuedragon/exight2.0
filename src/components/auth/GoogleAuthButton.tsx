@@ -10,42 +10,29 @@ interface GoogleAuthButtonProps {
 
 export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
   const navigate = useNavigate();
 
   const handleGoogleAuth = async () => {
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      // Redirect to backend Google OAuth endpoint
-      const API_BASE_URL = 'https://exight.in/api';
-      window.location.href = `${API_BASE_URL}/auth/google`;
-    } catch (error) {
-      console.error('Google auth failed:', error);
-      setError('Google authentication failed. Please try again.');
-      setIsLoading(false);
-    }
-    
+    setShowInfo(true);
     onClick?.();
   };
 
   return (
     <div>
-      {error && (
-        <div className="mb-3 p-2 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs">
-          {error}
+      {showInfo && (
+        <div className="mb-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 text-xs">
+          <p className="font-medium mb-1">Google sign-in coming soon!</p>
+          <p>Please use the email/password sign-up form above to create your account for now.</p>
         </div>
       )}
       <Button
         type="button"
         variant="outline"
         onClick={handleGoogleAuth}
-        disabled={isLoading}
         className={cn(
           "w-full h-12 bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 text-gray-900 dark:text-gray-100 typography-button text-xs rounded-xl transition-all duration-200 shadow-sm hover:shadow-md dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]",
           "flex items-center justify-center gap-2",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
           className
         )}
       >
@@ -71,7 +58,7 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
             fill="#EA4335"
           />
         </svg>
-        {isLoading ? 'CONNECTING...' : 'CONTINUE WITH GOOGLE'}
+        CONTINUE WITH GOOGLE
       </Button>
     </div>
   );
