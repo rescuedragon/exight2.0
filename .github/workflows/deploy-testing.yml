@@ -63,9 +63,11 @@ jobs:
 
           echo "==> Removing any redirect rules for testing.exight.in"
           sudo rm -f /etc/httpd/conf.d/redirect-testing.conf || true
+          sudo rm -f /etc/httpd/conf.d/000-redirect-testing.conf || true
+          sudo rm -f /etc/httpd/conf.d/*redirect*testing* || true
 
           echo "==> Detecting Apache DocumentRoot for testing.exight.in"
-          DOCROOT=$(sudo bash -lc 'grep -Ri "ServerName\\s\+testing\\.exight\\.in" -n /etc/httpd/conf* -R | cut -d: -f1 | sort -u | head -n1 | xargs -r grep -i "DocumentRoot" -n | awk '{print $NF}' | head -n1') || true
+          DOCROOT=$(sudo bash -c 'grep -Ri "ServerName.*testing\.exight\.in" /etc/httpd/conf* -R 2>/dev/null | head -n1 | cut -d: -f1 | xargs -r grep -i "DocumentRoot" 2>/dev/null | awk "{print \$NF}" | head -n1') || true
           if [ -z "${DOCROOT:-}" ]; then
             # Create a specific directory for testing
             DOCROOT="/var/www/testing.exight.in"
