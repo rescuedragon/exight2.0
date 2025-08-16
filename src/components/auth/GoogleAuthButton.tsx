@@ -13,37 +13,29 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
   const [showInfo, setShowInfo] = useState(false);
   const navigate = useNavigate();
 
-  const handleGoogleAuth = async () => {
-    setIsLoading(true);
-    setShowInfo(false);
-    
-    // The current /auth/google endpoint redirects to old GitHub Pages app
-    // Need to implement proper Google OAuth on the backend first
-    setTimeout(() => {
-      setShowInfo(true);
-      setIsLoading(false);
-    }, 500);
-    
+  const handleGoogleAuth = () => {
+    // Immediately show info without any loading or network requests
+    setShowInfo(true);
+    setIsLoading(false);
     onClick?.();
   };
 
   return (
     <div>
       {showInfo && (
-        <div className="mb-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-300 text-xs">
-          <p className="font-medium mb-1">🔧 Google OAuth needs backend update</p>
-          <p>The current Google OAuth endpoint redirects to the old dashboard. Backend needs to be updated with proper OAuth endpoints. Please use email/password sign-in for now.</p>
+        <div className="mb-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs">
+          <p className="font-medium mb-1">🚫 Google sign-in disabled</p>
+          <p>Google OAuth is temporarily disabled to prevent redirects to the old dashboard. Backend needs proper OAuth implementation. Please use email/password authentication above.</p>
         </div>
       )}
       <Button
         type="button"
         variant="outline"
         onClick={handleGoogleAuth}
-        disabled={isLoading}
         className={cn(
-          "w-full h-12 bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 text-gray-900 dark:text-gray-100 typography-button text-xs rounded-xl transition-all duration-200 shadow-sm hover:shadow-md dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]",
+          "w-full h-12 bg-gray-50 dark:bg-slate-800/30 border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400 typography-button text-xs rounded-xl transition-all duration-200",
           "flex items-center justify-center gap-2",
-          "disabled:opacity-50 disabled:cursor-not-allowed",
+          "hover:bg-gray-100 dark:hover:bg-slate-700/50 cursor-pointer",
           className
         )}
       >
