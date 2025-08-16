@@ -28,8 +28,11 @@ const LoginPage = () => {
             <div className="w-full h-full flex items-stretch justify-center">
               {/* Left: Auth 40% */}
               <div className="w-[40%] h-full flex items-stretch justify-start">
-                <div className="w-full max-w-[520px] h-full pl-6 pr-6 pt-6 flex flex-col">
-                  {/* Centered block: Tabs + Form + Divider + Google + Terms */}
+                <div className="w-full max-w-[560px] h-full pl-8 pr-8 pt-6 flex flex-col justify-between">
+                  {/* Top spacer to account for brand at absolute top-left */}
+                  <div className="h-6" />
+
+                  {/* Middle: Tabs + Form + Divider + Google */}
                   <div className="flex-1 flex items-center">
                     <div className="w-full space-y-4">
                       <AuthForm />
@@ -39,10 +42,14 @@ const LoginPage = () => {
                         <div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
                       </div>
                       <GoogleAuthButton />
-                      <p className="text-[11px] text-gray-500 typography-small text-center leading-tight">
-                        By signing in, you agree to our <button className="text-emerald-600 hover:text-emerald-700 underline">Terms of Service</button> and <button className="text-emerald-600 hover:text-emerald-700 underline">Privacy Policy</button>
-                      </p>
                     </div>
+                  </div>
+
+                  {/* Bottom: Terms pinned to bottom of left column */}
+                  <div className="pb-2">
+                    <p className="text-[11px] text-gray-500 typography-small text-center leading-tight">
+                      By signing in, you agree to our <button className="text-emerald-600 hover:text-emerald-700 underline">Terms of Service</button> and <button className="text-emerald-600 hover:text-emerald-700 underline">Privacy Policy</button>
+                    </p>
                   </div>
                 </div>
               </div>
