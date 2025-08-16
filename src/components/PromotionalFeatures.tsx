@@ -172,7 +172,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               openModal(feature);
             }}
             className={cn(
-              "group relative p-5 md:p-6 bg-white rounded-2xl border border-gray-100 hover:border-emerald-200",
+              "group relative p-5 md:p-6 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
               "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2 hover:scale-[1.02] md:hover:scale-105",
               "cursor-pointer h-full flex flex-col text-left justify-between",
               "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
@@ -180,7 +180,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           >
             {/* Feature icon */}
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
                 <feature.icon className="h-6 w-6 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
               </div>
             </div>
@@ -198,7 +198,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
             </div>
 
             {/* Subtle gradient overlay on hover */}
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </button>
         ))}
       </div>
@@ -214,7 +214,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           />
           
           {/* Modal Content - Fixed size for all states */}
-          <div className="relative overflow-hidden bg-white rounded-2xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px]">
+          <div className="relative overflow-hidden bg-white rounded-3xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px]">
           {selectedFeature && !showLoginInModal && (
             <div className="h-full flex">
               {/* Left Panel - Header & Description */}
@@ -227,7 +227,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   </div>
 
                   {/* Description */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
+                  <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 md:p-6 border border-white/20">
                     <p className="text-gray-700 typography-body text-base md:text-lg">{selectedFeature.modalContent.description}</p>
                   </div>
 
@@ -256,7 +256,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 mb-4 md:mb-6">Key Features</h4>
                   <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
                     {selectedFeature.modalContent.features.map((item, idx) => (
-                      <div key={idx} className="p-3 md:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+                      <div key={idx} className="p-3 md:p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors duration-200">
                         <span className="text-gray-700 typography-body text-sm md:text-base">{item.text}</span>
                       </div>
                     ))}
@@ -268,7 +268,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 mb-4 md:mb-6">Benefits</h4>
                   <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {selectedFeature.modalContent.benefits.map((benefit, idx) => (
-                      <div key={idx} className="p-3 md:p-4 bg-emerald-50 rounded-xl">
+                      <div key={idx} className="p-3 md:p-4 bg-emerald-50 rounded-2xl">
                         <span className="text-gray-700 typography-body text-sm md:text-base">{benefit}</span>
                       </div>
                     ))}
