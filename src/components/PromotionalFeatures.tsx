@@ -140,14 +140,14 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
     <>
       <div className={cn("flex flex-col h-full w-full", className)}>
       {/* App tagline */}
-      <div className="text-center mb-6 w-full">
-        <h3 className="text-xl typography-heading text-gray-900 leading-relaxed max-w-2xl mx-auto">
+      <div className="text-center mb-6 md:mb-8 w-full">
+        <h3 className="text-lg md:text-xl typography-heading text-gray-900 leading-relaxed max-w-2xl mx-auto">
           Exight helps you understand and control your money effortlessly.
         </h3>
       </div>
 
       {/* Features grid - Fill remaining space */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 w-full flex-1">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 w-full flex-1">
         {features.map((feature, index) => (
           <button
             key={index}
@@ -158,8 +158,8 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               openModal(feature);
             }}
             className={cn(
-              "group relative p-6 bg-white rounded-2xl border border-gray-100 hover:border-emerald-200",
-              "transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:scale-105",
+              "group relative p-5 md:p-6 bg-white rounded-2xl border border-gray-100 hover:border-emerald-200",
+              "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2 hover:scale-[1.02] md:hover:scale-105",
               "cursor-pointer h-full flex flex-col text-left justify-between",
               "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
             )}
@@ -200,34 +200,34 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           />
           
           {/* Modal Content - Fixed size for all states */}
-          <div className="relative w-[90vw] h-[70vh] max-w-6xl overflow-hidden bg-white rounded-2xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+          <div className="relative overflow-hidden bg-white rounded-2xl border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[94vw] h-[72vh] max-w-[1200px] md:w-[92vw] md:h-[70vh] md:max-w-[1280px] lg:max-w-[1320px] scale-[0.96] md:scale-100 lg:scale-[1.03]">
           {selectedFeature && !showLoginInModal && (
             <div className="h-full flex">
               {/* Left Panel - Header & Description */}
-              <div className="w-2/5 bg-gradient-to-br from-gray-50 to-gray-100/50 p-8 flex flex-col justify-center">
+              <div className="w-2/5 bg-gradient-to-br from-gray-50 to-gray-100/50 p-6 md:p-8 lg:p-10 flex flex-col justify-center">
                 {/* Modal Header */}
                 <div className="space-y-6">
                   <div className="space-y-3">
-                    <h2 className="text-3xl typography-heading text-gray-900">{selectedFeature.title}</h2>
-                    <p className="text-gray-600 typography-body text-lg">{selectedFeature.subtitle}</p>
+                    <h2 className="text-2xl md:text-3xl typography-heading text-gray-900">{selectedFeature.title}</h2>
+                    <p className="text-gray-600 typography-body text-base md:text-lg">{selectedFeature.subtitle}</p>
                   </div>
 
                   {/* Description */}
-                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 border border-white/20">
-                    <p className="text-gray-700 typography-body text-lg">{selectedFeature.modalContent.description}</p>
+                  <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 md:p-6 border border-white/20">
+                    <p className="text-gray-700 typography-body text-base md:text-lg">{selectedFeature.modalContent.description}</p>
                   </div>
 
                   {/* CTA */}
                   <div className="flex space-x-3">
                     <button 
                       onClick={handleGetStartedInModal}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-purple-600 text-white py-3 px-6 rounded-xl typography-button hover:from-emerald-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-purple-600 text-white py-2.5 md:py-3 px-5 md:px-6 rounded-xl typography-button hover:from-emerald-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                     >
                       Get Started
                     </button>
                     <button 
                       onClick={closeModal}
-                      className="px-6 py-3 border border-gray-200 text-gray-700 rounded-xl typography-button hover:bg-gray-50 transition-all duration-200"
+                      className="px-5 md:px-6 py-2.5 md:py-3 border border-gray-200 text-gray-700 rounded-xl typography-button hover:bg-gray-50 transition-all duration-200"
                     >
                       Close
                     </button>
@@ -236,14 +236,14 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               </div>
 
               {/* Right Panel - Features & Benefits */}
-              <div className="w-3/5 p-8 flex flex-col">
+              <div className="w-3/5 p-6 md:p-8 lg:p-10 flex flex-col">
                 {/* Features Section */}
                 <div className="flex-1">
-                  <h4 className="text-xl typography-feature-title text-gray-900 mb-6">Key Features</h4>
-                  <div className="grid grid-cols-2 gap-4 mb-8">
+                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 mb-4 md:mb-6">Key Features</h4>
+                  <div className="grid grid-cols-2 gap-3 md:gap-4 mb-6 md:mb-8">
                     {selectedFeature.modalContent.features.map((item, idx) => (
-                      <div key={idx} className="p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
-                        <span className="text-gray-700 typography-body">{item.text}</span>
+                      <div key={idx} className="p-3 md:p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors duration-200">
+                        <span className="text-gray-700 typography-body text-sm md:text-base">{item.text}</span>
                       </div>
                     ))}
                   </div>
@@ -251,11 +251,11 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
 
                 {/* Benefits Section */}
                 <div className="flex-1">
-                  <h4 className="text-xl typography-feature-title text-gray-900 mb-6">Benefits</h4>
-                  <div className="grid grid-cols-2 gap-4">
+                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 mb-4 md:mb-6">Benefits</h4>
+                  <div className="grid grid-cols-2 gap-3 md:gap-4">
                     {selectedFeature.modalContent.benefits.map((benefit, idx) => (
-                      <div key={idx} className="p-4 bg-emerald-50 rounded-xl">
-                        <span className="text-gray-700 typography-body">{benefit}</span>
+                      <div key={idx} className="p-3 md:p-4 bg-emerald-50 rounded-xl">
+                        <span className="text-gray-700 typography-body text-sm md:text-base">{benefit}</span>
                       </div>
                     ))}
                   </div>
@@ -268,15 +268,15 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           {showLoginInModal && (
             <div className="h-full flex flex-col animate-in fade-in slide-in-from-right-4 duration-300">
               {/* Header with Go Back Button, Exight Title, and Close Button */}
-              <div className="flex items-center justify-between p-4 pb-2">
+              <div className="flex items-center justify-between p-4 pb-2 md:p-5 md:pb-2">
                 <div className="flex items-center">
                   <button
                     onClick={() => setShowLoginInModal(false)}
-                    className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center mr-3"
+                    className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center mr-3"
                   >
                     <ArrowLeft className="h-4 w-4 text-gray-600" />
                   </button>
-                  <h1 className="text-lg typography-heading bg-clip-text text-transparent" style={{
+                  <h1 className="text-base md:text-lg typography-heading bg-clip-text text-transparent" style={{
                     backgroundImage: 'linear-gradient(45deg, #059669, #2563eb, #9333ea, #059669)',
                     backgroundSize: '400% 400%',
                     animation: 'gradient 8s ease-in-out infinite'
@@ -286,14 +286,14 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                 </div>
                 <button
                   onClick={closeModal}
-                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center"
+                  className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center"
                 >
                   <X className="h-4 w-4 text-gray-600" />
                 </button>
               </div>
 
               {/* Login Content */}
-              <div className="flex-1 flex items-start justify-center px-6 pb-4 pt-1 overflow-y-auto">
+              <div className="flex-1 flex items-start justify-center px-5 md:px-6 pb-4 pt-1 overflow-y-auto">
                 <div className="w-full max-w-sm space-y-2">
 
                   {/* Auth form - Compact version for fixed modal */}
