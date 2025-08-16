@@ -7,6 +7,14 @@ import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 const LoginPage = () => {
 	return (
 		<div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-gray-900 dark:via-gray-900/95 dark:to-gray-900">
+						{/* Brand at top-left */}
+			<div className="absolute top-6 left-6 z-50 select-none">
+				<h1 className="text-[32px] md:text-[36px] leading-none font-extrabold tracking-tight typography-heading">
+					<span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">Exight</span>
+				</h1>
+				<p className="mt-1 text-xs md:text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
+			</div>
+
 			{/* Dark mode toggle */}
 			<div className="absolute top-6 right-6 z-50">
 				<ThemeToggle />
@@ -17,16 +25,9 @@ const LoginPage = () => {
 				<div className="mx-auto w-full max-w-[1280px] px-6 md:px-8">
 					{/* 40/60 split container */}
 					<div className="grid grid-cols-1 md:grid-cols-[520px_minmax(0,1fr)] gap-10 md:gap-16 items-start">
-							{/* Left: Auth 40% */}
-							<div className="w-full md:w-auto h-full flex items-stretch justify-center">
-								<div className="w-full max-w-[520px] h-full px-0 md:px-2 pt-1 pb-2 flex flex-col">
-									{/* Brand inside left column for perfect left alignment */}
-									<div className="select-none mb-6">
-										<h1 className="text-[32px] md:text-[36px] leading-none font-extrabold tracking-tight typography-heading">
-											<span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">Exight</span>
-										</h1>
-										<p className="mt-1 text-xs md:text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
-									</div>
+						{/* Left: Auth 40% */}
+						<div className="w-full md:w-auto h-full flex items-stretch justify-center">
+							<div className="w-full max-w-[520px] h-full px-0 md:px-2 pt-1 pb-2 flex flex-col">
 
 									{/* Auth card container with depth */}
 									<div className="rounded-2xl bg-white/90 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-800/70 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] p-6 md:p-8">
