@@ -229,13 +229,13 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                   <div className="flex space-x-3">
                     <button 
                       onClick={handleGetStartedInModal}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-purple-600 text-white py-2.5 md:py-3 px-5 md:px-6 rounded-2xl typography-button hover:from-emerald-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                      className="flex-1 bg-gradient-to-r from-emerald-600 to-purple-600 text-white py-2.5 md:py-3 px-5 md:px-6 rounded-3xl typography-button hover:from-emerald-700 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl"
                     >
                       Get Started
                     </button>
                     <button 
                       onClick={closeModal}
-                      className="px-5 md:px-6 py-2.5 md:py-3 border border-gray-200 text-gray-700 rounded-2xl typography-button hover:bg-gray-50 transition-all duration-200"
+                      className="px-5 md:px-6 py-2.5 md:py-3 border border-gray-200 dark:border-slate-700 text-gray-700 dark:text-gray-300 rounded-3xl typography-button hover:bg-gray-50 dark:hover:bg-slate-800/50 transition-all duration-200"
                     >
                       Close
                     </button>
