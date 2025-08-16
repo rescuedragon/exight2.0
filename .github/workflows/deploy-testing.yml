@@ -1,0 +1,267 @@
+name: Deploy to Testing Environment
+
+on:
+  push:
+    branches: [testing]
+  workflow_dispatch:
+
+jobs:
+  deploy-testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Predeploy checks
+        run: |
+          echo "🔍 Running predeploy checks..."
+
+          # Run linting
+          echo "📝 Running ESLint..."
+          npm run lint
+
+          # Run tests if they exist
+          if npm run | grep -q "test"; then
+            echo "🧪 Running tests..."
+            npm test
+          else
+            echo "⚠️  No test script found, skipping tests"
+          fi
+
+          echo "✅ Predeploy checks completed"
+
+      - name: Inject frontend env (testing)
+        run: |
+          echo "VITE_API_BASE_URL=https://exight.in/api" >> .env
+          if [ -n "${{ secrets.TEST_GOOGLE_CLIENT_ID }}" ]; then
+            echo "VITE_GOOGLE_CLIENT_ID=${{ secrets.TEST_GOOGLE_CLIENT_ID }}" >> .env
+          fi
+          echo "✅ Wrote .env for build - using SAME API as production"
+
+      - name: Build application
+        run: npm run build
+
+      - name: Check required secrets
+        run: |
+          echo "🔍 Checking required secrets..."
+          if [ -z "${{ secrets.TEST_HOST }}" ]; then
+            echo "❌ TEST_HOST secret is missing"
+            echo "Please add TEST_HOST secret in repository settings"
+            exit 1
+          fi
+          if [ -z "${{ secrets.TEST_USERNAME }}" ]; then
+            echo "❌ TEST_USERNAME secret is missing"
+            echo "Please add TEST_USERNAME secret in repository settings"
+            exit 1
+          fi
+          if [ -z "${{ secrets.TEST_SSH_KEY }}" ]; then
+            echo "❌ TEST_SSH_KEY secret is missing"
+            echo "Please add TEST_SSH_KEY secret in repository settings"
+            exit 1
+          fi
+          echo "✅ All required secrets are configured"
+          echo "Host: ${{ secrets.TEST_HOST }}"
+          echo "Username: ${{ secrets.TEST_USERNAME }}"
+          echo "SSH Port: ${{ secrets.TEST_SSH_PORT || '22' }}"
+
+      - name: Validate SSH key
+        run: |
+          echo "🔐 Testing SSH key format..."
+          echo "${{ secrets.TEST_SSH_KEY }}" > /tmp/test_key
+          chmod 600 /tmp/test_key
+
+          # Check if key starts with -----BEGIN
+          if ! head -1 /tmp/test_key | grep -q "\-\-\-\-\-BEGIN"; then
+            echo "❌ SSH key doesn't start with -----BEGIN"
+            exit 1
+          fi
+          echo "✅ SSH key starts correctly"
+
+          # Check if key ends with -----END
+          if ! tail -1 /tmp/test_key | grep -q "\-\-\-\-\-END"; then
+            echo "❌ SSH key doesn't end with -----END"
+            exit 1
+          fi
+          echo "✅ SSH key ends correctly"
+
+          echo "🔌 Testing SSH connection..."
+          ssh -i /tmp/test_key -o StrictHostKeyChecking=no -o ConnectTimeout=10 ${{ secrets.TEST_USERNAME }}@${{ secrets.TEST_HOST }} "echo 'SSH connection successful'" || {
+            echo "❌ SSH connection failed"
+            echo "🔍 SSH key content (first 3 lines):"
+            head -3 /tmp/test_key
+            echo "🔍 SSH key content (last 3 lines):"
+            tail -3 /tmp/test_key
+            exit 1
+          }
+
+          echo "✅ SSH connection successful!"
+          rm -f /tmp/test_key
+
+      - name: Deploy to Testing Environment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT || '22' }}
+          script: |
+            echo "🚀 Starting testing deployment..."
+
+            # Create testing directory if it doesn't exist
+            sudo mkdir -p /var/www/html-testing
+
+            # Backup current files if they exist
+            if [ -d "/var/www/html-testing" ] && [ "$(ls -A /var/www/html-testing)" ]; then
+              sudo cp -r /var/www/html-testing /var/www/html-testing.backup.$(date +%Y%m%d_%H%M%S)
+              echo "✅ Backup created"
+            fi
+
+            # Clean testing directory
+            sudo rm -rf /var/www/html-testing/*
+            echo "🧹 Testing directory cleaned"
+
+            # Set proper permissions for upload
+            sudo chown -R ${{ secrets.TEST_USERNAME }}:${{ secrets.TEST_USERNAME }} /var/www/html-testing/
+            sudo chmod -R 755 /var/www/html-testing/
+            echo "🔐 Permissions set"
+
+      - name: Upload files to Testing
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT || '22' }}
+          source: 'dist/*'
+          target: '/var/www/html-testing/'
+          strip_components: 0
+
+      - name: Finalize Testing Deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT || '22' }}
+          script: |
+            echo "🎯 Finalizing testing deployment..."
+
+            # Remove any nested dist folder if created
+            if [ -d "/var/www/html-testing/dist" ]; then
+              sudo mv /var/www/html-testing/dist/* /var/www/html-testing/ 2>/dev/null || true
+              sudo rm -rf /var/www/html-testing/dist
+              echo "📁 Fixed nested dist folder"
+            fi
+
+            # Set final permissions
+            sudo chown -R ${{ secrets.TEST_USERNAME }}:apache /var/www/html-testing/
+            sudo chmod -R 750 /var/www/html-testing/
+            sudo chmod -R g+rx /var/www/html-testing/
+            echo "🔐 Final permissions set"
+
+            # Verify files are in correct location
+            echo "📋 Files in /var/www/html-testing/:"
+            ls -la /var/www/html-testing/
+
+            # Test if the site is accessible
+            echo "🌐 Testing site accessibility..."
+            if curl -s -o /dev/null -w "%{http_code}" http://localhost/ | grep -q "200\|404"; then
+              echo "✅ Testing site is responding"
+            else
+              echo "⚠️ Testing site may not be accessible yet"
+            fi
+
+            echo "🎉 Testing deployment completed!"
+
+      - name: Configure Apache headers (HSTS + caching)
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT || '22' }}
+          script: |
+            echo "🛡️  Configuring Apache HSTS + caching headers..."
+            CONF_PATH_HTTPD=/etc/httpd/conf.d/exight-testing-headers.conf
+            CONF_PATH_APACHE2=/etc/apache2/conf-enabled/exight-testing-headers.conf
+            
+            # Create Apache configuration content
+            CONTENT='<IfModule mod_headers.c>
+              Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+              <FilesMatch "\.(?:js|css|svg|png|jpe?g|gif|webp|avif|ico)$">
+                Header set Cache-Control "public, max-age=31536000, immutable"
+              </FilesMatch>
+              <FilesMatch "\.(?:json)$">
+                Header set Cache-Control "public, max-age=3600"
+              </FilesMatch>
+              <FilesMatch "\.(?:html)$">
+                Header set Cache-Control "no-cache"
+              </FilesMatch>
+            </IfModule>
+            <IfModule mod_expires.c>
+              ExpiresActive On
+              ExpiresDefault "access plus 1 hour"
+              ExpiresByType text/html "access plus 0 seconds"
+              ExpiresByType text/css "access plus 1 year"
+              ExpiresByType application/javascript "access plus 1 year"
+              ExpiresByType image/svg+xml "access plus 1 year"
+              ExpiresByType image/png "access plus 1 year"
+              ExpiresByType image/jpeg "access plus 1 year"
+              ExpiresByType image/webp "access plus 1 year"
+              ExpiresByType image/avif "access plus 1 year"
+              ExpiresByType image/x-icon "access plus 1 year"
+              ExpiresByType application/json "access plus 1 hour"
+            </IfModule>'
+            if [ -d "/etc/httpd/conf.d" ]; then
+              echo "Writing $CONF_PATH_HTTPD"
+              echo -e "$CONTENT" | sudo tee "$CONF_PATH_HTTPD" >/dev/null
+              sudo systemctl reload httpd || sudo systemctl restart httpd
+            elif [ -d "/etc/apache2" ]; then
+              echo "Writing $CONF_PATH_APACHE2"
+              echo -e "$CONTENT" | sudo tee "$CONF_PATH_APACHE2" >/dev/null
+              sudo systemctl reload apache2 || sudo systemctl restart apache2
+            else
+              echo "⚠️  Apache config directory not found; skipping"
+            fi
+
+      - name: Verify HSTS header
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT || '22' }}
+          script: |
+            echo "🔎 Checking HSTS header on https://testing.exight.in ..."
+            if command -v curl >/dev/null 2>&1; then
+              HDR=$(curl -sI https://testing.exight.in/ | grep -i "Strict-Transport-Security" || true)
+              echo "Response header: $HDR"
+              if [ -z "$HDR" ]; then
+                echo "⚠️  HSTS header not detected. Check Apache modules and config."
+              else
+                echo "✅ HSTS header present."
+              fi
+            else
+              echo "⚠️  curl not available on server; skipping verification."
+            fi
+
+      - name: Health Check
+        run: |
+          echo "🏥 Performing health check..."
+          sleep 10
+          if curl -s -o /dev/null -w "%{http_code}" https://testing.exight.in/ | grep -q "200\|404"; then
+            echo "✅ Testing site is responding to external requests"
+          else
+            echo "❌ Testing site health check failed"
+            exit 1
+          fi
