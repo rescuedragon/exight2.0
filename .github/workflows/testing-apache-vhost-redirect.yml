@@ -1,0 +1,58 @@
+name: Apply Apache vhost redirect for testing
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  apache-redirect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create vhost redirect for testing.exight.in
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TEST_HOST }}
+          username: ${{ secrets.TEST_USERNAME }}
+          key: ${{ secrets.TEST_SSH_KEY }}
+          port: ${{ secrets.TEST_SSH_PORT }}
+          script_stop: true
+          script: |
+            set -euo pipefail
+
+            FILE=/etc/httpd/conf.d/000-redirect-testing.conf
+            echo "==> Writing $FILE"
+            sudo tee "$FILE" >/dev/null <<'EOF'
+            # Managed by GitHub Actions: force testing.exight.in to GitHub Pages
+            <VirtualHost *:80>
+              ServerName testing.exight.in
+              Redirect permanent / https://rescuedragon.github.io/exight2.0/
+            </VirtualHost>
+
+            <VirtualHost *:443>
+              ServerName testing.exight.in
+              Redirect permanent / https://rescuedragon.github.io/exight2.0/
+            </VirtualHost>
+            EOF
+
+            echo "==> Config test"
+            if command -v apachectl >/dev/null 2>&1; then
+              sudo apachectl configtest
+              sudo systemctl reload httpd || sudo service httpd reload
+            else
+              sudo httpd -t
+              sudo systemctl reload httpd || sudo service httpd reload
+            fi
+
+            echo "==> httpd -S"
+            (apachectl -S 2>/dev/null || httpd -S 2>/dev/null) || true
+
+            echo "==> Curl check"
+            curl -I -s http://testing.exight.in | sed -n '1,20p' || true
+            curl -I -s https://testing.exight.in | sed -n '1,20p' || true
+
+
