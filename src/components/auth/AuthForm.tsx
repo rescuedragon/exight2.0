@@ -52,7 +52,7 @@ export function AuthForm({ className }: AuthFormProps) {
   };
 
   return (
-    <div className={cn("w-full", className)}>
+    <div className={cn("w-full transition-all duration-500 ease-in-out", className)}>
       <Tabs defaultValue="login" className="w-full">
         <TabsList className="grid w-full grid-cols-2 mb-6 p-1 h-12 rounded-3xl bg-gray-100 dark:bg-slate-800/60 border border-black/5 dark:border-slate-700/60 overflow-hidden" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
@@ -73,8 +73,8 @@ export function AuthForm({ className }: AuthFormProps) {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="login" className="space-y-4">
-          <form onSubmit={handleSubmitLogin} className="space-y-4">
+        <TabsContent value="login" className="space-y-4 transition-all duration-500 ease-in-out">
+          <form onSubmit={handleSubmitLogin} className="space-y-4 transition-all duration-500 ease-in-out">
             <div className="space-y-1">
               <Label htmlFor="login-email" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Email
@@ -137,8 +137,8 @@ export function AuthForm({ className }: AuthFormProps) {
           </form>
         </TabsContent>
 
-        <TabsContent value="register" className="space-y-4">
-          <form onSubmit={handleSubmitRegister} className="space-y-4">
+        <TabsContent value="register" className="space-y-4 transition-all duration-500 ease-in-out">
+          <form onSubmit={handleSubmitRegister} className="space-y-4 transition-all duration-500 ease-in-out">
             <div className="space-y-1">
               <Label htmlFor="register-name" className="text-sm typography-body text-gray-900 dark:text-gray-100">
                 Full Name

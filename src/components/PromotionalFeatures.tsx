@@ -280,9 +280,9 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                 <div className="flex items-center">
                   <button
                     onClick={() => setShowLoginInModal(false)}
-                    className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center mr-3"
+                    className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 dark:bg-slate-800/60 hover:bg-gray-200 dark:hover:bg-slate-700/80 transition-colors duration-200 flex items-center justify-center mr-3"
                   >
-                    <ArrowLeft className="h-4 w-4 text-gray-600" />
+                    <ArrowLeft className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                   </button>
                   <h1 className="text-base md:text-lg typography-heading bg-clip-text text-transparent" style={{
                     backgroundImage: 'linear-gradient(45deg, #059669, #2563eb, #9333ea, #059669)',
@@ -294,9 +294,9 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                 </div>
                 <button
                   onClick={closeModal}
-                  className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 hover:bg-gray-200 transition-colors duration-200 flex items-center justify-center"
+                  className="w-8 h-8 md:w-9 md:h-9 rounded-full bg-gray-100 dark:bg-slate-800/60 hover:bg-gray-200 dark:hover:bg-slate-700/80 transition-colors duration-200 flex items-center justify-center"
                 >
-                  <X className="h-4 w-4 text-gray-600" />
+                  <X className="h-4 w-4 text-gray-600 dark:text-gray-300" />
                 </button>
               </div>
 
@@ -446,9 +446,9 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           {!showLoginInModal && (
             <button
               onClick={closeModal}
-              className="absolute right-4 top-4 rounded-full p-2 bg-white/80 hover:bg-white transition-colors duration-200 shadow-sm"
+              className="absolute right-4 top-4 rounded-full p-2 bg-white/80 dark:bg-slate-900/80 hover:bg-white dark:hover:bg-slate-900 transition-colors duration-200 shadow-sm dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]"
             >
-              <X className="h-5 w-5 text-gray-600" />
+              <X className="h-5 w-5 text-gray-600 dark:text-gray-300" />
             </button>
           )}
           </div>
