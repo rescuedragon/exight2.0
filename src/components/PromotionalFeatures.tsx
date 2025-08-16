@@ -160,7 +160,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
         </h3>
       </div>
 
-      {/* Features grid - Fill remaining space exactly */}
+      {/* Features grid - Fill remaining space exactly, remove extra outer margins */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 w-full flex-1 items-stretch content-stretch">
         {features.map((feature, index) => (
           <button

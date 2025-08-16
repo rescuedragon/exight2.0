@@ -19,8 +19,8 @@ const LoginPage = () => {
         <p className="mt-1 text-xs md:text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
       </div>
 
-      {/* 40/60 grid that vertically centers both sides */}
-      <div className="mx-auto max-w-[1400px] min-h-screen grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-center gap-x-10 px-6 md:px-8">
+      {/* 40/60 grid that vertically centers both sides - full-bleed width */}
+      <div className="min-h-screen w-full grid grid-cols-1 lg:grid-cols-[2fr_3fr] items-center gap-x-12 px-4 md:px-8">
         {/* Left: Auth (40%) */}
         <div className="flex items-center justify-center py-16 lg:py-0">
           <div className="w-full max-w-[520px] space-y-5">
