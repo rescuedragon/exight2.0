@@ -13,10 +13,20 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
   const [showInfo, setShowInfo] = useState(false);
   const navigate = useNavigate();
 
-  const handleGoogleAuth = () => {
-    // Immediately show info without any loading or network requests
-    setShowInfo(true);
-    setIsLoading(false);
+  const handleGoogleAuth = async () => {
+    setIsLoading(true);
+    setShowInfo(false);
+    
+    try {
+      // Redirect to backend Google OAuth endpoint
+      // Safe now that old dashboard is completely removed
+      window.location.href = 'https://exight.in/auth/google';
+    } catch (error) {
+      console.error('Google auth failed:', error);
+      setShowInfo(true);
+      setIsLoading(false);
+    }
+    
     onClick?.();
   };
 
@@ -24,18 +34,19 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     <div>
       {showInfo && (
         <div className="mb-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs">
-          <p className="font-medium mb-1">🚫 Google sign-in disabled</p>
-          <p>Google OAuth is temporarily disabled to prevent redirects to the old dashboard. Backend needs proper OAuth implementation. Please use email/password authentication above.</p>
+          <p className="font-medium mb-1">⚠️ Google sign-in failed</p>
+          <p>Unable to connect to Google OAuth. Please try again or use email/password authentication above.</p>
         </div>
       )}
       <Button
         type="button"
         variant="outline"
         onClick={handleGoogleAuth}
+        disabled={isLoading}
         className={cn(
-          "w-full h-12 bg-gray-50 dark:bg-slate-800/30 border-gray-300 dark:border-slate-600 text-gray-600 dark:text-gray-400 typography-button text-xs rounded-xl transition-all duration-200",
+          "w-full h-12 bg-white dark:bg-slate-800/50 border-gray-200 dark:border-slate-700 hover:bg-gray-50 dark:hover:bg-slate-800 text-gray-900 dark:text-gray-100 typography-button text-xs rounded-xl transition-all duration-200 shadow-sm hover:shadow-md dark:shadow-[0_4px_20px_-4px_rgba(0,0,0,0.3)]",
           "flex items-center justify-center gap-2",
-          "hover:bg-gray-100 dark:hover:bg-slate-700/50 cursor-pointer",
+          "disabled:opacity-50 disabled:cursor-not-allowed",
           className
         )}
       >
