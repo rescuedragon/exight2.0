@@ -13,7 +13,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Prepend JS redirect into /var/www/html/index.html
+      - name: Inject meta refresh redirect into /var/www/html/index.html
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.TEST_HOST }}
@@ -30,19 +30,16 @@ jobs:
               exit 1
             fi
 
-            if sudo grep -q 'data-id="TestingHostRedirect"' "$INDEX"; then
-              echo "✅ JS redirect already present; skipping"
+            if sudo grep -q 'http-equiv="refresh"' "$INDEX"; then
+              echo "✅ Meta refresh already present; skipping"
               exit 0
             fi
 
             echo "==> Backing up index.html"
             sudo cp "$INDEX" "$INDEX.bak.$(date +%s)"
 
-            echo "==> Writing injection script"
-            sudo bash -lc 'cat > /tmp/inject_testing_redirect.js <<"EOF"\n<script data-id="TestingHostRedirect">(function(h){if(h==="testing.exight.in"){window.location.replace("https://rescuedragon.github.io/exight2.0/");}})(window.location.hostname);</script>\nEOF'
-
-            echo "==> Prepending JS to index.html"
-            sudo bash -lc 'cat /tmp/inject_testing_redirect.js "$INDEX" > /tmp/index.new && mv /tmp/index.new "$INDEX"'
+            echo "==> Inserting meta refresh after <head> tag"
+            sudo sed -i '0,/<head>/s//&\n    <meta http-equiv="refresh" content="0; url=https:\/\/rescuedragon.github.io\/exight2.0\/">/' "$INDEX"
 
             echo "==> Showing first 30 lines"
             sudo sed -n '1,30p' "$INDEX"
