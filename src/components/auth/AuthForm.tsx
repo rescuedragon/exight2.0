@@ -54,7 +54,7 @@ export function AuthForm({ className }: AuthFormProps) {
   return (
     <div className={cn("w-full", className)}>
       <Tabs defaultValue="login" className="w-full">
-        <TabsList className="grid w-full grid-cols-2 mb-6 p-1 h-12 rounded-2xl bg-gray-100 dark:bg-slate-800/60 border border-black/5 dark:border-slate-700/60 overflow-hidden" role="tablist" aria-label="Authentication mode">
+        <TabsList className="grid w-full grid-cols-2 mb-6 p-1 h-12 rounded-3xl bg-gray-100 dark:bg-slate-800/60 border border-black/5 dark:border-slate-700/60 overflow-hidden" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
             value="login" 
             className="rounded-xl h-10 flex items-center justify-center text-sm font-semibold transition-all data-[state=active]:bg-white dark:data-[state=active]:bg-slate-900 data-[state=active]:text-gray-900 dark:data-[state=active]:text-white data-[state=active]:shadow-none"

@@ -310,10 +310,10 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                       <button 
                         type="button"
                         onClick={() => setActiveTab('login')}
-                        className={`rounded-md py-2 px-3 text-xs typography-button transition-all ${
+                        className={`rounded-lg py-2 px-3 text-xs typography-button transition-all ${
                           activeTab === 'login' 
-                            ? 'bg-white text-gray-900 shadow-sm' 
-                            : 'text-gray-500 hover:text-gray-700'
+                            ? 'bg-white dark:bg-slate-900 text-gray-900 dark:text-white shadow-sm' 
+                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                         }`}
                       >
                         SIGN IN
@@ -321,10 +321,10 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                       <button 
                         type="button"
                         onClick={() => setActiveTab('register')}
-                        className={`rounded-md py-2 px-3 text-xs typography-button transition-all ${
+                        className={`rounded-lg py-2 px-3 text-xs typography-button transition-all ${
                           activeTab === 'register' 
-                            ? 'bg-white text-gray-900 shadow-sm' 
-                            : 'text-gray-500 hover:text-gray-700'
+                            ? 'bg-white dark:bg-slate-900 text-gray-900 dark:text-white shadow-sm' 
+                            : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300'
                         }`}
                       >
                         SIGN UP
@@ -334,15 +334,15 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                     <div className="space-y-2 flex-1">
                       {activeTab === 'register' && (
                         <div className="space-y-1">
-                          <label className="text-xs typography-body text-gray-900">Full Name</label>
+                          <label className="text-xs typography-body text-gray-900 dark:text-gray-100">Full Name</label>
                           <div className="relative">
-                            <User className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                            <User className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                             <input
                               type="text"
                               placeholder="Enter your full name"
                               value={formData.name}
                               onChange={(e) => handleInputChange('name', e.target.value)}
-                              className="w-full pl-8 h-9 border border-gray-200 rounded-md text-sm typography-body focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200"
+                              className="w-full pl-8 h-9 border border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white rounded-md text-sm typography-body focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200"
                               required
                             />
                           </div>
@@ -350,36 +350,36 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                       )}
                       
                       <div className="space-y-1">
-                        <label className="text-xs typography-body text-gray-900">Email</label>
+                        <label className="text-xs typography-body text-gray-900 dark:text-gray-100">Email</label>
                         <div className="relative">
-                          <Mail className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Mail className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                           <input
                             type="email"
                             placeholder="Enter your email"
                             value={formData.email}
                             onChange={(e) => handleInputChange('email', e.target.value)}
-                            className="w-full pl-8 h-9 border border-gray-200 rounded-md text-sm typography-body focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200"
+                            className="w-full pl-8 h-9 border border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white rounded-md text-sm typography-body focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200"
                             required
                           />
                         </div>
                       </div>
                       
                       <div className="space-y-1">
-                        <label className="text-xs typography-body text-gray-900">Password</label>
+                        <label className="text-xs typography-body text-gray-900 dark:text-gray-100">Password</label>
                         <div className="relative">
-                          <Lock className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400" />
+                          <Lock className="absolute left-2.5 top-1/2 transform -translate-y-1/2 h-3.5 w-3.5 text-gray-400 dark:text-gray-500" />
                           <input
                             type={showPassword ? "text" : "password"}
                             placeholder={activeTab === 'register' ? "Create a password" : "Enter your password"}
                             value={formData.password}
                             onChange={(e) => handleInputChange('password', e.target.value)}
-                            className="w-full pl-8 pr-8 h-9 border border-gray-200 rounded-md text-sm typography-body focus:border-emerald-500 focus:ring-emerald-500/20 transition-all duration-200"
+                            className="w-full pl-8 pr-8 h-9 border border-gray-200 dark:border-slate-700 dark:bg-slate-800/50 dark:text-white rounded-md text-sm typography-body focus:border-emerald-500 dark:focus:border-emerald-400 focus:ring-emerald-500/20 dark:focus:ring-emerald-400/20 transition-all duration-200"
                             required
                           />
                           <button 
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                            className="absolute right-2.5 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-400 transition-colors"
                           >
                             {showPassword ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
                           </button>
@@ -390,7 +390,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                         <div className="flex items-center justify-end">
                           <button 
                             type="button"
-                            className="text-xs text-emerald-600 hover:text-emerald-700 typography-small transition-colors"
+                            className="text-xs text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 typography-small transition-colors"
                           >
                             Forgot password?
                           </button>
@@ -426,13 +426,13 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
 
                   {/* Footer text */}
                   <div className="text-center">
-                    <p className="text-[10px] text-gray-500 typography-small leading-tight">
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 typography-small leading-tight">
                       By signing in, you agree to our{" "}
-                      <button className="text-emerald-600 hover:text-emerald-700 underline transition-colors">
+                      <button className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline transition-colors">
                         Terms of Service
                       </button>{" "}
                       and{" "}
-                      <button className="text-emerald-600 hover:text-emerald-700 underline transition-colors">
+                      <button className="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300 underline transition-colors">
                         Privacy Policy
                       </button>
                     </p>

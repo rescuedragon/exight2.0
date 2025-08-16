@@ -45,7 +45,7 @@ const LoginPage = () => {
 						</div>
 
 						{/* Right: Auth Form 40% */}
-						<div className="w-full max-w-[520px] mx-auto lg:mx-0 flex items-start justify-center h-full pt-16">
+						<div className="w-full max-w-[520px] mx-auto lg:mx-0 flex items-center justify-center h-full">
 							<div className="w-full max-w-[440px]">
 								{/* Auth card container with depth */}
 								<div className="rounded-3xl bg-white/90 dark:bg-slate-900/80 dark:backdrop-blur-xl border border-gray-200/80 dark:border-slate-700/50 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] p-10">
