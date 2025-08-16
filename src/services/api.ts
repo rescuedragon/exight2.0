@@ -106,10 +106,10 @@ export const authAPI = {
   },
 
   // Google OAuth login
-  googleLogin: async (credential: string) => {
+  googleLogin: async (idToken: string) => {
     const response = await apiCall('/auth/google', {
       method: 'POST',
-      body: JSON.stringify({ credential }),
+      body: JSON.stringify({ idToken }),
     });
     
     if (response.token) {

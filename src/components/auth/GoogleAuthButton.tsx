@@ -2,11 +2,15 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { authAPI } from "@/services/api";
 
 interface GoogleAuthButtonProps {
   className?: string;
   onClick?: () => void;
 }
+
+// Google OAuth configuration
+const GOOGLE_CLIENT_ID = "176712194964-34r23nnq9no31e92mgkjmo1qu87c63nu.apps.googleusercontent.com";
 
 export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,9 +22,35 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     setShowInfo(false);
     
     try {
-      // Redirect to backend Google OAuth endpoint
-      // Safe now that old dashboard is completely removed
-      window.location.href = 'https://exight.in/auth/google';
+      // Check if Google Identity Services is loaded
+      if (typeof window.google === 'undefined') {
+        // Try to wait for it to load
+        await new Promise((resolve, reject) => {
+          let attempts = 0;
+          const checkGoogle = () => {
+            attempts++;
+            if (typeof window.google !== 'undefined') {
+              resolve(true);
+            } else if (attempts < 10) {
+              setTimeout(checkGoogle, 500);
+            } else {
+              reject(new Error('Google Identity Services failed to load'));
+            }
+          };
+          checkGoogle();
+        });
+      }
+
+      // Initialize Google OAuth
+      window.google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleCallback,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+
+      // Prompt for Google sign-in
+      window.google.accounts.id.prompt();
     } catch (error) {
       console.error('Google auth failed:', error);
       setShowInfo(true);
@@ -30,12 +60,29 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     onClick?.();
   };
 
+  const handleGoogleCallback = async (response: { credential: string }) => {
+    try {
+      // Send the credential token to our backend
+      const result = await authAPI.googleLogin(response.credential);
+      
+      if (result.token) {
+        // Successfully authenticated, redirect to dashboard
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Google login failed:', error);
+      setShowInfo(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div>
       {showInfo && (
         <div className="mb-3 p-3 rounded-lg bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-300 text-xs">
           <p className="font-medium mb-1">⚠️ Google sign-in failed</p>
-          <p>Unable to connect to Google OAuth. Please try again or use email/password authentication above.</p>
+          <p>Unable to complete Google authentication. Please try again or use email/password authentication above.</p>
         </div>
       )}
       <Button

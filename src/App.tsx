@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import Index from "./pages/Index";
 import LoginPage from "./pages/LoginPage";
 import NotFound from "./pages/NotFound";
-import GoogleOAuthCallback from "./components/auth/GoogleOAuthCallback";
+
 
 const queryClient = new QueryClient();
 
@@ -21,7 +21,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LoginPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/auth/callback" element={<GoogleOAuthCallback />} />
+
           <Route path="/dashboard" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
