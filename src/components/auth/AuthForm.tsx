@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff, Mail, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,15 +19,36 @@ export function AuthForm({ className }: AuthFormProps) {
     name: "",
     confirmPassword: ""
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmitLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: Implement auth logic
-    console.log("Form submitted:", formData);
+    try {
+      const { authAPI } = await import("@/services/api");
+      await authAPI.login({ email: formData.email, password: formData.password });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Login failed', error);
+      alert('Invalid email or password');
+    }
+  };
+
+  const handleSubmitRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const [firstName, ...rest] = formData.name.split(' ');
+      const lastName = rest.join(' ');
+      const { authAPI } = await import("@/services/api");
+      await authAPI.register({ email: formData.email, password: formData.password, firstName, lastName });
+      navigate('/dashboard');
+    } catch (error) {
+      console.error('Registration failed', error);
+      alert('Registration failed');
+    }
   };
 
   return (
@@ -57,7 +79,7 @@ export function AuthForm({ className }: AuthFormProps) {
             <p className="text-gray-600 text-xs typography-body">Enter your credentials to access your account</p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-2">
+          <form onSubmit={handleSubmitLogin} className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="login-email" className="text-xs typography-body text-gray-900">
                 Email
@@ -126,7 +148,7 @@ export function AuthForm({ className }: AuthFormProps) {
             <p className="text-gray-600 text-xs typography-body">Sign up to start managing your finances</p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-2">
+          <form onSubmit={handleSubmitRegister} className="space-y-2">
             <div className="space-y-1">
               <Label htmlFor="register-name" className="text-xs typography-body text-gray-900">
                 Full Name

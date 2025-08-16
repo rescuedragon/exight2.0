@@ -125,15 +125,29 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
 
   const handleGetStartedInModal = () => {
     setShowLoginInModal(true);
+    if (onGetStarted) onGetStarted();
   };
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', { activeTab, formData });
+    try {
+      const { authAPI } = await import("@/services/api");
+      if (activeTab === 'login') {
+        await authAPI.login({ email: formData.email, password: formData.password });
+      } else {
+        const [firstName, ...rest] = formData.name.split(' ');
+        const lastName = rest.join(' ');
+        await authAPI.register({ email: formData.email, password: formData.password, firstName, lastName });
+      }
+      window.location.href = '/dashboard';
+    } catch (error) {
+      console.error('Auth failed', error);
+      alert('Authentication failed');
+    }
   };
 
   return (
