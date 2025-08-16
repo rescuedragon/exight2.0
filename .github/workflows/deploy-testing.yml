@@ -37,7 +37,7 @@ jobs:
       run: cp ./dist/index.html ./dist/404.html
       
     - name: Add cache-busting timestamp  
-      run: echo "<!-- Build timestamp: $(date) -->" >> ./dist/index.html
+      run: echo "<!-- Build timestamp:" $(date) "-->" >> ./dist/index.html
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
