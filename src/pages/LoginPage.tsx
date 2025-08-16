@@ -6,7 +6,7 @@ import { GoogleAuthButton } from "@/components/auth/GoogleAuthButton";
 
 const LoginPage = () => {
 	return (
-		<div className="h-screen w-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/20">
+		<div className="min-h-screen w-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-purple-50/20 dark:bg-gradient-to-br dark:from-slate-950 dark:via-slate-900 dark:to-indigo-950/20">
 			{/* Fixed header bar with logo and theme toggle */}
 			<div className="absolute top-0 left-0 right-0 h-32 flex items-center justify-between px-12 z-50">
 				{/* Brand at top-left - Much bigger */}
@@ -22,7 +22,7 @@ const LoginPage = () => {
 			</div>
 
 			{/* Main content area with fixed layout */}
-			<div className="h-full w-full flex items-center justify-center">
+			<div className="w-full flex items-center justify-center">
 				<div className="w-full h-full max-w-[1600px] px-12 pt-32 pb-8 flex items-center">
 					{/* Container with 60/40 split - promotional features left, auth right */}
 					<div className="w-full h-[calc(100vh-8rem)] max-h-[800px] grid grid-cols-1 lg:grid-cols-[1fr_520px] gap-16 items-center">
