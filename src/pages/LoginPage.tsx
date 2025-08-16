@@ -21,7 +21,7 @@ const LoginPage = () => {
 			</div>
 
 			{/* Content wrapper */}
-			<div className="h-full w-full flex items-center justify-center py-8">
+			<div className="h-full w-full flex items-start justify-center pt-24 pb-8">
 				<div className="mx-auto w-full max-w-[1280px] px-6 md:px-8">
 					{/* 40/60 split container */}
 					<div className="grid grid-cols-1 md:grid-cols-[520px_minmax(0,1fr)] gap-10 md:gap-16 items-start">
