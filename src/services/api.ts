@@ -28,6 +28,7 @@ const apiCall = async (endpoint: string, options: RequestInit = {}): Promise<any
   
   const config: RequestInit = {
     ...options,
+    mode: 'cors',
     headers: {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
@@ -35,14 +36,23 @@ const apiCall = async (endpoint: string, options: RequestInit = {}): Promise<any
     },
   };
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
-  
-  if (!response.ok) {
-    const errorData = await response.json().catch(() => ({ message: 'Request failed' }));
-    throw new Error(errorData.message || `HTTP ${response.status}`);
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ 
+        message: `Request failed with status ${response.status}` 
+      }));
+      throw new Error(errorData.message || errorData.error?.message || `HTTP ${response.status}`);
+    }
+    
+    return response.json();
+  } catch (error) {
+    if (error instanceof TypeError && error.message.includes('Failed to fetch')) {
+      throw new Error('Unable to connect to server. Please check your internet connection or try again later.');
+    }
+    throw error;
   }
-  
-  return response.json();
 };
 
 // Auth API functions
