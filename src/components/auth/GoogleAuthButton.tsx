@@ -17,15 +17,12 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     setIsLoading(true);
     setShowInfo(false);
     
-    try {
-      // Redirect to backend Google OAuth endpoint  
-      const BASE_URL = 'https://exight.in';
-      window.location.href = `${BASE_URL}/auth/google`;
-    } catch (error) {
-      console.error('Google auth failed:', error);
+    // The current /auth/google endpoint redirects to old GitHub Pages app
+    // Need to implement proper Google OAuth on the backend first
+    setTimeout(() => {
       setShowInfo(true);
       setIsLoading(false);
-    }
+    }, 500);
     
     onClick?.();
   };
@@ -34,8 +31,8 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     <div>
       {showInfo && (
         <div className="mb-3 p-3 rounded-lg bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-300 text-xs">
-          <p className="font-medium mb-1">⚠️ Google sign-in temporarily unavailable</p>
-          <p>Checking Google OAuth endpoint... Please try email/password sign-in for now, or try Google sign-in again in a moment.</p>
+          <p className="font-medium mb-1">🔧 Google OAuth needs backend update</p>
+          <p>The current Google OAuth endpoint redirects to the old dashboard. Backend needs to be updated with proper OAuth endpoints. Please use email/password sign-in for now.</p>
         </div>
       )}
       <Button
