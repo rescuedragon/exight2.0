@@ -208,7 +208,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           />
           
           {/* Modal Content - Fixed size for all states */}
-          <div className="relative overflow-hidden rounded-[2rem] border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[75vh] max-w-[1240px] md:w-[88vw] md:h-[72vh] md:max-w-[1280px] lg:max-w-[1320px] bg-white dark:bg-slate-950/90 dark:backdrop-blur-xl">
+          <div className="relative overflow-hidden rounded-[2rem] border-0 shadow-2xl animate-in fade-in zoom-in-95 duration-200 transform-gpu origin-center w-[92vw] h-[68vh] max-w-[1240px] md:w-[88vw] md:h-[66vh] md:max-w-[1280px] lg:max-w-[1320px] bg-white dark:bg-slate-950/90 dark:backdrop-blur-xl">
           {selectedFeature && !showLoginInModal && (
             <div className="h-full flex">
               {/* Left Panel - Header & Description */}
@@ -244,26 +244,26 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               </div>
 
               {/* Right Panel - Features & Benefits */}
-              <div className="w-3/5 p-6 md:p-8 lg:p-10 flex flex-col overflow-y-auto">
+              <div className="w-3/5 p-5 md:p-6 lg:p-8 flex flex-col">
                 {/* Features Section */}
-                <div className="mb-6 md:mb-8">
-                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 dark:text-gray-100 mb-4 md:mb-6">Key Features</h4>
-                  <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="flex-1">
+                  <h4 className="text-base md:text-lg typography-feature-title text-gray-900 dark:text-gray-100 mb-3 md:mb-4">Key Features</h4>
+                  <div className="grid grid-cols-2 gap-2 md:gap-3 mb-4 md:mb-5">
                     {selectedFeature.modalContent.features.map((item, idx) => (
-                      <div key={idx} className="p-3 md:p-4 bg-gray-50 dark:bg-slate-900/40 rounded-2xl hover:bg-gray-100 dark:hover:bg-slate-900/60 transition-colors duration-200 border border-transparent dark:border-slate-700/40">
-                        <span className="text-gray-700 dark:text-gray-300 typography-body text-sm md:text-base">{item.text}</span>
+                      <div key={idx} className="p-2.5 md:p-3 bg-gray-50 dark:bg-slate-900/40 rounded-xl hover:bg-gray-100 dark:hover:bg-slate-900/60 transition-colors duration-200 border border-transparent dark:border-slate-700/40">
+                        <span className="text-gray-700 dark:text-gray-300 typography-body text-xs md:text-sm leading-snug">{item.text}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
                 {/* Benefits Section */}
-                <div className="mb-4">
-                  <h4 className="text-lg md:text-xl typography-feature-title text-gray-900 dark:text-gray-100 mb-4 md:mb-6">Benefits</h4>
-                  <div className="grid grid-cols-2 gap-3 md:gap-4">
+                <div className="flex-1">
+                  <h4 className="text-base md:text-lg typography-feature-title text-gray-900 dark:text-gray-100 mb-3 md:mb-4">Benefits</h4>
+                  <div className="grid grid-cols-2 gap-2 md:gap-3">
                     {selectedFeature.modalContent.benefits.map((benefit, idx) => (
-                      <div key={idx} className="p-3 md:p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl border border-transparent dark:border-emerald-800/30">
-                        <span className="text-gray-700 dark:text-gray-300 typography-body text-sm md:text-base">{benefit}</span>
+                      <div key={idx} className="p-2.5 md:p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-transparent dark:border-emerald-800/30">
+                        <span className="text-gray-700 dark:text-gray-300 typography-body text-xs md:text-sm leading-snug">{benefit}</span>
                       </div>
                     ))}
                   </div>
