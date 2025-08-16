@@ -12,6 +12,14 @@ const LoginPage = () => {
         <ThemeToggle />
       </div>
 
+      {/* Brand — extreme top-left */}
+      <div className="absolute top-6 left-6 z-50 select-none">
+        <h1 className="text-[32px] md:text-[36px] leading-none font-extrabold tracking-tight typography-heading">
+          <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">Exight</span>
+        </h1>
+        <p className="mt-1 text-xs md:text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
+      </div>
+
       {/* Scaling wrapper for entire page */}
       <div className="h-full w-full flex items-center justify-center">
         <ScreenScale className="w-full flex items-center justify-center">
@@ -21,14 +29,6 @@ const LoginPage = () => {
               {/* Left: Auth 40% */}
               <div className="w-[40%] h-full flex items-stretch justify-start">
                 <div className="w-full max-w-[520px] h-full pl-6 pr-6 pt-6 flex flex-col">
-                  {/* Brand (pinned top-left) */}
-                  <div className="text-left">
-                    <h1 className="text-[44px] leading-none font-extrabold tracking-tight typography-heading">
-                      <span className="bg-gradient-to-r from-blue-accent via-purple-accent to-emerald-accent bg-clip-text text-transparent animate-gradient-x bg-[length:200%_200%]">Exight</span>
-                    </h1>
-                    <p className="mt-2 text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
-                  </div>
-
                   {/* Centered block: Tabs + Form + Divider + Google + Terms */}
                   <div className="flex-1 flex items-center">
                     <div className="w-full space-y-4">

@@ -161,7 +161,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
       </div>
 
       {/* Features grid - Fill remaining space exactly */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 w-full flex-1 items-stretch content-stretch">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 w-full flex-1 items-stretch content-stretch">
         {features.map((feature, index) => (
           <button
             key={index}
@@ -172,7 +172,7 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               openModal(feature);
             }}
             className={cn(
-              "group relative p-5 md:p-6 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
+              "group relative p-4 md:p-5 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
               "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2 hover:scale-[1.02] md:hover:scale-105",
               "cursor-pointer h-full flex flex-col text-left justify-between",
               "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
@@ -180,18 +180,18 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
           >
             {/* Feature icon */}
             <div className="flex-shrink-0">
-              <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <feature.icon className="h-6 w-6 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
+              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                <feature.icon className="h-5 w-5 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
               </div>
             </div>
 
             {/* Feature content */}
             <div className="flex-1 flex flex-col justify-center">
               <div className="space-y-3">
-                <h4 className="typography-feature-title text-gray-900 text-lg">
+                <h4 className="typography-feature-title text-gray-900 text-base md:text-[15px]">
                   {feature.title}
                 </h4>
-                <p className="text-gray-600 typography-body">
+                <p className="text-gray-600 typography-body text-[13px] leading-6">
                   {feature.subtitle}
                 </p>
               </div>
