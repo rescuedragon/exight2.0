@@ -41,6 +41,8 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
         });
       }
 
+      console.log('Initializing Google OAuth with client ID:', GOOGLE_CLIENT_ID);
+
       // Initialize Google OAuth
       window.google.accounts.id.initialize({
         client_id: GOOGLE_CLIENT_ID,
@@ -49,8 +51,39 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
         cancel_on_tap_outside: true,
       });
 
+      // Try rendering a button first as fallback
+      const buttonContainer = document.createElement('div');
+      buttonContainer.style.position = 'fixed';
+      buttonContainer.style.top = '-1000px';
+      document.body.appendChild(buttonContainer);
+
+      window.google.accounts.id.renderButton(buttonContainer, {
+        theme: 'outline',
+        size: 'large',
+        type: 'standard',
+        text: 'signin_with',
+        shape: 'rectangular',
+      });
+
+      // Clean up the hidden button
+      setTimeout(() => {
+        if (buttonContainer.parentNode) {
+          buttonContainer.parentNode.removeChild(buttonContainer);
+        }
+      }, 1000);
+
       // Prompt for Google sign-in
-      window.google.accounts.id.prompt();
+      window.google.accounts.id.prompt((notification: any) => {
+        console.log('Google prompt notification:', notification);
+        if (notification.isNotDisplayed()) {
+          console.log('Google prompt not displayed, reason:', notification.getNotDisplayedReason());
+          throw new Error(`Google sign-in not available: ${notification.getNotDisplayedReason()}`);
+        }
+        if (notification.isSkippedMoment()) {
+          console.log('Google prompt skipped, reason:', notification.getSkippedReason());
+          throw new Error(`Google sign-in skipped: ${notification.getSkippedReason()}`);
+        }
+      });
     } catch (error) {
       console.error('Google auth failed:', error);
       setShowInfo(true);
@@ -62,16 +95,33 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
 
   const handleGoogleCallback = async (response: { credential: string }) => {
     try {
+      console.log('Google callback received credential:', response.credential ? 'Yes' : 'No');
+      
+      if (!response.credential) {
+        throw new Error('No credential received from Google');
+      }
+
       // Send the credential token to our backend
+      console.log('Sending credential to backend...');
       const result = await authAPI.googleLogin(response.credential);
       
+      console.log('Backend response:', result);
+      
       if (result.token) {
+        console.log('Login successful, redirecting to dashboard');
         // Successfully authenticated, redirect to dashboard
         navigate('/');
+      } else {
+        throw new Error('No authentication token received from backend');
       }
     } catch (error) {
       console.error('Google login failed:', error);
       setShowInfo(true);
+      
+      // Show specific error message
+      if (error instanceof Error) {
+        console.error('Error details:', error.message);
+      }
     } finally {
       setIsLoading(false);
     }
