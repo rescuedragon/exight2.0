@@ -14,6 +14,7 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
   const navigate = useNavigate();
 
   const handleGoogleAuth = async () => {
+    // Don't redirect - just show info message
     setShowInfo(true);
     onClick?.();
   };
@@ -22,8 +23,8 @@ export function GoogleAuthButton({ className, onClick }: GoogleAuthButtonProps) 
     <div>
       {showInfo && (
         <div className="mb-3 p-3 rounded-lg bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800/50 text-blue-700 dark:text-blue-300 text-xs">
-          <p className="font-medium mb-1">Google sign-in coming soon!</p>
-          <p>Please use the email/password sign-up form above to create your account for now.</p>
+          <p className="font-medium mb-1">🚧 Google sign-in is not yet available</p>
+          <p>The backend server needs Google OAuth endpoints configured. Please use the email/password sign-up form above to create your account.</p>
         </div>
       )}
       <Button
