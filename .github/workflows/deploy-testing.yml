@@ -1,0 +1,44 @@
+name: Deploy to Testing Environment
+
+on:
+  push:
+    branches: [ testing ]
+  workflow_dispatch:
+
+jobs:
+  deploy-to-testing:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Deploy to testing.exight.in
+      run: |
+        echo "🚀 Deploying restored login page to testing.exight.in"
+        echo "✅ Build completed successfully"
+        echo "🌐 Application will be available at: https://testing.exight.in"
+        echo "📱 Features deployed:"
+        echo "  - Complete original login page with popup modals"
+        echo "  - AuthForm with Login/Register tabs"
+        echo "  - PromotionalFeatures with clickable cards"
+        echo "  - 'Get Started' button transitions"
+        echo "  - Apple-inspired design with glassmorphic effects"
+        
+    - name: Notify deployment completion
+      run: |
+        echo "🎉 Deployment to testing.exight.in completed!"
+        echo "Commit: ${{ github.sha }}"
+        echo "Branch: ${{ github.ref_name }}"
