@@ -60,10 +60,10 @@ const App = () => {
         <Toaster />
         <Sonner />
         <Routes>
-          <Route path="/" element={shouldLogin ? <Login /> : <Index />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<LandingPage />} />
           <Route path="/landing" element={<LandingPage />} />
-          <Route path="/dashboard" element={shouldLogin ? <Navigate to="/login" /> : <Index />} />
+          <Route path="/dashboard" element={<Index />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

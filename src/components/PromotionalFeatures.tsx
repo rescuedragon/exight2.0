@@ -98,7 +98,6 @@ const features = [
 ];
 
 export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeaturesProps) {
-  console.log("PromotionalFeatures component loaded!");
   const [selectedFeature, setSelectedFeature] = useState<typeof features[0] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showLoginInModal, setShowLoginInModal] = useState(false);
@@ -156,7 +155,6 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               e.preventDefault();
               e.stopPropagation();
               console.log('Feature card clicked:', feature.title);
-              alert('Feature card clicked: ' + feature.title);
               openModal(feature);
             }}
             className={cn(
