@@ -4,3 +4,4 @@
 [2025-08-16 19:07:03] Vertical fill: auth form and features now stretch to occupy full column heights.
 [2025-08-16 19:11:35] Vertical scale by 250n both login columns for fuller height usage on large screens.
 [2025-08-16 19:43:19] Pixel-alignment pass for login: brand moved into left column, standardized paddings (px-6 md:px-8), uniform gaps (space-y-5), Google button h-12, responsive 40/60 split with mobile stack. Files: src/pages/LoginPage.tsx, src/components/auth/GoogleAuthButton.tsx. Build OK.
+[2025-08-16 19:49:15] Push request: ensuring latest login layout micro-adjustments are deployed. No functional changes.
