@@ -216,13 +216,13 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
                 {/* Modal Header */}
                 <div className="space-y-6">
                   <div className="space-y-3">
-                    <h2 className="text-2xl md:text-3xl typography-heading text-gray-900">{selectedFeature.title}</h2>
-                    <p className="text-gray-600 typography-body text-base md:text-lg">{selectedFeature.subtitle}</p>
+                    <h2 className="text-2xl md:text-3xl typography-heading text-gray-900 dark:text-gray-100">{selectedFeature.title}</h2>
+                    <p className="text-gray-600 dark:text-gray-300 typography-body text-base md:text-lg">{selectedFeature.subtitle}</p>
                   </div>
 
                   {/* Description */}
                   <div className="bg-white/80 dark:bg-slate-900/40 backdrop-blur-sm rounded-3xl p-4 md:p-6 border border-white/20 dark:border-slate-700/40">
-                    <p className="text-gray-700 typography-body text-base md:text-lg">{selectedFeature.modalContent.description}</p>
+                    <p className="text-gray-700 dark:text-gray-200 typography-body text-base md:text-lg">{selectedFeature.modalContent.description}</p>
                   </div>
 
                   {/* CTA */}
