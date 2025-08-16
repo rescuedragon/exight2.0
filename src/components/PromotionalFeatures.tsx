@@ -152,16 +152,9 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
 
   return (
     <>
-      <div className={cn("flex flex-col h-full w-full", className)}>
-      {/* App tagline */}
-      <div className="text-center mb-6 md:mb-8 w-full">
-        <h3 className="text-lg md:text-xl typography-heading text-gray-900 leading-relaxed max-w-2xl mx-auto">
-          Exight helps you understand and control your money effortlessly.
-        </h3>
-      </div>
-
-      {/* Features grid - Fill remaining space exactly */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-5 w-full flex-1 items-stretch content-stretch">
+      <div className={cn("w-full", className)}>
+      {/* Features grid - 2x2 layout optimized for Mac screens */}
+      <div className="grid grid-cols-2 gap-4 w-full">
         {features.map((feature, index) => (
           <button
             key={index}
@@ -172,33 +165,34 @@ export function PromotionalFeatures({ className, onGetStarted }: PromotionalFeat
               openModal(feature);
             }}
             className={cn(
-              "group relative p-4 md:p-5 bg-white rounded-3xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
-              "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 md:hover:-translate-y-2 hover:scale-[1.02] md:hover:scale-105",
-              "cursor-pointer h-full flex flex-col text-left justify-between",
+              "group relative p-5 bg-white rounded-2xl border border-gray-100 hover:border-emerald-200 shadow-sm hover:shadow-lg",
+              "transition-all duration-300 hover:shadow-xl hover:-translate-y-1 hover:scale-[1.02]",
+              "cursor-pointer h-[140px] flex flex-col text-left",
               "focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-300"
             )}
           >
-            {/* Feature icon */}
-            <div className="flex-shrink-0">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-                <feature.icon className="h-5 w-5 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
-              </div>
-            </div>
-
             {/* Feature content */}
-            <div className="flex-1 flex flex-col justify-center">
-              <div className="space-y-3">
-                <h4 className="typography-feature-title text-gray-900 text-base md:text-[15px]">
+            <div className="flex items-start gap-3">
+              {/* Feature icon */}
+              <div className="flex-shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-100 to-purple-100 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                  <feature.icon className="h-4.5 w-4.5 text-emerald-600 group-hover:text-purple-600 transition-colors duration-300" />
+                </div>
+              </div>
+              
+              {/* Text content */}
+              <div className="flex-1">
+                <h4 className="typography-feature-title text-gray-900 text-[14px] mb-1.5">
                   {feature.title}
                 </h4>
-                <p className="text-gray-600 typography-body text-[13px] leading-6">
+                <p className="text-gray-600 typography-body text-[12px] leading-5">
                   {feature.subtitle}
                 </p>
               </div>
             </div>
 
             {/* Subtle gradient overlay on hover */}
-            <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-emerald-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           </button>
         ))}
       </div>
