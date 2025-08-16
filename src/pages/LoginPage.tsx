@@ -28,9 +28,9 @@ const LoginPage = () => {
 										<p className="mt-1 text-xs md:text-sm text-muted-foreground typography-body">Insights for your expenses.</p>
 									</div>
 
-									{/* Middle: Tabs + Form + Divider + Google */}
-									<div className="flex-1 flex items-start">
-										<div className="w-full space-y-5 mt-2">
+									{/* Auth card container with depth */}
+									<div className="rounded-2xl bg-white/90 dark:bg-gray-900/60 border border-gray-200/80 dark:border-gray-800/70 shadow-[0_12px_32px_-12px_rgba(0,0,0,0.25)] p-6 md:p-8">
+										<div className="w-full space-y-5">
 											<AuthForm />
 											<div className="flex items-center gap-3">
 												<div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
@@ -38,14 +38,10 @@ const LoginPage = () => {
 												<div className="flex-1 border-t border-gray-200 dark:border-gray-800"></div>
 											</div>
 											<GoogleAuthButton />
+											<p className="pt-2 text-[11px] text-gray-500 typography-small text-center leading-tight">
+												By signing in, you agree to our <button className="text-emerald-600 hover:text-emerald-700 underline">Terms of Service</button> and <button className="text-emerald-600 hover:text-emerald-700 underline">Privacy Policy</button>
+											</p>
 										</div>
-									</div>
-
-									{/* Bottom: Terms pinned to bottom of left column */}
-									<div className="pt-4">
-										<p className="text-[11px] text-gray-500 typography-small text-center leading-tight">
-											By signing in, you agree to our <button className="text-emerald-600 hover:text-emerald-700 underline">Terms of Service</button> and <button className="text-emerald-600 hover:text-emerald-700 underline">Privacy Policy</button>
-										</p>
 									</div>
 								</div>
 							</div>
