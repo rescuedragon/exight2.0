@@ -25,20 +25,31 @@ jobs:
     - name: Build application
       run: npm run build
       
-    - name: Deploy to testing.exight.in
-      run: |
-        echo "🚀 Deploying restored login page to testing.exight.in"
-        echo "✅ Build completed successfully"
-        echo "🌐 Application will be available at: https://testing.exight.in"
-        echo "📱 Features deployed:"
-        echo "  - Complete original login page with popup modals"
-        echo "  - AuthForm with Login/Register tabs"
-        echo "  - PromotionalFeatures with clickable cards"
-        echo "  - 'Get Started' button transitions"
-        echo "  - Apple-inspired design with glassmorphic effects"
+    - name: Deploy to GitHub Pages (testing.exight.in)
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/testing'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./dist
+        cname: testing.exight.in
+        
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-files
+        path: dist/
         
     - name: Notify deployment completion
       run: |
         echo "🎉 Deployment to testing.exight.in completed!"
+        echo "📱 Complete restored login functionality deployed:"
+        echo "  ✅ Split layout (40% auth + 60% promotional features)"
+        echo "  ✅ AuthForm with Login/Register tabs"
+        echo "  ✅ PromotionalFeatures with popup modals"  
+        echo "  ✅ 'Get Started' button transitions"
+        echo "  ✅ Apple-inspired typography and animations"
+        echo "  ✅ Clickable feature cards"
+        echo "  ✅ GoogleAuthButton with official branding"
+        echo "🌐 Live at: https://testing.exight.in"
         echo "Commit: ${{ github.sha }}"
         echo "Branch: ${{ github.ref_name }}"
