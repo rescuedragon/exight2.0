@@ -52,8 +52,8 @@ export function AuthForm({ className }: AuthFormProps) {
   };
 
   return (
-    <div className={cn("w-full", className)}>
-      <Tabs defaultValue="login" className="w-full">
+    <div className={cn("w-full h-full", className)}>
+      <Tabs defaultValue="login" className="w-full h-full">
         <TabsList className="grid w-full grid-cols-2 mb-6 bg-gray-50 p-1.5 rounded-lg" role="tablist" aria-label="Authentication mode">
           <TabsTrigger 
             value="login" 
@@ -73,7 +73,7 @@ export function AuthForm({ className }: AuthFormProps) {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="login" className="space-y-4">
+        <TabsContent value="login" className="space-y-4 flex-1">
           <div className="space-y-1 text-center">
             <h2 className="text-xl typography-heading text-gray-900">Welcome back</h2>
             <p className="text-gray-600 text-sm typography-body">Enter your credentials to access your account</p>
@@ -142,7 +142,7 @@ export function AuthForm({ className }: AuthFormProps) {
           </form>
         </TabsContent>
 
-        <TabsContent value="register" className="space-y-4">
+        <TabsContent value="register" className="space-y-4 flex-1">
           <div className="space-y-1 text-center">
             <h2 className="text-xl typography-heading text-gray-900">Create account</h2>
             <p className="text-gray-600 text-sm typography-body">Sign up to start managing your finances</p>
